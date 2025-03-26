@@ -200,3 +200,4 @@ document.getElementById('restart-game').addEventListener('click', () => {
   document.getElementById('question-screen').style.display = 'block';
   loadQuestion();
 });
+

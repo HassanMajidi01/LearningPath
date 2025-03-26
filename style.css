@@ -69,40 +69,75 @@ main {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+main p{
+  text-align: justify;
+  text-align: center;
+}
+
+.section__pic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.section__pic-container img {
+  max-width: 20%;
+  height: auto;
+  border-radius: 8px;
+}
 
 /* بخش‌های محتوا */
 .intro,
-.subjects,
 .video-section,
 .exam-section {
   margin-bottom: 40px;
 }
 
 /* لیست موضوعات */
-.subjects ul {
+.subjects {
+  margin: 20px 0;
+}
+
+.subject-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   list-style: none;
   padding: 0;
 }
 
-.subjects ul li {
+.subject-item {
+  flex: 1 1 calc(25% - 20px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.subject-item:hover {
+  transform: translateY(-5px);
+}
+
+.subject-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 10px;
+}
+
+.subject-link img {
+  max-width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
 }
 
-/* دکمه‌های موضوع */
-.subject-link {
-  display: inline-block;
-  background-color: #1d2d50;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
 .subject-link:hover {
-  background-color: #fcbf49;
+  color: #007BFF;
 }
-
 h2 {
   font-family: 'Tahoma', sans-serif;
   font-size: 2rem;
@@ -273,6 +308,8 @@ button:active {
   justify-content: center;
   margin: 20px 0;
 }
+
+
 
 /* Footer */
 footer {
