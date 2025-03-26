@@ -36,6 +36,41 @@
         </div>
       </div>
     </section>
+    <!-- بخش بازی و تمرین-->
+    <section class="game-section">
+      <h2>بازی و تمرین</h2>
+      <div id="game-container">
+        <!-- صفحه خوش‌آمدگویی -->
+        <div id="welcome-screen">
+          <h1>بازی مرتب‌سازی جملات</h1>
+          <p>با مرتب کردن تکه‌های جمله، جمله کامل را بسازید.</p>
+          <button id="start-btn">شروع بازی</button>
+        </div>
+        
+        <!-- صفحه سوال -->
+        <div id="question-screen" style="display:none;">
+          <div id="sentence-container">
+            <!-- تکه‌های جمله به صورت داینامیک اینجا قرار می‌گیرند -->
+          </div>
+          <button id="submit-answer">ارسال پاسخ</button>
+          <div id="feedback"></div>
+          <div id="error-options" style="display:none;">
+            <button id="try-again">تلاش مجدد</button>
+            <button id="show-answer">مشاهده پاسخ صحیح</button>
+          </div>
+          <button id="next-question" style="display:none;">سوال بعد</button>
+        </div>
+        
+        <!-- صفحه نتیجه نهایی -->
+        <div id="result-screen" style="display:none;">
+          <h2>نتیجه نهایی</h2>
+          <p id="correct-count"></p>
+          <p id="wrong-count"></p>
+          <p id="attempts-count"></p>
+          <button id="restart-game">شروع مجدد</button>
+        </div>
+      </div>
+    </section>
     
     <!-- بخش آزمون (جاسازی گوگل فرم) -->
     <section class="exam-section">
@@ -53,5 +88,6 @@
       <p>تمامی حقوق محفوظ است &copy; 2025</p>
     </div>
   </footer>
+  <script src="script.js"></script>
 </body>
 </html>
