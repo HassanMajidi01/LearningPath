@@ -103,16 +103,16 @@ main p{
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  list-style: none;
-  padding: 0;
+  justify-content: center;
 }
 
 .subject-item {
-  flex: 1 1 calc(25% - 20px);
+  flex: 1 1 calc(25% - 20px); /* برای دسکتاپ */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s;
+  text-align: center;
 }
 
 .subject-item:hover {
@@ -131,8 +131,24 @@ main p{
 .subject-link img {
   max-width: 100%;
   height: auto;
-  border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
+}
+
+.subject-link h3 {
+  margin: 10px 0 0;
+}
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 768px) {
+  .subject-item {
+    flex: 1 1 calc(50% - 20px); /* دو ستون در موبایل */
+  }
+}
+
+@media (max-width: 480px) {
+  .subject-item {
+    flex: 1 1 100%; /* یک ستون در موبایل‌های کوچک */
+  }
 }
 
 .subject-link:hover {
