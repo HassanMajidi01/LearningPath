@@ -201,3 +201,117 @@ document.getElementById('restart-game').addEventListener('click', () => {
   loadQuestion();
 });
 
+//بازی پیدا کردن کلمات درست
+document.addEventListener('DOMContentLoaded', () => {
+  const wordGameContainer = document.getElementById('word-game-container');
+  const wordWelcomeScreen = document.getElementById('word-welcome-screen');
+  const wordQuestionScreen = document.getElementById('word-question-screen');
+  const wordQuestionContainer = document.getElementById('word-question-container');
+  const wordFeedback = document.getElementById('word-feedback');
+  const wordErrorOptions = document.getElementById('word-error-options');
+  const wordNextQuestion = document.getElementById('word-next-question');
+  const wordTryAgain = document.getElementById('word-try-again');
+  const wordShowAnswer = document.getElementById('word-show-answer');
+  const wordResultScreen = document.getElementById('word-result-screen');
+  const wordCorrectCount = document.getElementById('word-correct-count');
+  const wordWrongCount = document.getElementById('word-wrong-count');
+  const wordAttemptsCount = document.getElementById('word-attempts-count');
+  const wordRestartGame = document.getElementById('word-restart-game');
+  const wordProgressBar = document.getElementById('word-progress-bar');
+
+  const wordQuestions = [
+    { question: 'کدام کلمه درست است؟', options: ['عازاده', 'ازاده', 'آزاده'], correct: 'آزاده' },
+    { question: 'کدام کلمه درست است؟', options: ['عنسان', 'اِنسان', 'آنسان'], correct: 'اِنسان' },
+    { question: 'کدام کلمه درست است؟', options: ['آکس', 'عکس', 'اَکس'], correct: 'عکس' },
+    { question: 'کدام کلمه درست است؟', options: ['ای مان', 'عیمان', 'ایمان'], correct: 'ایمان' },
+    { question: 'کدام کلمه درست است؟', options: [' ای ستاد', 'ایستاد', 'عیستاد'], correct: 'ایستاد' },
+    { question: 'کدام کلمه درست است؟', options: [' ای رانی', 'ایرانی', 'عیرانی'], correct: 'ایرانی' },
+    { question: 'کدام کلمه درست است؟', options: [ 'اَلی', 'علی'], correct: 'علی' },
+  ];
+
+  let currentQuestionIndex = 0;
+  let correctAnswers = 0;
+  let wrongAnswers = 0;
+  let attempts = 0;
+
+  function showWordQuestion() {
+    const currentQuestion = wordQuestions[currentQuestionIndex];
+    wordQuestionContainer.innerHTML = `<h3>${currentQuestion.question}</h3>`;
+    currentQuestion.options.forEach(option => {
+      const optionElement = document.createElement('div');
+      optionElement.className = 'word-option';
+      optionElement.textContent = option;
+      optionElement.addEventListener('click', () => checkWordAnswer(option));
+      wordQuestionContainer.appendChild(optionElement);
+    });
+    wordFeedback.textContent = '';
+    wordErrorOptions.style.display = 'none';
+    wordNextQuestion.style.display = 'none';
+    updateProgressBar(); // به‌روزرسانی نوار پیشرفت
+  }
+
+  function checkWordAnswer(selectedOption) {
+    const currentQuestion = wordQuestions[currentQuestionIndex];
+    attempts++;
+    if (selectedOption === currentQuestion.correct) {
+      correctAnswers++;
+      wordFeedback.textContent = 'آفرین درست گفتی!';
+      wordFeedback.className = 'correct'; // Add the "correct" class
+      wordNextQuestion.style.display = 'block';
+    } else {
+      wrongAnswers++;
+      wordFeedback.textContent = 'اشتباه است!';
+      wordFeedback.className = 'incorrect'; // Add the "incorrect" class
+      wordErrorOptions.style.display = 'block';
+    }
+    updateProgressBar();
+  }
+
+  wordTryAgain.addEventListener('click', showWordQuestion);
+  wordShowAnswer.addEventListener('click', () => {
+    wordFeedback.textContent = `پاسخ صحیح: ${wordQuestions[currentQuestionIndex].correct}`;
+    wordNextQuestion.style.display = 'block';
+  });
+
+  wordNextQuestion.addEventListener('click', () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < wordQuestions.length) {
+      showWordQuestion();
+    } else {
+      showWordResult();
+    }
+    updateProgressBar();
+  });
+
+  function showWordResult() {
+    wordQuestionScreen.style.display = 'none';
+    wordResultScreen.style.display = 'block';
+    wordCorrectCount.textContent = `تعداد پاسخ‌های درست: ${correctAnswers}`;
+    wordWrongCount.textContent = `تعداد پاسخ‌های غلط: ${wrongAnswers}`;
+    wordAttemptsCount.textContent = `تعداد تلاش‌ها: ${attempts}`;
+  }
+
+  wordRestartGame.addEventListener('click', () => {
+    currentQuestionIndex = 0;
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    attempts = 0;
+    wordResultScreen.style.display = 'none';
+    wordWelcomeScreen.style.display = 'block';
+    wordProgressBar.style.width = '0%'; // بازنشانی نوار پیشرفت
+  });
+
+  document.getElementById('word-start-btn').addEventListener('click', () => {
+    wordWelcomeScreen.style.display = 'none';
+    wordQuestionScreen.style.display = 'block';
+    showWordQuestion();
+    updateProgressBar();
+  });
+
+  function updateProgressBar() {
+    const progress = ((currentQuestionIndex + 1) / wordQuestions.length) * 100;
+    wordProgressBar.style.width = `${progress}%`;
+  }
+
+  wordProgressBar.style.width = '0%';
+});

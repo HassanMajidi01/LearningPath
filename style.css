@@ -223,7 +223,7 @@ h2::after {
 }
 
 /* بخش بازی و تمرین */
-#game-container {
+#game-container, #word-game-container {
   max-width: 800px;
   margin: 40px auto;
   padding: 30px;
@@ -233,7 +233,7 @@ h2::after {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-#game-container:hover {
+#game-container:hover, #word-game-container:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
@@ -309,8 +309,56 @@ button:active {
   margin: 20px 0;
 }
 
+.word-option {
+  margin: 10px 0;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
+.word-option:hover {
+  background-color: #f0f0f0;
+}
 
+#word-feedback {
+  margin: 20px 0;
+  font-size: 1.2em;
+}
+
+#word-feedback.correct {
+  color: green;
+}
+
+#word-feedback.incorrect {
+  color: red;
+}
+
+#word-error-options {
+  margin: 20px 0;
+}
+
+#word-next-question {
+  margin-top: 20px;
+}
+
+#word-progress-bar-container {
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  margin: 20px 0;
+  height: 20px;
+  overflow: hidden;
+}
+
+#word-progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: #4caf50;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
 /* Footer */
 footer {
   background-color: #1d2d50;

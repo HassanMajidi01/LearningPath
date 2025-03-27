@@ -55,7 +55,7 @@
     </section>
     <!-- بخش بازی و تمرین-->
     <section class="game-section">
-      <h2>تمرین اول</h2>
+      <h2>بازی و تمرین</h2>
       <div id="game-container">
         <!-- صفحه خوش‌آمدگویی -->
         <div id="welcome-screen">
@@ -66,6 +66,9 @@
         
         <!-- صفحه سوال -->
         <div id="question-screen" style="display:none;">
+          <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+          </div>
           <div id="sentence-container">
             <!-- تکه‌های جمله به صورت داینامیک اینجا قرار می‌گیرند -->
           </div>
@@ -88,6 +91,39 @@
         </div>
         
         </div>
+         <!-- New Game Container -->
+  <div id="word-game-container" style="display:block;">
+    <div id="word-welcome-screen">
+      <h1>بازی انتخاب کلمه درست</h1>
+      <p>کلمه درست را از بین گزینه‌ها انتخاب کنید.</p>
+      <button id="word-start-btn">شروع بازی</button>
+    </div>
+    
+    <!-- Word Game Question Screen -->
+    <div id="word-question-screen" style="display:none;">
+      <div id="word-progress-bar-container">
+        <div id="word-progress-bar"></div>
+      </div>
+      <div id="word-question-container">
+        <!-- Dynamic questions will be inserted here -->
+      </div>
+      <div id="word-feedback"></div>
+      <div id="word-error-options" style="display:none;">
+        <button id="word-try-again">تلاش مجدد</button>
+        <button id="word-show-answer">مشاهده پاسخ صحیح</button>
+      </div>
+      <button id="word-next-question" style="display:none;">سوال بعد</button>
+    </div>
+    
+    <!-- Word Game Result Screen -->
+    <div id="word-result-screen" style="display:none;">
+      <h2>نتیجه نهایی</h2>
+      <p id="word-correct-count"></p>
+      <p id="word-wrong-count"></p>
+      <p id="word-attempts-count"></p>
+      <button id="word-restart-game">شروع مجدد</button>
+    </div>
+  </div>
     </section>
     
      
