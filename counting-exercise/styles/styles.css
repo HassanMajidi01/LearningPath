@@ -98,3 +98,44 @@ progress {
   box-shadow: 0 0 15px red;
   transition: box-shadow 0.3s ease, border 0.3s ease;
 }
+
+#new-game-section, .count-small-numbers {
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#new-exercise-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+#new-exercise-container .animal-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#new-exercise-container .number-row {
+  display: flex;
+  gap: 10px;
+}
+
+.number-row input {
+  width: 40px;
+  text-align: center;
+  font-size: 1.2em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.number-row span {
+  width: 40px;
+  text-align: center;
+  font-size: 1.2em;
+}

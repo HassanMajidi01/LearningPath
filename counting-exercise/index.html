@@ -11,26 +11,43 @@
     <h1>تمرین شمارش</h1>
   </header>
   <main>
-    <section id="start-section">
-      <h2> تمرین شمارش اعداد کوچک</h2>
-      <button id="start-button">شروع تمرین</button>
+    <section class="count-small-numbers">
+      <section id="start-section">
+        <h2> تمرین شمارش اعداد کوچک</h2>
+        <button id="start-button">شروع تمرین</button>
+      </section>
+  
+      <section id="exercise-section" style="display: none;">
+        <div id="exercise-container"></div>
+        <div id="progress-bar-container"></div>
+        <p id="feedback-message"></p>
+        <button id="check-answer" style="display: none;">چک کردن پاسخ</button>
+        <button id="skip-question" style="display: none;">رد کردن سوال</button>
+        <button id="show-answer" style="display: none;">نمایش پاسخ درست</button>
+        <button id="next-question" style="display: none;">سوال بعد</button>
+      </section>
+  
+      <section id="results-section" style="display: none;">
+        <h2>نتایج</h2>
+        <div id="results-container"></div>
+        <button id="retry-button">تمرین دوباره</button>
+      </section>
     </section>
-
-    <section id="exercise-section" style="display: none;">
-      <div id="exercise-container"></div>
-      <div id="progress-bar-container"></div>
-      <p id="feedback-message"></p>
-      <button id="check-answer" style="display: none;">چک کردن پاسخ</button>
-      <button id="skip-question" style="display: none;">رد کردن سوال</button>
-      <button id="show-answer" style="display: none;">نمایش پاسخ درست</button>
-      <button id="next-question" style="display: none;">سوال بعد</button>
+    
+    <section id="new-game-section">
+      <h2>به ترتیب بشمار و جا خالی را پر کن</h2>
+      <button id="new-game-start-button">شروع بازی</button>
+      
+      <section id="new-exercise-section" style="display: none;">
+        <div id="new-exercise-container">
+          <!-- تصاویر حیوانات و اعداد به صورت داینامیک اضافه می‌شوند -->
+        </div>
+        <p id="new-feedback-message"></p>
+        <button id="new-check-answer" style="display: none;">چک کردن پاسخ</button>
+        <button id="new-next-question" style="display: none;">سوال بعد</button>
+      </section>
     </section>
-
-    <section id="results-section" style="display: none;">
-      <h2>نتایج</h2>
-      <div id="results-container"></div>
-      <button id="retry-button">تمرین دوباره</button>
-    </section>
+    
   </main>
   
   <script src="scripts/app.js"></script>

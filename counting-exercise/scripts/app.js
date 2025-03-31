@@ -15,12 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const retryButton = document.getElementById("retry-button");
 
   const exercises = [
-    { question: "۷ کاشی گربه را داخل جعبه بگذار.", count: 7, image: "cat.png" },
-    { question: "۳ کاشی حیوان دیگر را داخل جعبه بگذار.", count: 3, image: "dog.png" },
-    { question: "۸ کاشی حیوان دیگر را داخل جعبه بگذار.", count: 8, image: "rabbit.png" },
-    { question: "۶ کاشی حیوان دیگر را داخل جعبه بگذار.", count: 6, image: "bird.png" },
-    { question: "۵ کاشی حیوان دیگر را داخل جعبه بگذار.", count: 5, image: "fish.png" },
-    { question: "۹ کاشی حیوان دیگر را داخل جعبه بگذار.", count: 9, image: "horse.png" },
+    { question: "۷  گربه را داخل جعبه بگذار.", count: 7, image: "cat.png" },
+    { question: "۳  سگ  را داخل جعبه بگذار.", count: 3, image: "dog.png" },
+    { question: "۸  خرگوش  را داخل جعبه بگذار.", count: 8, image: "rabbit.png" },
+    { question: "۶  پرنده  را داخل جعبه بگذار.", count: 6, image: "bird.png" },
+    { question: "۵  ماهی  را داخل جعبه بگذار.", count: 5, image: "fish.png" },
+    { question: "۹  اسب  را داخل جعبه بگذار.", count: 9, image: "horse.png" },
   ];
 
   let currentExerciseIndex = 0;
@@ -218,4 +218,144 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsSection.style.display = "none";
     startSection.style.display = "block";
   });
+  
+//تمرین شمردن به ترتیب و پر کردن جا خالی
+  const newGameStartButton = document.getElementById("new-game-start-button");
+  const newExerciseSection = document.getElementById("new-exercise-section");
+  const newExerciseContainer = document.getElementById("new-exercise-container");
+  const newFeedbackMessage = document.getElementById("new-feedback-message");
+  const newCheckAnswerButton = document.getElementById("new-check-answer");
+  const newShowAnswerButton = document.createElement("button"); // دکمه نمایش پاسخ درست
+  const newNextQuestionButton = document.createElement("button"); // دکمه رد کردن سوال
+
+  newShowAnswerButton.id = "new-show-answer";
+  newShowAnswerButton.textContent = "نمایش پاسخ درست";
+  newShowAnswerButton.style.display = "none";
+  newExerciseSection.appendChild(newShowAnswerButton);
+
+  newNextQuestionButton.id = "new-skip-question";
+  newNextQuestionButton.textContent = "رد کردن سوال";
+  newNextQuestionButton.style.display = "none";
+  newExerciseSection.appendChild(newNextQuestionButton);
+
+  const newQuestions = [
+    {
+      animals: ["cat.png", "cat.png", "cat.png", "cat.png", "cat.png"],
+      numbers: ["5", "4", null, "2", "1"],
+      correctAnswer: "3",
+    },
+    {
+      animals: ["dog.png", "dog.png", "dog.png", "dog.png", "dog.png", "dog.png"],
+      numbers: ["10", null, "8", "7", "6", "5"],
+      correctAnswer: "9",
+    },
+    {
+      animals: ["rabbit.png", "rabbit.png", "rabbit.png", "rabbit.png"],
+      numbers: ["9", "8", null, "6"],
+      correctAnswer: "7",
+    },
+  ];
+
+  let currentNewQuestionIndex = 0;
+
+  function loadNewQuestion() {
+    const currentQuestion = newQuestions[currentNewQuestionIndex];
+    newExerciseContainer.innerHTML = "";
+
+    // ایجاد ردیف حیوانات
+    const animalRow = document.createElement("div");
+    animalRow.classList.add("animal-row");
+    currentQuestion.animals.forEach((animal) => {
+      const img = document.createElement("img");
+      img.src = `assets/images/${animal}`;
+      img.alt = "Animal";
+      img.style.width = "50px";
+      img.style.height = "50px";
+      animalRow.appendChild(img);
+    });
+    newExerciseContainer.appendChild(animalRow);
+
+    // ایجاد ردیف اعداد
+    const numberRow = document.createElement("div");
+    numberRow.classList.add("number-row");
+    currentQuestion.numbers.forEach((number, index) => {
+      if (number === null) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.id = `number-input-${index}`;
+        input.style.direction = "rtl"; // اعداد به ترتیب از راست به چپ
+        numberRow.appendChild(input);
+      } else {
+        const span = document.createElement("span");
+        span.textContent = number;
+        span.style.direction = "rtl"; // اعداد فارسی
+        numberRow.appendChild(span);
+      }
+    });
+    newExerciseContainer.appendChild(numberRow);
+
+    newFeedbackMessage.textContent = "";
+    newCheckAnswerButton.style.display = "inline-block";
+    newShowAnswerButton.style.display = "none";
+    newNextQuestionButton.style.display = "none";
+  }
+
+  function checkNewAnswer() {
+    const currentQuestion = newQuestions[currentNewQuestionIndex];
+    const userAnswer = document.querySelector("input[type='number']").value;
+
+    if (!userAnswer) {
+      newFeedbackMessage.textContent = "لطفاً یک عدد وارد کنید.";
+      newFeedbackMessage.style.color = "red";
+      return;
+    }
+
+    if (userAnswer === currentQuestion.correctAnswer) {
+      newFeedbackMessage.textContent = "آفرین! پاسخ صحیح است.";
+      newFeedbackMessage.style.color = "green";
+      newCheckAnswerButton.style.display = "none";
+      newNextQuestionButton.style.display = "inline-block";
+    } else {
+      newFeedbackMessage.textContent = "اشتباه است! دوباره تلاش کنید.";
+      newFeedbackMessage.style.color = "red";
+      newShowAnswerButton.style.display = "inline-block"; // نمایش دکمه نمایش پاسخ درست
+    }
+  }
+
+  function showCorrectAnswer() {
+    const currentQuestion = newQuestions[currentNewQuestionIndex];
+    const inputField = document.querySelector("input[type='number']");
+    inputField.value = currentQuestion.correctAnswer; // نمایش پاسخ درست
+    inputField.disabled = true; // غیرفعال کردن ورودی
+
+    newFeedbackMessage.textContent = `پاسخ درست: ${currentQuestion.correctAnswer}`;
+    newFeedbackMessage.style.color = "green";
+
+    newCheckAnswerButton.style.display = "none"; // مخفی کردن دکمه چک کردن پاسخ
+    newShowAnswerButton.style.display = "none"; // مخفی کردن دکمه نمایش پاسخ درست
+    newNextQuestionButton.style.display = "inline-block"; // نمایش دکمه رد کردن سوال
+  }
+
+  function nextNewQuestion() {
+    currentNewQuestionIndex++;
+    if (currentNewQuestionIndex >= newQuestions.length) {
+      newFeedbackMessage.textContent = "تبریک! همه سوالات را پاسخ دادید.";
+      newFeedbackMessage.style.color = "green";
+      newCheckAnswerButton.style.display = "none";
+      newShowAnswerButton.style.display = "none";
+      newNextQuestionButton.style.display = "none";
+    } else {
+      loadNewQuestion();
+    }
+  }
+
+  newGameStartButton.addEventListener("click", () => {
+    newGameStartButton.style.display = "none";
+    newExerciseSection.style.display = "block";
+    loadNewQuestion();
+  });
+
+  newCheckAnswerButton.addEventListener("click", checkNewAnswer);
+  newShowAnswerButton.addEventListener("click", showCorrectAnswer);
+  newNextQuestionButton.addEventListener("click", nextNewQuestion);
 });
