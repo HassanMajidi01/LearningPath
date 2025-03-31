@@ -375,17 +375,147 @@ button:active {
   border-radius: 10px;
   transition: width 0.3s ease;
 }
-/* Footer */
-footer {
-  background-color: #1d2d50;
-  color: #fff;
+
+/* یوتیوب سکشن */
+.youtube-section {
   text-align: center;
-  padding: 15px 0;
-  margin-top: 30px;
-  border-top: 3px solid #fcbf49;
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ریسپانسیو */
+.youtube-section h2 {
+  font-size: 1.8em;
+  color: #007BFF;
+  margin-bottom: 10px;
+}
+
+.youtube-section p {
+  font-size: 1.2em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.youtube-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.youtube-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.youtube-box {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 90%;
+  max-width: 600px;
+}
+
+.youtube-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.youtube-thumbnail {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+}
+
+.youtube-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.youtube-info h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.youtube-info p {
+  font-size: 1em;
+  color: #666;
+}
+
+/* تمرین سکشن */
+.exercise-section {
+  text-align: center;
+  margin: 40px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-section h2 {
+  font-size: 1.8em;
+  color: #007BFF;
+  margin-bottom: 10px;
+}
+
+.exercise-section p {
+  font-size: 1.2em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.exercise-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.exercise-box {
+  flex: 1 1 calc(25% - 20px);
+  max-width: 250px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.exercise-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.exercise-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.exercise-thumbnail {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.exercise-box h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 10px 0 0;
+}
+
+/* ریسپانسیو برای موبایل */
 @media (max-width: 768px) {
   nav ul {
     flex-direction: column;
@@ -402,4 +532,46 @@ footer {
     font-size: 1rem;
     padding: 10px 15px;
   }
+
+  .youtube-box {
+    flex-direction: column; /* تغییر جهت به حالت عمودی */
+    text-align: center;
+  }
+
+  .youtube-thumbnail {
+    width: 100%; /* تصویر تمام عرض شود */
+    height: auto;
+  }
+
+  .youtube-info {
+    padding: 10px;
+  }
+
+  .youtube-info h3 {
+    font-size: 1.2em;
+  }
+
+  .youtube-info p {
+    font-size: 0.9em;
+  }
+
+  .exercise-box {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-box {
+    flex: 1 1 100%;
+  }
+}
+
+/* Footer */
+footer {
+  background-color: #1d2d50;
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 30px;
+  border-top: 3px solid #fcbf49;
 }

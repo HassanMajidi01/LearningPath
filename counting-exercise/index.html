@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بازی شمارش</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <header>
+    <h1>تمرین شمارش</h1>
+  </header>
+  <main>
+    <section id="start-section">
+      <h2> تمرین شمارش اعداد کوچک</h2>
+      <button id="start-button">شروع تمرین</button>
+    </section>
+
+    <section id="exercise-section" style="display: none;">
+      <div id="exercise-container"></div>
+      <div id="progress-bar-container"></div>
+      <p id="feedback-message"></p>
+      <button id="check-answer" style="display: none;">چک کردن پاسخ</button>
+      <button id="skip-question" style="display: none;">رد کردن سوال</button>
+      <button id="show-answer" style="display: none;">نمایش پاسخ درست</button>
+      <button id="next-question" style="display: none;">سوال بعد</button>
+    </section>
+
+    <section id="results-section" style="display: none;">
+      <h2>نتایج</h2>
+      <div id="results-container"></div>
+      <button id="retry-button">تمرین دوباره</button>
+    </section>
+  </main>
+  
+  <script src="scripts/app.js"></script>
+</body>
+</html>
