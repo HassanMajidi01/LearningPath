@@ -10,45 +10,46 @@ let draggedEl = null; // عنصر در حال کشیده شدن
 // مجموعه‌ای از سوالات نمونه (در عمل این داده‌ها از سرور دریافت می‌شود)
 let questions = [
   {
-    correctOrder: ["من", "به", "مدرسه", "رفته‌ام"],
-    pieces: ["مدرسه", "رفته‌ام", "من", "به"]
+    correctOrder: ["ثانیه ها", "خیلی", "سریع", "می گذرند"],
+    pieces: ["خیلی", "می گذرند", "ثانیه ها", "سریع"]
   },
   {
-    correctOrder: [ "علی", "به", "سفر", "رفت"],
-    pieces: [ "سفر","به", "رفت", "علی"]
+    correctOrder: [ "اثرِ", "برف", "رویِ", "سقفِ", "خانه", "دیده", "می شود"],
+    pieces: [ "سقفِ","خانه", "دیده", "می شود", "اثرِ", "برف", "رویِ"]
   },
   {
-    correctOrder: ["من", "عید", "را", "دوست", "دارم"],
-    pieces: ["را","دارم", "دوست", "من", "عید"]
+    correctOrder: ["سیما", "قبل", "از", "خواب", "دندان", "و", "لثه هایش", "را", "مسواک", "می زند"],
+    pieces: ["قبل", "از", "دندان", "می زند", "لثه هایش", "و", "مسواک", "سیما", "را", "خواب"]
   },
   {
-    correctOrder: ["معلّم","همه یِ","دانش آموزانش", "را", "دوست", "دارد"],
-    pieces: ["همه یِ","را","دارد", "دوست", "دانش آموزانش", "معلّم"]
+    correctOrder: ["صندلی", "را", "زیرِ", "میز", "گذاشت"],
+    pieces: ["زیرِ", "میز", "گذاشت", "صندلی", "را"]
   },
   {
-    correctOrder: ["من","عروسک", "هایِ", "قشنگی", "دارم"],
-    pieces: ["هایِ","عروسک", "من", "دارم", "قشنگی"]
+    correctOrder: ["صورتِ", "دخترم", "بسیار", "زیباست"],
+    pieces: ["دخترم", "بسیار", "زیباست", "صورتِ"]
   },
   {
-    correctOrder: ["مادرم","در", "مزرعه", "کار", "می کند"],
-    pieces: ["می کند","کار", "در", "مزرعه", "مادرم"]
+    correctOrder: ["سارا", "با", "دوستانش", "به", "پارک", "می رود"],
+    pieces: ["دوستانش", "به", "پارک", "می رود", "سارا", "با"]
   },
   {
-    correctOrder: ["ما", "شمع", "روشن", "کردیم"],
-    pieces: ["شمع", "ما", "کردیم", "روشن"]
+    correctOrder: ["خورشید","باعثِ", "روشناییِ", "زمین", "می شود"],
+    pieces: ["باعثِ", "روشناییِ", "زمین", "می شود", "خورشید"]
   },
   {
-    correctOrder: ["درس", "علوم", "شیرین", "است"],
-    pieces: ["است", "علوم", "درس", "شیرین"]
+    correctOrder: ["مدرسه", "محلِ", "آموزش", "دانش آموزان", "است"],
+    pieces: ["محلِ", "آموزش", "دانش آموزان", "است", "مدرسه"]
   },
   {
-    correctOrder: ["او", "عینکم", "را", "شکست"],
-    pieces: ["شکست", "را", "عینکم", "او"]
+    correctOrder: ["دستمال", "را", "در", "کیفش", "گذاشت"],
+    pieces: ["در", "کیفش", "گذاشت", "دستمال", "را"]
   },
   {
-    correctOrder: ["مسلمانان", "در", "مسجد", "عبادت", "می کنند"],
-    pieces: ["می کنند","در", "عبادت", "مسجد", "مسلمانان"]
+    correctOrder: ["جاده", "بسیار", "صاف","و", "تمیز", "است"],
+    pieces: ["بسیار", "صاف", "تمیز", "است", "جاده", "و"]
   },
+ 
   // سوالات بیشتر...
 ];
 
@@ -220,15 +221,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const wordProgressBar = document.getElementById('word-progress-bar');
 
   const wordQuestions = [
-    { question: 'کدام کلمه درست است؟', options: ['عازاده', 'ازاده', 'آزاده'], correct: 'آزاده' },
-    { question: 'کدام کلمه درست است؟', options: ['عنسان', 'اِنسان', 'آنسان'], correct: 'اِنسان' },
-    { question: 'کدام کلمه درست است؟', options: ['آکس', 'عکس', 'اَکس'], correct: 'عکس' },
-    { question: 'کدام کلمه درست است؟', options: ['ای مان', 'عیمان', 'ایمان'], correct: 'ایمان' },
-    { question: 'کدام کلمه درست است؟', options: [' ای ستاد', 'ایستاد', 'عیستاد'], correct: 'ایستاد' },
-    { question: 'کدام کلمه درست است؟', options: [' ای رانی', 'ایرانی', 'عیرانی'], correct: 'ایرانی' },
-    { question: 'کدام کلمه درست است؟', options: ['عصبانی', 'اصبانی', 'عسبانی'], correct: 'عصبانی' },
-    { question: 'کدام کلمه درست است؟', options: ['عذیت', 'ازیت', 'اذیت'], correct: 'اذیت' },
-    { question: 'کدام کلمه درست است؟', options: [ 'اَلی', 'علی'], correct: 'علی' },
+    { question: 'کدام کلمه درست است؟', options: ['مبعس', 'مبعث', 'مبعص'], correct: 'مبعث' },
+    { question: 'کدام کلمه درست است؟', options: ['صمیرا', 'ثمیرا', 'سمیرا'], correct: 'سمیرا' },
+    { question: 'کدام کلمه درست است؟', options: ['صامان', 'ثامان', 'سامان'], correct: 'سامان' },
+    { question: 'کدام کلمه درست است؟', options: ['صام', 'ثام', 'سام'], correct: 'سام' },
+    { question: 'کدام کلمه درست است؟', options: ['سابون', 'ثابون', 'صابون'], correct: 'صابون' },
+    { question: 'کدام کلمه درست است؟', options: ['ثادق', 'سادق', 'صادق'], correct: 'صادق' },
+    { question: 'کدام کلمه درست است؟', options: ['عصبانی', 'عثبانی', 'عسبانی'], correct: 'عصبانی' },
+    { question: 'کدام کلمه درست است؟', options: ['شست', 'شثت', 'شصت'], correct: 'شصت' },
+    { question: 'کدام کلمه درست است؟', options: [ 'اثفهان', 'اصفهان', 'اسفهان'], correct: 'اصفهان' },
+    { question: 'کدام کلمه درست است؟', options: [ 'آصار', 'آسار', 'آثار'], correct: 'آثار' },
   ];
 
   let currentQuestionIndex = 0;
@@ -326,16 +328,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const memoryGameTimer = document.getElementById("memory-game-timer");
   const memoryGameFeedback = document.getElementById("memory-game-feedback");
   const memoryGameRetryButton = document.getElementById("memory-game-retry-button");
+  const memoryGameEndButton = document.getElementById("memory-game-end-button");
+  const memoryGameButtons = document.getElementById("memory-game-buttons");
 
   const words = [
-    { word: "سیب", audio: "audio/apple.mp3" },
-    { word: "موز", audio: "audio/banana.mp3" },
-    { word: "گلابی", audio: "audio/pear.mp3" },
-    { word: "هلو", audio: "audio/peach.mp3" },
-    { word: "انگور", audio: "audio/grape.mp3" },
-    { word: "توت", audio: "audio/berry.mp3" },
-    { word: "آناناس", audio: "audio/pineapple.mp3" },
-    { word: "گیلاس", audio: "audio/cherry.mp3" },
+    { word: "مثل", audio: "audio/mesl.mp3" },
+    { word: "مبعث", audio: "audio/mabas.mp3" },
+    { word: "ثریّا", audio: "audio/soraya.mp3" },
+    { word: "مثلَّث", audio: "audio/mosalas.mp3" },
+    { word: "سبد", audio: "audio/sabad.mp3" },
+    { word: "صورتی", audio: "audio/sorati.mp3" },
+    { word: "لثه", audio: "audio/lase.mp3" },
+    { word: "تصمیم", audio: "audio/tasmim.mp3" },
   ];
 
   let shuffledWords = [];
@@ -369,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
     shuffledWords = shuffleArray([...words, ...words]); // دو نسخه از هر کلمه
     memoryCardsContainer.innerHTML = "";
     memoryGameFeedback.textContent = "";
-    memoryGameRetryButton.style.display = "none";
+    memoryGameButtons.style.display = "none";
     memoryGameTimer.textContent = "زمان: 0 ثانیه";
     stopTimer();
     createCards();
@@ -421,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (matchedPairs === words.length) {
           stopTimer();
           memoryGameFeedback.textContent = `تبریک! بازی را در ${timer} ثانیه به پایان رساندید.`;
-          memoryGameRetryButton.style.display = "block";
+          memoryGameButtons.style.display = "block";
         }
       } else {
         // عدم جفت‌شدن کارت‌ها
@@ -445,5 +449,11 @@ document.addEventListener("DOMContentLoaded", () => {
   memoryGameRetryButton.addEventListener("click", () => {
     resetGame();
     startTimer();
+  });
+
+  memoryGameEndButton.addEventListener("click", () => {
+    stopTimer();
+    memoryGameContainer.style.display = "none";
+    memoryGameStartButton.style.display = "block";
   });
 });

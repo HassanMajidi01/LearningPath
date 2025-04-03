@@ -239,7 +239,7 @@ h2::after {
 }
 
 /* بخش بازی و تمرین */
-#game-container, #word-game-container {
+#game-container, #word-game-container, #memory-game-section {
   max-width: 800px;
   margin: 40px auto;
   padding: 30px;
@@ -249,7 +249,7 @@ h2::after {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-#game-container:hover, #word-game-container:hover {
+#game-container:hover, #word-game-container:hover, #memory-game-section:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
@@ -564,6 +564,30 @@ button:active {
   .exercise-box {
     flex: 1 1 100%;
   }
+}
+
+/* Memory Cards */
+#memory-cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.memory-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  height: 50px;
+}
+
+.memory-card.matched {
+  background-color: #a0e7a0;
+  cursor: default;
 }
 
 /* Footer */
