@@ -11,6 +11,45 @@
             /* جلوگیری از اسکرول افقی ناخواسته */
             overflow-x: hidden;
         }
+        /* Header */
+header {
+  background-color: #1d2d50;
+  color: #fff;
+  padding: 20px 0;
+  border-bottom: 3px solid #fcbf49;
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+/* منو */
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+nav ul li a:hover {
+  background-color: #fcbf49;
+  transform: translateY(-3px);
+}
         .exercise-container, .exercise-container-2, .exercise-container-3 {
             max-width: 600px;
             margin: 20px auto; /* کاهش مارجین عمودی برای موبایل */
@@ -166,7 +205,9 @@
         .skip-button { background-color: #6b7280; color: white; }
         .skip-button:hover { background-color: #4b5563; }
         .button:disabled { background-color: #9ca3af; cursor: not-allowed; }
-
+        .related-video { background-color: #3b82f6; color: white; margin-top: 8px; }
+        .related-video:hover { background-color: #e0e7ff; }
+        
         .feedback {
             margin-top: 8px;
             padding: 6px;
@@ -381,10 +422,45 @@
             }
         }
 
+        .related-videos-section {
+            margin: 30px auto 0;
+            max-width: 260px;
+        }
+        .related-video-item {
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .video-embed {
+            width: 100%;
+            aspect-ratio: 16/9;
+            min-height: 120px;
+        }
+        .related-video-title {
+            font-size: 0.9rem;
+            margin-top: 4px;
+            text-align: center;
+        }
 
     </style>
 </head>
 <body class="bg-gray-100">
+    <header>
+    <div class="container">
+      <h1>تمرین شمارش</h1>
+      <nav>
+        <ul>
+          <li><a href="../index.html">صفحه اصلی</a></li>
+          <li><a href="../math.html">ریاضیات</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <div id="exercise-container-2" class="exercise-container-2">
     <h2 class="section-title">شمارش با اعداد کوچک</h2>
@@ -403,7 +479,19 @@
         <button id="pib-skip-button" class="button skip-button">رد شدن</button>
         <button id="pib-next-button" class="button next-button" disabled>بعدی</button>
     </div>
+
 </div>
+ <!-- بخش ویدئوهای مرتبط -->
+<div class="related-videos-section">
+    <h2 class="section-title">ویدئوهای مرتبط</h2>
+    <div class="related-video-item">
+        <div id="41357763279" class="video-embed">
+            <script type="text/JavaScript" src="https://www.aparat.com/embed/maejlhi?data[rnddiv]=41357763279&data[responsive]=yes"></script>
+        </div>
+        <div class="related-video-title">شمارش با اعداد کوچک</div>
+    </div>
+</div>
+<!-- پایان بخش ویدئوهای مرتبط -->
 
 
     <div id="exercise-container" class="exercise-container">
@@ -419,6 +507,7 @@
             <button id="check-button" class="button check-button">بررسی</button>
             <button id="next-button" class="button next-button" disabled>بعدی</button>
         </div>
+        
     </div>
 
    
@@ -443,6 +532,10 @@
             <button id="sp-next-button" class="button next-button" disabled>بعدی</button>
         </div>
     </div>
+
+
+    
+</div>
 
 
     <script>
@@ -550,7 +643,7 @@
             questionText1El.textContent = "تبریک! شما بخش اول تمرین‌ها را کامل کردید.";
             mainContentArea1El.innerHTML = `<div class="text-center w-full"><span class="text-5xl">🎉</span><p class="text-lg mt-2">شما به ${correctAnswers1Count} از ${exercises1.length} تمرین پاسخ صحیح دادید.</p></div>`;
             feedbackMessage1El.style.display = 'none'; checkButton1El.style.display = 'none';
-            nextButton1El.textContent = "شروع مجدد بخش اول"; nextButton1El.disabled = false;
+            nextButton1El.textContent = "شروع مجدد"; nextButton1El.disabled = false;
             nextButton1El.onclick = () => {
                 currentExercise1Index = 0; correctAnswers1Count = 0;
                 exercises1.forEach(ex => ex.answeredCorrectly = false); 
@@ -679,7 +772,7 @@
             if(pibCheckButtonEl) pibCheckButtonEl.style.display = 'none'; 
             if(pibSkipButtonEl) pibSkipButtonEl.style.display = 'none';
             if(pibNextButtonEl) {
-                pibNextButtonEl.textContent = "شروع مجدد بخش دوم"; pibNextButtonEl.disabled = false;
+                pibNextButtonEl.textContent = "شروع مجدد"; pibNextButtonEl.disabled = false;
                 pibNextButtonEl.onclick = () => {
                     currentExercise2Index = 0; correctAnswers2Count = 0;
                     exercises2.forEach(ex => ex.answeredCorrectly = false);
@@ -933,7 +1026,7 @@
             spFeedbackMessageEl.style.display = 'none';
             spCheckButtonEl.style.display = 'none';
             spSkipButtonEl.style.display = 'none';
-            spNextButtonEl.textContent = "شروع مجدد بخش سوم";
+            spNextButtonEl.textContent = "شروع مجدد";
             spNextButtonEl.disabled = false;
             spNextButtonEl.onclick = () => {
                 currentExercise3Index = 0;
@@ -955,6 +1048,11 @@
 
 
     </script>
+
+    
+</div>
+
+
 
 </body>
 </html>
