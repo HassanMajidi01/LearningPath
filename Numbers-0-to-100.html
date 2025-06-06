@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرین‌های ریاضی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl;
+        }
+        .custom-radio:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .custom-radio:checked::after {
+            content: '';
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: white;
+        }
+        .correct-answer {
+             border-color: #22c55e !important;
+             background-color: #f0fdf4 !important;
+        }
+        .wrong-answer {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        .option-selected {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .hundreds-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            direction: ltr;
+        }
+        .grid-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1 / 1;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+        }
+        .grid-cell-empty {
+            background-color: white;
+            border: 2px dashed #9ca3af;
+        }
+        .ten-frames-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            direction: ltr;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .ten-frame {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            padding: 4px;
+            border: 2px solid #a3a3a3;
+            border-radius: 8px;
+            width: 50px;
+        }
+        .ten-frame-dot {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+        }
+        .action-button {
+            font-weight: bold;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="w-full bg-[#1d2d50] text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- لوگو/عنوان -->
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl md:text-2xl font-bold">اعداد صفر تا صد</h1>
+                </div>
+
+                <!-- منوی دسکتاپ -->
+                <nav class="hidden md:flex items-baseline space-x-6 space-x-reverse">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors duration-200">صفحه اصلی</a>
+                    <a href="math.html" class="text-yellow-400 font-bold border-b-2 border-yellow-400 pb-1" aria-current="page">ریاضیات</a>
+                </nav>
+
+                <!-- دکمه منوی موبایل -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none">
+                        <span class="sr-only">باز کردن منو</span>
+                        <svg id="menu-open-icon" class="block h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="menu-close-icon" class="hidden h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- منوی موبایل -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">صفحه اصلی</a>
+                <a href="math.html" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">ریاضیات</a>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="flex flex-col items-center justify-center w-full p-4 mt-8">
+        
+        <!-- بخش تمرین اول -->
+        <section class="w-full max-w-2xl mx-auto mb-12">
+            <div id="quiz-container-1" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">جاخالی اعداد</h2>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600 mb-2" id="q1-counter-text"></p>
+                    <div class="flex space-x-1 space-x-reverse" id="q1-progress-bar"></div>
+                </div>
+                <div id="q1-question-content" class="mb-6 min-h-[200px]"></div>
+                <div class="border-t pt-4">
+                    <div id="q1-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div>
+                    <div id="q1-button-container" class="flex items-center space-x-4 space-x-reverse"></div>
+                </div>
+            </div>
+            <!-- ویدئوهای مرتبط تمرین ۱ -->
+            <div class="mt-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div id="24507271375"><script type="text/JavaScript" src="https://www.aparat.com/embed/fizyheb?data[rnddiv]=24507271375&data[responsive]=yes"></script></div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">جاخالی اعداد</h4></div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div class="bg-gray-300 h-32 flex items-center justify-center relative">
+                            <img src="https://placehold.co/300x200/10b981/ffffff?text=ویدئو" alt="تصویر کوچک ویدئو" class="w-full h-full object-cover">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">چطور اعداد گمشده را پیدا کنیم</h4></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش تمرین دوم -->
+        <section class="w-full max-w-2xl mx-auto mb-12">
+            <div id="quiz-container-2" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">اعداد تا 100</h2>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600 mb-2" id="q2-counter-text"></p>
+                    <div class="flex space-x-1 space-x-reverse" id="q2-progress-bar"></div>
+                </div>
+                <div id="q2-question-content" class="mb-6 min-h-[200px]"></div>
+                <div class="border-t pt-4">
+                    <div id="q2-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div>
+                    <div id="q2-button-container" class="flex items-center space-x-4 space-x-reverse"></div>
+                </div>
+            </div>
+             <!-- ویدئوهای مرتبط تمرین ۲ -->
+             <div class="mt-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div id="89656101612"><script type="text/JavaScript" src="https://www.aparat.com/embed/dvm9yui?data[rnddiv]=89656101612&data[responsive]=yes"></script></div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">جدول اعداد</h4></div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div class="bg-gray-300 h-32 flex items-center justify-center relative">
+                            <img src="https://placehold.co/300x200/10b981/ffffff?text=ویدئو" alt="تصویر کوچک ویدئو" class="w-full h-full object-cover">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">چطور اعداد گمشده را پیدا کنیم</h4></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش تمرین سوم -->
+        <section class="w-full max-w-2xl mx-auto mb-12">
+            <div id="quiz-container-3" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">10 تا 10 بشمار</h2>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600 mb-2" id="q3-counter-text"></p>
+                    <div class="flex space-x-1 space-x-reverse" id="q3-progress-bar"></div>
+                </div>
+                <div id="q3-question-content" class="mb-6 min-h-[220px]"></div>
+                <div class="border-t pt-4">
+                    <div id="q3-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div>
+                     <div id="q3-button-container" class="flex items-center space-x-4 space-x-reverse"></div>
+                </div>
+            </div>
+            <!-- ویدئوهای مرتبط تمرین ۳ -->
+            <div class="mt-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div class="bg-gray-300 h-32 flex items-center justify-center relative">
+                            <img src="https://placehold.co/300x200/8b5cf6/ffffff?text=ویدئو" alt="تصویر کوچک ویدئو" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">آموزش شمردن ده‌تایی</h4></div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow-md overflow-hidden group cursor-pointer">
+                        <div class="bg-gray-300 h-32 flex items-center justify-center relative">
+                            <img src="https://placehold.co/300x200/f59e0b/ffffff?text=ویدئو" alt="تصویر کوچک ویدئو" class="w-full h-full object-cover">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="p-3"><h4 class="font-semibold text-gray-800 truncate">مفهوم قاب ده‌تایی</h4></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- مودال اتمام کوئیز (مشترک) -->
+    <div id="completion-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-8 text-center max-w-sm w-full">
+            <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 id="modal-title" class="text-2xl font-bold mb-2">آفرین!</h2>
+            <div id="modal-text" class="text-gray-700 mb-6 text-center space-y-2"></div>
+            <button id="restart-button" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">شروع مجدد</button>
+        </div>
+    </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- منطق منوی موبایل ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+    });
+
+    // --- توابع کمکی و منطق مودال ---
+    function toPersianDigits(n) { const p = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'}; return n.toString().replace(/[0-9]/g, w => p[w]); }
+    const completionModal = document.getElementById('completion-modal'); const restartButton = document.getElementById('restart-button'); const modalText = document.getElementById('modal-text'); let currentQuizToRestart = null;
+    
+    function showCompletionModal(quizName, eventName, correctCount, totalQuestions, attemptCount) {
+        modalText.innerHTML = `
+            <p class="mb-2">${quizName} به پایان رسید.</p>
+            <p class="font-semibold text-lg">امتیاز: ${toPersianDigits(correctCount)} از ${toPersianDigits(totalQuestions)}</p>
+            <p class="font-semibold text-base">تعداد کل تلاش‌ها: ${toPersianDigits(attemptCount)}</p>
+        `;
+        currentQuizToRestart = eventName;
+        completionModal.classList.remove('hidden');
+    }
+    restartButton.addEventListener('click', () => { completionModal.classList.add('hidden'); if (currentQuizToRestart) document.dispatchEvent(new Event(currentQuizToRestart)); });
+
+    function createInitialButtons(container, checkHandler, skipHandler, color) {
+        container.innerHTML = '';
+        const checkBtn = document.createElement('button');
+        checkBtn.textContent = 'بررسی';
+        checkBtn.className = `action-button flex-grow ${color} text-white hover:opacity-90`;
+        checkBtn.addEventListener('click', checkHandler);
+
+        const skipBtn = document.createElement('button');
+        skipBtn.textContent = 'رد کردن';
+        skipBtn.className = 'action-button flex-grow-0 px-8 bg-gray-400 text-white hover:bg-gray-500';
+        skipBtn.addEventListener('click', skipHandler);
+
+        container.appendChild(checkBtn);
+        container.appendChild(skipBtn);
+    }
+
+    // =================================================================
+    // --- منطق کوئیز اول (دنباله اعداد) ---
+    // =================================================================
+    {
+        const quizData = [ { type: 'multipleChoice', q: 'عدد بعدی کدام است؟', s: ['15', '16', '17', '18', '?'], o: ['20', '19', '14'], a: '19' }, { type: 'fillInTheBlanks', q: 'اعداد گمشده را در کادرها تایپ کنید.', s: ['5', '6', '7', '_', '9', '10', '11', '_'], a: ['8', '12'] }, { type: 'multipleChoice', q: 'عدد بعدی کدام است؟', s: ['3', '4', '5', '6', '?'], o: ['6', '7', '8'], a: '7' }, { type: 'fillInTheBlanks', q: 'اعداد گمشده را در کادرها تایپ کنید.', s: ['2', '3', '4', '_', '6', '7', '8'], a: ['5'] }, { type: 'multipleChoice', q: 'عدد بعدی کدام است؟', s: ['10', '11', '12', '13', '?'], o: ['9', '15', '14'], a: '14' }, { type: 'fillInTheBlanks', q: 'اعداد گمشده را در کادرها تایپ کنید.', s: ['9', '10', '11', '_', '13', '14', '_'], a: ['12', '15'] }, { type: 'multipleChoice', q: 'عدد بعدی کدام است؟', s: ['16', '17', '18', '19', '?'], o: ['10', '14', '20'], a: '20' }];
+        let currentQuestionIndex, totalAttempts;
+        const container = document.getElementById('quiz-container-1'), questionContent = document.getElementById('q1-question-content'), buttonContainer = document.getElementById('q1-button-container'), feedbackMessage = document.getElementById('q1-feedback-message'), progressBar = document.getElementById('q1-progress-bar'), counterText = document.getElementById('q1-counter-text');
+        
+        function init() { currentQuestionIndex = 0; totalAttempts = 0; quizData.forEach(q => q.isCorrect = undefined); createProgressCircles(); loadQuestion(); }
+        function createProgressCircles() { progressBar.innerHTML = ''; for (let i = 0; i < quizData.length; i++) { const c = document.createElement('div'); c.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; progressBar.appendChild(c); } }
+        function loadQuestion() {
+            feedbackMessage.textContent = ''; createProgressCircles();
+            if (currentQuestionIndex >= quizData.length) { const correctCount = quizData.filter(q=>q.isCorrect).length; showCompletionModal('تمرین ۱', 'initQuiz1', correctCount, quizData.length, totalAttempts); return; }
+            counterText.textContent = `سوال ${toPersianDigits(currentQuestionIndex + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[currentQuestionIndex]; questionContent.innerHTML = '';
+            const sC = document.createElement('div'); sC.dir = 'ltr'; sC.className = 'flex justify-center items-center flex-wrap space-x-2 mb-8'; q.s.forEach(item => { if (item === '_') { const i = document.createElement('input'); i.type = 'text'; i.className = 'blank-input w-12 h-12 text-center border-2 border-gray-300 rounded-md'; sC.appendChild(i); } else { const c = document.createElement('div'); c.className = 'w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold text-white'; c.textContent = toPersianDigits(item); if (item === '?') c.classList.add('bg-pink-500'); else if (currentQuestionIndex % 3 === 1) c.classList.add('bg-teal-500'); else if (currentQuestionIndex % 3 === 2) c.classList.add('bg-indigo-500'); else c.classList.add('bg-pink-500'); sC.appendChild(c); } });
+            questionContent.append(sC); const qT = document.createElement('p'); qT.textContent = q.q; qT.className = 'text-xl font-semibold text-gray-800 mb-4'; questionContent.append(qT);
+            if (q.type === 'multipleChoice') { const oC = document.createElement('div'); oC.className = 'space-y-3'; q.o.forEach((opt, idx) => { const oD = document.createElement('div'); oD.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all'; const r = document.createElement('input'); r.type = 'radio'; r.name = 'q1-answer'; r.id = `q1-option-${idx}`; r.value = opt; r.className = 'ml-4 custom-radio'; const l = document.createElement('label'); l.htmlFor = r.id; l.textContent = toPersianDigits(opt); l.className = 'text-lg text-gray-700 cursor-pointer flex-grow'; oD.append(r, l); oD.onclick = () => { oC.querySelectorAll('div').forEach(div => div.classList.remove('option-selected')); oD.classList.add('option-selected'); r.click(); }; oC.appendChild(oD); }); questionContent.appendChild(oC); }
+            createInitialButtons(buttonContainer, checkAnswer, skipQuestion, 'bg-blue-600');
+        }
+        function skipQuestion() { currentQuestionIndex++; loadQuestion(); }
+        function checkAnswer() {
+            totalAttempts++; const q = quizData[currentQuestionIndex]; let isCorrect = false;
+            if (q.type === 'multipleChoice') { const sO = questionContent.querySelector('input:checked'); if (!sO) { totalAttempts--; feedbackMessage.textContent = 'لطفا یک گزینه را انتخاب کنید.'; feedbackMessage.classList.add('text-red-600'); return; } isCorrect = sO.value === q.a; questionContent.querySelectorAll('input').forEach(r => { r.disabled = true; const pD = r.parentElement; pD.classList.remove('option-selected'); if (r.value === q.a) pD.classList.add('correct-answer'); else if (r.checked) pD.classList.add('wrong-answer'); }); } else { const ins = questionContent.querySelectorAll('input'); const uA = Array.from(ins).map(i => i.value.trim()); isCorrect = JSON.stringify(uA) === JSON.stringify(q.a); ins.forEach((i, idx) => { i.classList.add(i.value.trim() === q.a[idx] ? 'correct-answer' : 'wrong-answer'); i.disabled = true; }); }
+            if(isCorrect) q.isCorrect = true;
+            feedbackMessage.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`; feedbackMessage.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+            buttonContainer.innerHTML = '';
+            if (isCorrect) { createProgressCircles(); const nextBtn = document.createElement('button'); nextBtn.textContent = 'سوال بعدی'; nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700'; nextBtn.onclick = () => { currentQuestionIndex++; loadQuestion(); }; buttonContainer.appendChild(nextBtn); } else { const retryBtn = document.createElement('button'); retryBtn.textContent = 'تلاش دوباره'; retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600'; retryBtn.onclick = loadQuestion; buttonContainer.appendChild(retryBtn); }
+        }
+        document.addEventListener('DOMContentLoaded', init); document.addEventListener('initQuiz1', init);
+    }
+
+    // =================================================================
+    // --- منطق کوئیز دوم (جدول اعداد) ---
+    // =================================================================
+    {
+        const quizData = [ { m: 68 }, { m: 29 }, { m: 72 }, { m: 97 }, { m: 21 }, { m: 15 }, { m: 84 } ];
+        let currentQuestionIndex, totalAttempts; const container = document.getElementById('quiz-container-2'), questionContent = document.getElementById('q2-question-content'), buttonContainer = document.getElementById('q2-button-container'), feedbackMessage = document.getElementById('q2-feedback-message'), progressBar = document.getElementById('q2-progress-bar'), counterText = document.getElementById('q2-counter-text'); const colors = [ 'bg-green-400', 'bg-pink-400', 'bg-sky-400', 'bg-red-400', 'bg-purple-400', 'bg-green-500', 'bg-pink-500', 'bg-sky-500', 'bg-red-500', 'bg-purple-500'];
+        function init() { currentQuestionIndex = 0; totalAttempts = 0; quizData.forEach(q => q.isCorrect = undefined); createProgressCircles(); loadQuestion(); }
+        function createProgressCircles() { progressBar.innerHTML = ''; for (let i = 0; i < quizData.length; i++) { const c = document.createElement('div'); c.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; progressBar.appendChild(c); } }
+        function loadQuestion() {
+            feedbackMessage.textContent = ''; createProgressCircles();
+            if (currentQuestionIndex >= quizData.length) { const correctCount = quizData.filter(q=>q.isCorrect).length; showCompletionModal('تمرین ۲', 'initQuiz2', correctCount, quizData.length, totalAttempts); return; }
+            counterText.textContent = `سوال ${toPersianDigits(currentQuestionIndex + 1)} از ${toPersianDigits(quizData.length)}`; const q = quizData[currentQuestionIndex];
+            questionContent.innerHTML = `<div class="flex flex-col items-center"><p class="text-xl font-semibold text-gray-800 mb-4">چه عددی جا افتاده است؟</p><input type="text" id="q2-answer-input" class="w-24 h-12 text-center border-2 border-gray-300 rounded-md mb-6 text-xl"><div id="q2-hundreds-grid" class="hundreds-grid w-full"></div></div>`;
+            const grid = questionContent.querySelector('#q2-hundreds-grid'); for (let i = 1; i <= 100; i++) { const cell = document.createElement('div'); cell.className = 'grid-cell'; if (i === q.m) { cell.classList.add('grid-cell-empty'); } else { cell.textContent = toPersianDigits(i); cell.classList.add(colors[Math.floor((i - 1) / 10)]); } grid.appendChild(cell); }
+            createInitialButtons(buttonContainer, checkAnswer, skipQuestion, 'bg-indigo-600');
+        }
+        function skipQuestion() { currentQuestionIndex++; loadQuestion(); }
+        function checkAnswer() {
+            totalAttempts++; const q = quizData[currentQuestionIndex]; const input = document.getElementById('q2-answer-input'); const uA = input.value.trim(); if (!uA) { totalAttempts--; feedbackMessage.textContent = 'لطفا یک عدد وارد کنید.'; feedbackMessage.className = 'min-h-[2rem] mb-4 text-center font-semibold text-red-600'; return; }
+            const isCorrect = uA == q.m; input.disabled = true; if(isCorrect) q.isCorrect = true; feedbackMessage.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`; feedbackMessage.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.'; input.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+            buttonContainer.innerHTML = '';
+            if (isCorrect) { createProgressCircles(); const nextBtn = document.createElement('button'); nextBtn.textContent = 'سوال بعدی'; nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700'; nextBtn.onclick = () => { currentQuestionIndex++; loadQuestion(); }; buttonContainer.appendChild(nextBtn); } else { const retryBtn = document.createElement('button'); retryBtn.textContent = 'تلاش دوباره'; retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600'; retryBtn.onclick = loadQuestion; buttonContainer.appendChild(retryBtn); }
+        }
+        document.addEventListener('DOMContentLoaded', init); document.addEventListener('initQuiz2', init);
+    }
+    
+    // =================================================================
+    // --- منطق کوئیز سوم (شمردن ده‌تا ده‌تا) ---
+    // =================================================================
+    {
+        const quizData = [ { t: 'missingNumber', q: 'چه عددی جا افتاده است؟', s: [10, 20, 30, 40, 50, 60, null, 80, 90, 100], o: ['70', '90', '50'], a: '70' }, { t: 'tenFrames', q: 'مقدار نمایش داده شده توسط قاب‌های ده‌تایی چقدر است؟', c: 70, o: ['40', '70', '60'], a: '70' }, { t: 'missingNumber', q: 'چه عددی جا افتاده است؟', s: [10, 20, 30, 40, null, 60, 70, 80, 90, 100], o: ['90', '50', '20'], a: '50' }, { t: 'tenFrames', q: 'مقدار نمایش داده شده توسط قاب‌های ده‌تایی چقدر است؟', c: 90, o: ['60', '80', '90'], a: '90' }, { t: 'missingNumber', q: 'چه عددی جا افتاده است؟', s: [10, 20, 30, 40, 50, 60, 70, null, 90, 100], o: ['80', '30', '50'], a: '80' }, { t: 'tenFrames', q: 'مقدار نمایش داده شده توسط قاب‌های ده‌تایی چقدر است؟', c: 60, o: ['60', '80', '90'], a: '60' }, { t: 'missingNumber', q: 'چه عددی جا افتاده است؟', s: [10, 20, 30, 40, 50, null, 70, 80, 90, 100], o: ['60', '70', '30'], a: '60' }];
+        let currentQuestionIndex, totalAttempts; const container = document.getElementById('quiz-container-3'), questionContent = document.getElementById('q3-question-content'), buttonContainer = document.getElementById('q3-button-container'), feedbackMessage = document.getElementById('q3-feedback-message'), progressBar = document.getElementById('q3-progress-bar'), counterText = document.getElementById('q3-counter-text');
+        
+        function init() { currentQuestionIndex = 0; totalAttempts = 0; quizData.forEach(q => q.isCorrect = undefined); createProgressCircles(); loadQuestion(); }
+        function createProgressCircles() { progressBar.innerHTML = ''; for (let i = 0; i < quizData.length; i++) { const c = document.createElement('div'); c.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; progressBar.appendChild(c); } }
+        function renderOptions(options, answerName) {
+            const oC = document.createElement('div'); oC.className = 'space-y-3';
+            options.forEach((opt, idx) => {
+                const oD = document.createElement('div'); oD.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                const r = document.createElement('input'); r.type = 'radio'; r.name = answerName; r.id = `${answerName}-option-${idx}`; r.value = opt; r.className = 'ml-4 custom-radio';
+                const l = document.createElement('label'); l.htmlFor = r.id; l.textContent = toPersianDigits(opt); l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                oD.append(r, l); oD.onclick = () => { oC.querySelectorAll('div').forEach(div => div.classList.remove('option-selected')); oD.classList.add('option-selected'); r.click(); };
+                oC.appendChild(oD);
+            });
+            return oC;
+        }
+        function loadQuestion() {
+            feedbackMessage.textContent = ''; createProgressCircles();
+            if (currentQuestionIndex >= quizData.length) { const correctCount = quizData.filter(q=>q.isCorrect).length; showCompletionModal('تمرین ۳', 'initQuiz3', correctCount, quizData.length, totalAttempts); return; }
+            counterText.textContent = `سوال ${toPersianDigits(currentQuestionIndex + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[currentQuestionIndex]; questionContent.innerHTML = '';
+            const qT = document.createElement('p'); qT.textContent = q.q; qT.className = 'text-xl font-semibold text-gray-800 mb-4 text-center';
+            questionContent.appendChild(qT);
+            if (q.t === 'missingNumber') {
+                const sC = document.createElement('div'); sC.dir = 'ltr'; sC.className = 'flex justify-center items-center flex-wrap space-x-2 mb-8';
+                q.s.forEach(item => { const c = document.createElement('div'); c.className = 'w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold'; if (item === null) { c.classList.add('bg-white', 'border-2', 'border-dashed', 'border-gray-400'); } else { c.textContent = toPersianDigits(item); c.classList.add('text-white', 'bg-teal-500'); } sC.appendChild(c); });
+                questionContent.appendChild(sC);
+            } else if (q.t === 'tenFrames') {
+                const tfC = document.createElement('div'); tfC.className = 'ten-frames-container my-4';
+                for(let i=0; i < q.c / 10; i++) { const frame = document.createElement('div'); frame.className = 'ten-frame'; for(let j=0; j<10; j++) { const dot = document.createElement('div'); dot.className = 'ten-frame-dot bg-purple-500'; frame.appendChild(dot); } tfC.appendChild(frame); }
+                questionContent.appendChild(tfC);
+            }
+            questionContent.appendChild(renderOptions(q.o, 'q3-answer'));
+            createInitialButtons(buttonContainer, checkAnswer, skipQuestion, 'bg-teal-600');
+        }
+        function skipQuestion() { currentQuestionIndex++; loadQuestion(); }
+        function checkAnswer() {
+            totalAttempts++; const q = quizData[currentQuestionIndex]; const sO = questionContent.querySelector('input:checked');
+            if (!sO) { totalAttempts--; feedbackMessage.textContent = 'لطفا یک گزینه را انتخاب کنید.'; feedbackMessage.classList.add('text-red-600'); return; }
+            const isCorrect = sO.value === q.a;
+            if(isCorrect) q.isCorrect = true;
+            questionContent.querySelectorAll('input').forEach(r => { r.disabled = true; const pD = r.parentElement; pD.classList.remove('option-selected'); if (r.value === q.a) pD.classList.add('correct-answer'); else if (r.checked) pD.classList.add('wrong-answer'); });
+            feedbackMessage.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`; feedbackMessage.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+            buttonContainer.innerHTML = '';
+            if (isCorrect) { createProgressCircles(); const nextBtn = document.createElement('button'); nextBtn.textContent = 'سوال بعدی'; nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700'; nextBtn.onclick = () => { currentQuestionIndex++; loadQuestion(); }; buttonContainer.appendChild(nextBtn); } else { const retryBtn = document.createElement('button'); retryBtn.textContent = 'تلاش دوباره'; retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600'; retryBtn.onclick = loadQuestion; buttonContainer.appendChild(retryBtn); }
+        }
+        document.addEventListener('DOMContentLoaded', init); document.addEventListener('initQuiz3', init);
+    }
+</script>
+</body>
+</html>
