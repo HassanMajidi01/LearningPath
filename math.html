@@ -37,7 +37,9 @@
         .drop-target-box { width: 100%; min-height: 150px; background-color: #f3f4f6; border: 2px dashed #9ca3af; border-radius: 8px; padding: 10px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 8px; }
         .drop-target-box.drag-over { background-color: #e0e7ff; border-color: #6366f1; }
         .placed-item { font-size: 2rem; width: 45px; height: 45px; display: inline-flex; align-items: center; justify-content: center; background-color: #d1d5db; border: 1px solid #9ca3af; border-radius: 4px; cursor: pointer; user-select: none; }
-        .item-image { font-size: 2rem; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+        .item-image { font-size: 1.5rem; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+        .option-image-container { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border: 2px solid transparent; border-radius: 8px; }
+
 
         .sub-list {
             max-height: 0;
@@ -73,7 +75,7 @@
     <header class="w-full bg-[#1d2d50] text-white shadow-lg sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                 <div class="flex-shrink-0">
+                <div class="flex-shrink-0">
                     <h1 class="text-lg md:text-xl font-bold">وبسایت آموزشی</h1>
                 </div>
 
@@ -84,7 +86,7 @@
                     <a href="https://www.aparat.com/playlist/15078314" target="_blank" class="text-gray-300 hover:text-white transition-colors duration-200">ویدئو ها</a>
                 </nav>
 
-                 <!-- دکمه منوی موبایل -->
+                <!-- دکمه منوی موبایل -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white focus:outline-none">
                         <span class="sr-only">باز کردن منو</span>
@@ -107,16 +109,16 @@
         <!-- منوی کشویی (موبایل) -->
         <div id="mobile-main-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-30 transform translate-x-full md:hidden overflow-y-auto">
             <div class="p-4">
-                 <button id="close-mobile-menu" class="absolute top-3 left-3 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">&times;</button>
-                 <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">منو</h2>
-                  <a href="#" class="text-gray-700 block p-2 rounded-md hover:bg-gray-200">صفحه اصلی</a>
-                    <a href="index.html" class="text-indigo-600 font-bold block p-2 rounded-md bg-indigo-50" aria-current="page">ریاضیات</a>
+                <button id="close-mobile-menu" class="absolute top-3 left-3 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">&times;</button>
+                <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">منو</h2>
+                 <a href="index.html" class="text-gray-700 block p-2 rounded-md hover:bg-gray-200">صفحه اصلی</a>
+                    <a href="math.html" class="text-indigo-600 font-bold block p-2 rounded-md bg-indigo-50" aria-current="page">ریاضیات</a>
                     <a href="https://www.aparat.com/playlist/15078314" target="_blank" class="text-gray-700 block p-2 rounded-md hover:bg-gray-200">ویدئو ها</a>
-                 <hr class="my-4">
-                 <h2 class="text-lg font-bold text-gray-800 mb-2">لیست تمرین‌ها</h2>
-                 <div id="mobile-exercise-list" class="space-y-2">
-                     <!-- دسته بندی ها به صورت پویا توسط جاوااسکریپت اضافه می شوند -->
-                 </div>
+                <hr class="my-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">لیست تمرین‌ها</h2>
+                <div id="mobile-exercise-list" class="space-y-2">
+                    <!-- دسته بندی ها به صورت پویا توسط جاوااسکریپت اضافه می شوند -->
+                </div>
             </div>
         </div>
         <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
@@ -186,6 +188,60 @@
             </div>
              <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q6-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
         </div>
+        <div id="quiz-container-7">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">آزمونک ۱: دوره شمردن</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q7-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q7-progress-bar"></div></div>
+                <div id="q7-question-content" class="mb-6 min-h-[250px]"></div>
+                <div class="border-t pt-4"><div id="q7-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q7-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q7-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
+        <div id="quiz-container-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">تمرین ۷: شمارش با هنر</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q8-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q8-progress-bar"></div></div>
+                <div id="q8-question-content" class="mb-6 min-h-[250px] flex flex-col items-center"></div>
+                <div class="border-t pt-4"><div id="q8-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q8-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q8-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
+        <div id="quiz-container-9">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">تمرین ۸: شمارش اشیا (۱)</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q9-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q9-progress-bar"></div></div>
+                <div id="q9-question-content" class="mb-6 min-h-[250px] flex flex-col items-center"></div>
+                <div class="border-t pt-4"><div id="q9-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q9-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q9-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
+        <div id="quiz-container-10">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">تمرین ۹: شمارش اشیا (۲)</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q10-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q10-progress-bar"></div></div>
+                <div id="q10-question-content" class="mb-6 min-h-[250px] flex flex-col items-center"></div>
+                <div class="border-t pt-4"><div id="q10-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q10-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q10-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
+         <div id="quiz-container-11">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">تمرین ۱۰: مقایسه تعداد اشیا (۱)</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q11-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q11-progress-bar"></div></div>
+                <div id="q11-question-content" class="mb-6 min-h-[250px] flex flex-col items-center"></div>
+                <div class="border-t pt-4"><div id="q11-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q11-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q11-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
+        <div id="quiz-container-12">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">تمرین ۱۱: مقایسه اعداد تا ۱۰</h2>
+                <div class="mb-6"><p class="text-sm text-gray-600 mb-2" id="q12-counter-text"></p><div class="flex space-x-1 space-x-reverse" id="q12-progress-bar"></div></div>
+                <div id="q12-question-content" class="mb-6 min-h-[200px] flex flex-col items-center"></div>
+                <div class="border-t pt-4"><div id="q12-feedback-message" class="min-h-[2rem] mb-4 text-center font-semibold"></div><div id="q12-button-container" class="flex items-center space-x-4 space-x-reverse"></div></div>
+            </div>
+             <div class="mt-6"><h3 class="text-xl font-bold mb-4 text-gray-700">ویدئوهای مرتبط</h3><div id="q12-video-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div></div>
+        </div>
     </div>
     
     <!-- مودال اتمام کوئیز -->
@@ -224,7 +280,12 @@
                     { title: "۴. جا خالی اعداد", id: 1 },
                     { title: "۵. اعداد تا ۱۰۰", id: 2 },
                     { title: "۶. ۱۰ تا ۱۰ تا بشمار", id: 3 },
-                    { title: "آزمونک 1", id: null, isQuiz: true }
+                    { title: "۷. شمارش با هنر", id: 8 },
+                    { title: "۸. شمارش اشیا (۱)", id: 9},
+                    { title: "۹. شمارش اشیا (۲)", id: 10},
+                    { title: "۱۰. مقایسه تعداد اشیا (۱)", id: 11},
+                    { title: "۱۱. مقایسه اعداد تا ۱۰", id: 12},
+                    { title: "آزمونک ۱ (مروری)", id: 7, isQuiz: true }
                 ]
             },
             { title: "مقدمات جمع و تفریق", items: [] },
@@ -259,8 +320,8 @@
                         a.textContent = item.title;
                         
                         if (item.isQuiz) {
-                            a.className = 'block p-2 rounded-md text-red-700 font-bold bg-red-50 hover:bg-red-100 text-sm';
-                            a.onclick = (e) => { e.preventDefault(); alert('آزمونک به زودی اضافه خواهد شد!'); };
+                            a.className = 'block p-2 rounded-md text-red-700 font-bold bg-red-50 hover:bg-red-100 text-sm quiz-link';
+                            a.dataset.quiz = item.id;
                         } else {
                             a.className = 'block p-2 rounded-md hover:bg-gray-200 text-sm quiz-link';
                             a.dataset.quiz = item.id;
@@ -305,7 +366,13 @@
             '3': [{ id: 'video-3-1', aparatId: 'eQoGv', title: 'آموزش شمردن ده‌تایی' }],
             '4': [{ id: 'video-4-1', aparatId: 'vac3m2y', title: 'توضیح تمرین به ترتیب بشمارید' }],
             '5': [{ id: 'video-5-1', aparatId: 'maejlhi', title: 'شمارش با اعداد کوچک' }],
-            '6': [{ id: 'video-6-1', aparatId: 'ykf23c8', title: 'یک عدد بیشتر یا یک عدد کمتر' }]
+            '6': [{ id: 'video-6-1', aparatId: 'ykf23c8', title: 'یک عدد بیشتر یا یک عدد کمتر' }],
+            '7': [{ id: 'video-7-1', aparatId: 'wJ9fV', title: 'پایه اول - ریاضی - آزمون (مروری)' }],
+            '8': [{ id: 'video-8-1', aparatId: '7E8kL', title: 'شمارش در هنر' }],
+            '9': [{ id: 'video-9-1', aparatId: '2z3xY', title: 'شمارش اشیا' }],
+            '10': [{ id: 'video-10-1', aparatId: '3fG5H', title: 'شمارش اشیا در گروه' }],
+            '11': [{ id: 'video-11-1', aparatId: 'hJ8kL', title: 'مقایسه تعداد اشیا' }],
+             '12': [{ id: 'video-12-1', aparatId: 't4x9v', title: 'مقایسه اعداد' }]
         };
 
         function loadRelatedVideos(quizId) {
@@ -365,11 +432,15 @@
             activeQuizId = null;
         }
         
-        document.querySelectorAll('.quiz-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                openQuiz(e.target.dataset.quiz);
-            });
+        // This needs to be delegated as the links are created dynamically
+        document.body.addEventListener('click', (e) => {
+            const link = e.target.closest('.quiz-link');
+            if (link) {
+                 e.preventDefault();
+                 if(link.dataset.quiz) {
+                    openQuiz(link.dataset.quiz);
+                 }
+            }
         });
 
         function openMobileMenu() { menuOverlay.classList.remove('hidden'); mobileMainMenu.classList.remove('translate-x-full'); }
@@ -396,7 +467,7 @@
     function createInitialButtons(container, checkHandler, skipHandler, color) { container.innerHTML = ''; const checkBtn = document.createElement('button'); checkBtn.textContent = 'بررسی'; checkBtn.className = `action-button flex-grow ${color} text-white hover:opacity-90`; checkBtn.onclick = checkHandler; const skipBtn = document.createElement('button'); skipBtn.textContent = 'رد کردن'; skipBtn.className = 'action-button flex-grow-0 px-8 bg-gray-400 text-white hover:bg-gray-500'; skipBtn.onclick = skipHandler; container.append(checkBtn, skipBtn); }
 
     // --- منطق کوئیزها (کپسوله شده) ---
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 12; i++) {
         document.addEventListener(`initQuiz${i}`, () => {});
     }
 
@@ -406,8 +477,68 @@
         let current,attempts;const Q=document.getElementById('q1-question-content'),B=document.getElementById('q1-button-container'),F=document.getElementById('q1-feedback-message'),P=document.getElementById('q1-progress-bar'),C=document.getElementById('q1-counter-text');
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
-        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین جا خالی اعداد',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML='';const s=document.createElement('div');s.dir='ltr';s.className='flex justify-center items-center flex-wrap space-x-2 mb-8';q.s.forEach(i=>{if(i==='_'){const n=document.createElement('input');n.type='text';n.className='blank-input w-12 h-12 text-center border-2 border-gray-300 rounded-md';s.appendChild(n);}else{const c=document.createElement('div');c.className='w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold text-white';c.textContent=toPersianDigits(i);if(i==='?')c.classList.add('bg-pink-500');else if(current%3===1)c.classList.add('bg-teal-500');else if(current%3===2)c.classList.add('bg-indigo-500');else c.classList.add('bg-pink-500');s.appendChild(c);}});Q.append(s,Object.assign(document.createElement('p'),{textContent:q.q,className:'text-xl font-semibold text-gray-800 mb-4'}));if(q.type==='multipleChoice'){const o=document.createElement('div');o.className='space-y-3';q.o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q1-answer';r.value=c;r.className='ml-4 custom-radio';const l=document.createElement('label');l.textContent=toPersianDigits(c);l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{o.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.click();};o.appendChild(d);});Q.appendChild(o);}createInitialButtons(B,E,()=>{current++;L();},'bg-blue-600');}
-        function E(){attempts++;const q=quizData[current];let c=false;if(q.type==='multipleChoice'){const s=Q.querySelector('input:checked');if(!s){attempts--;F.textContent='لطفا یک گزینه را انتخاب کنید.';F.classList.add('text-red-600');return;}c=s.value===q.a;Q.querySelectorAll('input').forEach(r=>{r.disabled=true;const d=r.parentElement;d.classList.remove('option-selected');if(r.value===q.a)d.classList.add('correct-answer');else if(r.checked)d.classList.add('wrong-answer');});}else{const i=Q.querySelectorAll('input');const u=Array.from(i).map(n=>n.value.trim());c=JSON.stringify(u)===JSON.stringify(q.a);i.forEach((n,x)=>{n.classList.add(n.value.trim()===q.a[x]?'correct-answer':'wrong-answer');n.disabled=true;});}if(c)q.isCorrect=true;F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی! پاسخ شما صحیح است.':'جواب درست نبود.';B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white hover:bg-green-700';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white hover:bg-gray-600';r.onclick=L;B.appendChild(r);}}I();
+        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین جا خالی اعداد',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML='';const s=document.createElement('div');s.dir='ltr';s.className='flex justify-center items-center flex-wrap space-x-2 mb-8';q.s.forEach(i=>{if(i==='_'){const n=document.createElement('input');n.type='text';n.className='blank-input w-12 h-12 text-center border-2 border-gray-300 rounded-md';s.appendChild(n);}else{const c=document.createElement('div');c.className='w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold text-white';c.textContent=toPersianDigits(i);if(i==='?')c.classList.add('bg-pink-500');else if(current%3===1)c.classList.add('bg-teal-500');else if(current%3===2)c.classList.add('bg-indigo-500');else c.classList.add('bg-pink-500');s.appendChild(c);}});Q.append(s,Object.assign(document.createElement('p'),{textContent:q.q,className:'text-xl font-semibold text-gray-800 mb-4'}));if(q.type==='multipleChoice'){const o=document.createElement('div');o.className='space-y-3';q.o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q1-answer';r.value=c;r.className='ml-4 custom-radio';const l=document.createElement('label');l.textContent=toPersianDigits(c);l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{o.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.checked=true;};o.appendChild(d);});Q.appendChild(o);}createInitialButtons(B,E,()=>{current++;L();},'bg-blue-600');}
+        function E(){
+            attempts++;
+            const q = quizData[current];
+            let isCorrect = false;
+
+            if (q.type === 'multipleChoice') {
+                const selected = Q.querySelector('input:checked');
+                if (!selected) {
+                    attempts--;
+                    F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                    F.classList.add('text-red-600');
+                    return;
+                }
+                isCorrect = selected.value === q.a;
+                Q.querySelectorAll('input').forEach(r => {
+                    r.disabled = true;
+                    const d = r.parentElement;
+                    d.classList.remove('option-selected');
+                    if (isCorrect) {
+                        if (r.value === q.a) d.classList.add('correct-answer');
+                    } else {
+                        if (r.checked) d.classList.add('wrong-answer');
+                    }
+                });
+            } else { // fillInTheBlanks
+                const inputs = Q.querySelectorAll('input');
+                const userAnswers = Array.from(inputs).map(n => n.value.trim());
+                isCorrect = JSON.stringify(userAnswers) === JSON.stringify(q.a);
+                inputs.forEach((n, x) => {
+                    n.disabled = true;
+                    if (isCorrect) {
+                        n.classList.add('correct-answer');
+                    } else {
+                        if (n.value.trim() !== q.a[x]) {
+                            n.classList.add('wrong-answer');
+                        }
+                    }
+                });
+            }
+
+            if(isCorrect) q.isCorrect = true;
+            F.className=`min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent=isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            B.innerHTML='';
+            if(isCorrect){
+                U();
+                const n=document.createElement('button');
+                n.textContent='سوال بعدی';
+                n.className='action-button w-full bg-green-600 text-white hover:bg-green-700';
+                n.onclick=()=>{current++;L();};
+                B.appendChild(n);
+            } else {
+                const r=document.createElement('button');
+                r.textContent='تلاش دوباره';
+                r.className='action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                r.onclick=L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
 
     // --- منطق کوئیز 2 (اعداد تا ۱۰۰) ---
@@ -417,7 +548,42 @@
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
         function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین اعداد تا ۱۰۰',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML=`<div class="flex flex-col items-center"><p class="text-xl font-semibold text-gray-800 mb-4">چه عددی جا افتاده است؟</p><input type="text" id="q2-answer-input" class="w-24 h-12 text-center border-2 border-gray-300 rounded-md mb-6 text-xl"><div id="q2-hundreds-grid" class="hundreds-grid w-full"></div></div>`;const g=Q.querySelector('#q2-hundreds-grid');for(let i=1;i<=100;i++){const c=document.createElement('div');c.className='grid-cell';if(i===q.m)c.classList.add('grid-cell-empty');else{c.textContent=toPersianDigits(i);c.classList.add(colors[Math.floor((i-1)/10)]);}g.appendChild(c);}createInitialButtons(B,E,()=>{current++;L();},'bg-indigo-600');}
-        function E(){attempts++;const q=quizData[current];const i=document.getElementById('q2-answer-input');const u=i.value.trim();if(!u){attempts--;F.textContent='لطفا یک عدد وارد کنید.';F.className='min-h-[2rem] mb-4 text-center font-semibold text-red-600';return;}const c=u==q.m;i.disabled=true;if(c)q.isCorrect=true;F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی! پاسخ شما صحیح است.':'جواب درست نبود.';i.classList.add(c?'correct-answer':'wrong-answer');B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white hover:bg-green-700';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white hover:bg-gray-600';r.onclick=L;B.appendChild(r);}}I();
+        function E(){
+            attempts++;
+            const q = quizData[current];
+            const i = document.getElementById('q2-answer-input');
+            const u = i.value.trim();
+            if(!u){
+                attempts--;
+                F.textContent='لطفا یک عدد وارد کنید.';
+                F.className='min-h-[2rem] mb-4 text-center font-semibold text-red-600';
+                return;
+            }
+            const c = u == q.m;
+            i.disabled = true;
+            if(c) q.isCorrect = true;
+            
+            F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;
+            F.textContent=c?'عالی! پاسخ شما صحیح است.':'جواب درست نبود.';
+            i.classList.add(c?'correct-answer':'wrong-answer');
+            
+            B.innerHTML='';
+            if(c){
+                U();
+                const n=document.createElement('button');
+                n.textContent='سوال بعدی';
+                n.className='action-button w-full bg-green-600 text-white hover:bg-green-700';
+                n.onclick=()=>{current++;L();};
+                B.appendChild(n);
+            }else{
+                const r=document.createElement('button');
+                r.textContent='تلاش دوباره';
+                r.className='action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                r.onclick=L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
 
     // --- منطق کوئیز 3 (۱۰ تا ۱۰ تا بشمار) ---
@@ -426,19 +592,116 @@
         let current,attempts;const Q=document.getElementById('q3-question-content'),B=document.getElementById('q3-button-container'),F=document.getElementById('q3-feedback-message'),P=document.getElementById('q3-progress-bar'),C=document.getElementById('q3-counter-text');
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
-        function R(o,a){const n=document.createElement('div');n.className='space-y-3';o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name=a;r.value=c;r.className='ml-4 custom-radio';const l=document.createElement('label');l.textContent=toPersianDigits(c);l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{n.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.click();};n.appendChild(d);});return n;}
+        function R(o,a){const n=document.createElement('div');n.className='space-y-3';o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name=a;r.value=c;r.className='ml-4 custom-radio';const l=document.createElement('label');l.textContent=toPersianDigits(c);l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{n.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.checked=true;};n.appendChild(d);});return n;}
         function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین ۱۰ تا ۱۰ تا بشمار',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML='';const t=document.createElement('p');t.textContent=q.q;t.className='text-xl font-semibold text-gray-800 mb-4 text-center';Q.appendChild(t);if(q.t==='missingNumber'){const s=document.createElement('div');s.dir='ltr';s.className='flex justify-center items-center flex-wrap space-x-2 mb-8';q.s.forEach(i=>{const c=document.createElement('div');c.className='w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold';if(i===null)c.classList.add('bg-white','border-2','border-dashed','border-gray-400');else{c.textContent=toPersianDigits(i);c.classList.add('text-white','bg-teal-500');}s.appendChild(c);});Q.appendChild(s);}else if(q.t==='tenFrames'){const f=document.createElement('div');f.className='ten-frames-container my-4';for(let i=0;i<q.c/10;i++){const e=document.createElement('div');e.className='ten-frame';for(let j=0;j<10;j++){const d=document.createElement('div');d.className='ten-frame-dot bg-purple-500';e.appendChild(d);}f.appendChild(e);}Q.appendChild(f);}Q.appendChild(R(q.o,'q3-answer'));createInitialButtons(B,E,()=>{current++;L();},'bg-teal-600');}
-        function E(){attempts++;const q=quizData[current];const s=Q.querySelector('input:checked');if(!s){attempts--;F.textContent='لطفا یک گزینه را انتخاب کنید.';F.classList.add('text-red-600');return;}const c=s.value===q.a;if(c)q.isCorrect=true;Q.querySelectorAll('input').forEach(r=>{r.disabled=true;const d=r.parentElement;d.classList.remove('option-selected');if(r.value===q.a)d.classList.add('correct-answer');else if(r.checked)d.classList.add('wrong-answer');});F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی! پاسخ شما صحیح است.':'جواب درست نبود.';B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white hover:bg-green-700';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white hover:bg-gray-600';r.onclick=L;B.appendChild(r);}}I();
+        function E(){
+            attempts++;
+            const q = quizData[current];
+            const s = Q.querySelector('input:checked');
+            if (!s) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            const c = s.value === q.a;
+            if (c) q.isCorrect = true;
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (c) {
+                    if (r.value === q.a) d.classList.add('correct-answer');
+                } else {
+                    if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${c ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = c ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+            B.innerHTML = '';
+            if (c) {
+                U();
+                const n = document.createElement('button');
+                n.textContent = 'سوال بعدی';
+                n.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                n.onclick = () => { current++; L(); };
+                B.appendChild(n);
+            } else {
+                const r = document.createElement('button');
+                r.textContent = 'تلاش دوباره';
+                r.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                r.onclick = L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
     
     // --- منطق کوئیز 4 (به ترتیب بشمارید) ---
     document.addEventListener('initQuiz4', () => {
-        const quizData = [{id:1,type:'fill-in-the-blanks',q:"کفشدوزک‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐞'},sequence:[1,2,null,null],a:[3,4]},{id:2,type:'multiple-choice',q:"چگونه بلوط‌ها را می‌شماریم؟",items:{icon:'🌰',count:2},choices:[{text:"۱، ۲",isCorrect:true},{text:"۱، ۳"}],correctAnswerText:"۱، ۲"},{id:3,type:'fill-in-the-blanks',q:"نهنگ‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐳'},sequence:[1,null,3,4,null],a:[2,5]},{id:4,type:'multiple-choice',q:"چگونه موزها را می‌شماریم؟",items:{icon:'🍌',count:9},choices:[{text:"۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹",isCorrect:true},{text:"۱ ۲ ۳ ۵ ۴ ۶ ۸ ۹ ۷"}],correctAnswerText:"۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹"},{id:5,type:'fill-in-the-blanks',q:"اسب‌های کوچک را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐎'},sequence:[1,2,3,null,5,null,7],a:[4,6]},{id:6,type:'multiple-choice',q:"چگونه کفشدوزک‌ها را می‌شماریم؟",items:{icon:'�',count:4},choices:[{text:"۱ ۲ ۳ ۴",isCorrect:true},{text:"۲ ۳ ۴ ۵"}],correctAnswerText:"۱ ۲ ۳ ۴"},{id:7,type:'fill-in-the-blanks',q:"گل‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🌸'},sequence:[null,2,3,null,5],a:[1,4]}];
+        const quizData = [{id:1,type:'fill-in-the-blanks',q:"کفشدوزک‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐞'},sequence:[1,2,null,null],a:['3','4']},{id:2,type:'multiple-choice',q:"چگونه بلوط‌ها را می‌شماریم؟",items:{icon:'🌰',count:2},choices:[{text:"۱، ۲",isCorrect:true},{text:"۱، ۳"}],correctAnswerText:"۱، ۲"},{id:3,type:'fill-in-the-blanks',q:"نهنگ‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐳'},sequence:[1,null,3,4,null],a:['2','5']},{id:4,type:'multiple-choice',q:"چگونه موزها را می‌شماریم؟",items:{icon:'🍌',count:9},choices:[{text:"۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹",isCorrect:true},{text:"۱ ۲ ۳ ۵ ۴ ۶ ۸ ۹ ۷"}],correctAnswerText:"۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹"},{id:5,type:'fill-in-the-blanks',q:"اسب‌های کوچک را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🐎'},sequence:[1,2,3,null,5,null,7],a:['4','6']},{id:6,type:'multiple-choice',q:"چگونه کفشدوزک‌ها را می‌شماریم؟",items:{icon:'🐞',count:4},choices:[{text:"۱ ۲ ۳ ۴",isCorrect:true},{text:"۲ ۳ ۴ ۵"}],correctAnswerText:"۱ ۲ ۳ ۴"},{id:7,type:'fill-in-the-blanks',q:"گل‌ها را بشمارید. اعداد جا افتاده را در کادرها وارد کنید.",items:{icon:'🌸'},sequence:[null,2,3,null,5],a:[1,4]}];
         let current,attempts;const Q=document.getElementById('q4-question-content'),B=document.getElementById('q4-button-container'),F=document.getElementById('q4-feedback-message'),P=document.getElementById('q4-progress-bar'),C=document.getElementById('q4-counter-text');
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
-        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین به ترتیب بشمارید',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML=`<h3 class="text-xl font-semibold text-center mb-4">${q.q}</h3>`;const contentArea=document.createElement('div');contentArea.className='flex flex-wrap justify-center items-center gap-2';Q.appendChild(contentArea);if(q.type==='fill-in-the-blanks'){contentArea.dir='ltr';q.sequence.forEach(i=>{const p=document.createElement('div');p.className='flex flex-col items-center';if(q.items&&q.items.icon)p.innerHTML=`<span class="item-image">${q.items.icon}</span>`;if(i===null)p.innerHTML+=`<input type="text" class="w-12 h-12 text-center border-2 rounded-md">`;else p.innerHTML+=`<span class="w-12 h-12 flex items-center justify-center">${toPersianDigits(i)}</span>`;contentArea.appendChild(p);});}else if(q.type==='multiple-choice'){if(q.items&&q.items.icon&&q.items.count){const d=document.createElement('div');d.className='w-full flex justify-center flex-wrap gap-2 mb-4';for(let i=0;i<q.items.count;i++)d.innerHTML+=`<span class="item-image">${q.items.icon}</span>`;contentArea.appendChild(d);}const o=document.createElement('div');o.className='w-full space-y-3 mt-4';q.choices.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q4-answer';r.value=c.text;r.className='ml-4 custom-radio';const l=document.createElement('label');l.innerHTML=`<span dir="ltr">${toPersianDigits(c.text)}</span>`;l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{o.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.click();};o.appendChild(d);});contentArea.appendChild(o);}createInitialButtons(B,E,()=>{current++;L();},'bg-yellow-500');}
-        function E(){attempts++;const q=quizData[current];let c=false;if(q.type==='fill-in-the-blanks'){const i=Q.querySelectorAll('input');const u=Array.from(i).map(n=>n.value.trim());c=JSON.stringify(u.map(Number))===JSON.stringify(q.a);i.forEach((n,x)=>{n.classList.add(n.value==q.a[x]?'correct-answer':'wrong-answer');n.disabled=true;});}else{const s=Q.querySelector('input:checked');if(!s){attempts--;F.textContent='لطفا یک گزینه را انتخاب کنید.';F.classList.add('text-red-600');return;}c=s.value===q.correctAnswerText;Q.querySelectorAll('input').forEach(r=>{r.disabled=true;const d=r.parentElement;d.classList.remove('option-selected');if(r.value===q.correctAnswerText)d.classList.add('correct-answer');else if(r.checked)d.classList.add('wrong-answer');});}if(c)q.isCorrect=true;F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی!':'دوباره تلاش کن.';B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white';r.onclick=L;B.appendChild(r);}}I();
+        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین به ترتیب بشمارید',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML=`<h3 class="text-xl font-semibold text-center mb-4">${q.q}</h3>`;const contentArea=document.createElement('div');contentArea.className='flex flex-wrap justify-center items-center gap-2';Q.appendChild(contentArea);if(q.type==='fill-in-the-blanks'){contentArea.dir='ltr';q.sequence.forEach(i=>{const p=document.createElement('div');p.className='flex flex-col items-center';if(q.items&&q.items.icon)p.innerHTML=`<span class="item-image">${q.items.icon}</span>`;if(i===null)p.innerHTML+=`<input type="text" class="w-12 h-12 text-center border-2 rounded-md">`;else p.innerHTML+=`<span class="w-12 h-12 flex items-center justify-center">${toPersianDigits(i)}</span>`;contentArea.appendChild(p);});}else if(q.type==='multiple-choice'){if(q.items&&q.items.icon&&q.items.count){const d=document.createElement('div');d.className='w-full flex justify-center flex-wrap gap-2 mb-4';for(let i=0;i<q.items.count;i++)d.innerHTML+=`<span class="item-image">${q.items.icon}</span>`;contentArea.appendChild(d);}const o=document.createElement('div');o.className='w-full space-y-3 mt-4';q.choices.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q4-answer';r.value=c.text;r.className='ml-4 custom-radio';const l=document.createElement('label');l.innerHTML=`<span dir="ltr">${toPersianDigits(c.text)}</span>`;l.className='text-lg text-gray-700 cursor-pointer flex-grow';d.append(r,l);d.onclick=()=>{o.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.checked=true;};o.appendChild(d);});contentArea.appendChild(o);}createInitialButtons(B,E,()=>{current++;L();},'bg-yellow-500');}
+        function E(){
+            attempts++;
+            const q = quizData[current];
+            let isCorrect = false;
+            if (q.type === 'fill-in-the-blanks') {
+                const inputs = Q.querySelectorAll('input');
+                const userAnswers = Array.from(inputs).map(n => n.value.trim());
+                isCorrect = JSON.stringify(userAnswers.map(Number)) === JSON.stringify(q.a);
+                inputs.forEach((n, x) => {
+                    n.disabled = true;
+                    if(isCorrect) {
+                        n.classList.add('correct-answer');
+                    } else {
+                        if (n.value != q.a[x]) {
+                            n.classList.add('wrong-answer');
+                        }
+                    }
+                });
+            } else {
+                const selected = Q.querySelector('input:checked');
+                if (!selected) {
+                    attempts--;
+                    F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                    F.classList.add('text-red-600');
+                    return;
+                }
+                isCorrect = selected.value === q.correctAnswerText;
+                Q.querySelectorAll('input').forEach(r => {
+                    r.disabled = true;
+                    const d = r.parentElement;
+                    d.classList.remove('option-selected');
+                    if (isCorrect) {
+                        if (r.value === q.correctAnswerText) d.classList.add('correct-answer');
+                    } else {
+                        if (r.checked) d.classList.add('wrong-answer');
+                    }
+                });
+            }
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی!' : 'دوباره تلاش کن.';
+            B.innerHTML = '';
+            if (isCorrect) {
+                U();
+                const n = document.createElement('button');
+                n.textContent = 'سوال بعدی';
+                n.className = 'action-button w-full bg-green-600 text-white';
+                n.onclick = () => { current++; L(); };
+                B.appendChild(n);
+            } else {
+                const r = document.createElement('button');
+                r.textContent = 'تلاش دوباره';
+                r.className = 'action-button w-full bg-gray-500 text-white';
+                r.onclick = L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
 
     // --- منطق کوئیز 5 (شمارش با اعداد کوچک) ---
@@ -448,7 +711,37 @@
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
         function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین شمارش با اعداد کوچک',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML=`<h3 class="text-xl font-semibold text-center mb-4">${q.q}</h3><div id="q5-source" class="text-center mb-4"><span class="drag-source-item" draggable="true">${q.icon}</span></div><div id="q5-target" class="drop-target-box"></div>`;const s=Q.querySelector('.drag-source-item');const t=Q.querySelector('.drop-target-box');s.ondragstart=e=>{e.dataTransfer.setData("text/plain",q.icon);};t.ondragover=e=>e.preventDefault();t.ondragenter=()=>t.classList.add('drag-over');t.ondragleave=()=>t.classList.remove('drag-over');t.ondrop=e=>{e.preventDefault();t.classList.remove('drag-over');const i=document.createElement('span');i.className='placed-item';i.textContent=e.dataTransfer.getData('text/plain');i.onclick=()=>i.remove();t.appendChild(i);};createInitialButtons(B,E,()=>{current++;L();},'bg-purple-600');}
-        function E(){attempts++;const q=quizData[current];const t=Q.querySelector('.drop-target-box');const c=t.children.length===q.a;if(c)q.isCorrect=true;F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی!':`تعداد اشتباه است. باید ${toPersianDigits(q.a)} مورد باشد.`;t.classList.add(c?'correct-answer':'wrong-answer');B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white';r.onclick=L;B.appendChild(r);}}I();
+        function E(){
+            attempts++;
+            const q = quizData[current];
+            const t = Q.querySelector('.drop-target-box');
+            const c = t.children.length === q.a;
+            if (c) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${c ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = c ? 'عالی!' : `تعداد اشتباه است. باید ${toPersianDigits(q.a)} مورد باشد.`;
+            // Only add wrong-answer class, don't reveal correct state by adding correct-answer class on fail
+            if (!c) {
+                t.classList.add('wrong-answer');
+            } else {
+                t.classList.add('correct-answer');
+            }
+            B.innerHTML = '';
+            if (c) {
+                U();
+                const n = document.createElement('button');
+                n.textContent = 'سوال بعدی';
+                n.className = 'action-button w-full bg-green-600 text-white';
+                n.onclick = () => { current++; L(); };
+                B.appendChild(n);
+            } else {
+                const r = document.createElement('button');
+                r.textContent = 'تلاش دوباره';
+                r.className = 'action-button w-full bg-gray-500 text-white';
+                r.onclick = L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
 
     // --- منطق کوئیز 6 (یک عدد بیشتر/کمتر) ---
@@ -457,11 +750,974 @@
         let current,attempts;const Q=document.getElementById('q6-question-content'),B=document.getElementById('q6-button-container'),F=document.getElementById('q6-feedback-message'),P=document.getElementById('q6-progress-bar'),C=document.getElementById('q6-counter-text');
         function I(){current=0;attempts=0;quizData.forEach(q=>q.isCorrect=undefined);U();L();}
         function U(){P.innerHTML='';for(let i=0;i<quizData.length;i++){const c=document.createElement('div');c.className=`w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect?'bg-green-500 border-green-500':'border-gray-300'}`;P.appendChild(c);}}
-        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین یک عدد بیشتر/کمتر',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML='';const storyDiv=document.createElement('div');storyDiv.className='text-center mb-4';q.s.forEach(p=>{if(p.t==='text'){storyDiv.innerHTML+=`<p class="text-lg">${p.c}</p>`;}else if(p.t==='image'){const d=document.createElement('div');d.className='flex justify-center flex-wrap gap-2 my-2';for(let i=0;i<p.n;i++)d.innerHTML+=`<span class="item-image">${p.i}</span>`;storyDiv.appendChild(d);}});Q.appendChild(storyDiv);Q.innerHTML+=`<p class="text-xl font-semibold text-center my-4">${q.q}</p>`;const oC=document.createElement('div');oC.className='space-y-3';q.o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q6-answer';r.value=c.v||c.c;r.dataset.correct=!!c.correct;r.className='ml-4 custom-radio';const l=document.createElement('label');l.className='text-lg text-gray-700 cursor-pointer flex-grow flex items-center flex-wrap gap-1';if(c.i)c.i.forEach(ic=>l.innerHTML+=`<span class="item-image text-2xl">${ic}</span>`);else l.textContent=toPersianDigits(c.c);d.append(r,l);d.onclick=()=>{oC.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.click();};oC.appendChild(d);});Q.appendChild(oC);createInitialButtons(B,E,()=>{current++;L();},'bg-pink-600');}
-        function E(){attempts++;const s=Q.querySelector('input:checked');if(!s){attempts--;F.textContent='لطفا یک گزینه را انتخاب کنید.';F.classList.add('text-red-600');return;}const c=s.dataset.correct==='true';const q=quizData[current];if(c)q.isCorrect=true;Q.querySelectorAll('input').forEach(r=>{r.disabled=true;const d=r.parentElement;d.classList.remove('option-selected');if(r.dataset.correct==='true')d.classList.add('correct-answer');else if(r.checked)d.classList.add('wrong-answer');});F.className=`min-h-[2rem] mb-4 text-center font-semibold ${c?'text-green-600':'text-red-600'}`;F.textContent=c?'عالی!':'دوباره تلاش کن.';B.innerHTML='';if(c){U();const n=document.createElement('button');n.textContent='سوال بعدی';n.className='action-button w-full bg-green-600 text-white';n.onclick=()=>{current++;L();};B.appendChild(n);}else{const r=document.createElement('button');r.textContent='تلاش دوباره';r.className='action-button w-full bg-gray-500 text-white';r.onclick=L;B.appendChild(r);}}I();
+        function L(){F.textContent='';U();if(current>=quizData.length){const c=quizData.filter(q=>q.isCorrect).length;window.showCompletionModal('تمرین یک عدد بیشتر/کمتر',c,quizData.length,attempts);return;}C.textContent=`سوال ${toPersianDigits(current+1)} از ${toPersianDigits(quizData.length)}`;const q=quizData[current];Q.innerHTML='';const storyDiv=document.createElement('div');storyDiv.className='text-center mb-4';q.s.forEach(p=>{if(p.t==='text'){storyDiv.innerHTML+=`<p class="text-lg">${p.c}</p>`;}else if(p.t==='image'){const d=document.createElement('div');d.className='flex justify-center flex-wrap gap-2 my-2';for(let i=0;i<p.n;i++)d.innerHTML+=`<span class="item-image">${p.i}</span>`;storyDiv.appendChild(d);}});Q.appendChild(storyDiv);Q.innerHTML+=`<p class="text-xl font-semibold text-center my-4">${q.q}</p>`;const oC=document.createElement('div');oC.className='space-y-3';q.o.forEach(c=>{const d=document.createElement('div');d.className='border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';const r=document.createElement('input');r.type='radio';r.name='q6-answer';r.value=c.v||c.c;r.dataset.correct=!!c.correct;r.className='ml-4 custom-radio';const l=document.createElement('label');l.className='text-lg text-gray-700 cursor-pointer flex-grow flex items-center flex-wrap gap-1';if(c.i)c.i.forEach(ic=>l.innerHTML+=`<span class="item-image text-2xl">${ic}</span>`);else l.textContent=toPersianDigits(c.c);d.append(r,l);d.onclick=()=>{oC.querySelectorAll('div').forEach(v=>v.classList.remove('option-selected'));d.classList.add('option-selected');r.checked=true;};oC.appendChild(d);});Q.appendChild(oC);createInitialButtons(B,E,()=>{current++;L();},'bg-pink-600');}
+        function E() {
+            attempts++;
+            const s = Q.querySelector('input:checked');
+            if (!s) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            const c = s.dataset.correct === 'true';
+            const q = quizData[current];
+            if (c) q.isCorrect = true;
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (c) {
+                    if (r.dataset.correct === 'true') d.classList.add('correct-answer');
+                } else {
+                    if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${c ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = c ? 'عالی!' : 'دوباره تلاش کن.';
+            B.innerHTML = '';
+            if (c) {
+                U();
+                const n = document.createElement('button');
+                n.textContent = 'سوال بعدی';
+                n.className = 'action-button w-full bg-green-600 text-white';
+                n.onclick = () => { current++; L(); };
+                B.appendChild(n);
+            } else {
+                const r = document.createElement('button');
+                r.textContent = 'تلاش دوباره';
+                r.className = 'action-button w-full bg-gray-500 text-white';
+                r.onclick = L;
+                B.appendChild(r);
+            }
+        }
+        I();
     });
 
+    // --- منطق آزمونک 7 (مروری) ---
+    document.addEventListener('initQuiz7', () => {
+        const quizData=[
+            {type:'sequenceAndFill', q:"سیب ها را بشمارید و اعداد جا افتاده را در کادرها وارد کنید.", items:{icon:'🍎'}, sequence:[1,2,null,4,5,6,7,null], a:['3','8']},
+            {type:'dragAndDrop', q:"۵ سیب در جعبه قرار دهید.", icon:'🍎', a:5},
+            {type:'hundredGrid', q: "چه عددی در جدول جا افتاده است؟", m:93},
+            {type:'oneMore', s:[{t:'text',c:"علی ۸ کفشدوزک داشت."},{t:'image',i:'🐞',n:8},{t:'text',c:"او ۱ کفشدوزک دیگر پیدا کرد."}], q:"حالا او چند کفشدوزک دارد؟",o:[{c:"10"},{c:"9",correct:true},{c:"8"}]},
+            {type:'countByTens', q:'چه عددی جا افتاده است؟',s:[10,null,30,40,50,60,70,80,90,100],o:['100','80','20'],a:'20'},
+            {type:'fillInTheBlanks', q:'جاهای خالی را با اعداد مناسب پر کنید.', s:['11','12','13','_','15','16','17','_'],a:['14','18']},
+        ];
+        let current, attempts;
+        const Q = document.getElementById('q7-question-content');
+        const B = document.getElementById('q7-button-container');
+        const F = document.getElementById('q7-feedback-message');
+        const P = document.getElementById('q7-progress-bar');
+        const C = document.getElementById('q7-counter-text');
+        
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('آزمونک ۱ (مروری)', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+
+            const title = document.createElement('h3');
+            title.className = 'text-xl font-semibold text-center mb-4';
+            title.innerHTML = q.q;
+            Q.appendChild(title);
+
+            const contentArea = document.createElement('div');
+            Q.appendChild(contentArea);
+
+            switch(q.type) {
+                case 'fillInTheBlanks':
+                    contentArea.dir = 'ltr';
+                    contentArea.className = 'flex justify-center items-center flex-wrap space-x-2 my-8';
+                    q.s.forEach(item => {
+                        if (item === '_') {
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'w-12 h-12 text-center border-2 border-gray-300 rounded-md';
+                            contentArea.appendChild(input);
+                        } else {
+                            const div = document.createElement('div');
+                            div.className = 'w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold text-white bg-blue-500';
+                            div.textContent = toPersianDigits(item);
+                            contentArea.appendChild(div);
+                        }
+                    });
+                    break;
+                case 'sequenceAndFill':
+                    contentArea.className = 'flex flex-wrap justify-center items-center gap-2';
+                    contentArea.dir = 'ltr';
+                    q.sequence.forEach(i => {
+                        const p = document.createElement('div');
+                        p.className = 'flex flex-col items-center';
+                        if (q.items && q.items.icon) p.innerHTML = `<span class="item-image">${q.items.icon}</span>`;
+                        if (i === null) p.innerHTML += `<input type="text" class="w-12 h-12 text-center border-2 rounded-md">`;
+                        else p.innerHTML += `<span class="w-12 h-12 flex items-center justify-center font-bold text-lg">${toPersianDigits(i)}</span>`;
+                        contentArea.appendChild(p);
+                    });
+                    break;
+                case 'dragAndDrop':
+                    contentArea.innerHTML = `<div id="q7-source" class="text-center mb-4"><span class="drag-source-item" draggable="true">${q.icon}</span></div><div id="q7-target" class="drop-target-box mx-auto"></div>`;
+                    const source = contentArea.querySelector('.drag-source-item');
+                    const target = contentArea.querySelector('.drop-target-box');
+                    source.ondragstart = e => { e.dataTransfer.setData("text/plain", q.icon); };
+                    target.ondragover = e => e.preventDefault();
+                    target.ondragenter = () => target.classList.add('drag-over');
+                    target.ondragleave = () => target.classList.remove('drag-over');
+                    target.ondrop = e => {
+                        e.preventDefault();
+                        target.classList.remove('drag-over');
+                        const item = document.createElement('span');
+                        item.className = 'placed-item';
+                        item.textContent = e.dataTransfer.getData('text/plain');
+                        item.onclick = () => item.remove();
+                        target.appendChild(item);
+                    };
+                    break;
+                case 'hundredGrid':
+                    contentArea.innerHTML = `<div class="flex flex-col items-center"><input type="text" id="q7-answer-input" class="w-24 h-12 text-center border-2 border-gray-300 rounded-md mb-6 text-xl"><div id="q7-hundreds-grid" class="hundreds-grid w-full max-w-md"></div></div>`;
+                    const grid = contentArea.querySelector('#q7-hundreds-grid');
+                    const colors = ['bg-green-400','bg-pink-400','bg-sky-400','bg-red-400','bg-purple-400','bg-green-500','bg-pink-500','bg-sky-500','bg-red-500','bg-purple-500'];
+                    for(let i = 1; i <= 100; i++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell';
+                        if (i === q.m) {
+                            cell.classList.add('grid-cell-empty');
+                        } else {
+                            cell.textContent = toPersianDigits(i);
+                            cell.classList.add(colors[Math.floor((i-1)/10)]);
+                        }
+                        grid.appendChild(cell);
+                    }
+                    break;
+                case 'oneMore':
+                case 'countByTens':
+                     const optionsContainer = document.createElement('div');
+                     optionsContainer.className = 'space-y-3';
+                     
+                     if (q.type === 'oneMore') {
+                         const storyDiv = document.createElement('div');
+                         storyDiv.className = 'text-center mb-4 space-y-2';
+                         q.s.forEach(p => {
+                             if (p.t === 'text') {
+                                 storyDiv.innerHTML += `<p class="text-lg">${p.c}</p>`;
+                             } else if (p.t === 'image') {
+                                 const d = document.createElement('div');
+                                 d.className = 'flex justify-center flex-wrap gap-2 my-2';
+                                 for (let i = 0; i < p.n; i++) d.innerHTML += `<span class="item-image">${p.i}</span>`;
+                                 storyDiv.appendChild(d);
+                             }
+                         });
+                         contentArea.appendChild(storyDiv);
+                     } else { // countByTens
+                        const seqDiv = document.createElement('div');
+                        seqDiv.dir = 'ltr';
+                        seqDiv.className = 'flex justify-center items-center flex-wrap space-x-2 my-4';
+                        q.s.forEach(i => {
+                            const c = document.createElement('div');
+                            c.className = 'w-14 h-14 my-1 rounded-full flex items-center justify-center text-xl font-bold';
+                            if(i===null){ c.classList.add('bg-white','border-2','border-dashed','border-gray-400'); }
+                            else { c.textContent=toPersianDigits(i); c.classList.add('text-white','bg-teal-500'); }
+                            seqDiv.appendChild(c);
+                        });
+                        contentArea.appendChild(seqDiv);
+                     }
+                     
+                     const options = q.type === 'oneMore' ? q.o : q.o.map(opt => ({c: opt}));
+
+                     options.forEach(c => {
+                         const d = document.createElement('div');
+                         d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                         const r = document.createElement('input');
+                         r.type = 'radio';
+                         r.name = 'q7-answer';
+                         r.value = c.c;
+                         if(q.type === 'oneMore') r.dataset.correct = !!c.correct;
+                         r.className = 'ml-4 custom-radio';
+                         const l = document.createElement('label');
+                         l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                         l.textContent = toPersianDigits(c.c);
+                         d.append(r, l);
+                         d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked=true; };
+                         optionsContainer.appendChild(d);
+                     });
+                     contentArea.appendChild(optionsContainer);
+                     break;
+            }
+
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-red-600');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            let isCorrect = false;
+
+            switch(q.type) {
+                case 'fillInTheBlanks':
+                case 'sequenceAndFill':
+                    const inputs = Q.querySelectorAll('input');
+                    const userAnswers = Array.from(inputs).map(n => n.value.trim());
+                    isCorrect = JSON.stringify(userAnswers) === JSON.stringify(q.a);
+                    inputs.forEach((input, index) => {
+                        input.disabled = true;
+                        if(isCorrect) {
+                            input.classList.add('correct-answer');
+                        } else {
+                            if (input.value.trim() !== q.a[index]) {
+                                input.classList.add('wrong-answer');
+                            }
+                        }
+                    });
+                    break;
+                case 'dragAndDrop':
+                    const target = Q.querySelector('.drop-target-box');
+                    isCorrect = target.children.length === q.a;
+                    if(isCorrect) target.classList.add('correct-answer');
+                    else target.classList.add('wrong-answer');
+                    break;
+                case 'hundredGrid':
+                    const input = document.getElementById('q7-answer-input');
+                    isCorrect = input.value.trim() == q.m;
+                    input.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+                    input.disabled = true;
+                    break;
+                case 'oneMore':
+                case 'countByTens':
+                     const selected = Q.querySelector('input:checked');
+                     if (!selected) {
+                         attempts--;
+                         F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                         F.classList.add('text-red-600');
+                         return;
+                     }
+                     const correctValue = q.type === 'countByTens' ? q.a : q.o.find(opt => opt.correct).c;
+                     isCorrect = selected.value === correctValue;
+                     Q.querySelectorAll('input').forEach(r => {
+                         r.disabled = true;
+                         const d = r.parentElement;
+                         d.classList.remove('option-selected');
+                         if(isCorrect) {
+                             if (r.value === correctValue) d.classList.add('correct-answer');
+                         } else {
+                            if (r.checked) d.classList.add('wrong-answer');
+                         }
+                     });
+                     break;
+            }
+
+            if(isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
+
+    // --- منطق آزمونک 8 (شمارش با هنر) ---
+    document.addEventListener('initQuiz8', () => {
+        const quizData = [
+            { q: "چند تکه میوه می‌بینید؟", img: "https://i.ibb.co/3cqd4cm/Screenshot-2025-06-07-172433.jpg", o: ["5", "7", "3"], a: "7" },
+            { q: "چند چهره می‌بینید؟", img: "https://i.ibb.co/bJCq2M6/Screenshot-2025-06-07-172525.jpg", o: ["10", "9", "12"], a: "10" },
+            { q: "ببر چند پا دارد؟", img: "https://i.ibb.co/MfZ2YqR/Screenshot-2025-06-07-172556.jpg", o: ["5", "4", "2"], a: "4" },
+            { q: "چند نفر در قایق هستند؟", img: "https://i.ibb.co/Ksm7F0S/Screenshot-2025-06-07-172621.jpg", o: ["3", "13", "7"], a: "3" },
+            { q: "چند نفر را می‌بینید؟", img: "https://i.ibb.co/vLNzL6Y/Screenshot-2025-06-07-172643.jpg", o: ["12", "3", "6"], a: "6" },
+            { q: "چند دکمه در جلوی کت وجود دارد؟", img: "https://i.ibb.co/2ZkQz7h/Screenshot-2025-06-07-172704.jpg", o: ["7", "5", "8"], a: "8" },
+            { q: "چند ماشین می‌بینید؟", img: "https://i.ibb.co/Bf1g7Gz/Screenshot-2025-06-07-172724.jpg", o: ["4", "7", "8"], a: "4" }
+        ];
+
+        let current, attempts;
+        const Q = document.getElementById('q8-question-content');
+        const B = document.getElementById('q8-button-container');
+        const F = document.getElementById('q8-feedback-message');
+        const P = document.getElementById('q8-progress-bar');
+        const C = document.getElementById('q8-counter-text');
+
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('تمرین ۷: شمارش با هنر', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+
+            const questionContainer = document.createElement('div');
+            questionContainer.className = "flex flex-col items-center w-full";
+            
+            const questionText = document.createElement('p');
+            questionText.className = "text-xl font-semibold text-gray-800 mb-4";
+            questionText.textContent = q.q;
+
+            const image = document.createElement('img');
+            image.src = q.img;
+            image.alt = q.q;
+            image.className = "max-w-xs md:max-w-sm rounded-lg shadow-md mb-6";
+            
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = "space-y-3 w-full max-w-sm";
+            q.o.forEach(opt => {
+                const d = document.createElement('div');
+                d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                const r = document.createElement('input');
+                r.type = 'radio';
+                r.name = 'q8-answer';
+                r.value = opt;
+                r.className = 'ml-4 custom-radio';
+                const l = document.createElement('label');
+                l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                l.textContent = toPersianDigits(opt);
+                d.append(r, l);
+                d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                optionsContainer.appendChild(d);
+            });
+            
+            questionContainer.append(questionText, image, optionsContainer);
+            Q.appendChild(questionContainer);
+
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-purple-600');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            const selected = Q.querySelector('input:checked');
+
+            if (!selected) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            
+            const isCorrect = selected.value === q.a;
+
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (isCorrect) {
+                    if (r.value === q.a) d.classList.add('correct-answer');
+                } else {
+                    if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
+
+    // --- منطق تمرین 9 (شمارش اشیا 1) ---
+    document.addEventListener('initQuiz9', () => {
+         const quizData = [
+            { type: 'fill-in', q: "چند سیب وجود دارد؟", items: { icon: '🍎', count: 8 }, a: "8" },
+            { type: 'multiple-choice-image', q: "کدام جعبه ۷ موز دارد؟", items: [{ icon: '🍌', count: 7 }, { icon: '🍌', count: 12 }, { icon: '🍌', count: 10 }], a: "7" },
+            { type: 'multiple-choice-text', q: "چند راکون وجود دارد؟", items: { icon: '🦝', count: 13 }, o: ["13", "14", "6"], a: "13" },
+            { type: 'fill-in', q: "چند روباه وجود دارد؟", items: { icon: '🦊', count: 4 }, a: "4" },
+            { type: 'multiple-choice-image', q: "کدام جعبه ۱۲ نهنگ دارد؟", items: [{ icon: '🐳', count: 12 }, { icon: '🐳', count: 15 }, { icon: '🐳', count: 9 }], a: "12" },
+            { type: 'multiple-choice-text', q: "چند هویج وجود دارد؟", items: { icon: '🥕', count: 16 }, o: ["7", "16", "18"], a: "16" },
+            { type: 'fill-in', q: "چند کوسه وجود دارد؟", items: { icon: '🦈', count: 13 }, a: "13" }
+        ];
+
+        let current, attempts;
+        const Q = document.getElementById('q9-question-content');
+        const B = document.getElementById('q9-button-container');
+        const F = document.getElementById('q9-feedback-message');
+        const P = document.getElementById('q9-progress-bar');
+        const C = document.getElementById('q9-counter-text');
+
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('تمرین ۸: شمارش اشیا (۱)', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+            
+            const questionText = document.createElement('p');
+            questionText.className = "text-xl font-semibold text-gray-800 mb-4";
+            questionText.textContent = q.q;
+            Q.appendChild(questionText);
+
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'w-full flex flex-col items-center';
+            
+            if (q.type === 'fill-in' || q.type === 'multiple-choice-text') {
+                const itemsDiv = document.createElement('div');
+                itemsDiv.className = 'flex flex-wrap justify-center gap-2 mb-4';
+                for (let i = 0; i < q.items.count; i++) {
+                    const itemSpan = document.createElement('span');
+                    itemSpan.className = 'item-image text-3xl';
+                    itemSpan.textContent = q.items.icon;
+                    itemsDiv.appendChild(itemSpan);
+                }
+                contentContainer.appendChild(itemsDiv);
+            }
+
+            if (q.type === 'fill-in') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'q9-answer-input';
+                input.className = 'w-24 h-12 text-center border-2 border-gray-300 rounded-md mt-4 text-xl';
+                contentContainer.appendChild(input);
+            } else if (q.type.startsWith('multiple-choice')) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'space-y-3 w-full max-w-md';
+                
+                const itemsToRender = q.type === 'multiple-choice-image' ? q.items : q.o;
+                
+                itemsToRender.forEach(opt => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'border-2 border-gray-300 rounded-lg p-2 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'q9-answer';
+                    radio.className = 'ml-4 custom-radio';
+                    
+                    const label = document.createElement('label');
+                    label.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+
+                    if (q.type === 'multiple-choice-image') {
+                        radio.value = opt.count;
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'option-image-container';
+                        for(let i = 0; i < opt.count; i++) {
+                            const itemSpan = document.createElement('span');
+                            itemSpan.className = 'item-image';
+                            itemSpan.textContent = opt.icon;
+                            imageContainer.appendChild(itemSpan);
+                        }
+                        label.appendChild(imageContainer);
+                    } else { // multiple-choice-text
+                         radio.value = opt;
+                         label.textContent = toPersianDigits(opt);
+                    }
+
+                    optionDiv.append(radio, label);
+                    optionDiv.onclick = () => {
+                        optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected'));
+                        optionDiv.classList.add('option-selected');
+                        radio.checked = true;
+                    };
+                    optionsContainer.appendChild(optionDiv);
+                });
+                contentContainer.appendChild(optionsContainer);
+            }
+
+            Q.appendChild(contentContainer);
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-green-600');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            let isCorrect = false;
+
+            if (q.type === 'fill-in') {
+                const input = document.getElementById('q9-answer-input');
+                isCorrect = input.value.trim() === q.a;
+                input.disabled = true;
+                input.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+            } else {
+                 const selected = Q.querySelector('input:checked');
+                 if (!selected) {
+                     attempts--;
+                     F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                     F.classList.add('text-red-600');
+                     return;
+                 }
+                 isCorrect = selected.value === q.a;
+                 Q.querySelectorAll('input').forEach(r => {
+                     r.disabled = true;
+                     const d = r.parentElement;
+                     d.classList.remove('option-selected');
+                     if (isCorrect) {
+                        if (r.value === q.a) d.classList.add('correct-answer');
+                     } else {
+                        if (r.checked) d.classList.add('wrong-answer');
+                     }
+                 });
+            }
+
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
+
+    // --- منطق تمرین 10 (شمارش اشیا 2) ---
+    document.addEventListener('initQuiz10', () => {
+        const quizData = [
+            { q: "چند سیب می‌بینید؟", items: [{ icon: '🍎', count: 4 }, { icon: '🍌', count: 3 }], o: ["5", "4", "8"], a: "4" },
+            { q: "چند کلوچه می‌بینید؟", items: [{ icon: '🍪', count: 9 }], o: ["5", "9", "7"], a: "9" },
+            { q: "چند بستنی قیفی می‌بینید؟", items: [{ icon: '🍦', count: 10 }], o: ["6", "10", "8"], a: "10" },
+            { q: "چند کلوچه می‌بینید؟", items: [{ icon: '🍪', count: 5 }, { icon: '🐘', count: 3 }], o: ["3", "7", "5"], a: "5" },
+            { q: "چند خوک می‌بینید؟", items: [{ icon: '🐷', count: 7 }], o: ["5", "8", "7"], a: "7" },
+            { q: "چند پنگوئن می‌بینید؟", items: [{ icon: '🐧', count: 5 }], o: ["5", "6", "2"], a: "5" },
+            { q: "چند میمون می‌بینید؟", items: [{ icon: '🐒', count: 5 }, { icon: '🐄', count: 3 }, { icon: '🍦', count: 4 }], o: ["4", "5", "8"], a: "5" }
+        ];
+
+        let current, attempts;
+        const Q = document.getElementById('q10-question-content');
+        const B = document.getElementById('q10-button-container');
+        const F = document.getElementById('q10-feedback-message');
+        const P = document.getElementById('q10-progress-bar');
+        const C = document.getElementById('q10-counter-text');
+
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('تمرین ۹: شمارش اشیا (۲)', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+            
+            const questionText = document.createElement('p');
+            questionText.className = "text-xl font-semibold text-gray-800 mb-4";
+            questionText.textContent = q.q;
+            
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'flex flex-wrap justify-center items-center gap-3 mb-6';
+            
+            let allItems = [];
+            q.items.forEach(itemGroup => {
+                for(let i=0; i < itemGroup.count; i++) {
+                    allItems.push(itemGroup.icon);
+                }
+            });
+            allItems.sort(() => Math.random() - 0.5); 
+            
+            allItems.forEach(icon => {
+                const itemSpan = document.createElement('span');
+                itemSpan.className = 'item-image text-4xl';
+                itemSpan.textContent = icon;
+                itemsContainer.appendChild(itemSpan);
+            });
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = "space-y-3 w-full max-w-sm";
+            q.o.forEach(opt => {
+                const d = document.createElement('div');
+                d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                const r = document.createElement('input');
+                r.type = 'radio';
+                r.name = 'q10-answer';
+                r.value = opt;
+                r.className = 'ml-4 custom-radio';
+                const l = document.createElement('label');
+                l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                l.textContent = toPersianDigits(opt);
+                d.append(r, l);
+                d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                optionsContainer.appendChild(d);
+            });
+            
+            Q.append(questionText, itemsContainer, optionsContainer);
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-cyan-600');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            const selected = Q.querySelector('input:checked');
+
+            if (!selected) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            
+            const isCorrect = selected.value === q.a;
+
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (isCorrect) {
+                   if (r.value === q.a) d.classList.add('correct-answer');
+                } else {
+                   if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
+
+     // --- منطق تمرین 11 (مقایسه تعداد اشیا 1) ---
+    document.addEventListener('initQuiz11', () => {
+         const quizData = [
+            { q: "کدام قفس موش‌های بیشتری دارد؟", type: 'compare-image', options: [{img: "https://i.ibb.co/CbfBfXT/Screenshot-2025-06-07-183258-A.png", value: "A"}, {img: "https://i.ibb.co/PMg97F8/Screenshot-2025-06-07-183258-B.png", value: "B"}, {text: "تعداد موش‌ها در هر دو قفس برابر است.", value: "C"}], a: "B" },
+            { q: "چه کسی گل‌های کمتری چیده است؟", type: 'compare-text', groups: [{name: "وس", items: "🌸🌸🌸"}, {name: "جولز", items: "🌸🌸🌸🌸🌸"}], options: [{text: "وس", value: "A"}, {text: "جولز", value: "B"}], a: "A" },
+            { q: "آیا تعداد بستنی‌ها کمتر است یا کلوچه‌ها؟", type: 'compare-rows', groups: [{items: "🍦🍦🍦🍦🍦🍦"}, {items: "🍪🍪🍪🍪🍪🍪"}], options: ["A", "B", "تعداد هر دو برابر است."], a: "C" },
+            { q: "کدام حیوان حباب‌های بیشتری درست کرده است؟", type: 'compare-image-rows', options: [{img: "https://i.ibb.co/5jwMHm5/Screenshot-2025-06-07-183457-A.png", value: "A"}, {img: "https://i.ibb.co/VQLbCgC/Screenshot-2025-06-07-183457-B.png", value: "B"}, {text: "هر دو به یک اندازه حباب درست کرده‌اند.", value: "C"}], a: "C"},
+            { q: "چه کسی میمون‌های کمتری دارد؟", type: 'compare-text', groups: [{name: "جان", items: "🐒🐒🐒🐒🐒🐒🐒🐒🐒🐒"}, {name: "پینگ", items: "🐒🐒🐒🐒🐒🐒🐒🐒🐒"}], options: [{text: "جان", value: "A"}, {text: "پینگ", value: "B"}], a: "B" },
+            { q: "تعداد گل‌ها بیشتر است یا کفشدوزک‌ها؟", type: 'compare-rows', groups: [{items: "🌸🌸🌸🌸🌸🌸🌸🌸"}, {items: "🐞🐞🐞🐞🐞🐞"}], options: ["A", "B", "تعداد هر دو برابر است."], a: "A" },
+            { q: "کدام آکواریوم ماهی کمتری دارد؟", type: 'compare-image', options: [{img: "https://i.ibb.co/8Yn4wXN/Screenshot-2025-06-07-183732-A.png", value: "A"}, {img: "https://i.ibb.co/yQjD9j6/Screenshot-2025-06-07-183732-B.png", value: "B"}, {text: "تعداد ماهی‌ها در هر دو آکواریوم برابر است.", value: "C"}], a: "A" }
+        ];
+
+        let current, attempts;
+        const Q = document.getElementById('q11-question-content');
+        const B = document.getElementById('q11-button-container');
+        const F = document.getElementById('q11-feedback-message');
+        const P = document.getElementById('q11-progress-bar');
+        const C = document.getElementById('q11-counter-text');
+
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+        
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('تمرین ۱۰: مقایسه تعداد اشیا (۱)', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+            
+            const questionText = document.createElement('p');
+            questionText.className = "text-xl font-semibold text-gray-800 mb-4";
+            questionText.textContent = q.q;
+            Q.appendChild(questionText);
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'space-y-4 w-full';
+            
+            if (q.type === 'compare-text') {
+                const groupsContainer = document.createElement('div');
+                groupsContainer.className = 'space-y-4 mb-4';
+                q.groups.forEach(group => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.innerHTML = `<span class="font-bold">${group.name}:</span> <span class="text-3xl">${group.items}</span>`;
+                    groupsContainer.appendChild(groupDiv);
+                });
+                Q.insertBefore(groupsContainer, questionText.nextSibling);
+
+                q.options.forEach(opt => {
+                     const d = document.createElement('div');
+                     d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                     const r = document.createElement('input');
+                     r.type = 'radio'; r.name = 'q11-answer'; r.value = opt.value; r.className = 'ml-4 custom-radio';
+                     const l = document.createElement('label');
+                     l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                     l.textContent = opt.text;
+                     d.append(r, l);
+                     d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                     optionsContainer.appendChild(d);
+                });
+
+            } else if (q.type === 'compare-rows') {
+                 q.options.forEach((opt, index) => {
+                     const d = document.createElement('div');
+                     d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                     const r = document.createElement('input');
+                     r.type = 'radio'; r.name = 'q11-answer'; r.value = String.fromCharCode(65 + index); r.className = 'ml-4 custom-radio';
+                     
+                     const l = document.createElement('label');
+                     l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+
+                     if (index < q.groups.length) {
+                        l.textContent = q.groups[index].items;
+                        l.className += ' text-3xl';
+                     } else {
+                        l.textContent = opt;
+                     }
+                     
+                     d.append(r, l);
+                     d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                     optionsContainer.appendChild(d);
+                 });
+            } else if (q.type === 'compare-image' || q.type === 'compare-image-rows') {
+                 q.options.forEach(opt => {
+                     const d = document.createElement('div');
+                     d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-start cursor-pointer hover:bg-gray-100 transition-all';
+                     const r = document.createElement('input');
+                     r.type = 'radio'; r.name = 'q11-answer'; r.value = opt.value; r.className = 'ml-4 custom-radio mt-2';
+                     
+                     const l = document.createElement('label');
+                     l.className = 'text-lg text-gray-700 cursor-pointer flex-grow';
+                     if(opt.img) {
+                        const img = document.createElement('img');
+                        img.src = opt.img;
+                        img.className = "max-w-full rounded-md";
+                        l.appendChild(img);
+                     } else {
+                         l.textContent = opt.text;
+                     }
+                     
+                     d.append(r, l);
+                     d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                     optionsContainer.appendChild(d);
+                 });
+            }
+
+            Q.appendChild(optionsContainer);
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-orange-500');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            const selected = Q.querySelector('input:checked');
+
+            if (!selected) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            
+            const isCorrect = selected.value === q.a;
+
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (isCorrect) {
+                   if (r.value === q.a) d.classList.add('correct-answer');
+                } else {
+                   if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
+
+    // --- منطق تمرین 12 (مقایسه اعداد تا 10) ---
+    document.addEventListener('initQuiz12', () => {
+        const quizData = [
+            { type: 'less_greater', q: "کدام عدد کمتر است؟", o: ["6", "2"], a: "2" },
+            { type: 'phrase', q: "عدد ۶ ___ است.", o: ["کمتر از ۴", "بیشتر از ۴"], a: "بیشتر از ۴" },
+            { type: 'less_greater', q: "کدام عدد کمتر است؟", o: ["10", "3"], a: "3" },
+            { type: 'phrase', q: "عدد ۷ ___ است.", o: ["کمتر از ۸", "بیشتر از ۸"], a: "کمتر از ۸" },
+            { type: 'less_greater', q: "کدام عدد بیشتر است؟", o: ["5", "10"], a: "10" },
+            { type: 'phrase', q: "عدد ۴ ___ است.", o: ["کمتر از ۷", "بیشتر از ۷"], a: "کمتر از ۷" },
+            { type: 'less_greater', q: "کدام عدد کمتر است؟", o: ["4", "1"], a: "1" },
+        ];
+
+        let current, attempts;
+        const Q = document.getElementById('q12-question-content');
+        const B = document.getElementById('q12-button-container');
+        const F = document.getElementById('q12-feedback-message');
+        const P = document.getElementById('q12-progress-bar');
+        const C = document.getElementById('q12-counter-text');
+
+        function initializeQuiz(){ current = 0; attempts = 0; quizData.forEach(q => q.isCorrect = undefined); updateProgress(); loadQuestion(); }
+        function updateProgress(){ P.innerHTML = ''; for(let i=0; i < quizData.length; i++){ const dot = document.createElement('div'); dot.className = `w-4 h-4 rounded-full border-2 ${quizData[i].isCorrect ? 'bg-green-500 border-green-500' : 'border-gray-300'}`; P.appendChild(dot); } }
+        
+        function loadQuestion() {
+            F.textContent = '';
+            updateProgress();
+            if (current >= quizData.length) {
+                const correctCount = quizData.filter(q => q.isCorrect).length;
+                window.showCompletionModal('تمرین ۱۱: مقایسه اعداد تا ۱۰', correctCount, quizData.length, attempts);
+                return;
+            }
+            C.textContent = `سوال ${toPersianDigits(current + 1)} از ${toPersianDigits(quizData.length)}`;
+            const q = quizData[current];
+            Q.innerHTML = '';
+
+            const questionText = document.createElement('p');
+            questionText.className = "text-2xl font-bold text-gray-800 mb-6";
+            questionText.textContent = q.q;
+            
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = "space-y-3 w-full max-w-sm";
+            q.o.forEach(opt => {
+                const d = document.createElement('div');
+                d.className = 'border-2 border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-100 transition-all';
+                const r = document.createElement('input');
+                r.type = 'radio';
+                r.name = 'q12-answer';
+                r.value = opt;
+                r.className = 'ml-4 custom-radio';
+                const l = document.createElement('label');
+                l.className = 'text-xl text-gray-700 cursor-pointer flex-grow';
+                l.textContent = toPersianDigits(opt);
+                d.append(r, l);
+                d.onclick = () => { optionsContainer.querySelectorAll('div').forEach(v => v.classList.remove('option-selected')); d.classList.add('option-selected'); r.checked = true; };
+                optionsContainer.appendChild(d);
+            });
+            
+            Q.append(questionText, optionsContainer);
+            createInitialButtons(B, checkAnswer, () => { current++; loadQuestion(); }, 'bg-rose-500');
+        }
+
+        function checkAnswer() {
+            attempts++;
+            const q = quizData[current];
+            const selected = Q.querySelector('input:checked');
+
+            if (!selected) {
+                attempts--;
+                F.textContent = 'لطفا یک گزینه را انتخاب کنید.';
+                F.classList.add('text-red-600');
+                return;
+            }
+            
+            const isCorrect = selected.value === q.a;
+
+            if (isCorrect) q.isCorrect = true;
+            F.className = `min-h-[2rem] mb-4 text-center font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`;
+            F.textContent = isCorrect ? 'عالی! پاسخ شما صحیح است.' : 'جواب درست نبود.';
+
+            Q.querySelectorAll('input').forEach(r => {
+                r.disabled = true;
+                const d = r.parentElement;
+                d.classList.remove('option-selected');
+                if (isCorrect) {
+                   if (r.value === q.a) d.classList.add('correct-answer');
+                } else {
+                   if (r.checked) d.classList.add('wrong-answer');
+                }
+            });
+
+            B.innerHTML = '';
+            if (isCorrect) {
+                updateProgress();
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'سوال بعدی';
+                nextBtn.className = 'action-button w-full bg-green-600 text-white hover:bg-green-700';
+                nextBtn.onclick = () => { current++; loadQuestion(); };
+                B.appendChild(nextBtn);
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.textContent = 'تلاش دوباره';
+                retryBtn.className = 'action-button w-full bg-gray-500 text-white hover:bg-gray-600';
+                retryBtn.onclick = loadQuestion;
+                B.appendChild(retryBtn);
+            }
+        }
+        
+        initializeQuiz();
+    });
 </script>
 </body>
 </html>
-�
