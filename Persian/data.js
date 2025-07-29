@@ -10,7 +10,6 @@ const lessonsData = {
             { word: 'ا', image: 'assets/images/a-gheire-aval.png', audio: 'assets/audio/a-gheire-aval.mp3', highlight: 'ا' },
             { word: 'باران', image: 'assets/images/baran.png', audio: 'assets/audio/baran.mp3', highlight: 'ا' },
             { word: 'آرد', image: 'assets/images/ard.png', audio: 'assets/audio/ard.mp3', highlight: 'آ' },
-            { word: 'اَنار', image: 'assets/images/anar.png', audio: 'assets/audio/anar.mp3', highlight: 'ا' }
         ],
         sentenceScramble: [
             { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
