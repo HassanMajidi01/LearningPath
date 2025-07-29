@@ -42,14 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonsList.appendChild(lessonItem);
 
         lessonItem.querySelector('.lesson-title').addEventListener('click', () => {
-            // بستن سایر زیرمنوهای باز
             const allSubmenus = lessonsList.querySelectorAll('.submenu');
             allSubmenus.forEach(sm => {
                 if (sm !== submenu) {
                     sm.style.display = 'none';
                 }
             });
-            // باز و بسته کردن زیرمنوی فعلی
             submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
         });
     }
@@ -61,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const lessonData = lessonsData[lessonId];
             loadActivity(activity, lessonData);
             
-            // بستن سایدبار بعد از انتخاب یک گزینه در حالت موبایل
             if (window.innerWidth < 768) {
                 sidebar.classList.remove('open');
             }
@@ -74,19 +71,42 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'flashcards':
                 initializeFlashcards(mainContent, data.flashcardWords);
                 break;
+            
+            // --- ✨ بخش کلیدی و تغییر یافته ✨ ---
             case 'memory':
-                const wordsForGame = data.memoryWords.slice(0, 8);
+                // به جای memoryWords، از داده‌های فلش‌کارت استفاده می‌کنیم.
+                // متد slice(0, 8) تضمین می‌کند که بازی با ۸ جفت کارت (مجموعاً ۱۶ کارت) اجرا شود.
+                const wordsForGame = data.flashcardWords.slice(0, 8);
+
+                // بازی حافظه به جفت کارت‌ها نیاز دارد، پس آرایه را دو برابر می‌کنیم.
                 const gameWords = [...wordsForGame, ...wordsForGame];
+                
                 initializeMemoryGame(mainContent, gameWords);
                 break;
+            // ------------------------------------
+
             case 'scramble':
-                initializeSentenceScramble(mainContent, data.sentenceScramble);
+                // بررسی می‌کنیم که آیا داده‌های جمله‌سازی برای این درس وجود دارد یا نه
+                if (data.sentenceScramble && data.sentenceScramble.length > 0) {
+                    initializeSentenceScramble(mainContent, data.sentenceScramble);
+                } else {
+                    mainContent.innerHTML = `<h2>بازی جمله‌سازی</h2><p>تمرین جمله‌سازی برای این درس هنوز آماده نشده است.</p>`;
+                }
                 break;
+
             case 'video':
                 mainContent.innerHTML = `<h2>ویدئوی آموزشی: ${data.title}</h2> <video controls width="100%"><source src="${data.videoSrc}" type="video/mp4"></video>`;
                 break;
+            
             case 'quiz':
-                mainContent.innerHTML = `<h2>آزمون درس: ${data.title}</h2><p>برای شروع آزمون روی لینک زیر کلیک کنید.</p><a href="${data.quizLink}" target="_blank" class="button">شروع آزمون</a>`;
+                 mainContent.innerHTML = `
+                    <div class="quiz-card-container">
+                        <div class="quiz-icon">📝</div>
+                        <h2>آزمون درس: ${data.title}</h2>
+                        <p class="quiz-description">وقتشه چیزایی که یاد گرفتی رو امتحان کنی! آماده‌ای؟</p>
+                        <a href="${data.quizLink}" target="_blank" class="button-start-quiz">بزن بریم آزمون!</a>
+                    </div>
+                `;
                 break;
         }
     }
