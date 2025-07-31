@@ -72,18 +72,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 initializeFlashcards(mainContent, data.flashcardWords);
                 break;
             
-            // --- ✨ بخش کلیدی و تغییر یافته ✨ ---
+            // --- ✨ بخش کلیدی و تغییر یافته برای انتخاب رندوم کلمات ✨ ---
             case 'memory':
-                // به جای memoryWords، از داده‌های فلش‌کارت استفاده می‌کنیم.
-                // متد slice(0, 8) تضمین می‌کند که بازی با ۸ جفت کارت (مجموعاً ۱۶ کارت) اجرا شود.
-                const wordsForGame = data.flashcardWords.slice(0, 8);
+                // ابتدا یک کپی از آرایه کلمات فلش‌کارت را ایجاد می‌کنیم تا آرایه اصلی دست‌نخورده باقی بماند.
+                const allWords = [...data.flashcardWords];
+
+                // آرایه کلمات را به صورت تصادفی بُر می‌زنیم (Fisher-Yates Shuffle Algorithm)
+                for (let i = allWords.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+                }
+                
+                // حالا ۸ کلمه اول را از لیست بُر خورده انتخاب می‌کنیم.
+                const wordsForGame = allWords.slice(0, 8);
 
                 // بازی حافظه به جفت کارت‌ها نیاز دارد، پس آرایه را دو برابر می‌کنیم.
                 const gameWords = [...wordsForGame, ...wordsForGame];
                 
                 initializeMemoryGame(mainContent, gameWords);
                 break;
-            // ------------------------------------
+            // --------------------------------------------------------
 
             case 'scramble':
                 // بررسی می‌کنیم که آیا داده‌های جمله‌سازی برای این درس وجود دارد یا نه
@@ -98,22 +106,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContent.innerHTML = `<h2>ویدئوی آموزشی: ${data.title}</h2> <video controls width="100%"><source src="${data.videoSrc}" type="video/mp4"></video>`;
                 break;
             
+            // ✨ کیس آزمون با طراحی کاملاً جدید و جذاب ✨
             case 'quiz':
                  mainContent.innerHTML = `
-                    <div class="quiz-card-container">
-                        <div class="quiz-icon">📝</div>
-                        <h2>آزمون درس: ${data.title}</h2>
-                        <p class="quiz-description">وقتشه چیزایی که یاد گرفتی رو امتحان کنی! آماده‌ای؟</p>
-                        <a href="${data.quizLink}" target="_blank" class="button-start-quiz">بزن بریم آزمون!</a>
+                    <div class="quiz-launch-pad">
+                        <div class="quiz-card-header">
+                            <div class="quiz-header-icon">🏆</div>
+                            <h2>آزمون درس: ${data.title}</h2>
+                        </div>
+                        <div class="quiz-card-body">
+                            <p class="quiz-intro-text">
+                                این آخرین مرحله این درسه! آماده‌ای تا هرچی یاد گرفتی رو امتحان کنی؟
+                            </p>
+                            
+                            <ul class="quiz-instructions">
+                                <li>
+                                    <span class="li-icon">✅</span>
+                                    <span>این آزمون در یک صفحه جدید باز می‌شه.</span>
+                                </li>
+                                <li>
+                                    <span class="li-icon">💡</span>
+                                    <span>با دقت و بدون عجله به سوال‌ها جواب بده.</span>
+                                </li>
+                                <li>
+                                    <span class="li-icon">😊</span>
+                                    <span>فقط کافیه بهترین تلاشت رو بکنی!</span>
+                                </li>
+                            </ul>
+                            
+                            <a href="${data.quizLink}" target="_blank" class="button-start-quiz-final">شروع آزمون نهایی</a>
+                        </div>
                     </div>
                 `;
                 break;
         }
     }
 
-    // بارگذاری محتوای پیش‌فرض
+      // ✨ بارگذاری محتوای پیش‌فرض با ساختار جدید و شیک ✨
     mainContent.innerHTML = `
-        <h1>به سامانه آموزش زبان فارسی اول ابتدایی خوش آمدید!</h1>
-        <p>لطفاً از منوی سمت راست، نشانه مورد نظر خود را انتخاب کنید. در دستگاه‌های موبایل، از دکمه منو در بالا سمت راست استفاده کنید.</p>
+       <div class="welcome-container">
+            <div class="welcome-icon">🎉</div>
+            <h1>به دنیای حروف و کلمات خوش آمدی!</h1>
+            <p class="welcome-subtitle">اینجا یادگیری زبان فارسی مثل یک بازی شیرینه.</p>
+            <div class="welcome-cta">
+                <span class="cta-arrow">👉</span>
+                <p>برای شروع ماجراجویی، از منوی سمت راست یک نشانه انتخاب کن.</p>
+            </div>
+        </div>
     `;
 });

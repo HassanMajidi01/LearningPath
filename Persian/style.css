@@ -32,6 +32,8 @@ h1, h2 {
     cursor: pointer;
 }
 
+
+
 /* --- استایل سایدبار (برای موبایل: مخفی و خارج از صفحه) --- */
 .sidebar {
     position: fixed;
@@ -100,6 +102,118 @@ h1, h2 {
 
 .sidebar .submenu li:hover {
     background-color: #e67e22;
+}
+
+/* --- ✨ استایل جدید و شکیل برای صفحه خوش‌آمدگویی ✨ --- */
+
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #4facfe, #00f2fe); /* گرادیان آبی آسمانی و جذاب */
+    color: white;
+    padding: 50px 30px;
+    border-radius: 24px;
+    min-height: 60vh;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fade-in-up 0.7s ease-out;
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.welcome-icon {
+    font-size: 4rem; /* اندازه آیکون */
+    margin-bottom: 20px;
+    animation: wave-animation 2.5s infinite; /* انیمیشن برای آیکون */
+}
+
+@keyframes wave-animation {
+   0% { transform: rotate( 0.0deg) }
+   10% { transform: rotate(14.0deg) }
+   20% { transform: rotate(-8.0deg) }
+   30% { transform: rotate(14.0deg) }
+   40% { transform: rotate(-4.0deg) }
+   50% { transform: rotate(10.0deg) }
+   60% { transform: rotate( 0.0deg) }
+   100% { transform: rotate( 0.0deg) }
+}
+
+.welcome-container h1 {
+    color: white;
+    font-size: 2.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+}
+
+.welcome-subtitle {
+    font-size: 1.2em;
+    opacity: 0.95;
+    margin-bottom: 35px;
+    max-width: 400px;
+}
+
+/* کادر فراخوان (Call to Action) */
+.welcome-cta {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 15px 25px;
+    border-radius: 50px; /* کاملاً گرد */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.welcome-cta p {
+    font-size: 1.1em;
+    margin: 0;
+    font-weight: 500;
+}
+
+.welcome-cta .cta-arrow {
+    font-size: 1.8em;
+    margin-left: 15px; /* برای راست‌چین، فاصله در سمت چپ فلش */
+    animation: pulse-arrow 1.5s infinite;
+}
+
+/* انیمیشن برای فلش راهنما */
+@keyframes pulse-arrow {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+
+/* رسپانسیو کردن صفحه برای موبایل */
+@media (max-width: 600px) {
+    .welcome-container {
+        padding: 40px 20px;
+        min-height: 0; /* حذف ارتفاع ثابت برای انعطاف‌پذیری */
+    }
+    .welcome-container h1 {
+        font-size: 1.8em;
+    }
+    .welcome-subtitle {
+        font-size: 1em;
+    }
+    .welcome-cta {
+       padding: 12px 20px;
+    }
+    .welcome-cta p {
+       font-size: 1em;
+    }
 }
 
 /* --- محتوای اصلی --- */
@@ -454,7 +568,112 @@ h1, h2 {
     border-bottom-color: #f39c12;
 }
 
+/* --- ✨ استایل جدید، شیک و حرفه‌ای برای بخش آزمون ✨ --- */
 
+/* کانتینر اصلی که در مرکز صفحه قرار می‌گیرد */
+.quiz-launch-pad {
+    max-width: 600px;
+    margin: 30px auto;
+    background: #ffffff;
+    border-radius: 24px;
+    overflow: hidden; /* مهم برای گرد بودن گوشه‌های هدر */
+    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+    transform: scale(0.98);
+    animation: pop-in 0.5s ease-out forwards;
+}
+
+/* انیمیشن ظاهر شدن کارت */
+@keyframes pop-in {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* هدر کارت با رنگ متمایز و آیکون جام */
+.quiz-card-header {
+    background-color: #34495e;
+    color: white;
+    padding: 25px 30px;
+    position: relative;
+    text-align: center;
+}
+
+.quiz-card-header .quiz-header-icon {
+    font-size: 2.5rem;
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%) rotate(15deg);
+    opacity: 0.2;
+}
+
+.quiz-card-header h2 {
+    color: white;
+    font-size: 2em;
+    margin: 0;
+}
+
+/* بدنه کارت */
+.quiz-card-body {
+    padding: 35px;
+}
+
+.quiz-intro-text {
+    text-align: center;
+    font-size: 1.2em;
+    color: #636e72;
+    margin-bottom: 30px;
+}
+
+/* لیست دستورالعمل‌ها */
+.quiz-instructions {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+.quiz-instructions li {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.quiz-instructions .li-icon {
+    font-size: 1.5em;
+    margin-left: 15px; /* فاصله آیکون از متن */
+}
+
+/* دکمه نهایی شروع آزمون */
+.button-start-quiz-final {
+    display: block; /* تمام عرض را می‌گیرد */
+    width: 100%;
+    padding: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 5px 0 #d35400;
+    transition: all 0.2s ease-in-out;
+}
+
+.button-start-quiz-final:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 0 #d35400;
+}
+
+.button-start-quiz-final:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #d35400;
+}
 
 /* --- Media Query برای تبلت و صفحات بزرگتر --- */
 /* ------------------------------------------- */
