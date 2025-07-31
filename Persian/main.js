@@ -2,20 +2,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
     const menuToggle = document.getElementById('menu-toggle'); // دکمه همبرگر
+    const overlay = document.getElementById('sidebar-overlay'); // دریافت عنصر پوشش
+
+      // --- توابع جدید برای مدیریت باز و بسته شدن ---
+    function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('visible');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('visible');
+    }
 
     // --- مدیریت منوی موبایل ---
     if (menuToggle) {
         menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
         });
     }
 
     // بستن سایدبار با کلیک روی محتوای اصلی (اختیاری)
-    mainContent.addEventListener('click', () => {
-        if (sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-        }
-    });
+     if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+    }
 
 
     // ایجاد لیست دروس در سایدبار (بقیه کد بدون تغییر)
@@ -60,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadActivity(activity, lessonData);
             
             if (window.innerWidth < 768) {
-                sidebar.classList.remove('open');
+                closeSidebar(); // از تابع جدید استفاده می‌کنیم
             }
         }
     });
