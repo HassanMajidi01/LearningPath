@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 /* --- استایل‌های عمومی و پایه (Mobile-First) --- */
 body {
     font-family: 'Vazirmatn', sans-serif;
@@ -22,7 +28,7 @@ h1, h2 {
     position: fixed;
     top: 15px;
     right: 15px;
-    z-index: 1001; /* بالاتر از همه عناصر */
+    z-index: 1001;
     background-color: #e67e22;
     color: white;
     border: none;
@@ -32,46 +38,24 @@ h1, h2 {
     cursor: pointer;
 }
 
-
-
-/* --- استایل سایدبار (برای موبایل: مخفی و خارج از صفحه) --- */
+/* --- استایل سایدبار (برای موبایل) --- */
 .sidebar {
     position: fixed;
     top: 0;
     right: 0;
     width: 250px;
-    height: 100vh; /* ارتفاع کامل صفحه */
+    height: 100vh;
     background-color: #2c3e50;
     color: white;
     padding: 20px;
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     z-index: 1000;
-    overflow-y: auto; /* ✨ مهم: اجازه اسکرول شدن در داخل سایدبار را می‌دهد ✨ */
+    overflow-y: auto; /* مهم: اجازه اسکرول شدن را می‌دهد */
 }
 
 .sidebar.open {
     transform: translateX(0);
-}
-
-
-/* ✨ استایل جدید برای پوشش صفحه (Overlay) ✨ */
-#sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* رنگ نیمه‌شفاف */
-    z-index: 999; /* زیر سایدبار (1000) اما روی بقیه محتوا */
-    opacity: 0;
-    pointer-events: none; /* در حالت مخفی، قابل کلیک نیست */
-    transition: opacity 0.3s ease-in-out;
-}
-
-#sidebar-overlay.visible {
-    opacity: 1;
-    pointer-events: auto; /* در حالت نمایش، قابل کلیک می‌شود */
 }
 
 .sidebar h2 {
@@ -122,6 +106,31 @@ h1, h2 {
 
 .sidebar .submenu li:hover {
     background-color: #e67e22;
+}
+
+
+/* --- استایل برای پوشش صفحه (Overlay) --- */
+#sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- محتوای اصلی --- */
+.main-content {
+    padding: 20px;
 }
 
 /* --- ✨ استایل جدید و شکیل برای صفحه خوش‌آمدگویی ✨ --- */
