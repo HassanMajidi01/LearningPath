@@ -518,5 +518,299 @@ const lessonsData = {
          ],
         quizLink: "https://docs.google.com/forms/your-form-link-9",
         videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-26": {
+        title: "ه",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-27": {
+        title: "چ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-28": {
+        title: "ژ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-29": {
+        title: "خوا",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-30": {
+        title: "تشدید -ّ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-31": {
+        title: "ص",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-32": {
+        title: "ذ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-33": {
+        title: "ع",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-34": {
+        title: "ث",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-35": {
+        title: "ح",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-36": {
+        title: "ض",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-37": {
+        title: "ط",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-38": {
+        title: "غ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
+    },
+    "dars-39": {
+        title: "ظ",
+        flashcardWords: [
+            { word: 'خورشید', image: 'assets/images/khorshid.png', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
+            { word: 'دو', image: 'assets/images/do.png', audio: 'assets/audio/do.mp3', highlight: 'و' },
+            { word: 'نوک', image: 'assets/images/nok.png', audio: 'assets/audio/nok.mp3', highlight: 'و' },
+            { word: 'روشن', image: 'assets/images/roshan.png', audio: 'assets/audio/roshan.mp3', highlight: 'و' },
+            { word: 'خودکار', image: 'assets/images/khodkar.png', audio: 'assets/audio/khodkar.mp3', highlight: 'و' },
+            { word: 'خوردَن', image: 'assets/images/khordan.png', audio: 'assets/audio/khordan.mp3', highlight: 'و' },
+            { word: 'نو', image: 'assets/images/no.png', audio: 'assets/audio/no.mp3', highlight: 'و' },
+            { word: 'موتور', image: 'assets/images/motor.png', audio: 'assets/audio/motor.mp3', highlight: 'و' },
+            { word: 'نوزاد', image: 'assets/images/nozad.png', audio: 'assets/audio/nozad.mp3', highlight: 'و' }
+        ],
+        sentenceScramble: [ 
+            { correct: "خُروس به زمین نوک زد و دانه را خورد", scrambled: ["نوک", "زمین", "به", "خُروس", "زد", "و", "دانه", "را", "خورد"] },
+            { correct: "وقتی که خورشید زمین را روشن کرد امین برای خُروسِ خود دانه ریخت", scrambled: ["کرد", "روشن", "را", "زمین", "خورشید", "که", "وقتی", "امین", "برای", "خُروسِ", "خود", "دانه", "ریخت"] },
+            { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
+         ],
+        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        videoSrc: "assets/videos/dars-9.mp4"
     }
 };
