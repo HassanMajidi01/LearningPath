@@ -24,7 +24,7 @@ h1, h2 {
 
 /* --- استایل دکمه همبرگر منو --- */
 .menu-toggle {
-    display: block; /* در حالت موبایل نمایش داده می‌شود */
+    display: block;
     position: fixed;
     top: 15px;
     right: 15px;
@@ -51,7 +51,7 @@ h1, h2 {
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     z-index: 1000;
-    overflow-y: auto; /* مهم: اجازه اسکرول شدن را می‌دهد */
+    overflow-y: auto;
 }
 
 .sidebar.open {
@@ -747,16 +747,28 @@ h1, h2 {
 /* ------------------------------------------- */
 @media (min-width: 768px) {
     .menu-toggle { display: none; }
-    .container { display: flex; }
+     .container {
+        display: flex;
+        height: 100vh; /* ۱. کانتینر والد ارتفاع کامل صفحه را می‌گیرد */
+    }
     .sidebar { position: relative; transform: translateX(0); width: 280px; flex-shrink: 0; }
-    .main-content { flex-grow: 1; padding: 40px; }
+    .main-content {
+        flex-grow: 1; /* تمام فضای باقی‌مانده را پر می‌کند */
+        padding: 40px;
+        overflow-y: auto; /* ۳. اگر محتوای اصلی بلند باشد، خودش اسکرول می‌خورد */
+    }
     .flashcard-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     .flashcard .word-text { font-size: 28px; }
     .memory-game { max-width: 500px; }
-    .video-item {
-        max-width: 720px; /* ✨ حداکثر عرض به ۷۲۰ پیکسل کاهش یافت ✨ */
-        margin-right: auto;
-        margin-left: auto;
+    .videos-grid {
+        display: grid;
+        /* ۱. ستون‌هایی دقیقاً به عرض ۴۸۰ پیکسل بساز، تا جایی که جا می‌شود */
+        grid-template-columns: repeat(auto-fill, 480px);
+        
+        /* ۲. حالا کل این شبکه ستون‌ها را در وسط کانتینر قرار بده */
+        justify-content: center;
+
+        gap: 30px; /* فاصله بین آیتم‌ها */
     }
 }
 
