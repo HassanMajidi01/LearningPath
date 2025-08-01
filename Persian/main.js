@@ -116,8 +116,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
 
-            case 'video':
-                mainContent.innerHTML = `<h2>ویدئوی آموزشی: ${data.title}</h2> <video controls width="100%"><source src="${data.videoSrc}" type="video/mp4"></video>`;
+               case 'video':
+                let videoHTML = `<h2>ویدئوهای آموزشی: ${data.title}</h2>`;
+
+                // بررسی می‌کنیم که آیا آرایه ویدئوها وجود دارد و خالی نیست
+                if (data.videos && data.videos.length > 0) {
+                    // روی هر ویدئو در آرایه حلقه می‌زنیم
+                    data.videos.forEach(video => {
+                        videoHTML += `
+                            <div class="video-item">
+                                <h3>${video.title}</h3>
+                                <div class="video-container">
+                                    ${video.embedCode}
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    videoHTML += `<p>ویدئوی آموزشی برای این درس هنوز آماده نشده است.</p>`;
+                }
+
+                mainContent.innerHTML = videoHTML;
                 break;
             
             // ✨ کیس آزمون با طراحی کاملاً جدید و جذاب ✨
@@ -139,12 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <span>این آزمون در یک صفحه جدید باز می‌شه.</span>
                                 </li>
                                 <li>
-                                    <span class="li-icon">💡</span>
-                                    <span>با دقت و بدون عجله به سوال‌ها جواب بده.</span>
+                                    <span class="li-icon">😊</span>
+                                    <span>بعد از اینکه به سوال ها جواب دادی، دکمه ارسال رو بزن تا پاسخ هات ارسال بشه.</span>
                                 </li>
                                 <li>
-                                    <span class="li-icon">😊</span>
-                                    <span>فقط کافیه بهترین تلاشت رو بکنی!</span>
+                                    <span class="li-icon">💡</span>
+                                    <span>بعد از ارسال پاسخ گزینه نمایش امتیاز رو بزن تا هم امتیازت رو ببینی هم جواب هات رو چک کنی.</span>
                                 </li>
                             </ul>
                             

@@ -704,6 +704,45 @@ h1, h2 {
     box-shadow: 0 2px 0 #d35400;
 }
 
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* نسبت تصویر 16:9 (برای ویدئوهای عریض) */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ... (تمام کدهای CSS قبلی شما بدون تغییر) */
+
+
+/* --- ✨ استایل جزئی برای نمایش چندین ویدئو ✨ --- */
+.video-item {
+    margin-bottom: 40px; /* ایجاد فاصله بین هر ویدئو */
+}
+
+.video-item h3 {
+    font-size: 1.5em;
+    color: #34495e;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
 /* --- Media Query برای تبلت و صفحات بزرگتر --- */
 /* ------------------------------------------- */
 @media (min-width: 768px) {
@@ -714,4 +753,11 @@ h1, h2 {
     .flashcard-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     .flashcard .word-text { font-size: 28px; }
     .memory-game { max-width: 500px; }
+    .video-item {
+        max-width: 720px; /* ✨ حداکثر عرض به ۷۲۰ پیکسل کاهش یافت ✨ */
+        margin-right: auto;
+        margin-left: auto;
+    }
 }
+
+ 
