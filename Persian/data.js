@@ -202,7 +202,12 @@ const lessonsData = {
             { correct: "من ایران را دوست دارَم", scrambled: ["دارَم","دوست", "را", "ایران", "من"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScbIMv4nOiYpwoKi1b8coNk9yrIIH8orxMC2X1u9H5_ylKfsg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ای",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kwg8037/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-12": {
         title: "ز",
@@ -223,7 +228,12 @@ const lessonsData = {
             { correct: "زَنبور مَن را زَد", scrambled: ["زَد", "را", "زَنبور", "من"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSen1KmEA-F88Rb9TZ-V9ymuII6UcVSF3Y2Jd6jKqj7bKtHvgw/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ز",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/qthm7lz/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-13": {
         title: "اِ -ِ",
@@ -244,7 +254,12 @@ const lessonsData = {
             { correct: "بابا اِداره اَست", scrambled: ["اَست", "اِداره", "بابا"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScjjxzu2ZT75DzlUxTEy91rvdtVB8KlS515eraUhzldCCC3cQ/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "ای مستقل و -ِ ربط",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/aenu10k/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-14": {
         title: "ش",
@@ -355,7 +370,12 @@ const lessonsData = {
             { correct: "با وَرزِش کَردَن شاد می شَویم", scrambled: ["می شَویم", "شاد", "وَرزِش کَردَن", "با"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSe8UpY6WUw5BUdtdwFiInW0uaj_lHscxbtDMOr2YF3AOa_V_w/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "بخش اول: آموزش نشانه و",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/tukb7vb/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-19": {
         title: "پ",
@@ -383,7 +403,16 @@ const lessonsData = {
             { correct: "پِزِشک به مَن دارو داد", scrambled: ["دارو", "مَن", "به", "پِزِشک", "داد"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdwPX35xluk0I3eln-l5WaBd91k2SnwvpBFJLzFlA5TQBO8lg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "بخش اول: آموزش نشانه پ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/pmmb9fc/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: لوحه خوانی نشانه پ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/anw5g8y/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-20": {
         title: "گ",
@@ -402,7 +431,16 @@ const lessonsData = {
             { correct: "گَوَزن اَز گُرگ می تَرسَد", scrambled: ["می تَرسَد", "گُرگ", "اَز", "گَوَزن"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeofyspof17_ycR8O4meh82rblZm0ZHYLcNBBiGyiHwN5TqyQ/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "بخش اول: آموزش نشانه گ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wyod612/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: لوحه خوانی نشانه گ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/npr4j3d/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-21": {
         title: "ف",
@@ -421,7 +459,12 @@ const lessonsData = {
             { correct: "فَرید کَفشِ وَرزِشی دارَد", scrambled: ["دارَد", "وَرزِشی", "کَفشِ", "فَرید"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfhz3XaH6oxqMuGy4TIx9uv5Gc7FRR4i-KEw4F-zKYD7Oc73w/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ف",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/fnd9fd9/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-22": {
         title: "خ",
@@ -444,7 +487,12 @@ const lessonsData = {
             { correct: "پَرَستو رویِ شاخه ی دِرَخت اَست", scrambled: ["دِرَخت", "رویِ", "پَرَستو", "شاخه ی", "اَست"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSclu8b6AN1eFFsgxcd6bhiR3yk-G0a5WWm7seq29SJAW4wjjA/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه خ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/lmhu45p/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-23": {
         title: "ق",
@@ -468,7 +516,12 @@ const lessonsData = {
             { correct: "پِدَر قوری وَ اِستِکان را به اُتاق می بَرَد", scrambled: ["اُتاق", "به", "را", "اِستِکان", "و", "قوری", "پدَر", "می بَرَد"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfyq_16LfaT9n3dImT5e-0QRvUVxouW7LLdc3AFk9QwA321FQ/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ق",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dzsgnou/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-24": {
         title: "ل",
@@ -491,7 +544,12 @@ const lessonsData = {
             { correct: "بُلبُل کِنارِ گُل لانه ساخت", scrambled: ["لانه", "گُل", "کِنارِ", "بُلبُل", "ساخت"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScIRkM4KKMxDPBtF7urNAAIEC8uUDOKjeM8-SpENKUq9GGVdg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ل",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/eefx6bu/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-25": {
         title: "ج",
@@ -515,7 +573,12 @@ const lessonsData = {
             { correct: "زیرِ دِرَختِ نارِج سه جوجه و پَنج گُنجِشک بازی می کنند", scrambled: ["و", "جوجه", "سه", "نارِج", "دِرَختِ", "زیرِ", "می کنند", "پَنج", "گُنجِشک", "بازی"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfQxJqN8ki8qEqOijwMBMNNsRnA_m4TRWzkGzYKUJXIM0Sqpg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ج",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wmph7b4/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-26": {
         title: "و -> -ُ",
@@ -536,7 +599,20 @@ const lessonsData = {
             { correct: "دو روز پیش پدربزرگ برای امین یک خُروسِ خوش آواز خرید", scrambled: ["آواز", "خوش", "خُروسِ", "یک", "امین", "برای", "پدربزرگ", "دو", "پیش", "روز", "خرید"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfeSYdY4uMZakiBnGVHLnO4Xf4ykZeeBXj869EMCo6Fri7r_A/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "بخش اول: آموزش اُ استثنا",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mncnf6g/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: اُ استثنا خواندن متن کتاب",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/bal1isg/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش سوم: حل تمرینات نگارش درس اُ استثنا",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/rje3jd2/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-27": {
         title: "ه",
@@ -556,7 +632,17 @@ const lessonsData = {
             { correct: "ای خُدایِ مِهربان آسمان و ماه و سِتاره هایَت را دوست دارَم", scrambled: ["دوست", "را", "هایَت", "سِتاره", "و", "ماه", "و", "آسمان", "مِهربان", "خُدایِ", "ای", "دارَم"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdGEIUggjeTSiLyRXUXeq3OqzjJRrRkry2w3HcnJp6xsmXzPg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "بخش اول: شکل های مختلف نشانه ه",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/zbyb65g/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: حل تمرینات نگارش نشانه ه",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kus81u8/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     },
     "dars-28": {
         title: "چ",
@@ -577,7 +663,12 @@ const lessonsData = {
             { correct: "چوپان زیرِ درخت نِشَسته است", scrambled: ["است", "نِشَسته", "درخت", "زیرِ", "چوپان"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfGw0Na2eX3Ve0GAhbP5ksQvq6srZBJcIumGz7QrVpcMPj1Iw/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی چ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/xng93qk/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-29": {
         title: "ژ",
@@ -598,7 +689,12 @@ const lessonsData = {
             { correct: "پِژمان ژیانِ خود را به گاراژ بُرد", scrambled: ["به", "را", "خود", "ژیانِ", "پِژمان", "گاراژ", "بُرد"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfipHpejQJpYsGLUh3CMZmivDDpa8IEYfWToPjSWt4IdDwl4Q/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی ژ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dafgq4q/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-30": {
         title: "خوا",
@@ -617,7 +713,20 @@ const lessonsData = {
             { correct: "خواهَرَِم آزاده قَبل از خواب برایِ مَن کِتاب می خوانَد", scrambled: ["خواهَرَِم", "آزاده", "قَبل", "از", "خواب", "برایِ", "مَن", "کِتاب", "می خوانَد"] },
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScrPjW30ZvlNQEQAHny7sUPsDFxd1_V7_d04ppS07L8qx3V0g/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+         videos: [
+            {
+                title: "بخش اول: آموزش خوا استثنا با داستان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mwzpt2u/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: روخوانی درس خوا",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wcbt4n9/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش سوم: توضیح تمرینات نگارش درس خوا ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/vckg137/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-31": {
         title: "تشدید -ّ",
@@ -638,7 +747,14 @@ const lessonsData = {
             { correct: "پدرم از قنّادی شیرینی خرید", scrambled: ["پدرم", "از", "قنّادی", "شیرینی", "خرید"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScRmpKgwqu-ZDWJ4sBTzxbET3cCkNzqacjE1XqcBOKnq_5R-A/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+         videos: [
+            {
+                title: "آموزش تشدید",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/ntbxn2l/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+            
+        ]
     },
     "dars-32": {
         title: "ص",
@@ -692,7 +808,7 @@ const lessonsData = {
             { word: 'ساعت', image: 'assets/images/saat.png', audio: 'assets/audio/saat.mp3', highlight: 'ع' },
             { word: 'عَروسَک', image: 'assets/images/aroosak.png', audio: 'assets/audio/aroosak.mp3', highlight: 'ع' },
             { word: 'عِینَک', image: 'assets/images/einak.png', audio: 'assets/audio/einak.mp3', highlight: 'ع' },
-            { word: 'u', image: 'assets/images/ain.png', audio: 'assets/audio/ain.mp3', highlight: 'ع' }
+            { word: 'ع', image: 'assets/images/ain.png', audio: 'assets/audio/ain.mp3', highlight: 'ع' }
         ],
         sentenceScramble: [ 
             { correct: "آن ها وسایلِ خود را جمع می کنند", scrambled: ["خود", "وسایلِ", "آن ها", "را", "جمع", "می کنند"] },

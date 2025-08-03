@@ -1,0 +1,125 @@
+body {
+    font-family: 'Vazirmatn', sans-serif; 
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    background-color: #f0f8ff;
+}
+
+#sidebar {
+    width: 250px;
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    box-shadow: -3px 0 10px rgba(0,0,0,0.1);
+}
+
+#sidebar h2 {
+    text-align: center;
+    border-bottom: 2px solid white;
+    padding-bottom: 10px;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sidebar li {
+    padding: 15px;
+    margin: 5px 0;
+    background-color: #357abd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#sidebar li:hover {
+    background-color: #2a6299;
+}
+
+#main-content {
+    flex-grow: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#game-container {
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+/* استایل‌های بازی‌ها */
+.question-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.speaker-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.game-image {
+    max-width: 400px;
+    border-radius: 10px;
+    border: 3px solid #ccc;
+    margin-bottom: 20px;
+}
+
+/* استایل‌های بازی رنگ‌آمیزی */
+.coloring-table {
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+.coloring-table td {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #333;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+.colored {
+    background-color: #ffd700 !important;
+}
+
+/* استایل‌های بازی درگ اند دراپ */
+.drag-area {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 30px;
+}
+.source-item {
+    width: 80px;
+    cursor: grab;
+}
+.drop-box {
+    width: 400px;
+    height: 200px;
+    border: 3px dashed #4a90e2;
+    border-radius: 10px;
+    background-color: #eaf2fa;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 10px;
+}
+.dropped-item {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    cursor: pointer;
+}
