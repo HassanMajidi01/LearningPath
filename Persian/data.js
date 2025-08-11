@@ -20,11 +20,11 @@ const lessonsData = {
     "dars-2": {
         title: "ب",
         flashcardWords: [
-            { word: 'آب', image: 'assets/images/aab.webp', audio: 'assets/audio/aab.mp3', highlight: 'ب' },
+            { word: 'آب', image: 'assets/images/ab.webp', audio: 'assets/audio/ab.mp3', highlight: 'ب' },
             { word: 'اَبر', image: 'assets/images/abr.webp', audio: 'assets/audio/abr.mp3', highlight: 'ب' },
             { word: 'سَبَد', image: 'assets/images/sabad.webp', audio: 'assets/audio/sabad.mp3', highlight: 'ب' },
             { word: 'اَسب', image: 'assets/images/asb.webp', audio: 'assets/audio/asb.mp3', highlight: 'ب' },
-            { word: 'باد', image: 'assets/images/baad.webp', audio: 'assets/audio/baad.mp3', highlight: 'ب' },
+            { word: 'باد', image: 'assets/images/bad.webp', audio: 'assets/audio/bad.mp3', highlight: 'ب' },
             { word: 'بابا', image: 'assets/images/baba.webp', audio: 'assets/audio/baba.mp3', highlight: 'ب' },
             { word: 'آبی', image: 'assets/images/abi.webp', audio: 'assets/audio/abi.mp3', highlight: 'ب' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ب' }
@@ -34,7 +34,7 @@ const lessonsData = {
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-3": {
-        title: "اَ -َ",
+        title: "اَ",
         flashcardWords: [
             { word: 'اَبر', image: 'assets/images/abr.webp', audio: 'assets/audio/abr.mp3', highlight: 'اَ' },
             { word: 'دَریا', image: 'assets/images/darya.webp', audio: 'assets/audio/darya.mp3', highlight: 'َ' },
@@ -52,10 +52,10 @@ const lessonsData = {
     "dars-4": {
         title: "د",
         flashcardWords: [
-            { word: 'باد', image: 'assets/images/baad.webp', audio: 'assets/audio/asb.mp3', highlight: 'د' },
+            { word: 'باد', image: 'assets/images/bad.webp', audio: 'assets/audio/bad.mp3', highlight: 'د' },
             { word: 'دَریا', image: 'assets/images/darya.webp', audio: 'assets/audio/darya.mp3', highlight: 'د' },
             { word: 'بادبادَک', image: 'assets/images/badbadak.webp', audio: 'assets/audio/badbadak.mp3', highlight: 'د' },
-            { word: 'داد', image: 'assets/images/dad.webp', audio: 'assets/audio/dad.mp3', highlight: 'د' },
+            { word: 'بااَدَب', image: 'assets/images/baadab.webp', audio: 'assets/audio/baadab.mp3', highlight: 'د' },
             { word: 'د', image: 'assets/images/d.webp', audio: 'assets/audio/d.mp3', highlight: 'د' },
             { word: 'دَر', image: 'assets/images/dar.webp', audio: 'assets/audio/dar.mp3', highlight: 'د' },
             { word: 'سَبَد', image: 'assets/images/sabad.webp', audio: 'assets/audio/sabad.mp3', highlight: 'د' },
@@ -115,7 +115,7 @@ const lessonsData = {
             { word: 'او', image: 'assets/images/oo-aval.webp', audio: 'assets/audio/oo-aval.mp3', highlight: 'او' },
             { word: 'دوست', image: 'assets/images/doost.webp', audio: 'assets/audio/doost.mp3', highlight: 'و' },
             { word: 'اوستا', image: 'assets/images/oosta.webp', audio: 'assets/audio/oosta.mp3', highlight: 'او' },
-            { word: 'و', image: 'assets/images/oo-gheire-aval.webp', audio: 'assets/audio/oo-gheire-aval.mp3', highlight: 'و' }
+            { word: 'و', image: 'assets/images/v.webp', audio: 'assets/audio/oo-gheire-aval.mp3', highlight: 'و' }
         ],
         sentenceScramble: [ 
             { correct: "او با اَدَب بود", scrambled: ["او", "با", "اَدَب", "بود"] },
@@ -131,8 +131,8 @@ const lessonsData = {
             { word: 'توپ', image: 'assets/images/toop.webp', audio: 'assets/audio/toop.mp3', highlight: 'ت' },
             { word: 'سوت', image: 'assets/images/soot.webp', audio: 'assets/audio/soot.mp3', highlight: 'ت' },
             { word: 'دَست', image: 'assets/images/dast.webp', audio: 'assets/audio/dast.mp3', highlight: 'ت' },
-            { word: 'بَست', image: 'assets/images/bast.webp', audio: 'assets/audio/bast.mp3', highlight: 'ت' },
-            { word: 'اَست', image: 'assets/images/ast.webp', audio: 'assets/audio/ast.mp3', highlight: 'ت' },
+            { word: 'تور', image: 'assets/images/toor.webp', audio: 'assets/audio/toor.mp3', highlight: 'ت' },
+            { word: 'تَب', image: 'assets/images/t@b.webp', audio: 'assets/audio/t@b.mp3', highlight: 'ت' },
             { word: 'ت', image: 'assets/images/t.webp', audio: 'assets/audio/t.mp3', highlight: 'ت' },
             { word: 'تاس', image: 'assets/images/tas.webp', audio: 'assets/audio/tas.mp3', highlight: 'ت' }
         ],
@@ -149,10 +149,10 @@ const lessonsData = {
             { word: 'مادَر', image: 'assets/images/madar.webp', audio: 'assets/audio/madar.mp3', highlight: 'ر' },
             { word: 'اَبر', image: 'assets/images/abr.webp', audio: 'assets/audio/abr.mp3', highlight: 'ر' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ر' },
-            { word: 'آرام', image: 'assets/images/aram.webp', audio: 'assets/audio/aram.mp3', highlight: 'ر' },
+            { word: 'مار', image: 'assets/images/mar.webp', audio: 'assets/audio/mar.mp3', highlight: 'ر' },
             { word: 'دَر', image: 'assets/images/dar.webp', audio: 'assets/audio/dar.mp3', highlight: 'ر' },
             { word: 'ر', image: 'assets/images/r.webp', audio: 'assets/audio/r.mp3', highlight: 'ر' },
-            { word: 'رود', image: 'assets/images/rood.webp', audio: 'assets/audio/rood.mp3', highlight: 'ر' },
+            { word: 'رود', image: 'assets/images/roodkhane.webp', audio: 'assets/audio/rood.mp3', highlight: 'ر' },
             { word: 'سَر', image: 'assets/images/sar.webp', audio: 'assets/audio/sar.mp3', highlight: 'ر' }
         ],
         sentenceScramble: [ 
@@ -172,7 +172,7 @@ const lessonsData = {
             { word: 'نان', image: 'assets/images/nan.webp', audio: 'assets/audio/nan.mp3', highlight: 'ن' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ن' },
             { word: 'اَمین', image: 'assets/images/amin.webp', audio: 'assets/audio/amin.mp3', highlight: 'ن' },
-            { word: 'نَم', image: 'assets/images/nam.webp', audio: 'assets/audio/nam.mp3', highlight: 'ن' },
+            { word: 'مامان', image: 'assets/images/madar.webp', audio: 'assets/audio/nam.mp3', highlight: 'ن' },
             { word: 'ن', image: 'assets/images/n.webp', audio: 'assets/audio/n.mp3', highlight: 'ن' },
             { word: 'ایران', image: 'assets/images/iran.webp', audio: 'assets/audio/iran.mp3', highlight: 'ن' },
             { word: 'آسمان', image: 'assets/images/aseman.webp', audio: 'assets/audio/aseman.mp3', highlight: 'ن' }
@@ -193,9 +193,9 @@ const lessonsData = {
             { word: 'آبی', image: 'assets/images/abi.webp', audio: 'assets/audio/abi.mp3', highlight: 'ی' },
             { word: 'سِفید', image: 'assets/images/sefid.webp', audio: 'assets/audio/sefid.mp3', highlight: 'ی' },
             { word: 'سُرمه ای', image: 'assets/images/sormeei.webp', audio: 'assets/audio/sormeei.mp3', highlight: 'ای' },
-            { word: 'بیدار', image: 'assets/images/bidar.webp', audio: 'assets/audio/bidar.mp3', highlight: 'ی' },
-            { word: 'ای', image: 'assets/images/ei-akhare-tanha.webp', audio: 'assets/audio/ei-akhare-tanha.mp3', highlight: 'ای' },
-            { word: 'ی', image: 'assets/images/ei-akhar.webp', audio: 'assets/audio/e-akhar.mp3', highlight: 'ی' }
+            { word: 'سیر', image: 'assets/images/sir.webp', audio: 'assets/audio/sir.mp3', highlight: 'ی' },
+            { word: 'ای', image: 'assets/images/e.webp', audio: 'assets/audio/e.mp3', highlight: 'ای' },
+            { word: 'سیب', image: 'assets/images/sib.webp', audio: 'assets/audio/sib.mp3', highlight: 'ی' }
         ],
         sentenceScramble: [ 
             { correct: "ایرانی بیدار اَست", scrambled: ["اَست","بیدار", "ایرانی"] },
@@ -218,10 +218,8 @@ const lessonsData = {
             { word: 'سَبز', image: 'assets/images/sabz.webp', audio: 'assets/audio/sabz.mp3', highlight: 'ز' },
             { word: 'ز', image: 'assets/images/z.webp', audio: 'assets/audio/z.mp3', highlight: 'ز' },
             { word: 'زَنبور', image: 'assets/images/zanboor.webp', audio: 'assets/audio/zanboor.mp3', highlight: 'ز' },
-            { word: 'زود', image: 'assets/images/zood.webp', audio: 'assets/audio/zood.mp3', highlight: 'ز' },
             { word: 'سوزَن', image: 'assets/images/soozan.webp', audio: 'assets/audio/soozan.mp3', highlight: 'ز' },
-            { word: 'بازار', image: 'assets/images/bazar.webp', audio: 'assets/audio/bazar.mp3', highlight: 'ز' },
-            { word: 'زیبا', image: 'assets/images/ziba.webp', audio: 'assets/audio/ziba.mp3', highlight: 'ز' }
+            { word: 'بازار', image: 'assets/images/bazar.webp', audio: 'assets/audio/bazar.mp3', highlight: 'ز' }
         ],
         sentenceScramble: [ 
             { correct: " ایران زیبا اَست", scrambled: ["اَست","زیبا", "ایران"] },
@@ -236,7 +234,7 @@ const lessonsData = {
         ]
     },
     "dars-13": {
-        title: "اِ -ِ",
+        title: "اِ",
         flashcardWords: [
             { word: 'اِستَخر', image: 'assets/images/estakhr.webp', audio: 'assets/audio/estakhr.mp3', highlight: 'اِ' },
             { word: 'نَرده', image: 'assets/images/narde.webp', audio: 'assets/audio/narde.mp3', highlight: 'ه' },
@@ -308,7 +306,7 @@ const lessonsData = {
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-16": {
-        title: "اُ -ُ",
+        title: "اُ",
         flashcardWords: [
             { word: 'مادَر بُزُرگ', image: 'assets/images/madar-bozorg.webp', audio: 'assets/audio/madar-bozorg.mp3', highlight: 'ُ' },
             { word: 'اُتاق', image: 'assets/images/otagh.webp', audio: 'assets/audio/otagh.mp3', highlight: 'اُ' },
@@ -585,7 +583,7 @@ const lessonsData = {
         ]
     },
     "dars-26": {
-        title: "و -> -ُ",
+        title: "اُ استثنا",
         flashcardWords: [
             { word: 'خورشید', image: 'assets/images/khorshid.webp', audio: 'assets/audio/khorshid.mp3', highlight: 'و' },
             { word: 'دو', image: 'assets/images/do.webp', audio: 'assets/audio/do.mp3', highlight: 'و' },
@@ -733,7 +731,7 @@ const lessonsData = {
         ]
     },
     "dars-31": {
-        title: "تشدید -ّ",
+        title: "تشدید",
         flashcardWords: [
             { word: 'دکّان', image: 'assets/images/dokkan.webp', audio: 'assets/audio/dokkan.mp3', highlight: 'ّ' },
             { word: 'نجّار', image: 'assets/images/najjar.webp', audio: 'assets/audio/najjar.mp3', highlight: 'ّ' },
