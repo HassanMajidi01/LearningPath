@@ -246,7 +246,7 @@ const lessonsData = {
             { word: 'مَدرِسه', image: 'assets/images/madrese.webp', audio: 'assets/audio/madrese.mp3', highlight: 'ه' }
         ],
         sentenceScramble: [ 
-            { correct: " اِمروز به مَدرِسه آمَدَم", scrambled: ["مَدرِسه","به", "اِمروز", "آمَدَم"] },
+            { correct: "اِمروز به مَدرِسه آمَدَم", scrambled: ["مَدرِسه","به", "اِمروز", "آمَدَم"] },
             { correct: "بابا اِداره اَست", scrambled: ["اَست", "اِداره", "بابا"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScjjxzu2ZT75DzlUxTEy91rvdtVB8KlS515eraUhzldCCC3cQ/viewform?usp=header",
