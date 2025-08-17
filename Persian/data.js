@@ -216,7 +216,7 @@ const lessonsData = {
             { word: 'تیراَنداز', image: 'assets/images/tirandaz.webp', audio: 'assets/audio/tirandaz.mp3', highlight: 'ز' },
             { word: 'زَرد', image: 'assets/images/zard.webp', audio: 'assets/audio/zard.mp3', highlight: 'ز' },
             { word: 'سَبز', image: 'assets/images/sabz.webp', audio: 'assets/audio/sabz.mp3', highlight: 'ز' },
-            { word: 'ز', image: 'assets/images/z.webp', audio: 'assets/audio/z.mp3', highlight: 'ز' },
+            { word: 'ز', image: 'assets/images/z.webp', audio: 'assets/audio/za.mp3', highlight: 'ز' },
             { word: 'زَنبور', image: 'assets/images/zanboor.webp', audio: 'assets/audio/zanboor.mp3', highlight: 'ز' },
             { word: 'سوزَن', image: 'assets/images/soozan.webp', audio: 'assets/audio/soozan.mp3', highlight: 'ز' },
             { word: 'بازار', image: 'assets/images/bazar.webp', audio: 'assets/audio/bazar.mp3', highlight: 'ز' }
@@ -662,10 +662,14 @@ const lessonsData = {
             { word: 'مَنیژه', image: 'assets/images/manijhe.webp', audio: 'assets/audio/manijhe.mp3', highlight: 'ژ' },
             { word: 'گُلِ پَژمُرده', image: 'assets/images/golepajhmorde.webp', audio: 'assets/audio/golepajhmorde.mp3', highlight: 'ژ' },
             { word: 'ژِله', image: 'assets/images/jhele.webp', audio: 'assets/audio/jhele.mp3', highlight: 'ژ' },
-            { word: 'ژیان', image: 'assets/images/jhyan.webp', audio: 'assets/audio/jhyan.mp3', highlight: 'ژ' },
             { word: 'شوفاژ', image: 'assets/images/shoofajh.webp', audio: 'assets/audio/shoofajh.mp3', highlight: 'ژ' },
             { word: 'گاراژ', image: 'assets/images/garajh.webp', audio: 'assets/audio/garajh.mp3', highlight: 'ژ' },
-            { word: 'ژ', image: 'assets/images/jh.webp', audio: 'assets/audio/jh.mp3', highlight: 'ژ' }
+            { word: 'ژ', image: 'assets/images/jh.webp', audio: 'assets/audio/jh.mp3', highlight: 'ژ' },
+            { word: 'ژیان', image: 'assets/images/jhian.webp', audio: 'assets/audio/jhian.mp3', highlight: 'ژ' },
+            { word: 'پژمان', image: 'assets/images/pejhman.webp', audio: 'assets/audio/pejhman.mp3', highlight: 'ژ' },
+            { word: 'ژینا', image: 'assets/images/jhina.webp', audio: 'assets/audio/jhina.mp3', highlight: 'ژ' },
+            { word: 'بیژن', image: 'assets/images/bijhan.webp', audio: 'assets/audio/bijhan.mp3', highlight: 'ژ' },
+            { word: 'پژو', image: 'assets/images/jh.webp', audio: 'assets/audio/jh.mp3', highlight: 'ژ' }
         ],
         sentenceScramble: [ 
             { correct: "گُل ها پَژمُرده بودَند", scrambled: ["بودَند", "پَژمُرده", "گُل ها"] },
@@ -746,7 +750,7 @@ const lessonsData = {
             { word: 'صدا', image: 'assets/images/seda.webp', audio: 'assets/audio/seda.mp3', highlight: 'ص' },
             { word: 'صف', image: 'assets/images/saf.webp', audio: 'assets/audio/saf.mp3', highlight: 'ص' },
             { word: 'صدف', image: 'assets/images/sadaf.webp', audio: 'assets/audio/sadaf.mp3', highlight: 'ص' },
-            { word: 'ص', image: 'assets/images/sad.webp', audio: 'assets/audio/sad.mp3', highlight: 'ص' },
+            { word: 'ص', image: 'assets/images/sad.webp', audio: 'assets/audio/s.mp3', highlight: 'ص' },
             { word: 'قاصدک', image: 'assets/images/ghasedak.webp', audio: 'assets/audio/ghasedak.mp3', highlight: 'ص' },
             { word: 'صابون', image: 'assets/images/saboon.webp', audio: 'assets/audio/saboon.mp3', highlight: 'ص' },
             { word: 'صندوق', image: 'assets/images/sandogh.webp', audio: 'assets/audio/sandogh.mp3', highlight: 'ص' },
@@ -766,7 +770,7 @@ const lessonsData = {
             { word: 'دلپذیر', image: 'assets/images/delpazir.webp', audio: 'assets/audio/delpazir.mp3', highlight: 'ذ' },
             { word: 'آذر', image: 'assets/images/azar.webp', audio: 'assets/audio/azar.mp3', highlight: 'ذ' },
             { word: 'لذّت', image: 'assets/images/lezzat.webp', audio: 'assets/audio/lezzat.mp3', highlight: 'ذ' },
-            { word: 'ذ', image: 'assets/images/zal.webp', audio: 'assets/audio/zal.mp3', highlight: 'ذ' },
+            { word: 'ذ', image: 'assets/images/zal.webp', audio: 'assets/audio/za.mp3', highlight: 'ذ' },
             { word: 'ذُرّت', image: 'assets/images/zorrat.webp', audio: 'assets/audio/zorrat.mp3', highlight: 'ذ' },
             { word: 'ذَرّه بین', image: 'assets/images/zarrebin.webp', audio: 'assets/audio/zarrebin.mp3', highlight: 'ذ' },
             { word: 'لَذیذ', image: 'assets/images/laziz.webp', audio: 'assets/audio/laziz.mp3', highlight: 'ذ' },
@@ -818,14 +822,14 @@ const lessonsData = {
     "dars-35": {
         title: "ث",
         flashcardWords: [
-            { word: 'ث', image: 'assets/images/s....webp', audio: 'assets/audio/s....mp3', highlight: 'ث' },
-            { word: 'ثُریّا', image: 'assets/images/soryya.webp', audio: 'assets/audio/soryya.mp3', highlight: 'ث' },
+            { word: 'ث', image: 'assets/images/s....webp', audio: 'assets/audio/s.mp3', highlight: 'ث' },
+            { word: 'ثُریّا', image: 'assets/images/soryya.webp', audio: 'assets/audio/soraya.mp3', highlight: 'ث' },
             { word: 'ثانیه', image: 'assets/images/sanye.webp', audio: 'assets/audio/sanye.mp3', highlight: 'ث' },
             { word: 'لَثه', image: 'assets/images/lase.webp', audio: 'assets/audio/lase.mp3', highlight: 'ث' },
             { word: 'مَبعَث', image: 'assets/images/mabas.webp', audio: 'assets/audio/mabas.mp3', highlight: 'ث' },
             { word: 'ثِروَت', image: 'assets/images/servat.webp', audio: 'assets/audio/servat.mp3', highlight: 'ث' },
             { word: 'کَثیف', image: 'assets/images/kasif.webp', audio: 'assets/audio/kasif.mp3', highlight: 'ث' },
-            { word: 'مُثلَّث', image: 'assets/images/mosallas.webp', audio: 'assets/audio/mosallas.mp3', highlight: 'ث' },
+            { word: 'مُثلَّث', image: 'assets/images/mosallas.webp', audio: 'assets/audio/mosalas.mp3', highlight: 'ث' },
         ],
         sentenceScramble: [ 
             { correct: "من چند ثانیه فکر کردم", scrambled: ["فکر", "چند", "من", "ثانیه", "کردم"] },
@@ -838,13 +842,13 @@ const lessonsData = {
     "dars-36": {
         title: "ح",
         flashcardWords: [
-            { word: 'حَلَزون', image: 'assets/images/halazoon.webp', audio: 'assets/audio/halazoon.mp3', highlight: 'ح' },
+            { word: 'حَلَزون', image: 'assets/images/halazoon.webp', audio: 'assets/audio/halazon.mp3', highlight: 'ح' },
             { word: 'خوش حال', image: 'assets/images/khoshhal.webp', audio: 'assets/audio/khoshhal.mp3', highlight: 'ح' },
             { word: 'صُبح', image: 'assets/images/sobh.webp', audio: 'assets/audio/sobh.mp3', highlight: 'ح' },
             { word: 'صُحبَت', image: 'assets/images/sohbat.webp', audio: 'assets/audio/sohbat.mp3', highlight: 'ح' },
             { word: 'حیوان', image: 'assets/images/heivan.webp', audio: 'assets/audio/heivan.mp3', highlight: 'ح' },
             { word: 'حوله', image: 'assets/images/hole.webp', audio: 'assets/audio/hole.mp3', highlight: 'ح' },
-            { word: 'ح', image: 'assets/images/hj.webp', audio: 'assets/audio/hj.mp3', highlight: 'ح' },
+            { word: 'ح', image: 'assets/images/hj.webp', audio: 'assets/audio/h.mp3', highlight: 'ح' },
             { word: 'حَمّام', image: 'assets/images/hammam.webp', audio: 'assets/audio/hammam.mp3', highlight: 'ح' }
         ],
         sentenceScramble: [ 
@@ -861,8 +865,8 @@ const lessonsData = {
             { word: 'حوض', image: 'assets/images/hoz.webp', audio: 'assets/audio/hoz.mp3', highlight: 'ض' },
             { word: 'وُضو', image: 'assets/images/vozoo.webp', audio: 'assets/audio/vozoo.mp3', highlight: 'ض' },
             { word: 'مَریض', image: 'assets/images/t@b.webp', audio: 'assets/audio/mariz.mp3', highlight: 'ض' },
-            { word: 'ض', image: 'assets/images/zad.webp', audio: 'assets/audio/zad.mp3', highlight: 'ض' },
-            { word: 'ریاضی', image: 'assets/images/math.webp', audio: 'assets/audio/math.mp3', highlight: 'ض' },
+            { word: 'ض', image: 'assets/images/zad.webp', audio: 'assets/audio/za.mp3', highlight: 'ض' },
+            { word: 'ریاضی', image: 'assets/images/math.webp', audio: 'assets/audio/riazi.mp3', highlight: 'ض' },
             { word: 'فضانَوَرد', image: 'assets/images/fazanavard.webp', audio: 'assets/audio/fazanavard.mp3', highlight: 'ض' },
             { word: 'رَمِضان', image: 'assets/images/ramezan.webp', audio: 'assets/audio/ramezan.mp3', highlight: 'ض' },
             { word: 'ضبط', image: 'assets/images/zabt.webp', audio: 'assets/audio/zabt.mp3', highlight: 'ض' }
@@ -925,7 +929,7 @@ const lessonsData = {
             { word: 'حافظ', image: 'assets/images/hafez.webp', audio: 'assets/audio/hafez.mp3', highlight: 'ظ' },
             { word: 'ناظم مدرسه', image: 'assets/images/nazememadrese.webp', audio: 'assets/audio/nazememadrese.mp3', highlight: 'ظ' },
             { word: 'ظ', image: 'assets/images/za.webp', audio: 'assets/audio/za.mp3', highlight: 'ظ' },
-            { word: 'پیامبر اعظم', image: 'assets/images/mabas.webp', audio: 'assets/audio/payamareaazam.mp3', highlight: 'ظ' },
+            { word: 'پیامبر اعظم', image: 'assets/images/mabas.webp', audio: 'assets/audio/payambareaazam.mp3', highlight: 'ظ' },
             { word: 'نظامی', image: 'assets/images/nezami.webp', audio: 'assets/audio/nezami.mp3', highlight: 'ظ' },
             { word: 'ظُهر', image: 'assets/images/aftabi.webp', audio: 'assets/audio/zohr.mp3', highlight: 'ظ' },
             { word: 'مُحافِظَت', image: 'assets/images/mohafezat.webp', audio: 'assets/audio/mohafezat.mp3', highlight: 'ظ' }
