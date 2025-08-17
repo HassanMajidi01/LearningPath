@@ -669,7 +669,7 @@ const lessonsData = {
             { word: 'پژمان', image: 'assets/images/pejhman.webp', audio: 'assets/audio/pejhman.mp3', highlight: 'ژ' },
             { word: 'ژینا', image: 'assets/images/jhina.webp', audio: 'assets/audio/jhina.mp3', highlight: 'ژ' },
             { word: 'بیژن', image: 'assets/images/bijhan.webp', audio: 'assets/audio/bijhan.mp3', highlight: 'ژ' },
-            { word: 'پژو', image: 'assets/images/jh.webp', audio: 'assets/audio/jh.mp3', highlight: 'ژ' }
+            { word: 'پژو', image: 'assets/images/pejho.webp', audio: 'assets/audio/pejho.mp3', highlight: 'ژ' }
         ],
         sentenceScramble: [ 
             { correct: "گُل ها پَژمُرده بودَند", scrambled: ["بودَند", "پَژمُرده", "گُل ها"] },
