@@ -6,8 +6,8 @@ const lessonsData = {
             { word: 'آب', image: 'assets/images/ab.webp', audio: 'assets/audio/ab.mp3', highlight: 'آ' },
             { word: 'دَریا', image: 'assets/images/darya.webp', audio: 'assets/audio/darya.mp3', highlight: 'ا' },
             { word: 'آبی', image: 'assets/images/abi.webp', audio: 'assets/audio/abi.mp3', highlight: 'آ' },
-            { word: 'آ', image: 'assets/images/a-aval.webp', audio: 'assets/audio/a-aval.mp3', highlight: 'آ' },
-            { word: 'ا', image: 'assets/images/a-gheire-aval.webp', audio: 'assets/audio/a-gheire-aval.mp3', highlight: 'ا' },
+            { word: 'آ', image: 'assets/images/a-aval.webp', audio: 'assets/audio/a.mp3', highlight: 'آ' },
+            { word: 'ا', image: 'assets/images/a-gheire-aval.webp', audio: 'assets/audio/a.mp3', highlight: 'ا' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ا' },
             { word: 'آرد', image: 'assets/images/ard.webp', audio: 'assets/audio/ard.mp3', highlight: 'آ' },
         ],
@@ -42,8 +42,8 @@ const lessonsData = {
             { word: 'اَمین', image: 'assets/images/amin.webp', audio: 'assets/audio/amin.mp3', highlight: 'اَ' },
             { word: 'اَسب', image: 'assets/images/asb.webp', audio: 'assets/audio/asb.mp3', highlight: 'اَ' },
             { word: 'سَبَد', image: 'assets/images/sabad.webp', audio: 'assets/audio/sabad.mp3', highlight: 'َ' },
-            { word: 'اَ', image: 'assets/images/@-aval.webp', audio: 'assets/audio/@-aval.mp3', highlight: 'اَ' },
-            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@-gheire-aval.mp3', highlight: 'َ' }
+            { word: 'اَ', image: 'assets/images/@-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'اَ' },
+            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'َ' }
         ],
         // sentenceScramble: [ ... ],
         quizLink: "https://docs.google.com/forms/your-form-link-3",
@@ -112,10 +112,10 @@ const lessonsData = {
             { word: 'هُلو', image: 'assets/images/holoo.webp', audio: 'assets/audio/holoo.mp3', highlight: 'و' },
             { word: 'اَنگور', image: 'assets/images/angoor.webp', audio: 'assets/audio/angoor.mp3', highlight: 'و' },
             { word: 'آلو', image: 'assets/images/aloo.webp', audio: 'assets/audio/aloo.mp3', highlight: 'و' },
-            { word: 'او', image: 'assets/images/oo-aval.webp', audio: 'assets/audio/oo-aval.mp3', highlight: 'او' },
+            { word: 'او', image: 'assets/images/oo-aval.webp', audio: 'assets/audio/oo.mp3', highlight: 'او' },
             { word: 'دوست', image: 'assets/images/doost.webp', audio: 'assets/audio/doost.mp3', highlight: 'و' },
             { word: 'اوستا', image: 'assets/images/oosta.webp', audio: 'assets/audio/oosta.mp3', highlight: 'او' },
-            { word: 'و', image: 'assets/images/v.webp', audio: 'assets/audio/oo-gheire-aval.mp3', highlight: 'و' }
+            { word: 'و', image: 'assets/images/v.webp', audio: 'assets/audio/oo.mp3', highlight: 'و' }
         ],
         sentenceScramble: [ 
             { correct: "او با اَدَب بود", scrambled: ["او", "با", "اَدَب", "بود"] },
@@ -172,7 +172,7 @@ const lessonsData = {
             { word: 'نان', image: 'assets/images/nan.webp', audio: 'assets/audio/nan.mp3', highlight: 'ن' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ن' },
             { word: 'اَمین', image: 'assets/images/amin.webp', audio: 'assets/audio/amin.mp3', highlight: 'ن' },
-            { word: 'مامان', image: 'assets/images/madar.webp', audio: 'assets/audio/nam.mp3', highlight: 'ن' },
+            { word: 'مامان', image: 'assets/images/madar.webp', audio: 'assets/audio/maman.mp3', highlight: 'ن' },
             { word: 'ن', image: 'assets/images/n.webp', audio: 'assets/audio/n.mp3', highlight: 'ن' },
             { word: 'ایران', image: 'assets/images/iran.webp', audio: 'assets/audio/iran.mp3', highlight: 'ن' },
             { word: 'آسمان', image: 'assets/images/aseman.webp', audio: 'assets/audio/aseman.mp3', highlight: 'ن' }
@@ -468,7 +468,7 @@ const lessonsData = {
             { word: 'خَنده', image: 'assets/images/khande.webp', audio: 'assets/audio/khande.mp3', highlight: 'خ' },
             { word: 'خِرس', image: 'assets/images/khers.webp', audio: 'assets/audio/khers.mp3', highlight: 'خ' },
             { word: 'خُروس', image: 'assets/images/khoroos.webp', audio: 'assets/audio/khoroos.mp3', highlight: 'خ' },
-            { word: 'خَمیازه', image: 'assets/images/khamyaze.webp', audio: 'assets/audio/khamyaze.mp3', highlight: 'خ' },
+            { word: 'خَمیازه', image: 'assets/images/khamyaze.webp', audio: 'assets/audio/khamiaze.mp3', highlight: 'خ' },
         ],
         sentenceScramble: [ 
             { correct: "دِرَخت کِنارِ رودخانه اَست", scrambled: ["رودخانه", "کِنارِ", "دِرَخت", "اَست"] },
@@ -489,10 +489,10 @@ const lessonsData = {
             { word: 'قاشُق', image: 'assets/images/ghashogh.webp', audio: 'assets/audio/ghashogh.mp3', highlight: 'ق' },
             { word: 'بُشقاب', image: 'assets/images/boshghab.webp', audio: 'assets/audio/boshghab.mp3', highlight: 'ق' },
             { word: 'چاقو', image: 'assets/images/chaghoo.webp', audio: 'assets/audio/chaghoo.mp3', highlight: 'ق' },
-            { word: 'قوری', image: 'assets/images/ghoori.webp', audio: 'assets/audio/ghori.mp3', highlight: 'ق' },
+            { word: 'قوری', image: 'assets/images/ghoori.webp', audio: 'assets/audio/ghoori.mp3', highlight: 'ق' },
             { word: 'قَندان', image: 'assets/images/ghandan.webp', audio: 'assets/audio/ghandan.mp3', highlight: 'ق' },
             { word: 'قَند', image: 'assets/images/ghand.webp', audio: 'assets/audio/ghand.mp3', highlight: 'ق' },
-            { word: 'ق', image: 'assets/images/gh.webp', audio: 'assets/audio/gh.mp3', highlight: 'ق' },
+            { word: 'ق', image: 'assets/images/gh.webp', audio: 'assets/audio/ghain.mp3', highlight: 'ق' },
             { word: 'اُتاق', image: 'assets/images/otagh.webp', audio: 'assets/audio/otagh.mp3', highlight: 'ق' },
             { word: 'قَفَس', image: 'assets/images/ghafas.webp', audio: 'assets/audio/ghafas.mp3', highlight: 'ق' },
             { word: 'قو', image: 'assets/images/ghoo.webp', audio: 'assets/audio/ghoo.mp3', highlight: 'ق' },
@@ -824,7 +824,7 @@ const lessonsData = {
         flashcardWords: [
             { word: 'ث', image: 'assets/images/s....webp', audio: 'assets/audio/s.mp3', highlight: 'ث' },
             { word: 'ثُریّا', image: 'assets/images/soryya.webp', audio: 'assets/audio/soraya.mp3', highlight: 'ث' },
-            { word: 'ثانیه', image: 'assets/images/sanye.webp', audio: 'assets/audio/sanye.mp3', highlight: 'ث' },
+            { word: 'ثانیه', image: 'assets/images/sanye.webp', audio: 'assets/audio/saniye.mp3', highlight: 'ث' },
             { word: 'لَثه', image: 'assets/images/lase.webp', audio: 'assets/audio/lase.mp3', highlight: 'ث' },
             { word: 'مَبعَث', image: 'assets/images/mabas.webp', audio: 'assets/audio/mabas.mp3', highlight: 'ث' },
             { word: 'ثِروَت', image: 'assets/images/servat.webp', audio: 'assets/audio/servat.mp3', highlight: 'ث' },
@@ -846,7 +846,7 @@ const lessonsData = {
             { word: 'خوش حال', image: 'assets/images/khoshhal.webp', audio: 'assets/audio/khoshhal.mp3', highlight: 'ح' },
             { word: 'صُبح', image: 'assets/images/sobh.webp', audio: 'assets/audio/sobh.mp3', highlight: 'ح' },
             { word: 'صُحبَت', image: 'assets/images/sohbat.webp', audio: 'assets/audio/sohbat.mp3', highlight: 'ح' },
-            { word: 'حیوان', image: 'assets/images/heivan.webp', audio: 'assets/audio/heivan.mp3', highlight: 'ح' },
+            { word: 'حیوان', image: 'assets/images/heivan.webp', audio: 'assets/audio/heyvan.mp3', highlight: 'ح' },
             { word: 'حوله', image: 'assets/images/hole.webp', audio: 'assets/audio/hole.mp3', highlight: 'ح' },
             { word: 'ح', image: 'assets/images/hj.webp', audio: 'assets/audio/h.mp3', highlight: 'ح' },
             { word: 'حَمّام', image: 'assets/images/hammam.webp', audio: 'assets/audio/hammam.mp3', highlight: 'ح' }
