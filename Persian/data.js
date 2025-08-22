@@ -14,7 +14,7 @@ const lessonsData = {
         // sentenceScramble: [
         //     { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
         // ],
-        quizLink: "https://docs.google.com/forms/your-form-link-1",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfmV8mEN3JqeJHy6-UZRMG4UGZcn8h9kn1sqscPoZJNyoecUw/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-2": {
@@ -30,7 +30,7 @@ const lessonsData = {
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ب' }
         ],
         // sentenceScramble: [ ... ], // در صورت نیاز اضافه شود
-        quizLink: "https://docs.google.com/forms/your-form-link-2",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSd4KLK0wZDMAUE1y50sIEIV0HRVGNrWzumbZMp7oLQbBQz_iA/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-3": {
@@ -46,7 +46,7 @@ const lessonsData = {
             { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'َ' }
         ],
         // sentenceScramble: [ ... ],
-        quizLink: "https://docs.google.com/forms/your-form-link-3",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSefi0F8yNkjRG5dmpUjlQOoFvxiJMHML6uPL3M-qicrGVKDUQ/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-4": {
@@ -64,7 +64,7 @@ const lessonsData = {
         sentenceScramble: [ 
             { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-4",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScmDpGr1sU_zy2UWiJUTNScaJKsOmekvbuesVuG4cX0L5lZ8w/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-5": {
@@ -83,7 +83,7 @@ const lessonsData = {
             { correct: "باد آمَد", scrambled: ["آمَد", "باد"] },
             { correct: "بابا بادام داد", scrambled: ["داد", "بابا", "بادام"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-5",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeI065rZYu5e0qrLUmWdD9VPKURkfns17BqGSg_Ep4UHVvGFA/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-6": {
@@ -102,7 +102,7 @@ const lessonsData = {
             { correct: "بابا داس داد", scrambled: ["داد", "بابا", "داس"] },
             { correct: "بابا با اَسب آمد", scrambled: ["آمد", "بابا", "اَسب", "با"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-6",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeKXvM3l5cFuZMavAto2DVMZ4TSnk2S6gSLCtX547KQPFMMDg/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-7": {
@@ -121,7 +121,7 @@ const lessonsData = {
             { correct: "او با اَدَب بود", scrambled: ["او", "با", "اَدَب", "بود"] },
             { correct: "اوستا داس داد", scrambled: ["داد", "او", "داس"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-7",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeZnnVULNBWeQA4oVGALDaBYJl2TiUzxpCq25uu-Zp_8uoYzg/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-8": {
@@ -140,7 +140,7 @@ const lessonsData = {
             { correct: "بابا تاب بَست", scrambled: ["تاب", "بابا", "بَست"] },
             { correct: "سام سوت داد", scrambled: ["سام", "سوت", "داد"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-8",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdsCE74wjkbxEwy10_1P7SuRwb9EqkUk1ZKIwKDEfmtq63lHg/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-9": {
@@ -162,7 +162,7 @@ const lessonsData = {
             { correct: "آرام آرام باران آمَد", scrambled: ["آمَد", "باران", "آرام", "آرام"] },
             { correct: "مادَر دَر باران آمد", scrambled: ["آمد", "باران", "دَر", "مادَر"] }
          ],
-        quizLink: "https://docs.google.com/forms/your-form-link-9",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdb5Qnanos7ljL-kkfUPuEcQKPXuKX71zI-FbSSiCqnszL9wA/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-10": {
