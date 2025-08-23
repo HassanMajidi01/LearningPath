@@ -245,44 +245,120 @@ h1, h2 {
     }
 }
 
-/* --- محتوای اصلی --- */
-.main-content {
-    padding: 20px;
-    transition: margin-right 0.3s ease-in-out;
-}
-
-/* --- استایل فلش‌کارت‌ها (ریسپانسیو) --- */
+/* محفظه اصلی فلش‌کارت‌ها */
 .flashcard-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* گرید خودکار */
-    gap: 15px;
-    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* فاصله بین کارت‌ها */
+    justify-content: center;
+    padding: 20px;
+    perspective: 1000px; /* این ویژگی برای ایجاد عمق و افکت سه‌بعدی لازم است */
 }
 
+/* هر فلش‌کارت */
 .flashcard {
-    background-color: white;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 200px;
+    height: 250px;
+    background-color: transparent;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
 }
 
-.flashcard img {
-    max-width: 100%;
-    height: auto; /* ارتفاع خودکار برای حفظ نسبت */
-    max-height: 120px;
-    border-radius: 8px;
+/* محفظه داخلی کارت که انیمیشن چرخش روی آن اعمال می‌شود */
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s; /* سرعت انیمیشن چرخش */
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.flashcard .word-text {
-    font-size: 24px;
-    margin-top: 10px;
+/* اعمال چرخش با افزودن کلاس .flipped */
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
 }
-.flashcard .highlight-red { color: #e74c3c; }
+
+/* استایل مشترک برای پشت و روی کارت */
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* برای جلوگیری از نمایش وجه پشتی در مرورگرهای وب‌کیت */
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+/* استایل روی کارت */
+.flashcard-front {
+    background-color: #f9f9f9;
+    color: black;
+}
+
+/* استایل پشت کارت */
+.flashcard-back {
+    background-color: #2980b9;
+    color: white;
+    transform: rotateY(180deg); /* پشت کارت در ابتدا چرخانده شده است */
+}
+
+.flashcard-back img {
+    max-width: 150px;
+    max-height: 150px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.word-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.highlight-red {
+    color: red;
+}
 
 
+/* محفظه دکمه برای وسط‌چین کردن آن */
+.shuffle-button-container {
+    text-align: center;
+    margin-bottom: 25px; /* کمی فاصله بیشتر از بالا */
+}
+
+/* استایل اصلی دکمه بُر زدن */
+.shuffle-btn {
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Vazirmatn', sans-serif; /* یک فونت فارسی زیبا (در صورت وجود در پروژه) */
+    color: white; /* رنگ متن */
+    background: linear-gradient(45deg, #4a90e2, #50e3c2); /* پس‌زمینه گرادیانی */
+    border: none;
+    border-radius: 8px; /* گوشه‌های گرد */
+    cursor: pointer;
+    box-shadow: 0 4px 15px 0 rgba(74, 144, 226, 0.4); /* سایه زیبا */
+    transition: all 0.3s ease; /* انیمیشن نرم برای تمام تغییرات */
+    outline: none; /* حذف حاشیه آبی در حالت فوکوس */
+}
+
+/* استایل دکمه در زمان هاور (موس روی آن قرار می‌گیرد) */
+.shuffle-btn:hover {
+    background: linear-gradient(45deg, #4382cc, #48ccb1); /* گرادیان کمی تیره‌تر */
+    box-shadow: 0 6px 20px 0 rgba(74, 144, 226, 0.5); /* سایه برجسته‌تر */
+    transform: translateY(-2px); /* کمی به بالا حرکت کند */
+}
+
+/* استایل دکمه در زمان کلیک */
+.shuffle-btn:active {
+    transform: translateY(1px); /* حس فشرده شدن */
+    box-shadow: 0 2px 10px 0 rgba(74, 144, 226, 0.4);
+}
 /* --- بازی کارت حافظه (ریسپانسیو) --- */
 .memory-game {
     display: grid;
