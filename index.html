@@ -4,66 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مسیر یادگیری دانش آموزان</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- ⚠️ مهم: حتما این فایل CSS جدید را به جای فایل قبلی لینک کنید -->
+  <link rel="stylesheet" href="Persian/style.css"> 
+  <!-- فونت وزیرمتن برای هماهنگی با CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header  class="glass-panel">
-    <div class="container">
-      <h1>مسیر یادگیری دانش آموزان</h1>
-      <nav>
-        <ul>
-          <li><a href="math/index.html" target="_blank">ریاضیات</a></li>
-          <li><a href="Persian/index.html" target="_blank">فارسی</a></li>
-          <li><a href="science/index.html" target="_blank">علوم</a></li>
-          <li><a href="quran/index.html" target="_blank">قرآن</a></li>
 
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <!-- دکمه همبرگری برای باز کردن منو در موبایل -->
+  <button class="menu-toggle" id="menu-toggle-btn">☰</button>
   
-  <main class="container">
-    <section class="intro glass-panel">
-      <h2>به کلاس من خوش آمدید!</h2>
+  <!-- یک لایه تیره برای پشت سایدبار وقتی باز می‌شود -->
+  <div id="sidebar-overlay"></div>
+  <!-- شروع تگ جدید container -->
+  <div class="container">
+
+    <!-- سایدبار شیشه‌ای (داخل container قرار می‌گیرد) -->
+    <aside class="sidebar" id="sidebar-nav">
+      <!-- ... محتوای سایدبار ... -->
+      <h2>فهرست دروس</h2>
+      <ul>
+        <li class="lesson-item">
+          <a href="math/index.html" target="_blank" class="lesson-title" style="text-decoration: none; color: inherit;">ریاضیات</a>
+        </li>
+        <li class="lesson-item">
+          <a href="Persian/index.html" target="_blank" class="lesson-title" style="text-decoration: none; color: inherit;">فارسی</a>
+        </li>
+        <li class="lesson-item">
+          <a href="science/index.html" target="_blank" class="lesson-title" style="text-decoration: none; color: inherit;">علوم</a>
+        </li>
+        <li class="lesson-item">
+          <a href="quran/index.html" target="_blank" class="lesson-title" style="text-decoration: none; color: inherit;">قرآن</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- محتوای اصلی صفحه (داخل container قرار می‌گیرد) -->
+    <main class="main-content">
       
-      <p>سلام من سید محمد حسن مجیدی کیوی هستم. این سایت را ساخته ام تا دانش آموزان بتوانند مسیر یادگیری خود را هموار تر کنند.</p>
-      <p>برای شروع یکی از دروس زیر را انتخاب کنید:</p>
-    </section>
-    <section class="subjects">
-      <h2>درس‌ها</h2>
-      <div class="subject-list">
-        <div class="subject-item">
-          <a href="#" class="subject-link">
-            <img src="Persian/assets/images/math.webp" alt="ریاضیات">
-            <h3>ریاضیات</h3>
-          </a>
-        </div>
-        <div class="subject-item">
-          <a href="Persian/index.html" target="_blank" class="subject-link">
-            <img src="Persian/assets/images/persian.webp" alt="فارسی">
-            <h3>فارسی</h3>
-          </a>
-        </div>
-        <div class="subject-item">
-          <a href="#" class="subject-link">
-            <img src="Persian/assets/images/science.webp" alt="علوم">
-            <h3>علوم</h3>
-          </a>
-        </div>
-        <div class="subject-item">
-          <a href="#" class="subject-link">
-            <img src="Persian/assets/images/quran.webp" alt="قرآن">
-            <h3>قرآن</h3>
-          </a>
+      <!-- کانتینر شیشه‌ای برای خوش‌آمدگویی -->
+      <div class="welcome-container">
+        <!-- ... محتوای خوش‌آمدگویی ... -->
+        <div class="welcome-icon">👋</div>
+        <h1>به کلاس من خوش آمدید!</h1>
+        <p class="welcome-subtitle">سلام! من سید محمد حسن مجیدی کیوی هستم. این سایت را ساخته‌ام تا دانش‌آموزان بتوانند مسیر یادگیری خود را هموارتر کنند.</p>
+        <div class="welcome-cta">
+          <span class="cta-arrow">👉</span>
+          <p>برای شروع، یک درس را از منو انتخاب کنید</p>
+          
         </div>
       </div>
-    </section>
-  </main>
-  
-  <footer>
-    <div class="container">
-      <p>تمامی حقوق محفوظ است &copy; 2025</p>
-    </div>
-  </footer>
+      
+    </main>
+
+  </div> <!-- پایان تگ جدید container -->
+  <script>
+    const menuToggleBtn = document.getElementById('menu-toggle-btn');
+    const sidebar = document.getElementById('sidebar-nav');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('visible');
+    }
+
+    menuToggleBtn.addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', toggleSidebar);
+  </script>
+
 </body>
 </html>
