@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آموزش ریاضی اول ابتدایی</title>
+    <title>آموزش ریاضی</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="background-shapes">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+    
+    <button id="menu-toggle" class="menu-toggle">☰</button>
 
-    <aside id="sidebar">
-        <h2>مباحث کتاب ریاضی</h2>
-        <ul>
-            </ul>
-    </aside>
-
-    <main id="main-content">
-        <div id="welcome-message">
-            <h1>به بازی ریاضی خوش آمدی!</h1>
-            <p>از منوی سمت راست یک مبحث را انتخاب کن تا بازی شروع بشه.</p>
-        </div>
-        <div id="game-container" class="hidden">
-            </div>
-    </main>
+    <div class="container">
+        <aside id="sidebar" class="sidebar"></aside>
+        <main id="main-content" class="main-content">
+            <!-- محتوای اصلی به صورت پویا در اینجا بارگذاری می‌شود -->
+        </main>
+    </div>
+    
+    <!-- ✨ عنصر جدید برای پوشش صفحه هنگام باز بودن سایدبار ✨ -->
+    <div id="sidebar-overlay"></div>
 
     <script src="data.js"></script>
-    <script src="games/counting-coloring.js"></script>
-    <script src="games/drag-and-drop.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

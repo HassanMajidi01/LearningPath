@@ -1,125 +1,321 @@
-body {
-    font-family: 'Vazirmatn', sans-serif; 
-    display: flex;
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
-    height: 100vh;
-    background-color: #f0f8ff;
-}
-
-#sidebar {
-    width: 250px;
-    background-color: #4a90e2;
-    color: white;
-    padding: 20px;
-    box-shadow: -3px 0 10px rgba(0,0,0,0.1);
-}
-
-#sidebar h2 {
-    text-align: center;
-    border-bottom: 2px solid white;
-    padding-bottom: 10px;
-}
-
-#sidebar ul {
-    list-style: none;
     padding: 0;
 }
 
-#sidebar li {
-    padding: 15px;
-    margin: 5px 0;
-    background-color: #357abd;
+/* --- ✨ ۱. پس‌زمینه پویا و رنگارنگ ✨ --- */
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    direction: rtl;
+    background: #121212; /* یک پس‌زمینه تیره برای شروع */
+    color: #f0f0f0;
+    line-height: 1.7;
+    overflow: hidden; /* جلوگیری از نمایش اسکرول به خاطر اشکال پس‌زمینه */
+}
+
+/* این بخش اشکال رنگی متحرک را در پس‌زمینه ایجاد می‌کند */
+.background-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #4c00ff, #ff007f, #00bfff);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.7;
+}
+.blob1 {
+    width: 500px;
+    height: 500px;
+    background: rgba(0, 150, 255, 0.6);
+    top: -150px;
+    left: -150px;
+    animation: move 25s infinite alternate;
+}
+.blob2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 0, 150, 0.6);
+    bottom: -100px;
+    right: -100px;
+    animation: move 30s infinite alternate-reverse;
+}
+@keyframes move {
+    from { transform: translate(-20vw, -20vh) rotate(0deg); }
+    to { transform: translate(20vw, 20vh) rotate(360deg); }
+}
+
+/* --- ۲. ساختار اصلی و کانتینر --- */
+.container {
+    width: 100%;
+    height: 100vh;
+}
+
+/* --- ✨ ۳. استایل شیشه‌ای برای سایدبار ✨ --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    padding: 20px;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow-y: auto;
+    
+    /* افکت اصلی شیشه */
+    background: rgba(25, 25, 30, 0.4); /* پس‌زمینه تیره و نیمه‌شفاف */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1); /* حاشیه ظریف */
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar h2 {
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar .topic-title {
+    color: #f0f0f0;
+    font-weight: 500;
+    padding: 13px 15px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s, color 0.3s;
+    position: relative;
+}
+.sidebar .topic-title:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.sidebar .lesson-item.open .topic-title {
+    background: rgba(90, 135, 252, 0.4);
+    color: white;
+}
+.sidebar .topic-title::before {
+    content: '◀';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s;
+    font-size: 0.8em;
+}
+.sidebar .lesson-item.open .topic-title::before {
+    transform: translateY(-50%) rotate(-90deg);
 }
 
-#sidebar li:hover {
-    background-color: #2a6299;
+.sidebar .submenu {
+    list-style: none;
+    padding-right: 15px;
+    margin-top: 5px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
 }
 
-#main-content {
-    flex-grow: 1;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.sidebar .lesson-item.open .submenu {
+    max-height: 200px;
+    padding: 10px 15px 10px 0;
 }
 
-#game-container {
-    width: 100%;
+.sidebar .submenu a {
+    display: block;
+    color: #bbb;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    font-weight: 300;
+}
+.sidebar .submenu a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transform: translateX(-5px);
 }
 
-.hidden {
-    display: none;
-}
-
-/* استایل‌های بازی‌ها */
-.question-text {
+/* --- ✨ ۴. دکمه منوی همبرگری و پوشش صفحه ✨ --- */
+.menu-toggle {
+    display: block;
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1001;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 24px;
-    margin-bottom: 20px;
+    padding: 5px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    
+    /* افکت شیشه برای دکمه */
+    background: rgba(30, 30, 35, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.3s;
+}
+.menu-toggle:hover {
+    background: rgba(50, 50, 55, 0.7);
+}
+
+#sidebar-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+
+#sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- ✨ ۵. محتوای اصلی با استایل شیشه‌ای ✨ --- */
+.main-content {
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* کارت خوش‌آمدگویی */
+.welcome-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 50px 30px;
+    border-radius: 24px;
+    min-height: 60vh;
+    margin: 5vh auto;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.welcome-icon { font-size: 4rem; margin-bottom: 20px; text-shadow: 0 0 20px rgba(0, 200, 255, 0.5); }
+.welcome-container h1 { color: white; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+/* ویدئوها و آزمون */
+h2 { color: #f0f0f0; margin-bottom: 25px; }
+h3 { color: #ddd; font-weight: 400; font-size: 1.3em; margin-bottom: 15px; }
+
+.video-item {
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 18px;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.speaker-icon {
-    width: 30px;
-    height: 30px;
-    margin-right: 15px;
-    cursor: pointer;
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-.game-image {
-    max-width: 400px;
-    border-radius: 10px;
-    border: 3px solid #ccc;
-    margin-bottom: 20px;
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
 }
 
-/* استایل‌های بازی رنگ‌آمیزی */
-.coloring-table {
-    margin: 20px auto;
-    border-collapse: collapse;
-}
-.coloring-table td {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #333;
-    cursor: pointer;
-    background-color: #fff;
-    transition: background-color 0.2s;
-}
-.colored {
-    background-color: #ffd700 !important;
+/* کانتینر آزمون */
+.quiz-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 35px;
+    text-align: center;
+    border-radius: 20px;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* استایل‌های بازی درگ اند دراپ */
-.drag-area {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 30px;
+.start-quiz-btn {
+    display: inline-block;
+    padding: 15px 35px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    background: rgba(90, 135, 252, 0.7); /* رنگ آبی نیمه شفاف */
+    border: 1px solid rgba(90, 135, 252, 0.9);
+    transition: all 0.3s;
 }
-.source-item {
-    width: 80px;
-    cursor: grab;
+
+.start-quiz-btn:hover {
+    background: rgba(90, 135, 252, 1);
+    transform: scale(1.05);
 }
-.drop-box {
-    width: 400px;
-    height: 200px;
-    border: 3px dashed #4a90e2;
-    border-radius: 10px;
-    background-color: #eaf2fa;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    padding: 10px;
-}
-.dropped-item {
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    cursor: pointer;
+
+/* --- ۶. طراحی ریسپانسیو --- */
+@media (min-width: 768px) {
+    body {
+        /* برای قرارگیری صحیح اشکال پس‌زمینه */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .menu-toggle { display: none; }
+     .container {
+        display: flex;
+    }
+    .sidebar {
+        position: relative;
+        transform: translateX(0);
+        height: 95vh;
+        border-radius: 20px;
+        margin-left: 20px; /* فاصله از محتوای اصلی */
+    }
+    .main-content {
+        flex-grow: 1;
+        height: 95vh;
+        border-radius: 20px;
+        
+        /* افکت شیشه برای محتوای اصلی در دسکتاپ */
+        background: rgba(25, 25, 30, 0.2);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 }

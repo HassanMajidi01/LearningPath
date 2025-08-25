@@ -1,24 +1,43 @@
+/* ---
+   فایل استایل بازطراحی شده با الهام از گلس‌مورفیسم iOS
+   تاریخ: 25 آگوست 2025
+--- */
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* --- استایل‌های عمومی و پایه (Mobile-First) --- */
+/* --- استایل‌های پایه و پس‌زمینه گرادیانی --- */
 body {
     font-family: 'Vazirmatn', sans-serif;
     direction: rtl;
-    background-color: #f0f4f8;
-    margin: 0;
     line-height: 1.6;
+    color: #fff; /* تغییر رنگ پیش‌فرض متن به سفید برای کنتراست بهتر */
+    
+    /* پس‌زمینه گرادیانی پویا برای ایجاد عمق */
+    background: linear-gradient(135deg, #667eea, #764ba2, #89f7fe, #66a6ff);
+    background-size: 400% 400%;
+    animation: gradient-animation 15s ease infinite;
+    min-height: 100vh;
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .container {
     width: 100%;
 }
 
-h1, h2 {
-    color: #2c3e50;
+h1, h2, h3 {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
@@ -26,30 +45,43 @@ h1, h2 {
 .menu-toggle {
     display: block;
     position: fixed;
-    top: 15px;
-    right: 15px;
+    top: 20px;
+    right: 20px;
     z-index: 1001;
-    background-color: #e67e22;
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     font-size: 24px;
-    padding: 5px 12px;
-    border-radius: 8px;
+    padding: 8px 15px;
+    border-radius: 12px;
     cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.3s;
 }
 
-/* --- استایل سایدبار (برای موبایل) --- */
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- استایل سایدبار شیشه‌ای --- */
 .sidebar {
     position: fixed;
     top: 0;
     right: 0;
     width: 250px;
-    height: 100vh;
-    background-color: #2c3e50;
+    height: 100%;
+    
+    /* افکت شیشه‌ای اصلی */
+    background: rgba(30, 30, 50, 0.5); /* رنگ تیره نیمه‌شفاف */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    
     color: white;
     padding: 20px;
     transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     z-index: 1000;
     overflow-y: auto;
 }
@@ -61,7 +93,7 @@ h1, h2 {
 .sidebar h2 {
     color: white;
     text-align: center;
-    border-bottom: 2px solid #34495e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding-bottom: 15px;
     margin: 0 0 15px 0;
 }
@@ -78,23 +110,25 @@ h1, h2 {
 .sidebar .lesson-title {
     display: block;
     padding: 12px 15px;
-    background-color: #34495e;
+    background-color: rgba(255, 255, 255, 0.1);
     font-weight: bold;
     font-size: 1.1em;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.sidebar .lesson-title:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar .submenu {
     list-style: none;
     background-color: rgba(0, 0, 0, 0.2);
-    padding-right: 20px;
+    padding: 10px 20px 10px 0; /* اصلاح padding-right */
     display: none;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-top: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 .sidebar .submenu li {
@@ -105,22 +139,22 @@ h1, h2 {
 }
 
 .sidebar .submenu li:hover {
-    background-color: #e67e22;
+    background-color: rgba(102, 126, 234, 0.7);
 }
 
 
-/* --- استایل برای پوشش صفحه (Overlay) --- */
+/* --- پوشش صفحه (Overlay) --- */
 #sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 999;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.4s;
 }
 
 #sidebar-overlay.visible {
@@ -131,131 +165,52 @@ h1, h2 {
 /* --- محتوای اصلی --- */
 .main-content {
     padding: 20px;
+    transition: filter 0.4s; /* انیمیشن برای زمانی که سایدبار باز است */
 }
 
-/* --- ✨ استایل جدید و شکیل برای صفحه خوش‌آمدگویی ✨ --- */
-
+/* --- استایل شیشه‌ای برای صفحه خوش‌آمدگویی --- */
 .welcome-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: linear-gradient(135deg, #4facfe, #00f2fe); /* گرادیان آبی آسمانی و جذاب */
+    
+    /* افکت شیشه‌ای */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
     color: white;
     padding: 50px 30px;
     border-radius: 24px;
     min-height: 60vh;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     animation: fade-in-up 0.7s ease-out;
 }
 
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
+/* ... (انیمیشن‌های fade-in-up و wave-animation و pulse-arrow بدون تغییر باقی می‌مانند) ... */
+@keyframes fade-in-up { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.welcome-icon { font-size: 4rem; margin-bottom: 20px; animation: wave-animation 2.5s infinite; }
+@keyframes wave-animation { 0% { transform: rotate( 0.0deg) } 10% { transform: rotate(14.0deg) } 20% { transform: rotate(-8.0deg) } 30% { transform: rotate(14.0deg) } 40% { transform: rotate(-4.0deg) } 50% { transform: rotate(10.0deg) } 60% { transform: rotate( 0.0deg) } 100% { transform: rotate( 0.0deg) } }
+.welcome-container h1 { font-size: 2.2em; text-shadow: 1px 2px 4px rgba(0,0,0,0.2); }
+.welcome-subtitle { font-size: 1.2em; opacity: 0.9; margin-bottom: 35px; max-width: 400px; }
+.welcome-cta { display: inline-flex; align-items: center; background-color: rgba(255, 255, 255, 0.1); padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.3); }
+.welcome-cta p { font-size: 1.1em; margin: 0; font-weight: 500; }
+.welcome-cta .cta-arrow { font-size: 1.8em; margin-left: 15px; animation: pulse-arrow 1.5s infinite; }
+@keyframes pulse-arrow { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-.welcome-icon {
-    font-size: 4rem; /* اندازه آیکون */
-    margin-bottom: 20px;
-    animation: wave-animation 2.5s infinite; /* انیمیشن برای آیکون */
-}
-
-@keyframes wave-animation {
-   0% { transform: rotate( 0.0deg) }
-   10% { transform: rotate(14.0deg) }
-   20% { transform: rotate(-8.0deg) }
-   30% { transform: rotate(14.0deg) }
-   40% { transform: rotate(-4.0deg) }
-   50% { transform: rotate(10.0deg) }
-   60% { transform: rotate( 0.0deg) }
-   100% { transform: rotate( 0.0deg) }
-}
-
-.welcome-container h1 {
-    color: white;
-    font-size: 2.2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
-}
-
-.welcome-subtitle {
-    font-size: 1.2em;
-    opacity: 0.95;
-    margin-bottom: 35px;
-    max-width: 400px;
-}
-
-/* کادر فراخوان (Call to Action) */
-.welcome-cta {
-    display: inline-flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.15);
-    padding: 15px 25px;
-    border-radius: 50px; /* کاملاً گرد */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.welcome-cta p {
-    font-size: 1.1em;
-    margin: 0;
-    font-weight: 500;
-}
-
-.welcome-cta .cta-arrow {
-    font-size: 1.8em;
-    margin-left: 15px; /* برای راست‌چین، فاصله در سمت چپ فلش */
-    animation: pulse-arrow 1.5s infinite;
-}
-
-/* انیمیشن برای فلش راهنما */
-@keyframes pulse-arrow {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
-}
-
-
-/* رسپانسیو کردن صفحه برای موبایل */
-@media (max-width: 600px) {
-    .welcome-container {
-        padding: 40px 20px;
-        min-height: 0; /* حذف ارتفاع ثابت برای انعطاف‌پذیری */
-    }
-    .welcome-container h1 {
-        font-size: 1.8em;
-    }
-    .welcome-subtitle {
-        font-size: 1em;
-    }
-    .welcome-cta {
-       padding: 12px 20px;
-    }
-    .welcome-cta p {
-       font-size: 1em;
-    }
-}
-
-/* محفظه اصلی فلش‌کارت‌ها */
+/* --- استایل فلش‌کارت‌ها --- */
 .flashcard-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* فاصله بین کارت‌ها */
+    gap: 25px;
     justify-content: center;
     padding: 20px;
-    perspective: 1000px; /* این ویژگی برای ایجاد عمق و افکت سه‌بعدی لازم است */
+    perspective: 1200px;
 }
 
-/* هر فلش‌کارت */
 .flashcard {
     width: 200px;
     height: 250px;
@@ -264,498 +219,292 @@ h1, h2 {
     border: none;
 }
 
-/* محفظه داخلی کارت که انیمیشن چرخش روی آن اعمال می‌شود */
 .flashcard-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    text-align: center;
-    transition: transform 0.8s; /* سرعت انیمیشن چرخش */
+    transition: transform 0.8s;
     transform-style: preserve-3d;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-/* اعمال چرخش با افزودن کلاس .flipped */
 .flashcard.flipped .flashcard-inner {
     transform: rotateY(180deg);
 }
 
-/* استایل مشترک برای پشت و روی کارت */
 .flashcard-front, .flashcard-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* برای جلوگیری از نمایش وجه پشتی در مرورگرهای وب‌کیت */
     backface-visibility: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 15px;
+    
+    /* افکت شیشه‌ای برای کارت‌ها */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* استایل روی کارت */
-.flashcard-front {
-    background-color: #f9f9f9;
-    color: black;
-}
-
-/* استایل پشت کارت */
 .flashcard-back {
-    background-color: #2980b9;
-    color: white;
-    transform: rotateY(180deg); /* پشت کارت در ابتدا چرخانده شده است */
+    background: rgba(41, 128, 185, 0.6);
+    transform: rotateY(180deg);
 }
 
 .flashcard-back img {
     max-width: 150px;
     max-height: 150px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .word-text {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .highlight-red {
-    color: red;
+    color: #ffdddd; /* رنگ قرمز ملایم‌تر برای خوانایی بهتر */
+    font-weight: bold;
 }
 
-
-/* محفظه دکمه برای وسط‌چین کردن آن */
+/* --- استایل دکمه بُر زدن --- */
 .shuffle-button-container {
     text-align: center;
-    margin-bottom: 25px; /* کمی فاصله بیشتر از بالا */
-}
-
-/* استایل اصلی دکمه بُر زدن */
-.shuffle-btn {
-    padding: 12px 28px;
-    font-size: 16px;
-    font-weight: bold;
-    font-family: 'Vazirmatn', sans-serif; /* یک فونت فارسی زیبا (در صورت وجود در پروژه) */
-    color: white; /* رنگ متن */
-    background: linear-gradient(45deg, #4a90e2, #50e3c2); /* پس‌زمینه گرادیانی */
-    border: none;
-    border-radius: 8px; /* گوشه‌های گرد */
-    cursor: pointer;
-    box-shadow: 0 4px 15px 0 rgba(74, 144, 226, 0.4); /* سایه زیبا */
-    transition: all 0.3s ease; /* انیمیشن نرم برای تمام تغییرات */
-    outline: none; /* حذف حاشیه آبی در حالت فوکوس */
-}
-
-/* استایل دکمه در زمان هاور (موس روی آن قرار می‌گیرد) */
-.shuffle-btn:hover {
-    background: linear-gradient(45deg, #4382cc, #48ccb1); /* گرادیان کمی تیره‌تر */
-    box-shadow: 0 6px 20px 0 rgba(74, 144, 226, 0.5); /* سایه برجسته‌تر */
-    transform: translateY(-2px); /* کمی به بالا حرکت کند */
-}
-
-/* استایل دکمه در زمان کلیک */
-.shuffle-btn:active {
-    transform: translateY(1px); /* حس فشرده شدن */
-    box-shadow: 0 2px 10px 0 rgba(74, 144, 226, 0.4);
-}
-/* --- بازی کارت حافظه (ریسپانسیو) --- */
-.memory-game {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 10px;
-    max-width: 450px;
-    margin: 0 auto;
-}
-
-.memory-card {
-    width: 100%;
-    padding-top: 100%; /* نسبت ابعاد 1:1 */
-    position: relative;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.5s;
-}
-
-.memory-card .front-face, .memory-card .back-face {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backface-visibility: hidden;
-    border-radius: 8px;
-}
-
-.memory-card .back-face {
-    background-color: #e67e22;
-    color: white;
-    font-size: 2rem;
-}
-.memory-card .front-face {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transform: rotateY(180deg);
-}
-
-.memory-card.flip {
-    transform: rotateY(180deg);
-}
-
-
-/* --- ✨ استایل جدید بازی جمله‌سازی (مدل کلیکی دولینگو) ✨ --- */
-
-.scramble-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px;
-}
-
-/* کادر بالایی که جمله در آن ساخته می‌شود */
-.drop-zone-click {
-    border-bottom: 2px solid #bdc3c7;
-    padding: 15px 10px;
-    min-height: 50px;
-    margin-bottom: 25px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    transition: border-color 0.3s;
-    -webkit-transition: border-color 0.3s;
-    -moz-transition: border-color 0.3s;
-    -ms-transition: border-color 0.3s;
-    -o-transition: border-color 0.3s;
-}
-/* وقتی کلمه‌ای داخلش باشد، زیباتر می‌شود */
-.drop-zone-click:not(:empty) {
-    border-bottom: 2px solid #3498db;
-}
-
-/* کادر پایینی که کلمات موجود در آن قرار دارند */
-.word-bank-click {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 10px;
-    min-height: 50px;
-}
-
-/* استایل کاشی‌های کلمات */
-.word-tile {
-    background-color: #ffffff;
-    color: #34495e;
-    padding: 12px 20px;
-    font-size: 1.2em;
-    font-weight: 500;
-    border-radius: 10px;
-    border: 1px solid #bdc3c7;
-    box-shadow: 0 3px 0 #bdc3c7; /* حس سه‌بعدی و دکمه‌ای */
-    cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    user-select: none;
-}
-
-/* وقتی ماوس روی کاشی می‌رود */
-.word-tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 0 #bdc3c7;
-}
-
-/* وقتی روی کاشی کلیک می‌شود */
-.word-tile:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 0 #bdc3c7;
-}
-
-/* استایل کاشی‌ها وقتی به کادر جمله منتقل شده‌اند (برای تمایز) */
-#drop-zone-click .word-tile {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-}
-
-.feedback {
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-}
-.feedback.correct {
-    color: #27ae60;
-    background-color: #e8f8f5;
-}
-.feedback.incorrect {
-    color: #c0392b;
-    background-color: #fdedec;
-}
-
-
-
-/* --- ✨ استایل جدید بازی جمله‌سازی و نوار پیشرفت ✨ --- */
-
-/* کانتینر اصلی نوار پیشرفت */
-.progress-container {
-    width: 90%;
-    max-width: 600px;
-    background-color: #e0e0e0; /* رنگ زمینه (ترک) نوار */
-    border-radius: 10px;
-    margin: 10px auto 20px auto; /* فاصله از بالا و پایین */
-    height: 16px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    overflow: hidden; /* مهم برای گرد بودن گوشه‌ها */
-}
-
-/* بخش رنگی و متحرک نوار پیشرفت */
-.progress-bar-fill {
-    height: 100%;
-    width: 0%; /* شروع از صفر */
-    background-color: #58cc02; /* سبز زیبای دولینگو */
-    background-image: linear-gradient(to bottom, #58cc02, #4caf50); /* گرادیان برای زیبایی بیشتر */
-    border-radius: 10px;
-    transition: width 0.5s ease-out; /* انیمیشن روان برای پر شدن */
-}
-
-.scramble-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px;
-}
-
-/* کادر بالایی که جمله در آن ساخته می‌شود */
-.drop-zone-click {
-    border-bottom: 2px solid #bdc3c7;
-    padding: 15px 10px;
-    min-height: 50px;
-    margin-bottom: 25px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    transition: border-color 0.3s;
-}
-/* وقتی کلمه‌ای داخلش باشد، زیباتر می‌شود */
-.drop-zone-click:not(:empty) {
-    border-bottom: 2px solid #3498db;
-}
-
-/* کادر پایینی که کلمات موجود در آن قرار دارند */
-.word-bank-click {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 10px;
-    min-height: 50px;
-}
-
-/* استایل کاشی‌های کلمات */
-.word-tile {
-    background-color: #ffffff;
-    color: #34495e;
-    padding: 12px 20px;
-    font-size: 1.2em;
-    font-weight: 500;
-    border-radius: 10px;
-    border: 1px solid #bdc3c7;
-    box-shadow: 0 3px 0 #bdc3c7;
-    cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    user-select: none;
-}
-
-.word-tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 0 #bdc3c7;
-}
-
-.word-tile:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 0 #bdc3c7;
-}
-
-#drop-zone-click .word-tile {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-}
-
-.feedback {
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-}
-.feedback.correct {
-    color: #27ae60;
-    background-color: #e8f8f5;
-}
-.feedback.incorrect {
-    color: #c0392b;
-    background-color: #fdedec;
-}
-
-.review-message {
-    background-color: #e8f4fd;
-    color: #3498db;
-    padding: 15px;
-    margin: 0 auto 20px auto;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    max-width: 90%;
-    border: 1px solid #aed6f1;
-}
-
-#action-buttons-container {
-    margin: 25px auto 0 auto;
-    width: 80%;
-    max-width: 300px;
-}
-
-/* استایل دکمه "بررسی جواب" */
-#check-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.2em;
-    font-weight: bold;
-    background-color: #3498db; /* رنگ آبی برای بررسی */
-    color: white;
-    border: none;
-    border-radius: 10px;
-    border-bottom: 4px solid #2980b9;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-#check-btn:hover {
-    background-color: #4ea8e1;
-}
-
-/* استایل پایه برای دکمه "ادامه" */
-.button-continue {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-/* استایل دکمه "ادامه" برای جواب صحیح */
-.button-continue.correct {
-    background-color: #27ae60;
-    border-bottom: 4px solid #229954;
-}
-
-.button-continue.correct:hover {
-    background-color: #2ecc71;
-}
-
-/* استایل دکمه "ادامه" برای جواب غلط */
-.button-continue.incorrect {
-    background-color: #e74c3c;
-    border-bottom: 4px solid #c0392b;
-}
-
-.button-continue.incorrect:hover {
-    background-color: #f1c40f; /* هاور زرد برای تمایز */
-    color: #34495e;
-    border-bottom-color: #f39c12;
-}
-
-/* --- ✨ استایل جدید، شیک و حرفه‌ای برای بخش آزمون ✨ --- */
-
-/* کانتینر اصلی که در مرکز صفحه قرار می‌گیرد */
-.quiz-launch-pad {
-    max-width: 600px;
-    margin: 30px auto;
-    background: #ffffff;
-    border-radius: 24px;
-    overflow: hidden; /* مهم برای گرد بودن گوشه‌های هدر */
-    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-    transform: scale(0.98);
-    animation: pop-in 0.5s ease-out forwards;
-}
-
-/* انیمیشن ظاهر شدن کارت */
-@keyframes pop-in {
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* هدر کارت با رنگ متمایز و آیکون جام */
-.quiz-card-header {
-    background-color: #34495e;
-    color: white;
-    padding: 25px 30px;
-    position: relative;
-    text-align: center;
-}
-
-.quiz-card-header .quiz-header-icon {
-    font-size: 2.5rem;
-    position: absolute;
-    top: 50%;
-    right: 30px;
-    transform: translateY(-50%) rotate(15deg);
-    opacity: 0.2;
-}
-
-.quiz-card-header h2 {
-    color: white;
-    font-size: 2em;
-    margin: 0;
-}
-
-/* بدنه کارت */
-.quiz-card-body {
-    padding: 35px;
-}
-
-.quiz-intro-text {
-    text-align: center;
-    font-size: 1.2em;
-    color: #636e72;
     margin-bottom: 30px;
 }
 
-/* لیست دستورالعمل‌ها */
+.shuffle-btn {
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Vazirmatn', sans-serif;
+    color: white;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.shuffle-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.shuffle-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+/* --- بازی جمله‌سازی --- */
+.scramble-container {
+    max-width: 650px;
+    margin: 20px auto;
+    padding: 25px;
+    
+    /* افکت شیشه‌ای اصلی */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+}
+
+.drop-zone-click {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    min-height: 60px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    transition: border-color 0.3s;
+    border-radius: 10px;
+}
+
+.drop-zone-click:not(:empty) {
+    border-bottom-color: #fff;
+}
+
+.word-bank-click {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    min-height: 60px;
+}
+
+.word-tile {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #2c3e50;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    font-weight: 500;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.word-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.word-tile:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#drop-zone-click .word-tile {
+    background-color: rgba(236, 240, 241, 0.8);
+}
+
+.feedback {
+    margin-top: 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.feedback.correct { background-color: rgba(39, 174, 96, 0.7); }
+.feedback.incorrect { background-color: rgba(192, 57, 43, 0.7); }
+
+
+/* --- نوار پیشرفت --- */
+.progress-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 10px auto 25px auto;
+    height: 18px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #58cc02, #84fab0);
+    border-radius: 10px;
+    transition: width 0.5s ease-out;
+}
+
+/* --- دکمه‌های بررسی و ادامه --- */
+#action-buttons-container {
+    margin: 30px auto 0 auto;
+    width: 90%;
+    max-width: 350px;
+}
+
+#check-btn, .button-continue {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+#check-btn {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    box-shadow: 0 4px 0 #1f648b;
+}
+#check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #1f648b; }
+#check-btn:active { transform: translateY(0); box-shadow: 0 2px 0 #1f648b; }
+
+.button-continue.correct {
+    background: linear-gradient(45deg, #27ae60, #229954);
+    box-shadow: 0 4px 0 #1a7440;
+}
+.button-continue.correct:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #1a7440; }
+.button-continue.correct:active { transform: translateY(0); box-shadow: 0 2px 0 #1a7440; }
+
+
+.button-continue.incorrect {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    box-shadow: 0 4px 0 #922b21;
+}
+.button-continue.incorrect:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #922b21; }
+.button-continue.incorrect:active { transform: translateY(0); box-shadow: 0 2px 0 #922b21; }
+
+/* --- استایل بخش آزمون --- */
+.quiz-launch-pad {
+    max-width: 600px;
+    margin: 30px auto;
+    
+    /* افکت شیشه‌ای */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: pop-in 0.5s ease-out forwards;
+    transform: scale(0.98); opacity: 0;
+}
+
+@keyframes pop-in { to { transform: scale(1); opacity: 1; } }
+
+.quiz-card-header {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    position: relative;
+    text-align: center;
+}
+.quiz-card-header .quiz-header-icon { font-size: 2.5rem; opacity: 0.3; }
+.quiz-card-header h2 { font-size: 2em; margin: 0; }
+
+.quiz-card-body {
+    padding: 35px;
+}
+.quiz-intro-text { text-align: center; font-size: 1.2em; color: rgba(255,255,255,0.85); margin-bottom: 30px; }
+
 .quiz-instructions {
     list-style: none;
     padding: 0;
     margin-bottom: 40px;
 }
-
 .quiz-instructions li {
     display: flex;
     align-items: center;
-    background-color: #f8f9fa;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 10px;
     font-size: 1.1em;
 }
+.quiz-instructions .li-icon { font-size: 1.5em; margin-left: 15px; }
 
-.quiz-instructions .li-icon {
-    font-size: 1.5em;
-    margin-left: 15px; /* فاصله آیکون از متن */
-}
-
-/* دکمه نهایی شروع آزمون */
 .button-start-quiz-final {
-    display: block; /* تمام عرض را می‌گیرد */
+    display: block;
     width: 100%;
     padding: 20px;
     font-size: 1.5em;
@@ -766,35 +515,34 @@ h1, h2 {
     background: linear-gradient(135deg, #f39c12, #e67e22);
     border-radius: 12px;
     border: none;
-    box-shadow: 0 5px 0 #d35400;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     transition: all 0.2s ease-in-out;
 }
+.button-start-quiz-final:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 9px 20px rgba(0,0,0,0.25); }
+.button-start-quiz-final:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
-.button-start-quiz-final:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 9px 0 #d35400;
+/* --- استایل ویدئو --- */
+.video-item {
+    margin-bottom: 40px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 16px;
 }
-
-.button-start-quiz-final:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 0 #d35400;
+.video-item h3 {
+    margin-bottom: 15px;
+    text-align: center;
+    padding-bottom: 10px;
 }
-
 .video-container {
     position: relative;
-    padding-bottom: 56.25%; /* نسبت تصویر 16:9 (برای ویدئوهای عریض) */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     max-width: 100%;
-    background: #000;
     border-radius: 12px;
-    margin-top: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
-.video-container iframe,
-.video-container object,
-.video-container embed {
+.video-container iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -802,50 +550,99 @@ h1, h2 {
     height: 100%;
 }
 
-/* ... (تمام کدهای CSS قبلی شما بدون تغییر) */
 
-
-/* --- ✨ استایل جزئی برای نمایش چندین ویدئو ✨ --- */
-.video-item {
-    margin-bottom: 40px; /* ایجاد فاصله بین هر ویدئو */
-}
-
-.video-item h3 {
-    font-size: 1.5em;
-    color: #34495e;
-    margin-bottom: 15px;
-    text-align: center;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
-}
-
-/* --- Media Query برای تبلت و صفحات بزرگتر --- */
-/* ------------------------------------------- */
+/* --- Media Query برای صفحات بزرگتر --- */
 @media (min-width: 768px) {
     .menu-toggle { display: none; }
      .container {
         display: flex;
-        height: 100vh; /* ۱. کانتینر والد ارتفاع کامل صفحه را می‌گیرد */
+        height: 100vh;
     }
-    .sidebar { position: relative; transform: translateX(0); width: 280px; flex-shrink: 0; }
+    .sidebar {
+        position: relative;
+        transform: translateX(0);
+        width: 280px;
+        flex-shrink: 0;
+        height: 100vh; /* ارتفاع کامل */
+    }
     .main-content {
-        flex-grow: 1; /* تمام فضای باقی‌مانده را پر می‌کند */
+        flex-grow: 1;
         padding: 40px;
-        overflow-y: auto; /* ۳. اگر محتوای اصلی بلند باشد، خودش اسکرول می‌خورد */
+        overflow-y: auto;
     }
-    .flashcard-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    .flashcard .word-text { font-size: 28px; }
-    .memory-game { max-width: 500px; }
     .videos-grid {
         display: grid;
-        /* ۱. ستون‌هایی دقیقاً به عرض ۴۸۰ پیکسل بساز، تا جایی که جا می‌شود */
         grid-template-columns: repeat(auto-fill, 480px);
-        
-        /* ۲. حالا کل این شبکه ستون‌ها را در وسط کانتینر قرار بده */
         justify-content: center;
-
-        gap: 30px; /* فاصله بین آیتم‌ها */
+        gap: 30px;
     }
 }
 
- 
+/* --- ✨ استایل جدید و اصلاح شده برای بازی کارت حافظه (با سبک شیشه‌ای) ✨ --- */
+
+.memory-game {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 ستون */
+    gap: 15px; /* فاصله بیشتر بین کارت‌ها */
+    max-width: 500px;
+    margin: 20px auto;
+    perspective: 1200px; /* برای افکت سه‌بعدی بهتر */
+}
+
+.memory-card {
+    width: 100%;
+    padding-top: 100%; /* حفظ نسبت ابعاد 1:1 برای کارت‌های مربعی */
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* استایل مشترک برای هر دو روی کارت */
+.memory-card .front-face,
+.memory-card .back-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden; /* مهم برای انیمیشن چرخش */
+    border-radius: 15px;
+    
+    /* افکت شیشه‌ای */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* روی کارت (کلمه) که در ابتدا پنهان است */
+.memory-card .front-face {
+    font-size: 1.4rem;
+    font-weight: bold;
+    transform: rotateY(180deg); /* این روی کارت در ابتدا چرخانده شده */
+}
+
+/* پشت کارت (علامت سوال) که در ابتدا دیده می‌شود */
+.memory-card .back-face {
+    font-size: 2.5rem;
+    background: rgba(255, 255, 255, 0.1); /* کمی شفاف‌تر برای تمایز */
+}
+
+/* کلاسی که با جاوااسکریپت برای چرخاندن کارت اضافه می‌شود */
+.memory-card.flip {
+    transform: rotateY(180deg);
+}
+
+/* استایل برای کارت‌های جفت‌شده */
+.memory-card.matched .front-face {
+    background: rgba(39, 174, 96, 0.7); /* رنگ سبز برای نشان دادن موفقیت */
+    border-color: rgba(255, 255, 255, 0.5);
+}

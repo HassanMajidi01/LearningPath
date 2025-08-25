@@ -15,7 +15,12 @@ const lessonsData = {
         //     { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
         // ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfmV8mEN3JqeJHy6-UZRMG4UGZcn8h9kn1sqscPoZJNyoecUw/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+         videos: [
+            {
+                title: "آموزش نشانه آ با داستان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dbt0zrw/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-2": {
         title: "ب",
@@ -314,7 +319,7 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "ماشین تُرمُز دارَد", scrambled: ["دارَد","تُرمُز", "ماشین"] },
-            { correct: "مادَربُزُرگ مَن را بوسید", scrambled: ["بوسید", "را", "من", "مادَربُزُرگ"] }
+            { correct: "مادَربُزُرگ مَن را بوسید", scrambled: ["بوسید", "را", "مَن", "مادَربُزُرگ"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfeSYdY4uMZakiBnGVHLnO4Xf4ykZeeBXj869EMCo6Fri7r_A/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
