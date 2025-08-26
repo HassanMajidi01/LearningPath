@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
     const menuToggle = document.getElementById('menu-toggle');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
+    
+    // یک المنت Audio برای پخش صدا
+    const audioPlayer = new Audio();
 
     // تابع برای ایجاد منوی تاشو در سایدبار
     function createSidebarMenu() {
@@ -16,15 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const listItem = document.createElement('li');
             listItem.classList.add('lesson-item');
 
-            // ساختار هر آیتم در سایدبار
+            // ساختار هر آیتم در سایدبار - فقط عنوان لوحه
             listItem.innerHTML = `
                 <div class="topic-title" data-topic-id="${topicId}">
                     ${topic.title}
                 </div>
-                <ul class="submenu">
-                    <li><a href="#" data-topic-id="${topicId}" data-content-type="videos">ویدئوهای آموزشی</a></li>
-                    <li><a href="#" data-topic-id="${topicId}" data-content-type="quiz">آزمونک</a></li>
-                </ul>
             `;
             menuList.appendChild(listItem);
         }
@@ -32,48 +31,37 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.appendChild(menuList);
     }
 
-    // تابع برای نمایش ویدئوهای یک مبحث
-    function displayVideos(topicId) {
+    // تابع برای نمایش کاشی‌های یک مبحث
+    function displayTiles(topicId) {
         const topic = quranTopicsData[topicId];
-        let contentHTML = '';
+        let contentHTML = `<h1 class="topic-main-title">${topic.title}</h1>`;
 
-        if (topic.videos && topic.videos.length > 0) {
-            contentHTML += '<h2>ویدئوهای آموزشی</h2>';
-            topic.videos.forEach(video => {
+        if (topic.tiles && topic.tiles.length > 0) {
+            contentHTML += '<div class="tiles-container">';
+            topic.tiles.forEach((tile, index) => {
                 contentHTML += `
-                    <div class="video-item">
-                        <h3>${video.title}</h3>
-                        <div class="video-container">
-                            ${video.embedCode}
-                        </div>
+                    <div class="quran-tile" data-audio="${tile.audio}">
+                        <span>${tile.text}</span>
                     </div>
                 `;
             });
+            contentHTML += '</div>';
         } else {
-            contentHTML += '<p>ویدئویی برای این بخش وجود ندارد.</p>';
+            contentHTML += '<p>کاشی‌ای برای این بخش وجود ندارد.</p>';
         }
 
         mainContent.innerHTML = contentHTML;
-    }
-
-    // تابع برای نمایش بخش آزمون
-    function displayQuiz(topicId) {
-        const topic = quranTopicsData[topicId];
-        let contentHTML = `<h1>${topic.title}</h1>`;
-
-        if (topic.quizLink) {
-            contentHTML += `
-                <div class="quiz-container">
-                    <h2>آزمونک</h2>
-                    <p>دانسته‌های خود را با کلیک روی دکمه زیر بسنجید.</p>
-                    <a href="${topic.quizLink}" class="start-quiz-btn" target="_blank">شروع آزمون</a>
-                </div>
-            `;
-        } else {
-            contentHTML += '<p>آزمونی برای این بخش تعریف نشده است.</p>';
-        }
-
-        mainContent.innerHTML = contentHTML;
+        
+        // افزودن شنونده رویداد به کاشی‌ها پس از بارگذاری HTML
+        document.querySelectorAll('.quran-tile').forEach(tileElement => {
+            tileElement.addEventListener('click', () => {
+                const audioSrc = tileElement.dataset.audio;
+                if (audioSrc) {
+                    audioPlayer.src = audioSrc;
+                    audioPlayer.play();
+                }
+            });
+        });
     }
     
     // تابع برای نمایش پیام خوش‌آمدگویی
@@ -102,25 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- مدیریت رویدادها ---
 
     sidebar.addEventListener('click', (e) => {
-        // اگر روی عنوان اصلی مبحث کلیک شد، منوی زیرمجموعه را باز/بسته کن
+        // اگر روی عنوان اصلی مبحث کلیک شد
         const topicTitle = e.target.closest('.topic-title');
         if (topicTitle) {
-            topicTitle.parentElement.classList.toggle('open');
-            return;
-        }
-
-        // اگر روی لینک زیرمجموعه (ویدئو یا آزمون) کلیک شد
-        const contentLink = e.target.closest('.submenu a');
-        if (contentLink) {
-            e.preventDefault();
-            const topicId = contentLink.dataset.topicId;
-            const contentType = contentLink.dataset.contentType;
-
-            if (contentType === 'videos') {
-                displayVideos(topicId);
-            } else if (contentType === 'quiz') {
-                displayQuiz(topicId);
-            }
+            const topicId = topicTitle.dataset.topicId;
+            displayTiles(topicId); // نمایش کاشی‌ها
             closeMobileSidebar();
         }
     });
