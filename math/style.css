@@ -24,7 +24,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(135deg, #4c00ff, #ff007f, #00bfff);
+    background: linear-gradient(135deg, #1c2541, #2a3a5b, #0b132b);
 }
 
 .blob {
@@ -435,7 +435,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(135deg, #4c00ff, #ff007f, #00bfff);
+    background: linear-gradient(135deg, #1c2541, #2a3a5b, #0b132b);
 }
 
 .blob {
@@ -520,7 +520,52 @@ body {
 .sidebar .topic-title:hover {
     background: rgba(255, 255, 255, 0.1);
 }
+.sidebar .lesson-item.open .topic-title {
+    background: rgba(90, 135, 252, 0.4);
+    color: white;
+}
+.sidebar .topic-title::before {
+    content: '◀';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s;
+    font-size: 0.8em;
+}
+.sidebar .lesson-item.open .topic-title::before {
+    transform: translateY(-50%) rotate(-90deg);
+}
 
+.sidebar .submenu {
+    list-style: none;
+    padding-right: 15px;
+    margin-top: 5px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+}
+
+.sidebar .lesson-item.open .submenu {
+    max-height: 200px;
+    padding: 10px 15px 10px 0;
+}
+
+.sidebar .submenu a {
+    display: block;
+    color: #bbb;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    font-weight: 300;
+}
+.sidebar .submenu a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transform: translateX(-5px);
+}
 
 /* --- ✨ ۴. دکمه منوی همبرگری و پوشش صفحه ✨ --- */
 .menu-toggle {
@@ -569,11 +614,95 @@ body {
     overflow-y: auto;
 }
 
+/* کارت خوش‌آمدگویی */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px 30px;
+    border-radius: 24px;
+    min-height: 60vh;
+    margin: 5vh auto;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.welcome-icon { font-size: 4rem; margin-bottom: 20px; text-shadow: 0 0 20px rgba(0, 200, 255, 0.5); }
+.welcome-container h1 { color: white; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 
+/* ویدئوها و آزمون */
+h2 { color: #f0f0f0; margin-bottom: 25px; }
+h3 { color: #ddd; font-weight: 400; font-size: 1.3em; margin-bottom: 15px; }
+
+.video-item {
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 18px;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+}
+
+/* کانتینر آزمون */
+.quiz-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 35px;
+    text-align: center;
+    border-radius: 20px;
+    
+    /* افکت شیشه */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.start-quiz-btn {
+    display: inline-block;
+    padding: 15px 35px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    background: rgba(90, 135, 252, 0.7); /* رنگ آبی نیمه شفاف */
+    border: 1px solid rgba(90, 135, 252, 0.9);
+    transition: all 0.3s;
+}
+
+.start-quiz-btn:hover {
+    background: rgba(90, 135, 252, 1);
+    transform: scale(1.05);
+}
 
 /* --- ۶. طراحی ریسپانسیو --- */
 @media (min-width: 768px) {
     body {
+        /* برای قرارگیری صحیح اشکال پس‌زمینه */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -587,13 +716,14 @@ body {
         transform: translateX(0);
         height: 95vh;
         border-radius: 20px;
-        margin-left: 20px;
+        margin-left: 20px; /* فاصله از محتوای اصلی */
     }
     .main-content {
         flex-grow: 1;
         height: 95vh;
         border-radius: 20px;
         
+        /* افکت شیشه برای محتوای اصلی در دسکتاپ */
         background: rgba(25, 25, 30, 0.2);
         backdrop-filter: blur(25px);
         -webkit-backdrop-filter: blur(25px);
@@ -601,3 +731,33 @@ body {
     }
 }
 
+.quran-tile .red {
+    color: #f32b2b;
+}
+
+/* --- دکمه بازگشت به خانه --- */
+.home-button {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: rgba(30, 30, 35, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.home-button:hover {
+    background: rgba(50, 50, 55, 0.7);
+    transform: scale(1.1);
+}

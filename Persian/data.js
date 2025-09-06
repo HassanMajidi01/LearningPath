@@ -684,6 +684,10 @@ const lessonsData = {
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfipHpejQJpYsGLUh3CMZmivDDpa8IEYfWToPjSWt4IdDwl4Q/viewform?usp=header",
         videos: [
             {
+                title: "آموزش نشانه ژ با داستان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/lklsw9a/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
                 title: "لوحه خوانی ژ",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dafgq4q/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
@@ -890,7 +894,7 @@ const lessonsData = {
             { word: 'حیاط', image: 'assets/images/hayat.webp', audio: 'assets/audio/hayat.mp3', highlight: 'ط' },
             { word: 'سَطل', image: 'assets/images/satl.webp', audio: 'assets/audio/satl.mp3', highlight: 'ط' },
             { word: 'وطن', image: 'assets/images/iran.webp', audio: 'assets/audio/vatan.mp3', highlight: 'ط' },
-            { word: 'ط', image: 'assets/images/ta.webp', audio: 'assets/audio/ta.mp3', highlight: 'ط' },
+            { word: 'ط', image: 'assets/images/ta.webp', audio: 'assets/audio/taa.mp3', highlight: 'ط' },
             { word: 'طاووس', image: 'assets/images/tavoos.webp', audio: 'assets/audio/tavoos.mp3', highlight: 'ط' },
             { word: 'مُستَطیل', image: 'assets/images/mostatil.webp', audio: 'assets/audio/mostatil.mp3', highlight: 'ط' },
             { word: 'طوطی', image: 'assets/images/tooti.webp', audio: 'assets/audio/tooti.mp3', highlight: 'ط' },

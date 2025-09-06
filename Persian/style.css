@@ -19,7 +19,7 @@ body {
     color: #fff; /* تغییر رنگ پیش‌فرض متن به سفید برای کنتراست بهتر */
     
     /* پس‌زمینه گرادیانی پویا برای ایجاد عمق */
-    background: linear-gradient(135deg, #667eea, #764ba2, #89f7fe, #66a6ff);
+    background: linear-gradient(135deg, #232946, #1a1a2e, #283e51, #0f2027);
     background-size: 400% 400%;
     animation: gradient-animation 15s ease infinite;
     min-height: 100vh;
@@ -70,8 +70,8 @@ h1, h2, h3 {
     top: 0;
     right: 0;
     width: 250px;
-    height: 100%;
-    
+    height: auto;
+
     /* افکت شیشه‌ای اصلی */
     background: rgba(30, 30, 50, 0.5); /* رنگ تیره نیمه‌شفاف */
     backdrop-filter: blur(20px);
@@ -82,7 +82,7 @@ h1, h2, h3 {
     padding: 20px;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    z-index: 1000;
+    z-index: 989;
     overflow-y: auto;
 }
 
@@ -273,7 +273,7 @@ h1, h2, h3 {
 }
 
 .highlight-red {
-    color: #c90b0b; /* رنگ قرمز ملایم‌تر برای خوانایی بهتر */
+    color: #f32b2b; /* رنگ قرمز ملایم‌تر برای خوانایی بهتر */
     font-weight: bold;
 }
 
@@ -724,4 +724,32 @@ h1, h2, h3 {
 .sidebar .lesson-title.active {
     background-color: rgba(102, 126, 234, 0.7); /* رنگ بنفش برای تمایز */
     box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+/* --- استایل دکمه خانه --- */
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.3s, transform 0.3s;
+    text-decoration: none;
+}
+
+.home-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
 }

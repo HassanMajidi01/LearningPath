@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ایجاد لیست دروس در سایدبار (بقیه کد بدون تغییر)
     const lessonsList = document.createElement('ul');
-    sidebar.innerHTML = '<h2>لیست نشانه ها</h2>';
+    sidebar.innerHTML = '<h2> نشانه ها</h2>';
     sidebar.appendChild(lessonsList);
 
     for (const lessonId in lessonsData) {
