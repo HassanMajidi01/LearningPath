@@ -10,6 +10,7 @@ const lessonsData = {
             { word: 'ا', image: 'assets/images/a-gheire-aval.webp', audio: 'assets/audio/a.mp3', highlight: 'ا' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ا' },
             { word: 'آرد', image: 'assets/images/ard.webp', audio: 'assets/audio/ard.mp3', highlight: 'آ' },
+            { word: 'آذر', image: 'assets/images/azar.webp', audio: 'assets/audio/azar.mp3', highlight: 'آ' },
         ],
         // sentenceScramble: [
         //     { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
@@ -107,7 +108,7 @@ const lessonsData = {
             { correct: "بابا داس داد", scrambled: ["داد", "بابا", "داس"] },
             { correct: "بابا با اَسب آمد", scrambled: ["آمد", "بابا", "اَسب", "با"] }
          ],
-        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeKXvM3l5cFuZMavAto2DVMZ4TSnk2S6gSLCtX547KQPFMMDg/viewform?usp=header",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeKXvM3l5cFuZMavAto2DVMZ4TSNk2S6gSLCtX547KQPFMMDg/viewform?usp=header",
         videoEmbed: 'YOUR_EMBED_CODE'
     },
     "dars-7": {
@@ -707,7 +708,7 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "مَن خواهرِ خوبی دارَم", scrambled: ["دارَم", "خوبی", "خواهرِ", "مَن"] },
-            { correct: "خواهَرَِم آزاده قَبل از خواب برایِ مَن کِتاب می خوانَد", scrambled: ["خواهَرَِم", "آزاده", "قَبل", "از", "خواب", "برایِ", "مَن", "کِتاب", "می خوانَد"] },
+            { correct: "خواهَرَِم آزاده قَبل از خواب برایِ مَن کِتاب می خوانَد", scrambled: ["خواهَرِم", "آزاده", "قَبل", "از", "خواب", "برایِ", "مَن", "کِتاب", "می خوانَد"] },
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScrPjW30ZvlNQEQAHny7sUPsDFxd1_V7_d04ppS07L8qx3V0g/viewform?usp=header",
          videos: [

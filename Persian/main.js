@@ -45,24 +45,43 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const submenu = document.createElement('ul');
         submenu.className = 'submenu';
-        submenu.innerHTML = `
+        
+        // ایجاد آیتم‌های زیرمنو به صورت پویا
+        let submenuHTML = `
             <li data-lesson="${lessonId}" data-activity="video">ویدئوی آموزشی</li>
             <li data-lesson="${lessonId}" data-activity="flashcards">فلش‌کارت کلمات</li>
             <li data-lesson="${lessonId}" data-activity="memory">بازی کارت حافظه</li>
+        `;
+
+        // فقط در صورتی که داده تمرین پیدا کردن کلمه در فایل جدید وجود داشته باشد، آیتم را اضافه کن
+        if (wordSoundExerciseData[lessonId]) {
+            submenuHTML += `<li data-lesson="${lessonId}" data-activity="word-sound">تمرین پیدا کردن کلمه</li>`;
+        }
+
+        submenuHTML += `
             <li data-lesson="${lessonId}" data-activity="scramble">بازی جمله‌سازی</li>
             <li data-lesson="${lessonId}" data-activity="quiz">آزمون درس</li>
         `;
+        
+        submenu.innerHTML = submenuHTML;
         lessonItem.appendChild(submenu);
         lessonsList.appendChild(lessonItem);
 
-        lessonItem.querySelector('.lesson-title').addEventListener('click', () => {
+        lessonItem.querySelector('.lesson-title').addEventListener('click', (e) => {
+            // جلوگیری از بسته شدن منو هنگام کلیک روی عنوان
+            e.stopPropagation(); 
+            
             const allSubmenus = lessonsList.querySelectorAll('.submenu');
             allSubmenus.forEach(sm => {
                 if (sm !== submenu) {
                     sm.style.display = 'none';
+                    sm.parentElement.querySelector('.lesson-title').classList.remove('active');
                 }
             });
-            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            
+            const isVisible = submenu.style.display === 'block';
+            submenu.style.display = isVisible ? 'none' : 'block';
+            e.currentTarget.classList.toggle('active', !isVisible);
         });
     }
 
@@ -71,25 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const lessonId = e.target.dataset.lesson;
             const activity = e.target.dataset.activity;
             const lessonData = lessonsData[lessonId];
-            loadActivity(activity, lessonData);
+            loadActivity(activity, lessonData, lessonId);
             
+            // بستن سایدبار فقط در حالت موبایل
             if (window.innerWidth < 768) {
-                closeSidebar(); // از تابع جدید استفاده می‌کنیم
+                closeSidebar();
             }
         }
     });
 
-    function loadActivity(activity, data) {
+    function loadActivity(activity, lessonData, lessonId) { // lessonId را دریافت می‌کنیم
         mainContent.innerHTML = ''; 
         switch (activity) {
             case 'flashcards':
-                initializeFlashcards(mainContent, data.flashcardWords);
+                initializeFlashcards(mainContent, lessonData.flashcardWords);
                 break;
             
+            case 'word-sound':
+                const exerciseData = wordSoundExerciseData[lessonId];
+                if (exerciseData) {
+                    createWordSoundExercise(mainContent, exerciseData);
+                } else {
+                    mainContent.innerHTML = `<h2>تمرین پیدا کردن کلمه</h2><p>این تمرین برای درس فعلی تعریف نشده است.</p>`;
+                }
+                break;
+
             // --- ✨ بخش کلیدی و تغییر یافته برای انتخاب رندوم کلمات ✨ ---
             case 'memory':
                 // ابتدا یک کپی از آرایه کلمات فلش‌کارت را ایجاد می‌کنیم تا آرایه اصلی دست‌نخورده باقی بماند.
-                const allWords = [...data.flashcardWords];
+                const allWords = [...lessonData.flashcardWords];
 
                 // آرایه کلمات را به صورت تصادفی بُر می‌زنیم (Fisher-Yates Shuffle Algorithm)
                 for (let i = allWords.length - 1; i > 0; i--) {
@@ -109,20 +138,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case 'scramble':
                 // بررسی می‌کنیم که آیا داده‌های جمله‌سازی برای این درس وجود دارد یا نه
-                if (data.sentenceScramble && data.sentenceScramble.length > 0) {
-                    initializeSentenceScramble(mainContent, data.sentenceScramble);
+                if (lessonData.sentenceScramble && lessonData.sentenceScramble.length > 0) {
+                    initializeSentenceScramble(mainContent, lessonData.sentenceScramble);
                 } else {
                     mainContent.innerHTML = `<h2>بازی جمله‌سازی</h2><p>تمرین جمله‌سازی برای این درس هنوز آماده نشده است.</p>`;
                 }
                 break;
 
                case 'video':
-                let videoHTML = `<h2>ویدئوهای آموزشی: ${data.title}</h2>`;
+                let videoHTML = `<h2>ویدئوهای آموزشی: ${lessonData.title}</h2>`;
 
                 // بررسی می‌کنیم که آیا آرایه ویدئوها وجود دارد و خالی نیست
-                if (data.videos && data.videos.length > 0) {
+                if (lessonData.videos && lessonData.videos.length > 0) {
                     // روی هر ویدئو در آرایه حلقه می‌زنیم
-                    data.videos.forEach(video => {
+                    lessonData.videos.forEach(video => {
                         videoHTML += `
                             <div class="video-item">
                                 <h3>${video.title}</h3>
@@ -145,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="quiz-launch-pad">
                         <div class="quiz-card-header">
                             <div class="quiz-header-icon">🏆</div>
-                            <h2>آزمون درس: ${data.title}</h2>
+                            <h2>آزمون درس: ${lessonData.title}</h2>
                         </div>
                         <div class="quiz-card-body">
                             <p class="quiz-intro-text">
@@ -167,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </li>
                             </ul>
                             
-                            <a href="${data.quizLink}" target="_blank" class="button-start-quiz-final">شروع آزمون نهایی</a>
+                            <a href="${lessonData.quizLink}" target="_blank" class="button-start-quiz-final">شروع آزمون نهایی</a>
                         </div>
                     </div>
                 `;
