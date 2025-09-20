@@ -776,6 +776,10 @@ h1, h2, h3 {
     color: rgba(255, 255, 255, 0.8);
 }
 
+.word-sound-exercise-container #play-full-text-btn {
+    margin-bottom: 20px;
+}
+
 .exercise-text-panel {
     background: rgba(0, 0, 0, 0.2);
     padding: 20px;

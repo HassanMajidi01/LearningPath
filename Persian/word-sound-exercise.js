@@ -9,6 +9,7 @@ function createWordSoundExercise(container, exerciseData) {
         <div class="word-sound-exercise-container">
             <h2>تمرین پیدا کردن کلمات با صدای "${exerciseData.targetSound}"</h2>
             <p>روی هر کلمه یک بار بزن تا صدایش را بشنوی. اگر کلمه صدای خواسته شده را داشت، روی آن دو بار بزن.</p>
+            <button id="play-full-text-btn" class="shuffle-btn">پخش کل متن</button>
             <div class="exercise-text-panel"></div>
             <div class="exercise-score">امتیاز: <span id="word-sound-score">0</span></div>
         </div>
@@ -16,6 +17,7 @@ function createWordSoundExercise(container, exerciseData) {
 
     const textPanel = container.querySelector('.exercise-text-panel');
     const scoreSpan = container.querySelector('#word-sound-score');
+    const playFullTextBtn = container.querySelector('#play-full-text-btn');
     const audioPlayer = new Audio();
 
     // ایجاد کلمات در پنل متن
@@ -40,6 +42,10 @@ function createWordSoundExercise(container, exerciseData) {
             }
             lastTap = new Date().getTime();
         });
+    });
+
+    playFullTextBtn.addEventListener('click', () => {
+        playWordSound(exerciseData.fullAudio);
     });
 
     function playWordSound(audioSrc) {
