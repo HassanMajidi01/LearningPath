@@ -294,3 +294,33 @@ function disableBoardForWin() {
     document.getElementById('sudoku-item-palette').innerHTML = '';
     document.getElementById('sudoku-check-btn').disabled = true;
 }
+function initializeSudokuGame(container, data) {
+    sudokuGameData = data;
+    container.innerHTML = `
+        <div class="sudoku-game-container">
+            <h2>تمرین سودوکو (۳x۳)</h2>
+            <p>یکی از اشیاء پایین را به خانه‌های خالی بکشید. برای حذف یک شیء از جدول، روی آن کلیک کنید.</p>
+            <div class="sudoku-board-area">
+                <div id="sudoku-board" class="sudoku-board"></div>
+            </div>
+            <div id="sudoku-item-palette" class="sudoku-item-palette"></div>
+            <div class="sudoku-controls">
+                <button id="sudoku-check-btn" class="sudoku-btn check-btn">بررسی</button>
+                <button id="sudoku-reset-btn" class="sudoku-btn reset-btn">بازی جدید</button>
+            </div>
+            <div id="sudoku-feedback" class="sudoku-feedback"></div>
+        </div>
+    `;
+
+    const boardElement = document.getElementById('sudoku-board');
+    const paletteElement = document.getElementById('sudoku-item-palette');
+    const checkButton = document.getElementById('sudoku-check-btn');
+    const resetButton = document.getElementById('sudoku-reset-btn');
+
+    generateNewSudokuBoard(boardElement, paletteElement);
+
+    checkButton.addEventListener('click', checkSudokuSolution);
+    resetButton.addEventListener('click', () => generateNewSudokuBoard(boardElement, paletteElement));
+
+    initializeTouchSupportForSudoku(); // ✨ این خط را در انتهای تابع اضافه کنید ✨
+}
