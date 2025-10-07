@@ -1,0 +1,228 @@
+/* CSS for the Counting Game */
+.counting-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+.instruction {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.instruction p {
+    font-size: 1.4em;
+    color: #fff;
+}
+
+.instruction p span {
+    font-weight: bold;
+    color: #f1c40f;
+}
+
+.play-btn {
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.play-btn:hover {
+    transform: scale(1.2);
+}
+
+.item-source {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    min-height: 120px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 2px dashed transparent;
+    transition: border-color 0.3s;
+}
+
+.draggable-item {
+    width: 60px;
+    height: 60px;
+    cursor: grab;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.draggable-item:active {
+    cursor: grabbing;
+}
+
+.draggable-item.dragging {
+    opacity: 0.5;
+}
+
+.in-box-item {
+    width: 50px; /* Smaller size for items in the box */
+    height: 50px;
+    cursor: pointer; /* Can be clicked or dragged out */
+}
+
+.drop-box {
+    position: relative;
+    width: 300px;
+    height: 220px;
+    border: 3px dashed transparent; /* Hide default border */
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.box-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+.box-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-content: flex-start;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.drop-target.drag-over {
+    background-color: rgba(52, 152, 219, 0.2);
+    border-color: #2980b9;
+}
+
+.dropped-count {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background-color: #e74c3c;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.check-btn, .next-btn {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-family: 'Vazirmatn', sans-serif;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.check-btn {
+    background-color: #27ae60;
+}
+
+.check-btn:hover {
+    background-color: #229954;
+}
+
+.next-btn {
+    background-color: #f39c12;
+}
+
+.next-btn:hover {
+    background-color: #e67e22;
+}
+
+.feedback {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    width: 80%;
+    text-align: center;
+    display: none;
+}
+
+.feedback.correct {
+    background-color: rgba(39, 174, 96, 0.8);
+    color: white;
+}
+
+.feedback.incorrect {
+    background-color: rgba(192, 57, 43, 0.8);
+    color: white;
+}
+
+/* Progress Bar Styles */
+.progress-container {
+    width: 80%;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background-color: #2ecc71;
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Review Message Styles */
+.review-message {
+    background-color: rgba(243, 156, 18, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.results-summary {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #fff;
+}

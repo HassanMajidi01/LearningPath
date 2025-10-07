@@ -1,0 +1,231 @@
+/* sudoku-game.css */
+
+.sudoku-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 700px;
+    margin: 30px auto;
+    color: #f0f0f0;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.sudoku-game-container h2 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+}
+
+.sudoku-game-container p {
+    text-align: center;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: #ccc;
+    max-width: 500px;
+}
+
+.sudoku-board-area {
+    margin-bottom: 30px;
+}
+
+.sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(3, 80px); /* 3x3 grid */
+    grid-template-rows: repeat(3, 80px);
+    gap: 5px;
+    border: 3px solid rgba(90, 135, 252, 0.7);
+    border-radius: 10px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.sudoku-cell {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    overflow: hidden; /* Ensure images don't overflow */
+}
+
+.sudoku-cell.empty {
+    background-color: rgba(255, 255, 255, 0.05); /* Lighter background for empty cells */
+    border: 2px dashed rgba(90, 135, 252, 0.4); /* Dashed border to indicate droppable */
+}
+
+.sudoku-cell img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    pointer-events: none; /* Make image transparent to mouse events to allow dropping on cell */
+}
+
+.sudoku-item-palette {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to next line on smaller screens */
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 70px; /* To prevent collapse if empty */
+    justify-content: center;
+    align-items: center;
+}
+
+.draggable-item {
+    width: 60px;
+    height: 60px;
+    cursor: grab;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.draggable-item:hover {
+    border-color: rgba(90, 135, 252, 0.7);
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px rgba(90, 135, 252, 0.5);
+}
+
+.draggable-item.hide {
+    display: none;
+}
+
+.sudoku-controls {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.sudoku-btn {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.sudoku-btn.check-btn {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A); /* Green gradient */
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+.sudoku-btn.check-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+.sudoku-btn.reset-btn {
+    background: linear-gradient(135deg, #FF9800, #FFB74D); /* Orange gradient */
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+}
+.sudoku-btn.reset-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+}
+
+.sudoku-feedback {
+    margin-top: 25px;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    min-height: 45px; /* Prevent layout shift */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.sudoku-feedback.error {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: #ffcccc;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sudoku-feedback.success {
+    background-color: rgba(0, 255, 0, 0.2);
+    border: 1px solid rgba(0, 255, 0, 0.4);
+    color: #ccffcc;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sudoku-cell.incorrect {
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.7);
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .sudoku-board {
+        grid-template-columns: repeat(3, 60px);
+        grid-template-rows: repeat(3, 60px);
+        gap: 3px;
+        padding: 3px;
+    }
+    .sudoku-cell {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2em;
+    }
+    .draggable-item {
+        width: 45px;
+        height: 45px;
+    }
+    .sudoku-btn {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    .sudoku-game-container {
+        padding: 20px;
+    }
+    .sudoku-game-container h2 {
+        font-size: 1.5em;
+    }
+    .sudoku-item-palette {
+        gap: 10px;
+        padding: 10px;
+    }
+}
+
+/* sudoku-game.css (اضافه کنید به انتهای فایل یا در بخش .sudoku-cell) */
+
+.sudoku-cell.fixed {
+    background-color: rgba(255, 255, 255, 0.15); /* Slightly darker/different background */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: default; /* Indicate not draggable */
+}
+
+/* برای مطمئن شدن از اینکه تصاویر داخل سلول های fixed هم قابل کشیدن نیستند */
+.sudoku-cell.fixed img {
+    cursor: default;
+}

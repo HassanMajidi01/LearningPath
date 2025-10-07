@@ -19,7 +19,7 @@ const lessonsData = {
          videos: [
             {
                 title: "آموزش نشانه آ با داستان",
-                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dbt0zrw/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kafq52y/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -109,7 +109,12 @@ const lessonsData = {
             { correct: "بابا با اَسب آمد", scrambled: ["آمد", "بابا", "اَسب", "با"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeKXvM3l5cFuZMavAto2DVMZ4TSNk2S6gSLCtX547KQPFMMDg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "داستان نشانه س",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/xlg6g35/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-7": {
         title: "او و",
@@ -212,6 +217,10 @@ const lessonsData = {
             {
                 title: "آموزش نشانه ای",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kwg8037/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: " داستان نشانه ای",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/jmh93y9/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -542,6 +551,10 @@ const lessonsData = {
             {
                 title: "لوحه خوانی نشانه ل",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/eefx6bu/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "داستان نشانه ل",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/gbu19d6/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },

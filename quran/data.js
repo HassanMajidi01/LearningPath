@@ -33,13 +33,13 @@ const quranTopicsData = {
     "topic-4": {
         title: "لوحه ی ۴",
         tiles: [
-            { text: 'ب<span class="red">َ</span>', audio: "/Persian/assets/audio/ba.mp3" }, { text: 'ب<span class="red">ا</span>', audio: "/Persian/assets/audio/baa.mp3" }, { text: 'ب<span class="red">و</span>', audio: "/Persian/assets/audio/boo.mp3" },
-            { text: 'ت<span class="red">َ</span>', audio: "/Persian/assets/audio/ta.mp3" }, { text: 'ت<span class="red">ا</span>', audio: "/Persian/assets/audio/taa.mp3" }, { text: 'ت<span class="red">و</span>', audio: "/Persian/assets/audio/too.mp3" },
+            { text: 'بـ<span class="red">َ</span>', audio: "/Persian/assets/audio/ba.mp3" }, { text: 'ب<span class="red">ا</span>', audio: "/Persian/assets/audio/baa.mp3" }, { text: 'ب<span class="red">و</span>', audio: "/Persian/assets/audio/boo.mp3" },
+            { text: 'تـ<span class="red">َ</span>', audio: "/Persian/assets/audio/ta.mp3" }, { text: 'ت<span class="red">ا</span>', audio: "/Persian/assets/audio/taa.mp3" }, { text: 'ت<span class="red">و</span>', audio: "/Persian/assets/audio/too.mp3" },
             { text: 'د<span class="red">َ</span>', audio: "/Persian/assets/audio/da.mp3" }, { text: 'د<span class="red">ا</span>', audio: "/Persian/assets/audio/daa.mp3" }, { text: 'د<span class="red">و</span>', audio: "/Persian/assets/audio/doo.mp3" },
-            { text: 'س<span class="red">َ</span>', audio: "/Persian/assets/audio/sa.mp3" }, { text: 'س<span class="red">ا</span>', audio: "/Persian/assets/audio/saa.mp3" }, { text: 'س<span class="red">و</span>', audio: "/Persian/assets/audio/soo.mp3" },
-            { text: 'م<span class="red">َ</span>', audio: "/Persian/assets/audio/ma.mp3" }, { text: 'م<span class="red">ا</span>', audio: "/Persian/assets/audio/maa.mp3" }, { text: 'م<span class="red">و</span>', audio: "/Persian/assets/audio/moo.mp3" },
+            { text: 'سـ<span class="red">َ</span>', audio: "/Persian/assets/audio/sa.mp3" }, { text: 'س<span class="red">ا</span>', audio: "/Persian/assets/audio/saa.mp3" }, { text: 'س<span class="red">و</span>', audio: "/Persian/assets/audio/soo.mp3" },
+            { text: 'مـ<span class="red">َ</span>', audio: "/Persian/assets/audio/ma.mp3" }, { text: 'م<span class="red">ا</span>', audio: "/Persian/assets/audio/maa.mp3" }, { text: 'م<span class="red">و</span>', audio: "/Persian/assets/audio/moo.mp3" },
             { text: 'ر<span class="red">َ</span>', audio: "/Persian/assets/audio/ra.mp3" }, { text: 'ر<span class="red">ا</span>', audio: "/Persian/assets/audio/raa.mp3" }, { text: 'ر<span class="red">و</span>', audio: "/Persian/assets/audio/roo.mp3" },
-            { text: 'ن<span class="red">َ</span>', audio: "/Persian/assets/audio/na.mp3" }, { text: 'ن<span class="red">ا</span>', audio: "/Persian/assets/audio/naa.mp3" }, { text: 'ن<span class="red">و</span>', audio: "/Persian/assets/audio/noo.mp3" }
+            { text: 'نـ<span class="red">َ</span>', audio: "/Persian/assets/audio/na.mp3" }, { text: 'ن<span class="red">ا</span>', audio: "/Persian/assets/audio/naa.mp3" }, { text: 'ن<span class="red">و</span>', audio: "/Persian/assets/audio/noo.mp3" }
         ]
     }
 };

@@ -1,0 +1,78 @@
+/* CSS for the Pattern Game */
+.pattern-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    max-width: 900px;
+    margin: auto;
+    font-family: 'Vazirmatn', sans-serif;
+    color: #fff;
+}
+
+.pattern-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    direction: ltr; /* Force Left-to-Right direction */
+}
+
+.pattern-item, .pattern-placeholder {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pattern-item img {
+    width: 100%;
+    height: 100%;
+}
+
+.pattern-placeholder {
+    border: 3px dashed #bdc3c7;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    font-size: 2.5em;
+    color: #bdc3c7;
+}
+
+.pattern-separator {
+    font-size: 2em;
+    margin: 0 15px;
+}
+
+.pattern-options {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+.pattern-draggable {
+    width: 65px;
+    height: 65px;
+    cursor: grab;
+    transition: transform 0.2s;
+}
+
+.pattern-draggable:active {
+    cursor: grabbing;
+}
+
+.pattern-placeholder.drag-over {
+    background-color: rgba(52, 152, 219, 0.3);
+    border-color: #3498db;
+}
+
+.pattern-drop-area {
+    display: flex;
+    gap: 10px;
+}
