@@ -6,28 +6,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menu-toggle');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-    // تابع برای ایجاد منوی تاشو در سایدبار
+    // تابع برای ایجاد منوی ساده در سایدبار (بدون تم‌ها)
     function createSidebarMenu() {
         const menuList = document.createElement('ul');
-        sidebar.innerHTML = '<h2>مباحث ریاضی</h2>';
+        sidebar.innerHTML = '<h2>فهرست تمرین‌ها</h2>';
 
         mathTopicsData.forEach(theme => {
-            const listItem = document.createElement('li');
-            listItem.classList.add('lesson-item');
-
-            let subMenuHTML = '<ul class="submenu">';
             theme.subtopics.forEach(subtopic => {
-                subMenuHTML += `<li><a href="#" data-theme-id="${theme.id}" data-subtopic-id="${subtopic.id}">${subtopic.title}</a></li>`;
+                // ✨ این شرط اضافه شده است ✨
+                // فقط آیتم‌هایی نمایش داده می‌شوند که از نوع ویدئو یا آزمون نباشند
+                if (subtopic.type !== 'videos' && subtopic.type !== 'quiz') {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.dataset.themeId = theme.id;
+                    link.dataset.subtopicId = subtopic.id;
+                    link.textContent = subtopic.title;
+                    
+                    listItem.appendChild(link);
+                    menuList.appendChild(listItem);
+                }
             });
-            subMenuHTML += '</ul>';
-
-            listItem.innerHTML = `
-                <div class="topic-title" data-theme-id="${theme.id}">
-                    ${theme.title}
-                </div>
-                ${subMenuHTML}
-            `;
-            menuList.appendChild(listItem);
         });
 
         sidebar.appendChild(menuList);
@@ -45,13 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         switch (subtopic.type) {
             case 'game':
-                // Pass the game's specific data object
                 initializeCountingGame(mainContent, subtopic.data);
                 break;
             case 'pattern-game':
                 initializePatternGame(mainContent, subtopic.data);
                 break;
-            case 'sudoku-game': // ✨ اضافه شدن کیس جدید برای سودوکو ✨
+            case 'sudoku-game':
                 initializeSudokuGame(mainContent, subtopic.data);
                 break;
             case 'videos':
@@ -126,23 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- مدیریت رویدادها ---
 
+    // مدیریت رویداد کلیک ساده‌سازی شده است
     sidebar.addEventListener('click', (e) => {
-        const topicTitle = e.target.closest('.topic-title');
-        if (topicTitle) {
-            // Toggle the 'open' class on the parent <li>
-            topicTitle.parentElement.classList.toggle('open');
-            return;
-        }
-
-        // اگر روی لینک زیرمجموعه (ویدئو، آزمون یا بازی) کلیک شد
-        const contentLink = e.target.closest('.submenu a');
+        const contentLink = e.target.closest('a');
         if (contentLink) {
             e.preventDefault();
             const themeId = contentLink.dataset.themeId;
             const subtopicId = contentLink.dataset.subtopicId;
             
-            displayContent(themeId, subtopicId);
-            closeMobileSidebar();
+            if (themeId && subtopicId) {
+                displayContent(themeId, subtopicId);
+                closeMobileSidebar();
+            }
         }
     });
 
