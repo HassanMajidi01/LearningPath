@@ -113,3 +113,103 @@ function initializeTouchSupportForSudoku() {
         lastTouchTarget = null;
     });
 }
+
+// touch-support.js
+
+// ... (کد قبلی مربوط به سودوکو در اینجا قرار دارد، آن را پاک نکنید) ...
+
+function initializeTouchSupportForCountingGame() {
+    // پیدا کردن کانتینر اصلی بازی شمارش
+    const gameContainer = document.querySelector('.counting-game-container');
+    if (!gameContainer) {
+        // اگر بازی شمارش در صفحه فعال نباشد، کاری انجام نده
+        return;
+    }
+
+    const itemSource = gameContainer.querySelector('#item-source');
+    const dropBox = gameContainer.querySelector('#drop-box');
+
+    if (!itemSource || !dropBox) {
+        console.error("Counting game elements not found for touch support.");
+        return;
+    }
+
+    let touchDraggedItem = null;
+    let ghostElement = null;
+    let isDragging = false;
+
+    // شروع لمس روی آیتم قابل کشیدن
+    itemSource.addEventListener('touchstart', (e) => {
+        const target = e.target.closest('.draggable-item');
+        if (!target) return;
+
+        isDragging = true;
+        touchDraggedItem = target;
+
+        ghostElement = target.cloneNode(true);
+        ghostElement.style.position = 'absolute';
+        ghostElement.style.zIndex = '1000';
+        ghostElement.style.opacity = '0.8';
+        ghostElement.style.pointerEvents = 'none';
+        ghostElement.style.width = `${target.offsetWidth}px`;
+        ghostElement.style.height = `${target.offsetHeight}px`;
+        document.body.appendChild(ghostElement);
+
+        const touch = e.touches[0];
+        ghostElement.style.left = `${touch.clientX - ghostElement.offsetWidth / 2}px`;
+        ghostElement.style.top = `${touch.clientY - ghostElement.offsetHeight / 2}px`;
+
+    }, { passive: true });
+
+    // حرکت انگشت روی صفحه
+    document.addEventListener('touchmove', (e) => {
+        if (!isDragging || !ghostElement) return;
+
+        e.preventDefault();
+        const touch = e.touches[0];
+
+        ghostElement.style.left = `${touch.clientX - ghostElement.offsetWidth / 2}px`;
+        ghostElement.style.top = `${touch.clientY - ghostElement.offsetHeight / 2}px`;
+
+        const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+        const dropTarget = elementUnderFinger ? elementUnderFinger.closest('#drop-box') : null;
+
+        if (dropTarget) {
+            dropBox.classList.add('drag-over');
+        } else {
+            dropBox.classList.remove('drag-over');
+        }
+
+    }, { passive: false });
+
+    // پایان لمس (رها کردن آیتم)
+    document.addEventListener('touchend', (e) => {
+        if (!isDragging || !ghostElement) return;
+
+        const touch = e.changedTouches[0];
+        const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+        const dropTarget = elementUnderFinger ? elementUnderFinger.closest('#drop-box') : null;
+
+        if (dropTarget) {
+            // شبیه‌سازی منطق drop از فایل counting-game.js
+            const boxContent = dropBox.querySelector('#box-content');
+            
+            const newItem = touchDraggedItem.cloneNode(true);
+            newItem.id = `dropped-item-${Date.now()}`;
+            newItem.classList.remove('draggable-item');
+            newItem.classList.add('in-box-item');
+            boxContent.appendChild(newItem);
+            
+            // اینجا باید راهی برای افزایش شمارنده پیدا کنیم
+            // با صدا زدن یک تابع عمومی یا ارسال یک رویداد سفارشی
+            const dropEvent = new CustomEvent('itemDroppedByTouch');
+            document.dispatchEvent(dropEvent);
+        }
+
+        dropBox.classList.remove('drag-over');
+        document.body.removeChild(ghostElement);
+        ghostElement = null;
+        touchDraggedItem = null;
+        isDragging = false;
+    });
+}
