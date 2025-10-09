@@ -1,6 +1,5 @@
 /* pattern-game.css */
 
-/* ✨ این کلاس جهت را چپ-به-راست می‌کند ✨ */
 .ltr-force {
     direction: ltr;
 }
@@ -12,7 +11,7 @@
     padding: 20px;
     gap: 20px;
     width: 100%;
-    max-width: 900px; /* محدودیت عرض برای نمایش بهتر */
+    max-width: 900px;
     margin: auto;
 }
 
@@ -27,11 +26,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    padding: 20px; /* افزایش پدینگ برای بزرگتر شدن قاب */
     gap: 10px;
-    padding: 15px;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 20px;
+    width: auto; /* اجازه می‌دهد عرض کانتینر متناسب با محتوا باشد */
+    min-width: 320px; /* حداقل عرض برای جلوگیری از به‌هم‌ریختگی */
+    
+    /* ✨ تغییرات کلیدی در اینجا اعمال شده است ✨ */
+    flex-wrap: nowrap; /* آیتم‌ها را مجبور به ماندن در یک خط می‌کند */
+    overflow-x: auto; /* برای صفحه‌های خیلی کوچک، اسکرول افقی اضافه می‌کند */
 }
 
 .pattern-item,
@@ -43,6 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0; /* جلوگیری از کوچک شدن ناخواسته آیتم‌ها */
 }
 
 .drop-zone {
@@ -51,15 +56,16 @@
     background: rgba(255, 255, 255, 0.05);
     transition: all 0.3s;
 }
-/* ✨ استایل برای خانه‌های پر شده و قابل کلیک ✨ */
+
 .filled {
     border: 3px solid transparent;
     border-radius: 15px;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
 }
+
 .filled:hover {
-    background-color: rgba(255, 82, 82, 0.3); /* رنگ قرمز برای نشان دادن قابلیت حذف */
+    background-color: rgba(255, 82, 82, 0.3);
     transform: scale(1.05);
 }
 
@@ -88,7 +94,7 @@
     height: 80px;
     cursor: grab;
     transition: transform 0.2s;
-    user-select: none; /* جلوگیری از انتخاب ناخواسته عکس در موبایل */
+    user-select: none;
     -webkit-user-select: none;
 }
 
@@ -96,16 +102,14 @@
     cursor: grabbing;
 }
 
-/* ✨ استایل آیتم در حال کشیده شدن با تاچ ✨ */
 .touch-dragging {
     position: fixed;
-    pointer-events: none; /* اجازه می‌دهد رویدادها به عناصر زیرین برسند */
+    pointer-events: none;
     z-index: 9999;
     opacity: 0.8;
     transform: scale(1.1);
 }
 
-/* انیمیشن‌ها (بدون تغییر) */
 .shake {
     animation: shake 0.5s ease-in-out;
 }
@@ -115,7 +119,7 @@
     20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
 .feedback-message {
-    position: fixed; /* تغییر به fixed برای نمایش بهتر */
+    position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     font-size: 3rem;
@@ -132,11 +136,16 @@
     100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
 }
 
-/* ✨ بهینه‌سازی بیشتر برای موبایل ✨ */
+
+/* ✨ بهینه‌سازی سایزها برای حالت موبایل ✨ */
 @media (max-width: 600px) {
+    .pattern-display {
+        gap: 8px; /* کاهش فاصله بین آیتم‌ها */
+        padding: 15px;
+    }
     .pattern-item, .drop-zone, .filled {
-        width: 50px;
-        height: 50px;
+        width: 48px; /* کمی کوچک‌تر کردن آیتم‌ها */
+        height: 48px;
     }
     .draggable-item {
         width: 60px;
