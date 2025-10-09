@@ -15,10 +15,16 @@ const mathTopicsData = [
                         "ball": { "name": "ball", "image": "assets/images/ball.svg", "title": "توپ" },
                         "car": { "name": "car", "image": "assets/images/car.svg", "title": "ماشین" }
                     },
-                    "patterns": [
-                        { "type": "AB", "length": 6, "numItems": 2 },
-                        { "type": "AAB", "length": 9, "numItems": 2 },
-                        { "type": "ABC", "length": 9, "numItems": 3 }
+                    // ✨ تعداد الگوها به ۱۰ عدد افزایش یافت ✨
+                     "patterns": [
+                        { "type": "AAB", "numItems": 2 },
+                        { "type": "ABB", "numItems": 2 },
+                        { "type": "ABC", "numItems": 3 },
+                        { "type": "ABAB", "numItems": 2 },
+                        { "type": "AAB", "numItems": 2 }, // موارد تکراری برای افزایش احتمال انتخاب
+                        { "type": "ABB", "numItems": 2 },
+                        { "type": "ABC", "numItems": 3 },
+                        { "type": "ABAB", "numItems": 2 }
                     ]
                 }
             },
@@ -49,22 +55,6 @@ const mathTopicsData = [
                     },
                     "boxImage": "assets/images/box.svg"
                 }
-            },
-            {
-                "id": "theme-1-videos",
-                "title": "ویدئوهای آموزشی",
-                "type": "videos",
-                "data": {
-                    "videos": []
-                }
-            },
-            {
-                "id": "theme-1-quiz",
-                "title": "آزمونک",
-                "type": "quiz",
-                "data": {
-                    "quizLink": ""
-                }
             }
         ]
     }
@@ -83,7 +73,7 @@ for (let i = 2; i <= 25; i++) {
         theme.subtopics.push({
             "id": "sudoku-game",
             "title": "تمرین سودوکو",
-            "type": "sudoku-game", // نوع جدید برای بازی سودوکو
+            "type": "sudoku-game",
             "data": {
                 "items": [
                     { "name": "apple", "image": "assets/images/apple.svg", "title": "سیب" },
@@ -94,23 +84,5 @@ for (let i = 2; i <= 25; i++) {
         });
     }
 
-    theme.subtopics.push(
-        {
-            "id": `theme-${i}-videos`,
-            "title": "ویدئوهای آموزشی",
-            "type": "videos",
-            "data": {
-                "videos": []
-            }
-        },
-        {
-            "id": `theme-${i}-quiz`,
-            "title": "آزمونک",
-            "type": "quiz",
-            "data": {
-                "quizLink": ""
-            }
-        }
-    );
     mathTopicsData.push(theme);
 }

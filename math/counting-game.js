@@ -14,6 +14,11 @@ function initializeCountingGame(container, gameData) {
     let totalIncorrect = 0;
     let totalStepsInSession = initialQuantities.length;
 
+    function handleTouchDrop() {
+        droppedItemsCount++;
+        updateDroppedCount();
+    }
+
     function startGame() {
         shuffledQuantities = [...initialQuantities].sort(() => Math.random() - 0.5);
         reviewQuantities = [];
@@ -87,11 +92,14 @@ function initializeCountingGame(container, gameData) {
         playAudio();
         addEventListeners();
         updateProgressBar();
-        initializeTouchSupportForCountingGame(); // ✨ ۱. فعال‌سازی پشتیبانی لمسی ✨
+        initializeTouchSupportForCountingGame();
+        
+        document.addEventListener('itemDroppedByTouch', handleTouchDrop);
     }
 
     async function playAudio() {
         const numberAudioSrc = gameData.audio.numbers[currentRoundData.quantity];
+        // ✨ مشکل اینجا بود: game.audio به gameData.audio اصلاح شد ✨
         const itemAudioSrc = gameData.audio.items[currentRoundData.item.title];
         const instructionAudioSrc = gameData.audio.instruction;
 
@@ -111,14 +119,7 @@ function initializeCountingGame(container, gameData) {
             }
         }
     }
-
-    // ✨ ۲. تابع جدید برای گوش دادن به رویداد لمسی ✨
-    function handleTouchDrop() {
-        droppedItemsCount++;
-        updateDroppedCount();
-    }
-    document.addEventListener('itemDroppedByTouch', handleTouchDrop);
-
+    
     function addEventListeners() {
         container.querySelector('#play-audio-btn').addEventListener('click', playAudio);
         container.querySelector('#check-answer-btn').addEventListener('click', checkAnswer);
@@ -126,7 +127,7 @@ function initializeCountingGame(container, gameData) {
         const nextBtn = container.querySelector('#next-round-btn');
         if(nextBtn) {
             nextBtn.addEventListener('click', () => {
-                document.removeEventListener('itemDroppedByTouch', handleTouchDrop); // پاک کردن شنونده رویداد
+                document.removeEventListener('itemDroppedByTouch', handleTouchDrop);
                 currentRoundIndex++;
                 setupRound();
             });
@@ -164,10 +165,20 @@ function initializeCountingGame(container, gameData) {
                 } 
             });
         });
+        
+        const boxContent = container.querySelector('#box-content');
+        boxContent.addEventListener('click', (e) => {
+            if (e.target.classList.contains('in-box-item')) {
+                e.target.remove();
+                droppedItemsCount--;
+                updateDroppedCount();
+            }
+        });
     }
 
     function updateDroppedCount() {
         const countDisplay = container.querySelector('#dropped-count');
+        if (!countDisplay) return;
         countDisplay.textContent = toPersianNumber(droppedItemsCount);
         countDisplay.style.transform = 'scale(1.2)';
         setTimeout(() => {
@@ -225,7 +236,7 @@ function initializeCountingGame(container, gameData) {
     }
 
     function moveToNextPhase() {
-        document.removeEventListener('itemDroppedByTouch', handleTouchDrop); // پاک کردن شنونده رویداد
+        document.removeEventListener('itemDroppedByTouch', handleTouchDrop);
         if (gamePhase === 'main') {
             if (reviewQuantities.length > 0) {
                 gamePhase = 'review';

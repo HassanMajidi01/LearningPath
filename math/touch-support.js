@@ -213,3 +213,106 @@ function initializeTouchSupportForCountingGame() {
         isDragging = false;
     });
 }
+
+// touch-support.js
+
+// ... (کد initializeTouchSupportForSudoku شما در اینجا قرار دارد - دست نزنید) ...
+
+// ... (کد initializeTouchSupportForCountingGame شما در اینجا قرار دارد - دست نزنید) ...
+
+
+// =======================================================================
+// ✨ کد جدید برای پشتیبانی از بازی الگویابی (این بخش را اضافه کنید) ✨
+// =======================================================================
+function initializeTouchSupportForPatternGame() {
+    // اگر کانتینر بازی الگویابی در صفحه وجود ندارد، خارج شو
+    const gameContainer = document.querySelector('.pattern-game-container');
+    if (!gameContainer) {
+        return;
+    }
+
+    let draggedElement = null;
+    let ghostElement = null;
+    let lastTouchTarget = null;
+
+    // شروع لمس روی آیتم‌های قابل کشیدن
+    gameContainer.addEventListener('touchstart', (e) => {
+        const target = e.target.closest('.draggable-item');
+        if (!target) return;
+
+        draggedElement = target;
+        ghostElement = target.cloneNode(true);
+        ghostElement.classList.add('touch-dragging'); // استایل از pattern-game.css
+        document.body.appendChild(ghostElement);
+
+        const touch = e.touches[0];
+        moveGhostElement(touch);
+
+    }, { passive: true });
+
+    // حرکت انگشت روی صفحه
+    document.addEventListener('touchmove', (e) => {
+        if (!draggedElement) return;
+        e.preventDefault(); // جلوگیری از اسکرول صفحه هنگام کشیدن
+        
+        const touch = e.touches[0];
+        moveGhostElement(touch);
+
+        const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+        const currentDropTarget = elementUnderFinger ? elementUnderFinger.closest('.drop-zone') : null;
+
+        // مدیریت هایلایت شدن خانه‌های خالی
+        if (lastTouchTarget && lastTouchTarget !== currentDropTarget) {
+            lastTouchTarget.classList.remove('over');
+        }
+        if (currentDropTarget) {
+            currentDropTarget.classList.add('over');
+        }
+        lastTouchTarget = currentDropTarget;
+
+    }, { passive: false });
+
+    // پایان لمس (رها کردن)
+    document.addEventListener('touchend', (e) => {
+        if (!draggedElement) return;
+
+        const touch = e.changedTouches[0];
+        const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.drop-zone');
+
+        if (dropTarget) {
+            // شبیه‌سازی رویداد drop برای استفاده مجدد از منطق بازی
+            const dropEvent = new DragEvent('drop', {
+                bubbles: true,
+                cancelable: true,
+            });
+            
+            // ساخت یک dataTransfer سفارشی
+            Object.defineProperty(dropEvent, 'dataTransfer', {
+                value: {
+                    getData: (format) => {
+                        if (format === 'text/plain') {
+                            return draggedElement.dataset.itemName;
+                        }
+                    }
+                }
+            });
+
+            dropTarget.dispatchEvent(dropEvent);
+        }
+
+        // پاک‌سازی
+        if (lastTouchTarget) {
+            lastTouchTarget.classList.remove('over');
+        }
+        document.body.removeChild(ghostElement);
+        ghostElement = null;
+        draggedElement = null;
+        lastTouchTarget = null;
+    });
+
+    function moveGhostElement(touch) {
+        if (!ghostElement) return;
+        ghostElement.style.left = `${touch.clientX - ghostElement.offsetWidth / 2}px`;
+        ghostElement.style.top = `${touch.clientY - ghostElement.offsetHeight / 2}px`;
+    }
+}
