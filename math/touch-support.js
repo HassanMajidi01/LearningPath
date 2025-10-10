@@ -316,3 +316,4 @@ function initializeTouchSupportForPatternGame() {
         ghostElement.style.top = `${touch.clientY - ghostElement.offsetHeight / 2}px`;
     }
 }
+

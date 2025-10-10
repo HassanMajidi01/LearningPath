@@ -84,8 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h1>به کلاس علوم خوش آمدید!</h1>
                 <p class="welcome-subtitle">برای شروع، یک مبحث را از منوی سمت راست انتخاب کنید.</p>
                 <div class="welcome-cta">
+                  <span class="cta-arrow">👉</span>
                     <p>یک درس را انتخاب کن</p>
-                    <span class="cta-arrow">👉</span>
+                  
                 </div>
             </div>
         `;

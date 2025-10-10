@@ -3,14 +3,18 @@
 let sudokuGameData = null;
 let currentSudokuBoard = [];
 let correctSudokuBoard = [];
+let currentSudokuSize = 0; // ✨ اندازه جدول در اینجا ذخیره می‌شود
 
-let draggedItem = null; // Reference to the actual DOM element being dragged from the palette
+let draggedItem = null;
 
-function initializeSudokuGame(container, data) {
+// ✨ تابع اصلی اکنون `size` را به عنوان آرگومان می‌پذیرد ✨
+function initializeSudokuGame(container, data, size) {
     sudokuGameData = data;
+    currentSudokuSize = size; // ذخیره اندازه برای استفاده در توابع دیگر
+
     container.innerHTML = `
-        <div class="sudoku-game-container">
-            <h2>تمرین سودوکو (۳x۳)</h2>
+        <div class="sudoku-game-container sudoku-size-${size}">
+            <h2>تمرین سودوکو (${size}x${size})</h2>
             <p>یکی از اشیاء پایین را به خانه‌های خالی بکشید. برای حذف یک شیء از جدول، روی آن کلیک کنید.</p>
             <div class="sudoku-board-area">
                 <div id="sudoku-board" class="sudoku-board"></div>
@@ -29,46 +33,54 @@ function initializeSudokuGame(container, data) {
     const checkButton = document.getElementById('sudoku-check-btn');
     const resetButton = document.getElementById('sudoku-reset-btn');
 
-    generateNewSudokuBoard(boardElement, paletteElement);
+    generateNewSudokuBoard(boardElement, paletteElement, size);
 
-    checkButton.addEventListener('click', checkSudokuSolution);
-    resetButton.addEventListener('click', () => generateNewSudokuBoard(boardElement, paletteElement));
+    checkButton.addEventListener('click', () => checkSudokuSolution(size));
+    resetButton.addEventListener('click', () => generateNewSudokuBoard(boardElement, paletteElement, size));
+
+    initializeTouchSupportForSudoku();
 }
 
-function generateNewSudokuBoard(boardElement, paletteElement) {
-    // Clear previous board and palette
+// ✨ این تابع نیز `size` را دریافت می‌کند ✨
+function generateNewSudokuBoard(boardElement, paletteElement, size) {
     boardElement.innerHTML = '';
     paletteElement.innerHTML = '';
     document.getElementById('sudoku-feedback').innerHTML = '';
+    document.getElementById('sudoku-feedback').classList.remove('success', 'error');
     document.getElementById('sudoku-check-btn').disabled = false;
 
-    const items = sudokuGameData.items;
-    const itemNames = items.map(item => item.name);
+    // تنظیمات CSS پویا برای اندازه جدول
+    const cellSize = size === 3 ? 80 : 65;
+    boardElement.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
+    boardElement.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
 
-    correctSudokuBoard = generateSolvableSudoku(itemNames);
+
+    const itemsForGame = sudokuGameData.items.slice(0, size);
+    const itemNames = itemsForGame.map(item => item.name);
+
+    correctSudokuBoard = generateSolvableSudoku(itemNames, size);
     currentSudokuBoard = JSON.parse(JSON.stringify(correctSudokuBoard));
 
-    const cellsToHide = getRandomHiddenCells(3, 3);
+    const cellsToHide = getRandomHiddenCells(size);
 
-    for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
             const cell = document.createElement('div');
             cell.classList.add('sudoku-cell');
             cell.dataset.row = r;
             cell.dataset.col = c;
+            cell.style.width = `${cellSize}px`;
+            cell.style.height = `${cellSize}px`;
 
             if (cellsToHide.some(pos => pos.row === r && pos.col === c)) {
-                // This is an empty cell for the user to fill
                 cell.classList.add('empty');
                 currentSudokuBoard[r][c] = null;
-                // Add event listeners for dropping and clicking
                 cell.addEventListener('dragover', handleDragOver);
                 cell.addEventListener('drop', handleDrop);
-                cell.addEventListener('click', handleCellClick); // New click listener
+                cell.addEventListener('click', handleCellClick);
             } else {
-                // This is a pre-filled (fixed) cell
                 const itemName = correctSudokuBoard[r][c];
-                const item = items.find(i => i.name === itemName);
+                const item = itemsForGame.find(i => i.name === itemName);
                 const img = document.createElement('img');
                 img.src = item.image;
                 img.alt = item.title;
@@ -81,8 +93,7 @@ function generateNewSudokuBoard(boardElement, paletteElement) {
         }
     }
 
-    // Create a static palette with one of each item
-    items.forEach(itemData => {
+    itemsForGame.forEach(itemData => {
         const draggable = document.createElement('img');
         draggable.src = itemData.image;
         draggable.alt = itemData.title;
@@ -94,39 +105,27 @@ function generateNewSudokuBoard(boardElement, paletteElement) {
     });
 }
 
-/**
- * Handles clicks on cells to remove user-placed items.
- * @param {MouseEvent} e The click event.
- */
 function handleCellClick(e) {
     const cell = e.currentTarget;
-
-    // Do nothing if the cell is fixed or already empty
     if (cell.classList.contains('fixed') || !cell.querySelector('img')) {
         return;
     }
-
-    // Clear the cell's content
     cell.innerHTML = '';
-
-    // Update the board state
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
     currentSudokuBoard[row][col] = null;
-
-    // Clear any 'incorrect' styling from this cell
     cell.classList.remove('incorrect');
 }
 
-
-function generateSolvableSudoku(items) {
-    const board = Array(3).fill(null).map(() => Array(3).fill(null));
+// ✨ منطق تولید سودوکو اکنون پویا است ✨
+function generateSolvableSudoku(items, size) {
+    const board = Array(size).fill(null).map(() => Array(size).fill(null));
 
     function isValid(r, c, item) {
-        for (let x = 0; x < 3; x++) {
+        for (let x = 0; x < size; x++) {
             if (board[r][x] === item) return false;
         }
-        for (let x = 0; x < 3; x++) {
+        for (let x = 0; x < size; x++) {
             if (board[x][c] === item) return false;
         }
         return true;
@@ -152,8 +151,8 @@ function generateSolvableSudoku(items) {
     }
 
     function findEmpty() {
-        for (let r = 0; r < 3; r++) {
-            for (let c = 0; c < 3; c++) {
+        for (let r = 0; r < size; r++) {
+            for (let c = 0; c < size; c++) {
                 if (board[r][c] === null) {
                     return { row: r, col: c };
                 }
@@ -166,19 +165,20 @@ function generateSolvableSudoku(items) {
     return board;
 }
 
-
-function getRandomHiddenCells(rows, cols) {
+// ✨ تعداد خانه‌های مخفی بر اساس اندازه جدول تعیین می‌شود ✨
+function getRandomHiddenCells(size) {
     const allCells = [];
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
             allCells.push({ row: r, col: c });
         }
     }
     shuffleArray(allCells);
-    const numberOfCellsToHide = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
-    return allCells.slice(0, numberOfCellsToHide);
+    const cellsToHideCount = size === 3
+        ? Math.floor(Math.random() * 3) + 3 // 3 to 5 cells for 3x3
+        : Math.floor(Math.random() * 4) + 6; // 6 to 9 cells for 4x4
+    return allCells.slice(0, cellsToHideCount);
 }
-
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -187,8 +187,6 @@ function shuffleArray(array) {
     }
     return array;
 }
-
-// --- Drag and Drop Event Handlers ---
 
 function handleDragStart(e) {
     draggedItem = e.target;
@@ -204,16 +202,17 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
     const targetCell = e.target.closest('.sudoku-cell');
-
     if (!draggedItem || !targetCell || targetCell.classList.contains('fixed')) {
         return;
     }
 
     const droppedItemName = e.dataTransfer.getData('text/plain');
-    const itemData = sudokuGameData.items.find(item => item.name === droppedItemName);
+    const itemsForGame = sudokuGameData.items.slice(0, currentSudokuSize);
+    const itemData = itemsForGame.find(item => item.name === droppedItemName);
+
+    if (!itemData) return;
 
     targetCell.innerHTML = '';
-
     const imgToPlace = document.createElement('img');
     imgToPlace.src = itemData.image;
     imgToPlace.alt = itemData.title;
@@ -226,22 +225,20 @@ function handleDrop(e) {
     currentSudokuBoard[row][col] = droppedItemName;
 
     targetCell.classList.remove('incorrect');
-    
     draggedItem = null;
 }
 
+// ✨ منطق بررسی پاسخ نیز پویا شده است ✨
 function checkSudokuSolution() {
     const feedbackElement = document.getElementById('sudoku-feedback');
     feedbackElement.innerHTML = '';
     feedbackElement.classList.remove('success', 'error');
-
     document.querySelectorAll('.sudoku-cell').forEach(cell => cell.classList.remove('incorrect'));
 
     let isComplete = true;
-    for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
-            const cellElement = document.querySelector(`.sudoku-cell[data-row="${r}"][data-col="${c}"]`);
-            if (!cellElement.classList.contains('fixed') && currentSudokuBoard[r][c] === null) {
+    for (let r = 0; r < currentSudokuSize; r++) {
+        for (let c = 0; c < currentSudokuSize; c++) {
+            if (currentSudokuBoard[r][c] === null) {
                 isComplete = false;
                 break;
             }
@@ -256,11 +253,14 @@ function checkSudokuSolution() {
     }
 
     let isCorrect = true;
-    for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
+    for (let r = 0; r < currentSudokuSize; r++) {
+        for (let c = 0; c < currentSudokuSize; c++) {
             if (currentSudokuBoard[r][c] !== correctSudokuBoard[r][c]) {
                 isCorrect = false;
-                highlightIncorrectCell(r, c);
+                const cellElement = document.querySelector(`.sudoku-cell[data-row="${r}"][data-col="${c}"]`);
+                if (cellElement) {
+                    cellElement.classList.add('incorrect');
+                }
             }
         }
     }
@@ -270,57 +270,18 @@ function checkSudokuSolution() {
         feedbackElement.classList.add('success');
         disableBoardForWin();
     } else {
-        feedbackElement.innerHTML = 'پاسخ صحیح نیست. خانه‌هایی که اشتباه هستند مشخص شده‌اند. دوباره تلاش کنید!';
+        feedbackElement.innerHTML = 'پاسخ صحیح نیست. خانه‌های اشتباه مشخص شده‌اند.';
         feedbackElement.classList.add('error');
     }
 }
 
-function highlightIncorrectCell(row, col) {
-    const cellElement = document.querySelector(`.sudoku-cell[data-row="${row}"][data-col="${col}"]`);
-    if (cellElement) {
-        cellElement.classList.add('incorrect');
-    }
-}
-
 function disableBoardForWin() {
-    document.querySelectorAll('.sudoku-cell').forEach(cell => {
+    document.querySelectorAll('.sudoku-cell.empty').forEach(cell => {
         cell.removeEventListener('dragover', handleDragOver);
         cell.removeEventListener('drop', handleDrop);
         cell.removeEventListener('click', handleCellClick);
-        cell.classList.remove('empty');
         cell.style.cursor = 'default';
     });
-
     document.getElementById('sudoku-item-palette').innerHTML = '';
     document.getElementById('sudoku-check-btn').disabled = true;
-}
-function initializeSudokuGame(container, data) {
-    sudokuGameData = data;
-    container.innerHTML = `
-        <div class="sudoku-game-container">
-            <h2>تمرین سودوکو (۳x۳)</h2>
-            <p>یکی از اشیاء پایین را به خانه‌های خالی بکشید. برای حذف یک شیء از جدول، روی آن کلیک کنید.</p>
-            <div class="sudoku-board-area">
-                <div id="sudoku-board" class="sudoku-board"></div>
-            </div>
-            <div id="sudoku-item-palette" class="sudoku-item-palette"></div>
-            <div class="sudoku-controls">
-                <button id="sudoku-check-btn" class="sudoku-btn check-btn">بررسی</button>
-                <button id="sudoku-reset-btn" class="sudoku-btn reset-btn">بازی جدید</button>
-            </div>
-            <div id="sudoku-feedback" class="sudoku-feedback"></div>
-        </div>
-    `;
-
-    const boardElement = document.getElementById('sudoku-board');
-    const paletteElement = document.getElementById('sudoku-item-palette');
-    const checkButton = document.getElementById('sudoku-check-btn');
-    const resetButton = document.getElementById('sudoku-reset-btn');
-
-    generateNewSudokuBoard(boardElement, paletteElement);
-
-    checkButton.addEventListener('click', checkSudokuSolution);
-    resetButton.addEventListener('click', () => generateNewSudokuBoard(boardElement, paletteElement));
-
-    initializeTouchSupportForSudoku(); // ✨ این خط را در انتهای تابع اضافه کنید ✨
 }

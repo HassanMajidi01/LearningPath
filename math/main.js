@@ -32,6 +32,28 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.appendChild(menuList);
     }
 
+    // ✨ تابع جدید برای نمایش منوی انتخاب سطح سودوکو ✨
+    function displaySudokuMenu(data) {
+        mainContent.innerHTML = `
+            <div class="game-menu-container">
+                <h2>بازی سودوکو را انتخاب کنید</h2>
+                <div class="menu-options">
+                    <button class="menu-btn" data-size="3">سودوکو ۳x۳</button>
+                    <button class="menu-btn" data-size="4">سودوکو ۴x۴</button>
+                </div>
+            </div>
+        `;
+        // افزودن event listener به دکمه‌های منو
+        mainContent.querySelector('.menu-options').addEventListener('click', (e) => {
+            const button = e.target.closest('.menu-btn');
+            if (button) {
+                const size = parseInt(button.dataset.size, 10);
+                initializeSudokuGame(mainContent, data, size);
+            }
+        });
+    }
+
+
     // تابع برای نمایش محتوای یک زیرمجموعه
     function displayContent(themeId, subtopicId) {
         const theme = mathTopicsData.find(t => t.id === themeId);
@@ -50,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 initializePatternGame(mainContent, subtopic.data);
                 break;
             case 'sudoku-game':
-                initializeSudokuGame(mainContent, subtopic.data);
+                // ✨ به‌جای شروع مستقیم بازی، منو را نمایش می‌دهد ✨
+                displaySudokuMenu(subtopic.data);
                 break;
             case 'videos':
                 displayVideos(subtopic.data);
@@ -107,8 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h1>به کلاس ریاضی خوش آمدید!</h1>
                 <p class="welcome-subtitle">برای شروع، یک مبحث را از منوی سمت راست انتخاب کنید.</p>
                 <div class="welcome-cta">
+                  <span class="cta-arrow">👉</span>
                     <p>یک درس را انتخاب کن</p>
-                    <span class="cta-arrow">👉</span>
+                  
                 </div>
             </div>
         `;

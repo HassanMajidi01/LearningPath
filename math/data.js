@@ -5,32 +5,9 @@ const mathTopicsData = [
         "id": "theme-1",
         "title": "تم ۱",
         "subtopics": [
-            {
-                "id": "pattern-game",
-                "title": "تمرین الگویابی",
-                "type": "pattern-game",
-                "data": {
-                    "items": {
-                        "apple": { "name": "apple", "image": "assets/images/apple.svg", "title": "سیب" },
-                        "ball": { "name": "ball", "image": "assets/images/ball.svg", "title": "توپ" },
-                        "car": { "name": "car", "image": "assets/images/car.svg", "title": "ماشین" }
-                    },
-                    // ✨ تعداد الگوها به ۱۰ عدد افزایش یافت ✨
-                     "patterns": [
-                        { "type": "AAB", "numItems": 2 },
-                        { "type": "ABB", "numItems": 2 },
-                        { "type": "ABC", "numItems": 3 },
-                        { "type": "ABAB", "numItems": 2 },
-                        { "type": "AAB", "numItems": 2 }, // موارد تکراری برای افزایش احتمال انتخاب
-                        { "type": "ABB", "numItems": 2 },
-                        { "type": "ABC", "numItems": 3 },
-                        { "type": "ABAB", "numItems": 2 }
-                    ]
-                }
-            },
-            {
+             {
                 "id": "counting-game",
-                "title": "تمرین شمارش تا 5",
+                "title": "تمرین شمارش",
                 "type": "game",
                 "data": {
                     "items": [
@@ -55,7 +32,31 @@ const mathTopicsData = [
                     },
                     "boxImage": "assets/images/box.svg"
                 }
-            }
+            },
+            {
+                "id": "pattern-game",
+                "title": "تمرین الگویابی",
+                "type": "pattern-game",
+                "data": {
+                    "items": {
+                        "apple": { "name": "apple", "image": "assets/images/apple.svg", "title": "سیب" },
+                        "ball": { "name": "ball", "image": "assets/images/ball.svg", "title": "توپ" },
+                        "car": { "name": "car", "image": "assets/images/car.svg", "title": "ماشین" }
+                    },
+                    // ✨ تعداد الگوها به ۱۰ عدد افزایش یافت ✨
+                     "patterns": [
+                        { "type": "AAB", "numItems": 2 },
+                        { "type": "ABB", "numItems": 2 },
+                        { "type": "ABC", "numItems": 3 },
+                        { "type": "ABAB", "numItems": 2 },
+                        { "type": "AAB", "numItems": 2 }, // موارد تکراری برای افزایش احتمال انتخاب
+                        { "type": "ABB", "numItems": 2 },
+                        { "type": "ABC", "numItems": 3 },
+                        { "type": "ABAB", "numItems": 2 }
+                    ]
+                }
+            },
+           
         ]
     }
 ];
@@ -75,13 +76,18 @@ for (let i = 2; i <= 25; i++) {
             "title": "تمرین سودوکو",
             "type": "sudoku-game",
             "data": {
+                // ✨ آیتم چهارم برای سودوکو ۴x۴ اضافه شد ✨
                 "items": [
                     { "name": "apple", "image": "assets/images/apple.svg", "title": "سیب" },
                     { "name": "ball", "image": "assets/images/ball.svg", "title": "توپ" },
-                    { "name": "car", "image": "assets/images/car.svg", "title": "ماشین" }
+                    { "name": "car", "image": "assets/images/car.svg", "title": "ماشین" },
+                    { "name": "sun", "image": "assets/images/sun.svg", "title": "خورشید" }
                 ]
             }
         });
+
+           
+      
     }
 
     mathTopicsData.push(theme);
