@@ -3,14 +3,13 @@
 let sudokuGameData = null;
 let currentSudokuBoard = [];
 let correctSudokuBoard = [];
-let currentSudokuSize = 0; // ✨ اندازه جدول در اینجا ذخیره می‌شود
+let currentSudokuSize = 0;
 
 let draggedItem = null;
 
-// ✨ تابع اصلی اکنون `size` را به عنوان آرگومان می‌پذیرد ✨
 function initializeSudokuGame(container, data, size) {
     sudokuGameData = data;
-    currentSudokuSize = size; // ذخیره اندازه برای استفاده در توابع دیگر
+    currentSudokuSize = size;
 
     container.innerHTML = `
         <div class="sudoku-game-container sudoku-size-${size}">
@@ -38,18 +37,24 @@ function initializeSudokuGame(container, data, size) {
     checkButton.addEventListener('click', () => checkSudokuSolution(size));
     resetButton.addEventListener('click', () => generateNewSudokuBoard(boardElement, paletteElement, size));
 
-    initializeTouchSupportForSudoku();
+    if (typeof initializeTouchSupportForSudoku === 'function') {
+        initializeTouchSupportForSudoku();
+    }
 }
 
-// ✨ این تابع نیز `size` را دریافت می‌کند ✨
 function generateNewSudokuBoard(boardElement, paletteElement, size) {
     boardElement.innerHTML = '';
     paletteElement.innerHTML = '';
-    document.getElementById('sudoku-feedback').innerHTML = '';
-    document.getElementById('sudoku-feedback').classList.remove('success', 'error');
-    document.getElementById('sudoku-check-btn').disabled = false;
+    const feedbackEl = document.getElementById('sudoku-feedback');
+    if (feedbackEl) {
+        feedbackEl.innerHTML = '';
+        feedbackEl.classList.remove('success', 'error');
+    }
+    const checkBtn = document.getElementById('sudoku-check-btn');
+    if (checkBtn) {
+        checkBtn.disabled = false;
+    }
 
-    // تنظیمات CSS پویا برای اندازه جدول
     const cellSize = size === 3 ? 80 : 65;
     boardElement.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
     boardElement.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
@@ -117,7 +122,6 @@ function handleCellClick(e) {
     cell.classList.remove('incorrect');
 }
 
-// ✨ منطق تولید سودوکو اکنون پویا است ✨
 function generateSolvableSudoku(items, size) {
     const board = Array(size).fill(null).map(() => Array(size).fill(null));
 
@@ -165,7 +169,6 @@ function generateSolvableSudoku(items, size) {
     return board;
 }
 
-// ✨ تعداد خانه‌های مخفی بر اساس اندازه جدول تعیین می‌شود ✨
 function getRandomHiddenCells(size) {
     const allCells = [];
     for (let r = 0; r < size; r++) {
@@ -175,8 +178,8 @@ function getRandomHiddenCells(size) {
     }
     shuffleArray(allCells);
     const cellsToHideCount = size === 3
-        ? Math.floor(Math.random() * 3) + 3 // 3 to 5 cells for 3x3
-        : Math.floor(Math.random() * 4) + 6; // 6 to 9 cells for 4x4
+        ? Math.floor(Math.random() * 3) + 3
+        : Math.floor(Math.random() * 4) + 6;
     return allCells.slice(0, cellsToHideCount);
 }
 
@@ -228,7 +231,6 @@ function handleDrop(e) {
     draggedItem = null;
 }
 
-// ✨ منطق بررسی پاسخ نیز پویا شده است ✨
 function checkSudokuSolution() {
     const feedbackElement = document.getElementById('sudoku-feedback');
     feedbackElement.innerHTML = '';
@@ -266,13 +268,26 @@ function checkSudokuSolution() {
     }
 
     if (isCorrect) {
-        feedbackElement.innerHTML = 'تبریک! پاسخ شما صحیح است! ✨';
-        feedbackElement.classList.add('success');
+        // ✨ بازخورد قدیمی با تابع جدید جایگزین شد ✨
+        showSuccessAnimation();
         disableBoardForWin();
     } else {
         feedbackElement.innerHTML = 'پاسخ صحیح نیست. خانه‌های اشتباه مشخص شده‌اند.';
         feedbackElement.classList.add('error');
     }
+}
+
+// ✨ تابع جدید برای نمایش پیام موفقیت ✨
+function showSuccessAnimation() {
+    const successMessage = document.createElement('div');
+    successMessage.className = 'feedback-message';
+    successMessage.textContent = '🎉 آفرین! 🎉';
+    document.body.appendChild(successMessage);
+    
+    // پاک کردن پیام از DOM پس از پایان انیمیشن
+    setTimeout(() => {
+        successMessage.remove();
+    }, 2000); // زمان انیمیشن ۲ ثانیه است
 }
 
 function disableBoardForWin() {
@@ -282,6 +297,12 @@ function disableBoardForWin() {
         cell.removeEventListener('click', handleCellClick);
         cell.style.cursor = 'default';
     });
-    document.getElementById('sudoku-item-palette').innerHTML = '';
-    document.getElementById('sudoku-check-btn').disabled = true;
+    const palette = document.getElementById('sudoku-item-palette');
+    if (palette) {
+        palette.innerHTML = '';
+    }
+    const checkBtn = document.getElementById('sudoku-check-btn');
+    if(checkBtn) {
+        checkBtn.disabled = true;
+    }
 }

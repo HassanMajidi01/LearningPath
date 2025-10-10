@@ -38,7 +38,7 @@
 
 .sudoku-board {
     display: grid;
-    /* ✨ grid-template-columns and rows are now set dynamically via JS ✨ */
+    /* grid-template-columns and rows are now set dynamically via JS */
     gap: 5px;
     border: 3px solid rgba(90, 135, 252, 0.7);
     border-radius: 10px;
@@ -47,7 +47,7 @@
 }
 
 .sudoku-cell {
-    /* ✨ width and height are now set dynamically via JS ✨ */
+    /* width and height are now set dynamically via JS */
     background-color: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
@@ -189,7 +189,6 @@
     cursor: default;
 }
 
-/* ✨ استایل‌های جدید برای منوی انتخاب بازی ✨ */
 .game-menu-container {
     display: flex;
     flex-direction: column;
@@ -224,4 +223,30 @@
     background: rgba(90, 135, 252, 1);
     transform: translateY(-4px);
     box-shadow: 0 6px 20px rgba(90, 135, 252, 0.4);
+}
+
+/* ✨ بازخورد جدید از بازی الگویابی به اینجا اضافه شد ✨ */
+.feedback-message {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #fff;
+    background: rgba(28, 182, 34, 0.85);
+    padding: 20px 40px;
+    border-radius: 25px;
+    z-index: 10000;
+    animation: fadeInOut 2s forwards;
+}
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    25%, 75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+}
+
+@media (max-width: 600px) {
+    .feedback-message {
+        font-size: 2rem;
+        padding: 15px 30px;
+    }
 }
