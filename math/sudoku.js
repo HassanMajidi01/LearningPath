@@ -281,7 +281,7 @@ function checkSudokuSolution() {
 function showSuccessAnimation() {
     const successMessage = document.createElement('div');
     successMessage.className = 'feedback-message';
-    successMessage.textContent = '🎉 آفرین! 🎉';
+    successMessage.textContent = '🎉آفرین!🎉';
     document.body.appendChild(successMessage);
     
     // پاک کردن پیام از DOM پس از پایان انیمیشن

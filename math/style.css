@@ -105,6 +105,7 @@ body {
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
     position: relative;
+	text-decoration: text;
 }
 .sidebar .topic-title:hover {
     background: rgba(255, 255, 255, 0.1);

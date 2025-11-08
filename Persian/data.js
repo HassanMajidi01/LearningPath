@@ -11,6 +11,9 @@ const lessonsData = {
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ا' },
             { word: 'آرد', image: 'assets/images/ard.webp', audio: 'assets/audio/ard.mp3', highlight: 'آ' },
             { word: 'آذر', image: 'assets/images/azar.webp', audio: 'assets/audio/azar.mp3', highlight: 'آ' },
+            { word: 'بادام', image: 'assets/images/badam.webp', audio: 'assets/audio/badam.mp3', highlight: 'ا' },
+            { word: 'آسمان', image: 'assets/images/aseman.webp', audio: 'assets/audio/aseman.mp3', highlight: 'آ' },
+            { word: 'باد', image: 'assets/images/bad.webp', audio: 'assets/audio/bad.mp3', highlight: 'ا' },
         ],
         // sentenceScramble: [
         //     { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
@@ -33,11 +36,20 @@ const lessonsData = {
             { word: 'باد', image: 'assets/images/bad.webp', audio: 'assets/audio/bad.mp3', highlight: 'ب' },
             { word: 'بابا', image: 'assets/images/baba.webp', audio: 'assets/audio/baba.mp3', highlight: 'ب' },
             { word: 'آبی', image: 'assets/images/abi.webp', audio: 'assets/audio/abi.mp3', highlight: 'ب' },
-            { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ب' }
+            { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ب' },
+            { word: 'کتاب', image: 'assets/images/ketab.webp', audio: 'assets/audio/ketab.mp3', highlight: 'ب' },
+            { word: 'تاب', image: 'assets/images/tab.webp', audio: 'assets/audio/tab.mp3', highlight: 'ب' },
+            { word: 'سیب', image: 'assets/images/sib.webp', audio: 'assets/audio/sib.mp3', highlight: 'ب' }
+
         ],
         // sentenceScramble: [ ... ], // در صورت نیاز اضافه شود
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSd4KLK0wZDMAUE1y50sIEIV0HRVGNrWzumbZMp7oLQbBQz_iA/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "داستان نشانه ب",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kgg90qt/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-3": {
         title: "اَ",
@@ -49,11 +61,17 @@ const lessonsData = {
             { word: 'اَسب', image: 'assets/images/asb.webp', audio: 'assets/audio/asb.mp3', highlight: 'اَ' },
             { word: 'سَبَد', image: 'assets/images/sabad.webp', audio: 'assets/audio/sabad.mp3', highlight: 'َ' },
             { word: 'اَ', image: 'assets/images/@-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'اَ' },
-            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'َ' }
+            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'َ' },
+            { word: 'اَنار', image: 'assets/images/anar.webp', audio: 'assets/audio/anar.mp3', highlight: 'اَ' }
         ],
         // sentenceScramble: [ ... ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSefi0F8yNkjRG5dmpUjlQOoFvxiJMHML6uPL3M-qicrGVKDUQ/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه اَ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/ytwrxh0/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-4": {
         title: "د",
@@ -71,7 +89,12 @@ const lessonsData = {
             { correct: "بابا آب داد", scrambled: ["داد", "بابا", "آب"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScmDpGr1sU_zy2UWiJUTNScaJKsOmekvbuesVuG4cX0L5lZ8w/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "داستان نشانه د",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/axiq77e/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-5": {
         title: "م",
@@ -83,14 +106,34 @@ const lessonsData = {
             { word: 'مُدیر', image: 'assets/images/modir.webp', audio: 'assets/audio/modir.mp3', highlight: 'م' },
             { word: 'پَرچَم', image: 'assets/images/parcham.webp', audio: 'assets/audio/parcham.mp3', highlight: 'م' },
             { word: 'آدَم', image: 'assets/images/adam.webp', audio: 'assets/audio/adam.mp3', highlight: 'م' },
-            { word: 'م', image: 'assets/images/m.webp', audio: 'assets/audio/m.mp3', highlight: 'م' }
+            { word: 'م', image: 'assets/images/m.webp', audio: 'assets/audio/m.mp3', highlight: 'م' },
+			{ word: 'بادام', image: 'assets/images/badam.webp', audio: 'assets/audio/badam.mp3', highlight: 'م' },
+			{ word: 'بَرادَرَم', image: 'assets/images/baradaram.webp', audio: 'assets/audio/baradaram.mp3', highlight: 'م' },
+			{ word: 'دارَم', image: 'assets/images/daram.webp', audio: 'assets/audio/daram.mp3', highlight: 'م' },
+			{ word: 'دَستَم', image: 'assets/images/dastam.webp', audio: 'assets/audio/dastam.mp3', highlight: 'م' },
+			{ word: 'دوستَم', image: 'assets/images/doostam.webp', audio: 'assets/audio/doostam.mp3', highlight: 'م' },
+			{ word: 'اِمام', image: 'assets/images/emam.webp', audio: 'assets/audio/emam.mp3', highlight: 'م' },
+			{ word: 'مادَر', image: 'assets/images/madar.webp', audio: 'assets/audio/madar.mp3', highlight: 'م' },
+			{ word: 'مار', image: 'assets/images/mar.webp', audio: 'assets/audio/mar.mp3', highlight: 'م' },
+			{ word: 'مَسجِد', image: 'assets/images/masjed.webp', audio: 'assets/audio/masjed.mp3', highlight: 'م' },
+			{ word: 'شام', image: 'assets/images/sham.webp', audio: 'assets/audio/sham.mp3', highlight: 'م' }
         ],
         sentenceScramble: [ 
             { correct: "باد آمَد", scrambled: ["آمَد", "باد"] },
-            { correct: "بابا بادام داد", scrambled: ["داد", "بابا", "بادام"] }
+            { correct: "بابا بادام داد", scrambled: ["داد", "بابا", "بادام"] },
+            { correct: "بابا آمَد", scrambled: ["آمَد", "بابا"] },
+            { correct: "بابا با داماد آمَد", scrambled: ["با", "بابا", "آمَد", "داماد"] },
+            { correct: "آدَم آمَد", scrambled: ["آمَد", "آدَم"] },
+            { correct: "داماد آب داد", scrambled: ["داد", "آب", "داماد"] },
+            { correct: "دادا بادام داد", scrambled: ["داد", "بادام", "دادا"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeI065rZYu5e0qrLUmWdD9VPKURkfns17BqGSg_Ep4UHVvGFA/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "داستان نشانه م",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/hmh2880/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-6": {
         title: "س",
@@ -152,7 +195,12 @@ const lessonsData = {
             { correct: "سام سوت داد", scrambled: ["سام", "سوت", "داد"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdsCE74wjkbxEwy10_1P7SuRwb9EqkUk1ZKIwKDEfmtq63lHg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+            videos: [
+            {
+                title: "داستان نشانه ت",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/jheu1l6/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-9": {
         title: "ر",

@@ -6,6 +6,7 @@
     <title>آموزش فارسی کلاس اول</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="persian-header.css">
+    <link rel="stylesheet" href="listen-and-tap-game.css">
 
 </head>
 <body>
@@ -16,20 +17,49 @@
     <div class="container">
         <aside id="sidebar" class="sidebar"></aside>
         <main id="main-content" class="main-content">
-            <!-- <h1>به دنیای حروف و کلمات خوش آمدی!</h1>
-            <p>برای شروع ماجراجویی، از منوی سمت راست یک نشانه انتخاب کن.</p> -->
+            <div id="listen-tap-root">
+                <div style="max-width:1100px;margin:12px auto;padding:12px;color:#fff">
+                    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-start">
+                        <label for="lt-lesson">درس:</label>
+                        <select id="lt-lesson"></select>
+                        <button id="lt-launch" class="lt-btn" style="margin-left:8px">شروع بازی شنیداری</button>
+                    </div>
+                    <div id="lt-game-container"></div>
+                </div>
+            </div>
         </main>
     </div>
     
     <!-- ✨ عنصر جدید برای پوشش صفحه هنگام باز بودن سایدبار ✨ -->
     <div id="sidebar-overlay"></div>
 
-    <script src="data.js?v=7"></script>
+    <script src="data.js?v=20"></script>
+    <script src="listen-and-tap-game.js"></script>
     <script src="memory-game.js"></script>
     <script src="sentence-scramble.js"></script>
     <script src="flashcards.js"></script> 
-    <script src="word-sound-data.js?v=4"></script>
+    <script src="word-sound-data.js?v=8"></script>
     <script src="word-sound-exercise.js"></script>
     <script src="main.js"></script>
+    <script>
+        // populate lesson selector and attach launcher
+        (function(){
+            const sel = document.getElementById('lt-lesson');
+            const launch = document.getElementById('lt-launch');
+            const container = document.getElementById('lt-game-container');
+            if (!sel || !launch || !container) return;
+            const lessons = (typeof lessonsData !== 'undefined') ? lessonsData : (window.lessonsData || {});
+            const lessonKeys = Object.keys(lessons);
+            if (!lessonKeys.length) return;
+            lessonKeys.forEach(key=>{
+                const opt = document.createElement('option'); opt.value = key; opt.textContent = lessons[key].title || key; sel.appendChild(opt);
+            });
+            launch.addEventListener('click', ()=>{
+                const lessonId = sel.value || lessonKeys[0];
+                // initialize game inside container
+                initializeListenAndTapGame(container, lessonId);
+            });
+        })();
+    </script>
 </body>
 </html>

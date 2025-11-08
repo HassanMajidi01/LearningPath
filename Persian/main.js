@@ -57,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wordSoundExerciseData[lessonId]) {
             submenuHTML += `<li data-lesson="${lessonId}" data-activity="word-sound">تمرین پیدا کردن کلمه</li>`;
         }
-
+        // اضافه کردن تمرین شنیداری به زیرمنو برای هر درس
+        submenuHTML += `<li data-lesson="${lessonId}" data-activity="listen-tap">تمرین شنیداری</li>`;
         submenuHTML += `
             <li data-lesson="${lessonId}" data-activity="scramble">بازی جمله‌سازی</li>
             <li data-lesson="${lessonId}" data-activity="quiz">آزمون درس</li>
@@ -142,6 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     initializeSentenceScramble(mainContent, lessonData.sentenceScramble);
                 } else {
                     mainContent.innerHTML = `<h2>بازی جمله‌سازی</h2><p>تمرین جمله‌سازی برای این درس هنوز آماده نشده است.</p>`;
+                }
+                break;
+
+            case 'listen-tap':
+                // بازی شنیداری: از initializeListenAndTapGame استفاده می‌کنیم
+                if (typeof initializeListenAndTapGame === 'function') {
+                    // initialize inside mainContent, pass lessonId
+                    initializeListenAndTapGame(mainContent, lessonId);
+                } else {
+                    mainContent.innerHTML = `<h2>تمرین شنیداری</h2><p>بازی شنیداری بارگذاری نشده است.</p>`;
                 }
                 break;
 
