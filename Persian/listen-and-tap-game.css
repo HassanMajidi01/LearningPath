@@ -7,8 +7,8 @@
   margin: 12px auto;
   color: #fff;
 }
-.lt-topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.lt-score { font-size:18px; font-weight:600 }
+.lt-topbar { display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
+.lt-score { font-size:18px; font-weight:600; order:1 }
 .lt-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:16px; }
 .lt-word { background: rgba(255,255,255,0.03); border:2px solid rgba(255,255,255,0.06); padding:10px; border-radius:8px; text-align:center; cursor:pointer; user-select:none; transition:transform .12s ease, box-shadow .12s ease; font-size:18px; }
 .lt-word:active { transform: translateY(2px); }
@@ -17,7 +17,7 @@
 .lt-controls { display:flex; gap:8px; align-items:center }
 .lt-btn { background:#2f86ff; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer }
 .lt-small { background:transparent; border:1px solid rgba(255,255,255,0.08); }
-.lt-feedback { height:22px; margin-left:8px }
+.lt-feedback { height:22px; margin:0; }
 .lt-word.correct-flash { background: #2ecc71; color: #00331a; box-shadow:0 6px 18px rgba(46,204,113,0.18); }
 .lt-word.wrong-flash { background: #e74c3c; color: #3b0b05; box-shadow:0 6px 18px rgba(231,76,60,0.18); }
 .lt-muted { opacity:0.6 }
