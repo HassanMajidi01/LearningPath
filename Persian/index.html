@@ -17,16 +17,7 @@
     <div class="container">
         <aside id="sidebar" class="sidebar"></aside>
         <main id="main-content" class="main-content">
-            <div id="listen-tap-root">
-                <div style="max-width:1100px;margin:12px auto;padding:12px;color:#fff">
-                    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-start">
-                        <label for="lt-lesson">درس:</label>
-                        <select id="lt-lesson"></select>
-                        <button id="lt-launch" class="lt-btn" style="margin-left:8px">شروع بازی شنیداری</button>
-                    </div>
-                    <div id="lt-game-container"></div>
-                </div>
-            </div>
+            <div id="listen-tap-root"><!-- launcher will be injected by Persian/main.js --></div>
         </main>
     </div>
     
@@ -41,25 +32,6 @@
     <script src="word-sound-data.js?v=8"></script>
     <script src="word-sound-exercise.js"></script>
     <script src="main.js"></script>
-    <script>
-        // populate lesson selector and attach launcher
-        (function(){
-            const sel = document.getElementById('lt-lesson');
-            const launch = document.getElementById('lt-launch');
-            const container = document.getElementById('lt-game-container');
-            if (!sel || !launch || !container) return;
-            const lessons = (typeof lessonsData !== 'undefined') ? lessonsData : (window.lessonsData || {});
-            const lessonKeys = Object.keys(lessons);
-            if (!lessonKeys.length) return;
-            lessonKeys.forEach(key=>{
-                const opt = document.createElement('option'); opt.value = key; opt.textContent = lessons[key].title || key; sel.appendChild(opt);
-            });
-            launch.addEventListener('click', ()=>{
-                const lessonId = sel.value || lessonKeys[0];
-                // initialize game inside container
-                initializeListenAndTapGame(container, lessonId);
-            });
-        })();
-    </script>
+    <!-- Launcher logic moved to Persian/main.js (setupListenTapLauncher) -->
 </body>
 </html>

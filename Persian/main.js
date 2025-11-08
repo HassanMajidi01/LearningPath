@@ -227,4 +227,51 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
     `;
+
+    // If the page includes a local launcher (select + start button), set it up here.
+    // This moves the small inline script that used to live in `index.html` into main.js
+    function setupListenTapLauncher() {
+        // If the page already contains the launcher elements, use them.
+        let sel = document.getElementById('lt-lesson');
+        let launch = document.getElementById('lt-launch');
+        let containerEl = document.getElementById('lt-game-container');
+
+        // If the page has a placeholder root, inject the launcher HTML into it when elements are missing.
+        const root = document.getElementById('listen-tap-root');
+        if (root && (!sel || !launch || !containerEl)) {
+            root.innerHTML = `
+                <div style="max-width:1100px;margin:12px auto;padding:12px;color:#fff">
+                    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-start">
+                        <label for="lt-lesson">درس:</label>
+                        <select id="lt-lesson"></select>
+                        <button id="lt-launch" class="lt-btn" style="margin-left:8px">شروع بازی شنیداری</button>
+                    </div>
+                    <div id="lt-game-container"></div>
+                </div>
+            `;
+            // re-query the elements now that they exist
+            sel = document.getElementById('lt-lesson');
+            launch = document.getElementById('lt-launch');
+            containerEl = document.getElementById('lt-game-container');
+        }
+        if (!sel || !launch || !containerEl) return;
+        const lessons = (typeof lessonsData !== 'undefined') ? lessonsData : (window.lessonsData || {});
+        const lessonKeys = Object.keys(lessons);
+        if (!lessonKeys.length) return;
+        // populate select
+        lessonKeys.forEach(key => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = lessons[key].title || key;
+            sel.appendChild(opt);
+        });
+        // attach launcher
+        launch.addEventListener('click', ()=>{
+            const lessonId = sel.value || lessonKeys[0];
+            initializeListenAndTapGame(containerEl, lessonId);
+        });
+    }
+
+    // Run setup (if index.html contains the launcher UI)
+    setupListenTapLauncher();
 });
