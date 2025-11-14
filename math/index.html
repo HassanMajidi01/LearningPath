@@ -1,43 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آموزش ریاضی</title>
-    <link rel="stylesheet" href="style.css?v=8">
-    <link rel="stylesheet" href="counting.css">
-    <link rel="stylesheet" href="pattern.css">
-    <link rel="stylesheet" href="sudoku.css"> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ریاضی - کلاس اول</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <a href="../index.html" class="home-button">🏠</a>
+  <a class="home-link" href="../index.html" aria-label="خانه">
+    <img src="../home-button.png" alt="خانه" onerror="this.style.display='inline-block';this.alt='🏠';this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><text y=%2216%22 font-size=%2220%22>🏠</text></svg>'">
+  </a>
 
-    <div class="background-shapes">
-        <div class="blob blob1"></div>
-        <div class="blob blob2"></div>
+  <main class="page" role="main">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="title">ریاضی — پایهٔ اول</h1>
+        <p class="subtitle">ویدئوها، تمرین‌ها و فعالیت‌های تعاملی برای دانش‌آموزان پایهٔ اول</p>
+      </div>
+      <div class="header-right">
+        <nav aria-label="quick-actions">
+        </nav>
+      </div>
+    </header>
+
+    <div class="cards">
+      <a class="card" href="https://www.aparat.com/playlist/15078314/" target="_blank">
+        <div class="head">
+          <div class="icon">📺</div>
+          <div>
+            <h3>ویدئوهای آموزشی</h3>
+            <p>فیلم‌های کوتاه و مفید برای مفاهیم پایهٔ ریاضی</p>
+          </div>
+        </div>
+        <div class="actions">
+          <span style="opacity:0.85">مشاهده مجموعه ویدئوها</span>
+          <span style="flex:1"></span>
+          <span class="btn primary">باز کردن</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://math-master-c6a6230b.base44.app" target="_blank">
+        <div class="head">
+          <div class="icon">✍️</div>
+          <div>
+            <h3>تمرینات ریاضی</h3>
+            <p>تمرینات تعاملی و موضوعی مطابق با اهداف کلاس اول</p>
+          </div>
+        </div>
+        <div class="actions">
+          <span style="opacity:0.85">شروع تمرین‌ها</span>
+          <span style="flex:1"></span>
+          <span class="btn">باز کردن</span>
+        </div>
+      </a>
     </div>
-     
 
-
-    
-    <button id="menu-toggle" class="menu-toggle">☰</button>
-
-    <div class="container">
-        <aside id="sidebar" class="sidebar"></aside>
-        <main id="main-content" class="main-content">
-            <!-- محتوای اصلی به صورت پویا در اینجا بارگذاری می‌شود -->
-        </main>
-    </div>
-    
-    <!-- ✨ عنصر جدید برای پوشش صفحه هنگام باز بودن سایدبار ✨ -->
-    <div id="sidebar-overlay"></div>
-
-    <script src="data-game.js"></script>
-    <script src="counting.js"></script>
-    <script src="pattern.js"></script>
-    <script src="sudoku.js"></script> 
-    <script src="mobile-touch-support.js"></script>
-    <script src="base.js"></script>
-    
+  </div>
 </body>
 </html>
