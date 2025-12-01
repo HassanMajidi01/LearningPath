@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>بلاگ — edu-kiashahr</title>
+  <link rel="stylesheet" href="blog.css">
+  <link rel="stylesheet" href="../home-style.css">
+</head>
+<body>
+  <div class="header-container">
+      <header class="main-header">
+          <a href="../index.html" class="logo">آموزش و پرورش بندر کیاشهر</a>
+          <nav class="main-nav">
+              <a href="../index.html">خانه</a>
+              <a href="../Persian/index.html">فارسی</a>
+              <a href="../math/index.html">ریاضی</a>
+              <a href="index.html" class="active">بلاگ</a>
+          </nav>
+      </header>
+  </div>
+    <div class="blog-page">
+    <div id="blog-list"></div>
+    <div style="margin-top:18px">
+        <div class="blog-actions">
+          <div class="blog-search">
+            <input id="blog-search-input" placeholder="جستجوی مطالب..." aria-label="جستجو">
+            <button id="blog-search-clear" class="btn">پاک کردن</button>
+          </div>
+          <div class="blog-filters" id="blog-filters"></div>
+        </div>
+        <div class="pagination" id="blog-pagination"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="blog.js"></script>
+  <script>
+    (function(){
+      const root = document.getElementById('blog-list');
+      // Initialize filters from query params (tag/category/search/page)
+      const params = new URLSearchParams(window.location.search);
+      const tagParam = params.get('tag');
+      const catParam = params.get('category');
+      const searchParam = params.get('search');
+      const pageParam = parseInt(params.get('page')||'1',10);
+      if(tagParam) window.Blog.state.tag = tagParam;
+      if(catParam) window.Blog.state.category = catParam;
+      if(searchParam) window.Blog.state.search = searchParam;
+      if(pageParam && pageParam>0) window.Blog.state.currentPage = pageParam;
+      window.Blog.renderList(root);
+      if(searchInput && window.Blog.state.search) searchInput.value = window.Blog.state.search;
+      const searchInput = document.getElementById('blog-search-input');
+      const searchClear = document.getElementById('blog-search-clear');
+      let timer = null;
+      if(searchInput){
+        searchInput.addEventListener('input', (e)=>{
+          clearTimeout(timer);
+          timer = setTimeout(()=>{
+            window.Blog.state.search = e.target.value || '';
+            window.Blog.state.currentPage = 1;
+            window.Blog.renderList(root);
+          }, 250);
+        });
+      }
+      if(searchClear){
+        searchClear.addEventListener('click', ()=>{
+          if(searchInput){ searchInput.value = ''; }
+          window.Blog.state.search = '';
+          window.Blog.state.currentPage = 1;
+          window.Blog.renderList(root);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

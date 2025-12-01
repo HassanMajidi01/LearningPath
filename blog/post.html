@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بلاگ - مطلب</title>
+  <link rel="stylesheet" href="blog.css">
+  <link rel="stylesheet" href="../home-style.css">
+</head>
+<body>
+  <div class="header-container">
+      <header class="main-header">
+          <a href="../index.html" class="logo">آموزش و پرورش بندر کیاشهر</a>
+          <nav class="main-nav">
+              <a href="../index.html">خانه</a>
+              <a href="../Persian/index.html">فارسی</a>
+              <a href="../math/index.html">ریاضی</a>
+              <a href="index.html">بلاگ</a>
+          </nav>
+      </header>
+  </div>
+  <main class="blog-page" role="main">
+    <div id="post-root"></div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="blog.js"></script>
+  <script>
+    (function(){
+      const root = document.getElementById('post-root');
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug') || params.get('id');
+      if(!slug){ root.innerHTML = '<div class="blog-not-found">آدرس مطلب معتبر نیست.</div>'; return }
+      window.Blog.renderPost(root, slug);
+    })();
+  </script>
+</body>
+</html>
