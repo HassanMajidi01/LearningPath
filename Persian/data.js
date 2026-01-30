@@ -6,8 +6,8 @@ const lessonsData = {
             { word: 'آب', image: 'assets/images/ab.webp', audio: 'assets/audio/ab.mp3', highlight: 'آ' },
             { word: 'دَریا', image: 'assets/images/darya.webp', audio: 'assets/audio/darya.mp3', highlight: 'ا' },
             { word: 'آبی', image: 'assets/images/abi.webp', audio: 'assets/audio/abi.mp3', highlight: 'آ' },
-            { word: 'آ', image: 'assets/images/a-aval.webp', audio: 'assets/audio/a.mp3', highlight: 'آ' },
-            { word: 'ا', image: 'assets/images/a-gheire-aval.webp', audio: 'assets/audio/a.mp3', highlight: 'ا' },
+            { word: 'آ', image: 'assets/images/a-aval.webp', audio: 'assets/audio/a-aval.mp3', highlight: 'آ' },
+            { word: 'ا', image: 'assets/images/a-gheire-aval.webp', audio: 'assets/audio/a-gheire-aval.mp3', highlight: 'ا' },
             { word: 'باران', image: 'assets/images/baran.webp', audio: 'assets/audio/baran.mp3', highlight: 'ا' },
             { word: 'آرد', image: 'assets/images/ard.webp', audio: 'assets/audio/ard.mp3', highlight: 'آ' },
             { word: 'آذر', image: 'assets/images/azar.webp', audio: 'assets/audio/azar.mp3', highlight: 'آ' },
@@ -60,8 +60,8 @@ const lessonsData = {
             { word: 'اَمین', image: 'assets/images/amin.webp', audio: 'assets/audio/amin.mp3', highlight: 'اَ' },
             { word: 'اَسب', image: 'assets/images/asb.webp', audio: 'assets/audio/asb.mp3', highlight: 'اَ' },
             { word: 'سَبَد', image: 'assets/images/sabad.webp', audio: 'assets/audio/sabad.mp3', highlight: 'َ' },
-            { word: 'اَ', image: 'assets/images/@-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'اَ' },
-            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@.mp3', highlight: 'َ' },
+            { word: 'اَ', image: 'assets/images/@-aval.webp', audio: 'assets/audio/@-aval.mp3', highlight: 'اَ' },
+            { word: '-َ', image: 'assets/images/@-gheire-aval.webp', audio: 'assets/audio/@-gheire-aval.mp3', highlight: 'َ' },
             { word: 'اَنار', image: 'assets/images/anar.webp', audio: 'assets/audio/anar.mp3', highlight: 'اَ' }
         ],
         // sentenceScramble: [ ... ],
@@ -166,10 +166,10 @@ const lessonsData = {
             { word: 'هُلو', image: 'assets/images/holoo.webp', audio: 'assets/audio/holoo.mp3', highlight: 'و' },
             { word: 'اَنگور', image: 'assets/images/angoor.webp', audio: 'assets/audio/angoor.mp3', highlight: 'و' },
             { word: 'آلو', image: 'assets/images/aloo.webp', audio: 'assets/audio/aloo.mp3', highlight: 'و' },
-            { word: 'او', image: 'assets/images/oo-aval.webp', audio: 'assets/audio/oo.mp3', highlight: 'او' },
+            { word: 'او', image: 'assets/images/oo-aval.webp', audio: 'assets/audio/oo-aval.mp3', highlight: 'او' },
             { word: 'دوست', image: 'assets/images/doost.webp', audio: 'assets/audio/doost.mp3', highlight: 'و' },
             { word: 'اوستا', image: 'assets/images/oosta.webp', audio: 'assets/audio/oosta.mp3', highlight: 'او' },
-            { word: 'و', image: 'assets/images/v.webp', audio: 'assets/audio/oo.mp3', highlight: 'و' }
+            { word: 'و', image: 'assets/images/v.webp', audio: 'assets/audio/oo-gheire-aval.mp3', highlight: 'و' }
         ],
         sentenceScramble: [ 
             { correct: "او با اَدَب بود", scrambled: ["او", "با", "اَدَب", "بود"] },
