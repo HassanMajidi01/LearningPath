@@ -1,0 +1,285 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>   آزمون هدیه‌های آسمان   </title>
+    <style>
+        body {
+            font-family: 'B Nazanin', Arial, sans-serif;
+            background-color: #e0f7fa; /* Light Cyan */
+            color: #333;
+            margin: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #00796b; /* Dark Cyan */
+            text-align: center;
+        }
+        .exam-header, .question-block, .results-section, .answer-key-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #b2dfdb; /* Light Teal Border */
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .question-block label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .question-block input[type="radio"] {
+            margin-left: 10px;
+            transform: scale(1.2);
+        }
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d32f2f; /* Red */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        button {
+            padding: 12px 25px;
+            margin: 0 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-results {
+            background-color: #4caf50; /* Green */
+            color: white;
+        }
+        .btn-results:hover {
+            background-color: #388e3c; /* Darker Green */
+        }
+        .btn-print {
+            background-color: #2196f3; /* Blue */
+            color: white;
+        }
+        .btn-print:hover {
+            background-color: #1976d2; /* Darker Blue */
+        }
+        .results-section, .answer-key-section {
+            background-color: #fff9c4; /* Light Yellow for results/key */
+            border-color: #fbc02d; /* Yellow Border */
+        }
+        .results-summary, .answer-key-list {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .correct {
+            color: #2e7d32; /* Dark Green */
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #d32f2f; /* Red */
+            font-weight: bold;
+        }
+        .answer-key-list span {
+            font-weight: bold;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>آزمون هدیه‌های آسمان</h1>
+        <div class="exam-header">
+            <p><strong>نام دانش‌آموز:</strong> <span id="studentName"></span></p>
+            <p><strong>نام معلم:</strong> <span id="teacherName"></span></p>
+        </div>
+        <div class="timer" id="timer">زمان باقی‌مانده: 05:00</div>
+        <form id="exam-form">
+            <!-- Questions will be generated here -->
+        </form>
+        <div class="controls">
+            <button class="btn-results" onclick="showResults()">نمایش نتایج</button>
+            <button class="btn-print" onclick="window.print()">چاپ آزمون</button>
+        </div>
+        <div class="results-section" id="results-section" style="display: none;">
+            <h2>نتایج آزمون</h2>
+            <div class="results-summary" id="results-summary"></div>
+        </div>
+        <div class="answer-key-section" id="answer-key-section" style="display: none;">
+            <h2>کلید پاسخ معلم</h2>
+            <div class="answer-key-list" id="answer-key-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeRemaining = 300; // 5 minutes in seconds
+        const studentAnswers = {};
+        const correctAnswerKey = {
+            1: 'a', 2: 'a', 3: 'c', 4: 'a', 5: 'a',
+            6: 'b', 7: 'b', 8: 'c', 9: 'd', 10: 'a',
+            11: 'b', 12: 'c', 13: 'c', 14: 'b', 15: 'a'
+        }; // Correct answers: Fixed values
+
+        // Function to set student and teacher names
+        function setNames() {
+            const studentName = prompt("لطفاً نام دانش‌آموز را وارد کنید:");
+            document.getElementById('studentName').innerText = studentName || "نامشخص";
+            const teacherName = prompt("لطفاً نام معلم را وارد کنید:");
+            document.getElementById('teacherName').innerText = teacherName || "نامشخص";
+        }
+
+        // Function to generate questions
+        function generateQuestions() {
+            const form = document.getElementById('exam-form');
+            const questions = [
+                { q: "معنی «الحمدلله» چیست؟", options: { a: "خداوند بخشنده", b: "خداوند را ستایش می‌کنیم", c: "خداوند رحمان", d: "خداوند مهربان" } },
+                { q: "کدام پیامبر اولین پیامبر اولوالعزم است؟", options: { a: "حضرت موسی", b: "حضرت داوود", c: "حضرت سلیمان", d: "حضرت یونس" } },
+                { q: "نماز آیات در چه زمانی خوانده می‌شود؟", options: { a: "هنگام بارش باران", b: "هنگام اذان صبح", c: "هنگام وقوع زلزله یا خسوف و کسوف", d: "هنگام سال تحویل" } },
+                { q: "مفهوم «صراط مستقیم» در قرآن چیست؟", options: { a: "راه مستقیم دین اسلام", b: "راه رسیدن به ثروت", c: "راه رسیدن به شهرت", d: "راه رسیدن به قدرت" } },
+                { q: "اولین نماز واجب در اسلام کدام است؟", options: { a: "نماز صبح", b: "نماز ظهر", c: "نماز عصر", d: "نماز مغرب" } },
+                { q: "کدام سوره قرآن به «قلب قرآن» معروف است؟", options: { a: "سوره بقره", b: "سوره یاسین", c: "سوره حمد", d: "سوره توبه" } },
+                { q: "معنی «بسم الله الرحمن الرحیم» چیست؟", options: { a: "خداوند را ستایش می‌کنیم", b: "به نام خداوند بخشنده مهربان", c: "خداوند تنهاست", d: "خداوند همه جا هست" } },
+                { q: "مفهوم «شفاعت» در دین اسلام چیست؟", options: { a: "بخشش گناهان توسط خداوند", b: "کمک به نیازمندان", c: "پذیرش شفاعت پیامبران و امامان", d: "انجام کارهای خیر" } },
+                { q: "کدام یک از موارد زیر جزء اصول دین اسلام است؟", options: { a: "روزه", b: "نماز", c: "زکات", d: "توحید" } },
+                { q: "مفهوم «یوم الدین» در سوره حمد چیست؟", options: { a: "روز قیامت", b: "روز جمعه", c: "روز عید قربان", d: "روز عید فطر" } },
+                { q: "کدام پیامبر به «خلیل الله» معروف است؟", options: { a: "حضرت محمد", b: "حضرت ابراهیم", c: "حضرت عیسی", d: "حضرت نوح" } },
+                { q: "معنی «السلام علیکم» چیست؟", options: { a: "خداحافظ", b: "درود بر شما", c: "سلام بر شما", d: "خدا نگهدار" } },
+                { q: "کدام سوره قرآن در مورد حضرت مریم (س) است؟", options: { a: "سوره نساء", b: "سوره حجرات", c: "سوره مریم", d: "سوره لقمان" } },
+                { q: "نماز جماعت چه فضیلتی دارد؟", options: { a: "فضیلت کمتری نسبت به نماز فرادی دارد", b: "فضیلت بیشتری نسبت به نماز فرادی دارد", c: "فضیلتی ندارد", d: "فقط برای معلمان خوب است" } },
+                { q: "مفهوم «انفاق» در قرآن چیست؟", options: { a: "خرج کردن مال در راه خدا", b: "پس انداز کردن مال", c: "قرض دادن پول", d: "خریدن خانه" } }
+            ];
+
+            questions.forEach((qData, index) => {
+                const questionNum = index + 1;
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.innerHTML = `<h2>${questionNum}. ${qData.q}</h2>`;
+
+                for (const key in qData.options) {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.innerHTML = `
+                        <input type="radio" name="q${questionNum}" id="q${questionNum}${key}" value="${key}" onchange="recordAnswer(${questionNum}, '${key}')">
+                        <label for="q${questionNum}${key}">${String.fromCharCode(key.charCodeAt(0) - 32)}.${qData.options[key]}</label>
+                    `;
+                    block.appendChild(optionDiv);
+                }
+                form.appendChild(block);
+            });
+        }
+
+        // Function to record student's answer
+        function recordAnswer(questionNumber, answer) {
+            studentAnswers[questionNumber] = answer;
+        }
+
+        // Timer functions
+        function startTimer() {
+            setNames(); // Prompt for names at the start
+            generateQuestions(); // Generate questions after names are set
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('timer').innerText = `زمان باقی‌مانده: ${timeString}`;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    endExam();
+                }
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function endExam() {
+            alert("زمان آزمون به پایان رسید!");
+            showResults();
+            document.getElementById('timer').innerText = "زمان تمام شد";
+            // Disable all radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+        }
+
+        // Show results and answer key
+        function showResults() {
+            let score = 0;
+            const resultsSummary = document.getElementById('results-summary');
+            const answerKeyList = document.getElementById('answer-key-list');
+            resultsSummary.innerHTML = '';
+            answerKeyList.innerHTML = '';
+
+            for (let i = 1; i <= 15; i++) {
+                const correctAnswer = correctAnswerKey[i];
+                const studentAnswer = studentAnswers[i];
+                let status = '';
+
+                const answerKeyHtml = `<div><span>${i}.</span> ${String.fromCharCode(correctAnswer.charCodeAt(0) - 32)}.${getOptionText(i, correctAnswer)}</div>`;
+                answerKeyList.innerHTML += answerKeyHtml;
+
+                if (studentAnswer) {
+                    if (studentAnswer === correctAnswer) {
+                        score++;
+                        status = `<span class="correct">صحیح</span>`;
+                    } else {
+                        status = `<span class="incorrect">غلط</span> (پاسخ صحیح: ${String.fromCharCode(correctAnswer.charCodeAt(0) - 32)}.${getOptionText(i, correctAnswer)})`;
+                    }
+                } else {
+                    status = `<span class="incorrect">پاسخ داده نشده</span> (پاسخ صحیح: ${String.fromCharCode(correctAnswer.charCodeAt(0) - 32)}.${getOptionText(i, correctAnswer)})`;
+                }
+                resultsSummary.innerHTML += `<p>${i}. ${status}</p>`;
+            }
+
+            const totalQuestions = 15;
+            resultsSummary.innerHTML += `<h3>نمره کل: ${score} از ${totalQuestions}</h3>`;
+            document.getElementById('results-section').style.display = 'block';
+            document.getElementById('answer-key-section').style.display = 'block';
+
+            // Ensure timer is stopped if results are shown manually before time ends
+            clearInterval(timerInterval);
+        }
+
+        // Helper function to get option text
+        function getOptionText(questionNumber, optionKey) {
+            // This needs to dynamically fetch the option text.
+            // A more robust way would be to store options with their keys in a structured way.
+            // For simplicity here, we'll use a direct mapping for the known questions.
+            const questionsData = [
+                { options: { a: "خداوند بخشنده", b: "خداوند را ستایش می‌کنیم", c: "خداوند رحمان", d: "خداوند مهربان" } },
+                { options: { a: "حضرت موسی", b: "حضرت داوود", c: "حضرت سلیمان", d: "حضرت یونس" } },
+                { options: { a: "هنگام بارش باران", b: "هنگام اذان صبح", c: "هنگام وقوع زلزله یا خسوف و کسوف", d: "هنگام سال تحویل" } },
+                { options: { a: "راه مستقیم دین اسلام", b: "راه رسیدن به ثروت", c: "راه رسیدن به شهرت", d: "راه رسیدن به قدرت" } },
+                { options: { a: "نماز صبح", b: "نماز ظهر", c: "نماز عصر", d: "نماز مغرب" } },
+                { options: { a: "سوره بقره", b: "سوره یاسین", c: "سوره حمد", d: "سوره توبه" } },
+                { options: { a: "خداوند را ستایش می‌کنیم", b: "به نام خداوند بخشنده مهربان", c: "خداوند تنهاست", d: "خداوند همه جا هست" } },
+                { options: { a: "بخشش گناهان توسط خداوند", b: "کمک به نیازمندان", c: "پذیرش شفاعت پیامبران و امامان", d: "انجام کارهای خیر" } },
+                { options: { a: "روزه", b: "نماز", c: "زکات", d: "توحید" } },
+                { options: { a: "روز قیامت", b: "روز جمعه", c: "روز عید قربان", d: "روز عید فطر" } },
+                { options: { a: "حضرت محمد", b: "حضرت ابراهیم", c: "حضرت عیسی", d: "حضرت نوح" } },
+                { options: { a: "خداحافظ", b: "درود بر شما", c: "سلام بر شما", d: "خدا نگهدار" } },
+                { options: { a: "سوره نساء", b: "سوره حجرات", c: "سوره مریم", d: "سوره لقمان" } },
+                { options: { a: "فضیلت کمتری نسبت به نماز فرادی دارد", b: "فضیلت بیشتری نسبت به نماز فرادی دارد", c: "فضیلتی ندارد", d: "فقط برای معلمان خوب است" } },
+                { options: { a: "خرج کردن مال در راه خدا", b: "پس انداز کردن مال", c: "قرض دادن پول", d: "خریدن خانه" } }
+            ];
+            const questionIndex = questionNumber - 1;
+            if (questionsData[questionIndex] && questionsData[questionIndex].options[optionKey]) {
+                return questionsData[questionIndex].options[optionKey];
+            }
+            return ""; // Return empty string if not found
+        }
+
+        // Start the timer and load questions when the page loads
+        window.onload = startTimer;
+    </script>
+</body>
+</html>
+طراح سارا قربان دوست

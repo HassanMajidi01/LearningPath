@@ -1,0 +1,72 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>چالش ادبی - دبستان شهید انصاری</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #fdf6e3; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #d35400; }
+        .btn { display: block; width: 100%; padding: 10px; margin: 10px 0; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .btn:hover { background: #2980b9; }
+        #result-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        #result-table th, #result-table td { border: 1px solid #ddd; padding: 8px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container" id="game-container">
+        <h1>مسابقه آرایه‌های ادبی 📚</h1>
+        <div id="quiz">
+            <p id="question"></p>
+            <div id="options"></div>
+            <p id="feedback"></p>
+        </div>
+        <div id="score-screen" class="hidden">
+            <h2>پایان بازی!</h2>
+            <table id="result-table">
+                <tr><th>صحیح</th><th>غلط</th><th>امتیاز نهایی</th></tr>
+                <tr><td id="res-correct">0</td><td id="res-wrong">0</td><td id="res-total">0</td></tr>
+            </table>
+            <button class="btn" onclick="location.reload()">بازی مجدد 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "بیت 'شود کوه آهن چو دریای آب / اگر بشنود نام افراسیاب' چه آرایه‌ای دارد؟", o: ["اغراق", "کنایه", "تشبیه", "تشخیص"], a: 0 },
+            { q: "عبارت 'پا از گل درآوردن' کنایه از چیست؟", o: ["شستن پا", "رفع مشکل", "خستگی", "سفر"], a: 1 },
+            { q: "در کدام گزینه آرایه تضاد دیده می‌شود؟", o: ["مهر و ماه", "شاه و گدا", "دریا و آب", "گل و خار"], a: 1 },
+            { q: "نسبت دادن حالات انسانی به غیر انسان چه نام دارد؟", o: ["استعاره", "تشبیه", "تشخیص", "اغراق"], a: 2 },
+            { q: "در مصراع 'روی شعرم ستاره می‌بارد' ستاره استعاره از چیست؟", o: ["خورشید", "قطره‌های اشک", "امید", "روشنایی"], a: 1 }
+        ];
+
+        let currentQ = 0, score = 0, correct = 0, wrong = 0;
+        function loadQuestion() {
+            if(currentQ < questions.length) {
+                document.getElementById('question').innerText = questions[currentQ].q;
+                let html = '';
+                questions[currentQ].o.forEach((opt, i) => html += `<button class="btn" onclick="check(${i})">${opt}</button>`);
+                document.getElementById('options').innerHTML = html;
+            } else { showResult(); }
+        }
+        function check(i) {
+            if(i === questions[currentQ].a) {
+                score += 10; correct++; alert("آفرین! درست بود. 😊");
+            } else {
+                wrong++; alert("ای وای! اشتباه بود. ☹️");
+            }
+            currentQ++; loadQuestion();
+        }
+        function showResult() {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('score-screen').classList.remove('hidden');
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-wrong').innerText = wrong;
+            document.getElementById('res-total').innerText = score;
+        }
+        loadQuestion();
+    </script>
+</body>
+طراح : سارا قربان دوست

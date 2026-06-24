@@ -1,0 +1,410 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>دانشمندان کوچک دبستان شهید انصاری</title>
+<style>
+  body {
+    font-family: "Vazirmatn", sans-serif;
+    background: linear-gradient(135deg,#e8f9a8,#d8f6ff,#ffe7c8,#fcd9fc);
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    padding: 25px;
+    margin-top: 25px;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    color: #006699;
+  }
+  .intro {
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.9;
+    color: #333;
+  }
+  .designer {
+    text-align: center;
+    margin-top: 10px;
+    color: #922790;
+  }
+  .button {
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 15px;
+    display: inline-block;
+  }
+  .question-page {
+    display: none;
+  }
+  .question-title {
+    font-size: 22px;
+    color: #0f4c75;
+    margin-bottom: 15px;
+  }
+  .option {
+    display: block;
+    background: #f2fcff;
+    margin: 5px 0;
+    border: 2px solid #bbeafd;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+  }
+  .option:hover {
+    background: #d5f4ff;
+  }
+  .options input {
+    margin-left: 8px;
+  }
+  #resultBox {
+    display: none;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  th, td {
+    border: 1px solid #aaa;
+    padding: 10px;
+    text-align: center;
+  }
+  th {
+    background: #74b9ff;
+    color: #fff;
+  }
+  .correct-row {
+    background: #d4f8d4;
+    color: #0b7a29;
+    font-weight: bold;
+  }
+  .wrong-row {
+    background: #ffd6d6;
+    color: #b00020;
+    font-weight: bold;
+  }
+  .result-message {
+    text-align: center;
+    font-size: 23px;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  .success {color: #26a65b;}
+  .fail {color: #c0392b;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card" id="introPage">
+  <h1>🌱 دانشمندان کوچک دبستان شهید انصاری 🌱</h1>
+  <p class="intro">
+  دانشمندان کوچک دبستان شهید انصاری در حال کشف یه تونل جنگلی بودند...  
+  در مسیر این تونل رازهای علمی درباره‌ی ریشه، خاک و ابزارهای ساده نهفته است.  
+  برای رسیدن به نتیجه‌ی مطلوب، باید به پرسش‌های علمی زیر پاسخ دهند!  
+  اگر بیش از <b>۵۰٪</b> پاسخ‌ها درست باشند، شما موفق خواهید شد 🌟
+  </p>
+  <p class="designer">طراح: خانم قربان‌دوست</p>
+  <div style="text-align:center;">
+    <button class="button" onclick="startQuiz()">شروع بازی 🚀</button>
+  </div>
+</div>
+
+<div id="quizContainer"></div>
+
+<div class="card" id="resultBox">
+  <h2>نتیجه نهایی 🎯</h2>
+  <div id="finalScore"></div>
+  <div class="result-message" id="resultMessage"></div>
+
+  <h3>جدول امتیاز</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>سوال</th>
+        <th>نتیجه</th>
+        <th>پاسخ صحیح</th>
+      </tr>
+    </thead>
+    <tbody id="scoreTableBody"></tbody>
+  </table>
+
+  <div style="text-align:center;">
+    <button class="button" onclick="restartQuiz()">بازی مجدد 🔄</button>
+  </div>
+</div>
+</div>
+
+<script>
+const questions = [
+  {
+    question: "وظیفه ریشه چیست؟",
+    options: [
+      "آب و مواد مورد نیاز گیاه را از خاک می‌گیرد و وارد گیاه می‌کند",
+      "غذا درست می‌کند",
+      "هوا را تصفیه می‌کند",
+      "نور می‌دهد"
+    ],
+    answer: 0
+  },
+  {
+    question: "تارهای کشنده چیست؟",
+    options: [
+      "تارهای نازکی که روی ریشه قرار دارند",
+      "شاخه‌های ضخیم گیاه",
+      "برگ‌های سبز روی ساقه",
+      "گل‌های رنگی"
+    ],
+    answer: 0
+  },
+  {
+    question: "وظیفه تارهای کشنده چیست؟",
+    options: [
+      "آب و مواد محلول موجود در خاک را می‌گیرند و در اختیار گیاه می‌گذارند",
+      "جمع‌آوری نور",
+      "دفع مواد زائد",
+      "تولید بذر"
+    ],
+    answer: 0
+  },
+  {
+    question: "چرا نباید تارهای کشنده آسیب ببینند؟",
+    options: [
+      "گیاه نمی‌تواند آب و مواد محلول مورد نیاز خود را از خاک بگیرد و رشد آن متوقف می‌شود",
+      "ظاهر گیاه زشت می‌شود",
+      "برگ‌ها رنگی می‌شوند",
+      "بذرها خراب می‌شوند"
+    ],
+    answer: 0
+  },
+  {
+    question: "کار ساقه چیست؟",
+    options: [
+      "انتقال آب و مواد لازم از ریشه به برگ",
+      "تولید اکسیژن",
+      "خنک کردن گیاه",
+      "جذب نور خورشید"
+    ],
+    answer: 0
+  },
+  {
+    question: "آوند چیست؟",
+    options: [
+      "لوله‌های بسیار باریکی در ساقه و برگ هستند که آب را منتقل می‌کنند",
+      "جنس خاک گیاه",
+      "قسمت گلی برگ",
+      "نوعی کود مخصوص"
+    ],
+    answer: 0
+  },
+  {
+    question: "منظور از خاک مناسب چیست؟",
+    options: [
+      "خاکی که مواد لازم برای رشد گیاه را داشته باشد",
+      "خاک خشک بدون مواد",
+      "خاک سیاه بدون هوا",
+      "خاک شنی خالص"
+    ],
+    answer: 0
+  },
+  {
+    question: "خاک باغچه مخلوطی از چیست؟",
+    options: [
+      "ماسه، رس و مقداری کود",
+      "سنگ، چوب و برگ خشک",
+      "آب و بخار",
+      "نور و باد"
+    ],
+    answer: 0
+  },
+  {
+    question: "چرا به مخلوط رس و کود مقداری ماسه اضافه می‌کنند؟",
+    options: [
+      "تا میزان مناسبی آب در خاک حفظ شود",
+      "برای رنگ خاک",
+      "برای خشک شدن گیاه",
+      "برای سختی بیشتر خاک"
+    ],
+    answer: 0
+  },
+  {
+    question: "خاک بزرگترین منبع طبیعی تولید چیست؟",
+    options: [
+      "غذا برای انسان و بسیاری از جانداران",
+      "فلز و سنگ",
+      "هوا و ابر",
+      "نور خورشید"
+    ],
+    answer: 0
+  },
+  {
+    question: "یکی از روش‌های تشکیل خاک چیست؟",
+    options: [
+      "خرد شدن سنگ‌ها",
+      "کاشتن گیاهان",
+      "رسوب باران",
+      "حرکت جانوران"
+    ],
+    answer: 0
+  },
+  {
+    question: "سنگ‌ها در اثر هوازدگی چه می‌شوند؟",
+    options: [
+      "خرد و تجزیه می‌شوند",
+      "براق می‌شوند",
+      "ذوب می‌شوند",
+      "رنگارنگ می‌شوند"
+    ],
+    answer: 0
+  },
+  {
+    question: "برای تشکیل لایه‌ای از خاک به قطر یک سانتی‌متر چند سال زمان لازم است؟",
+    options: [
+      "بیش از ۲۰۰ سال",
+      "۲۰ سال",
+      "۲ سال",
+      "۲ روز"
+    ],
+    answer: 0
+  },
+  {
+    question: "گوه را با سطح شیب‌دار مقایسه کنید:",
+    options: [
+      "گوه شبیه سطح شیب‌دار است ولی برای بریدن و کندن به کار می‌رود، نه جابه‌جایی اجسام",
+      "سطح شیب‌دار سریع‌تر است",
+      "هر دو هیچ کاری انجام نمی‌دهند",
+      "گوه برای تزئین است"
+    ],
+    answer: 0
+  },
+  {
+    question: "دندان‌های پیشین انسان و جانوران گوشت‌خوار چگونه عمل می‌کنند؟",
+    options: [
+      "مثل گوه عمل می‌کنند و بریدن غذا را آسان می‌کنند",
+      "مثل چرخ عمل می‌کنند",
+      "مثل اهرم عمل می‌کنند",
+      "مثل سطح صاف عمل می‌کنند"
+    ],
+    answer: 0
+  },
+  {
+    question: "پیچ‌ها چه کمکی به ما می‌کنند؟",
+    options: [
+      "دو قطعه را به هم وصل می‌کنند یا جسمی را روی دیوار نصب می‌کنند",
+      "خاک را اندازه می‌گیرند",
+      "نور می‌تابانند",
+      "سنگ‌ها را خُرد می‌کنند"
+    ],
+    answer: 0
+  }
+];
+
+let currentQuestion=0;
+let userAnswers=new Array(questions.length).fill(null);
+
+function startQuiz(){
+  document.getElementById("introPage").style.display="none";
+  renderQuestions();
+  showQuestion(0);
+}
+
+function renderQuestions(){
+  const quizContainer=document.getElementById("quizContainer");
+  quizContainer.innerHTML="";
+  questions.forEach((q,i)=>{
+    const page=document.createElement("div");
+    page.className="card question-page";
+    page.id="question-page-"+i;
+    let optionsHTML="";
+    q.options.forEach((opt,idx)=>{
+      optionsHTML += `
+      <label class="option">
+        <input type="radio" name="q${i}" value="${idx}" onchange="saveAnswer(${i},${idx})">
+        ${opt}
+      </label>`;
+    });
+    page.innerHTML=`
+      <div class="question-title">${q.question}</div>
+      <div class="options">${optionsHTML}</div>
+      <div style="text-align:center;">
+        ${i<questions.length-1?`<button class="button" onclick="nextQuestion(${i})">بعدی ➡️</button>`:`<button class="button" onclick="finishQuiz()">پایان آزمون ✅</button>`}
+      </div>`;
+    quizContainer.appendChild(page);
+  });
+}
+
+function showQuestion(i){
+  document.querySelectorAll(".question-page").forEach(p=>p.style.display="none");
+  document.getElementById("question-page-"+i).style.display="block";
+  let sel=userAnswers[i];
+  if(sel!==null){
+    const radio=document.querySelector(`input[name="q${i}"][value="${sel}"]`);
+    if(radio) radio.checked=true;
+  }
+}
+
+function saveAnswer(i,opt){
+  userAnswers[i]=opt;
+}
+
+function nextQuestion(i){
+  if(userAnswers[i]==null){alert("لطفاً یکی از گزینه‌ها را انتخاب کنید 🌟");return;}
+  currentQuestion=i+1;
+  showQuestion(currentQuestion);
+}
+
+function finishQuiz(){
+  if(userAnswers[currentQuestion]==null){alert("لطفاً یکی از گزینه‌ها را انتخاب کنید 🌟");return;}
+  document.getElementById("quizContainer").style.display="none";
+  document.getElementById("resultBox").style.display="block";
+
+  let correct=0;
+  const body=document.getElementById("scoreTableBody");
+  body.innerHTML="";
+  questions.forEach((q,i)=>{
+    let isCorrect=userAnswers[i]==q.answer;
+    if(isCorrect) correct++;
+    const row=document.createElement("tr");
+    row.className=isCorrect?"correct-row":"wrong-row";
+    row.innerHTML=`<td>${i+1}</td><td>${isCorrect?"✅ درست":"❌ غلط"}</td><td>${q.options[q.answer]}</td>`;
+    body.appendChild(row);
+  });
+  const percent=(correct/questions.length)*100;
+  document.getElementById("finalScore").innerHTML=`شما ${correct} پاسخ صحیح از ${questions.length} دارید (${percent.toFixed(0)}٪)`;
+  const msg=document.getElementById("resultMessage");
+  if(percent>=50){
+    msg.className="result-message success";
+    msg.innerHTML="🎉 آفرین! به نتیجه مطلوب رسیدی و در تونل جنگلی موفق شدی 🌳🌟";
+  } else {
+    msg.className="result-message fail";
+    msg.innerHTML="😅 هنوز به نتیجه مطلوب نرسیدی. دوباره تلاش کن 🔄";
+  }
+}
+
+function restartQuiz(){
+  userAnswers.fill(null);
+  currentQuestion=0;
+  document.getElementById("resultBox").style.display="none";
+  document.getElementById("quizContainer").style.display="block";
+  renderQuestions();
+  showQuestion(0);
+}
+</script>
+</body>
+</html>

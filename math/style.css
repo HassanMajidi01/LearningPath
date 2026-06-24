@@ -1,4 +1,5 @@
 /* Glassmorphism page styles for math/index.html */
+/*@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap');*/
 :root{--bg:#0b1020;--glass:rgba(255,255,255,0.06);--glass-2:rgba(255,255,255,0.04);--accent1:#6dd3ff;--accent2:#7b61ff}
 html,body{height:100%;margin:0;font-family:Tahoma, Arial;direction:rtl;background:linear-gradient(135deg,#071231 0%, #0b1830 50%, #061124 100%);color:#fff}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(600px 400px at 10% 10%, rgba(123,97,255,0.12), transparent 12%), radial-gradient(500px 300px at 90% 90%, rgba(109,211,255,0.08), transparent 15%);pointer-events:none}

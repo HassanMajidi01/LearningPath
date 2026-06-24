@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گردونه اعداد زوج و فرد 🎡</title>
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --neon-pink: #ff00ff;
+            --neon-blue: #00f3ff;
+            --lamp-yellow: #fff314;
+            --bg-gradient: radial-gradient(circle, #001f3f 0%, #000a1a 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Tahoma, sans-serif;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: var(--bg-gradient);
+            color: white;
+        }
+
+        /* پس‌زمینه حباب‌ها */
+        .ocean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-blue);
+            animation: rise 10s infinite linear;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ساختار صفحات */
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active { display: flex; }
+
+        /* کادرهای نئونی */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 3px solid var(--neon-green);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 25px var(--neon-green);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .btn-neon {
+            background: transparent;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-shadow: 0 0 5px var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+            margin-top: 20px;
+        }
+
+        .btn-neon:hover:not(:disabled) {
+            background: var(--neon-pink);
+            color: white;
+            box-shadow: 0 0 40px var(--neon-pink);
+        }
+
+        .btn-neon:disabled {
+            border-color: #444;
+            color: #444;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        input[type="text"] {
+            background: rgba(0,0,0,0.6);
+            border: 2px solid var(--neon-blue);
+            padding: 12px;
+            color: white;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.1rem;
+            width: 80%;
+            outline: none;
+        }
+
+        /* گردونه دقیقاً در مرکز */
+        #wheel-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #wheel-container {
+            position: relative;
+            width: 390px;
+            height: 390px;
+        }
+
+        #wheel-canvas {
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        .wheel-arrow {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 35px solid var(--neon-pink);
+            z-index: 10;
+            filter: drop-shadow(0 0 5px var(--neon-pink));
+        }
+
+        .spin-center-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85px;
+            height: 85px;
+            background: white;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: 5px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+            z-index: 5;
+            transition: 0.2s;
+        }
+
+        .spin-center-btn:active { transform: translate(-50%, -50%) scale(0.9); }
+
+        /* پنل سوال مربعی */
+        #question-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            background: rgba(0, 10, 26, 0.98);
+            width: 380px; 
+            height: 380px; /* مربع کامل */
+            border: 4px solid var(--neon-blue);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 60px var(--neon-blue);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* لامپ جادویی و چت */
+        .magic-lamp-container {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            pointer-events: none;
+        }
+
+        .lamp-img {
+            width: 110px;
+            filter: drop-shadow(0 0 15px var(--lamp-yellow));
+            animation: flicker 3s infinite;
+        }
+
+        .chat-bubble {
+            background: white;
+            color: black;
+            padding: 12px 18px;
+            border-radius: 20px 20px 20px 0;
+            font-size: 0.95rem;
+            max-width: 220px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 15px var(--lamp-yellow)); }
+            50% { opacity: 0.8; filter: drop-shadow(0 0 5px var(--lamp-yellow)); }
+        }
+
+        /* امتیاز */
+        .score-box {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid var(--neon-green);
+        }
+
+        /* بالن‌های شیشه‌ای توخالی */
+        .balloon {
+            position: absolute;
+            bottom: -120px;
+            width: 60px;
+            height: 85px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            border: 3px solid white;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+            animation: flyUp 5s linear forwards;
+            z-index: 99;
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-120vh) scale(1.1); }
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #fff; }
+        th, td { border: 1px solid var(--neon-blue); padding: 12px; background: rgba(255,255,255,0.05); }
+        .success-text { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
+        .fail-text { color: var(--neon-pink); }
+
+    </style>
+</head>
+<body>
+
+    <div class="ocean-bg" id="ocean-bg"></div>
+
+    <!-- صداها -->
+    <audio id="bg-music" loop src="https://dl.aleftab.ir/download/Music/Careless%20Whisper.mp3"></audio>
+    <audio id="win-sound" src="https://www.myinstants.com/media/sounds/success-fanfare-trumpets.mp3"></audio>
+    <audio id="fail-sound" src="https://www.myinstants.com/media/sounds/buzzer_x.mp3"></audio>
+    <audio id="spin-sound" src="https://www.myinstants.com/media/sounds/wheel-fortune.mp3"></audio>
+
+    <!-- صفحه ۱: خوش‌آمدگویی -->
+    <section id="screen-welcome" class="screen active">
+        <div class="glass-card">
+            
+            <p style="margin: 5px 0;">طراح: خانم ساجده فلاح</p>
+            <h1 style="color: var(--neon-pink); text-shadow: 0 0 15px var(--neon-pink); font-size: 2.2rem;">گردونه اعداد زوج و فرد 🎡</h1>
+            <p style="margin-bottom: 20px;">قهرمان کوچک، نامت را اینجا بنویس:</p>
+            <input type="text" id="player-name" placeholder="نام زیبای تو...">
+            <br>
+            <button id="start-btn" class="btn-neon" disabled>شروع بازی 🚀</button>
+        </div>
+    </section>
+
+    <!-- صفحه ۲: درس‌نامه -->
+    <section id="screen-lesson" class="screen">
+        <div class="glass-card" style="border-color: var(--neon-blue); box-shadow: 0 0 25px var(--neon-blue);">
+            <h2 style="color: var(--lamp-yellow); font-size: 1.8rem;">یادآوری سریع 💡</h2>
+            <img src="https://s8.uupload.ir/files/9f83b72d-e394-4a23-9585-ad14e60f183c_jsc7.png" alt="Lesson" style="width: 100%; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.2);">
+            <p style="font-size: 1.1rem;">آماده‌ای تا ذهنت رو به چالش بکشی؟</p>
+            <button onclick="goToGame()" class="btn-neon" style="border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green);">بزن بریم! 💪</button>
+        </div>
+    </section>
+
+    <!-- صفحه ۳: بازی اصلی -->
+    <section id="screen-game" class="screen">
+        <div class="score-box">امتیاز: <span id="score-val">0</span></div>
+        
+        <div id="wheel-wrapper">
+            <div id="wheel-container">
+                <div class="wheel-arrow"></div>
+                <canvas id="wheel-canvas" width="380" height="380"></canvas>
+                <div class="spin-center-btn" onclick="spinWheel()">چرخش</div>
+            </div>
+        </div>
+
+        <!-- سوال پاپ آپ مربعی -->
+        <div id="question-modal">
+            <h2 id="question-text" style="color: var(--neon-blue);">عدد X زوج است یا فرد؟</h2>
+            <p style="color: var(--neon-pink); font-size: 1.2rem;">زمان باقی‌مانده: <span id="timer">15</span> ثانیه</p>
+            <input type="text" id="answer-input" placeholder="پاسخ: زوج یا فرد؟" style="width: 90%;">
+            <br>
+            <button onclick="checkAnswer()" class="btn-neon" style="width: 90%;">ثبت پاسخ طلایی ✨</button>
+        </div>
+
+        <div class="magic-lamp-container">
+            <div class="chat-bubble" id="lamp-msg">روی دکمه چرخش بزن تا شروع کنیم!</div>
+            <img src="https://s8.uupload.ir/files/2ba8f368-417e-4407-bc4b-24ee9b71fbf6_nc4s.png" class="lamp-img" alt="Lamp">
+        </div>
+    </section>
+
+    <!-- صفحه ۴: نتیجه نهایی -->
+    <section id="screen-result" class="screen">
+        <div class="glass-card" style="max-width: 650px; width: 95%;">
+            <h2 id="final-message" style="font-size: 1.6rem; color: var(--lamp-yellow);">نتیجه نهایی</h2>
+            <div style="max-height: 350px; overflow-y: auto; margin-top: 15px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>عدد</th>
+                            <th>پاسخ تو</th>
+                            <th>نتیجه</th>
+                        </tr>
+                    </thead>
+                    <tbody id="result-body"></tbody>
+                </table>
+            </div>
+            <button onclick="location.reload()" class="btn-neon">شروع دوباره 🔄</button>
+        </div>
+    </section>
+
+    <script>
+        let score = 0;
+        let wheelNumbers = [346, 450, 571, 980, 521, 400, 563, 236, 765, 201, 674, 506, 707, 843];
+        let currentNumbers = [];
+        let gameResults = [];
+        let isSpinning = false;
+        let selectedNumber = null;
+        let timerInterval;
+
+        const canvas = document.getElementById('wheel-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // حباب‌های پس‌زمینه
+        function createBubbles() {
+            const container = document.getElementById('ocean-bg');
+            const nums = [2, 5, 10, 18, 21, 44, 73, 99];
+            for(let i=0; i<25; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 40 + 40;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDelay = Math.random() * 8 + 's';
+                bubble.style.fontSize = (size/3.5) + 'px';
+                bubble.innerText = nums[Math.floor(Math.random() * nums.length)];
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
+
+        // کنترل ورود نام
+        document.getElementById('player-name').addEventListener('input', function(e) {
+            document.getElementById('start-btn').disabled = e.target.value.length < 2;
+        });
+
+        document.getElementById('start-btn').onclick = () => {
+            document.getElementById('bg-music').play().catch(() => {});
+            showScreen('screen-lesson');
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'screen-game') initWheel();
+        }
+
+        function goToGame() {
+            showScreen('screen-game');
+        }
+
+        function initWheel() {
+            currentNumbers = [...wheelNumbers].sort(() => 0.5 - Math.random()).slice(0, 10);
+            drawWheel(0);
+        }
+
+        function drawWheel(angle) {
+            const sectors = currentNumbers.length;
+            const arc = (2 * Math.PI) / sectors;
+            ctx.clearRect(0, 0, 380, 380);
+            
+            currentNumbers.forEach((num, i) => {
+                const currentAngle = angle + (i * arc);
+                ctx.beginPath();
+                ctx.fillStyle = `hsl(${i * (360/sectors)}, 75%, 55%)`;
+                ctx.moveTo(190, 190);
+                ctx.arc(190, 190, 185, currentAngle, currentAngle + arc);
+                ctx.fill();
+                ctx.strokeStyle = "rgba(255,255,255,0.5)";
+                ctx.stroke();
+                
+                ctx.save();
+                ctx.translate(190, 190);
+                ctx.rotate(currentAngle + arc / 2 + Math.PI / 2); 
+                ctx.textAlign = "center";
+                ctx.fillStyle = "white";
+                ctx.font = "bold 20px Tahoma";
+                ctx.fillText(num, 0, -145); 
+                ctx.restore();
+            });
+        }
+
+        function spinWheel() {
+            if(isSpinning || currentNumbers.length === 0) return;
+            isSpinning = true;
+            document.getElementById('spin-sound').play();
+            
+            const duration = 4000;
+            const start = performance.now();
+            const extraSpins = 6 + Math.random() * 4;
+            const targetSectorIndex = Math.floor(Math.random() * currentNumbers.length);
+            const sectors = currentNumbers.length;
+            const arc = (2 * Math.PI) / sectors;
+            
+            const stopAngleOffset = (1.5 * Math.PI) - (targetSectorIndex * arc + arc / 2);
+            const totalRotation = (extraSpins * 2 * Math.PI) + stopAngleOffset;
+
+            function animate(time) {
+                let progress = (time - start) / duration;
+                if (progress > 1) progress = 1;
+                
+                // Ease out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentAngle = easeOut * totalRotation;
+                
+                drawWheel(currentAngle);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    selectedNumber = currentNumbers[targetSectorIndex];
+                    setTimeout(openQuestion, 500);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function openQuestion() {
+            const modal = document.getElementById('question-modal');
+            document.getElementById('question-text').innerText = `عدد ${selectedNumber} زوج است یا فرد؟`;
+            modal.style.display = 'flex';
+            document.getElementById('answer-input').value = "";
+            document.getElementById('answer-input').focus();
+            
+            let timeLeft = 15;
+            document.getElementById('timer').innerText = timeLeft;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswer(true);
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(isTimeout = false) {
+            clearInterval(timerInterval);
+            const userAns = document.getElementById('answer-input').value.trim();
+            const correctAns = (selectedNumber % 2 === 0) ? "زوج" : "فرد";
+            const isCorrect = !isTimeout && (userAns === correctAns);
+
+            const modal = document.getElementById('question-modal');
+            if(isCorrect) {
+                score += 10;
+                document.getElementById('win-sound').play();
+                document.getElementById('lamp-msg').innerText = "آفرین! ذهن تو مثل لامپ می‌درخشه!";
+                modal.style.borderColor = "#39ff14";
+                launchBalloons();
+            } else {
+                score = Math.max(0, score - 5);
+                document.getElementById('fail-sound').play();
+                document.getElementById('lamp-msg').innerText = isTimeout ? "زمان تموم شد! دقت کن." : "اشتباه شد! دوباره تلاش کن.";
+                modal.style.borderColor = "#ff00ff";
+            }
+
+            gameResults.push({
+                num: selectedNumber,
+                user: isTimeout ? "زمان تمام" : (userAns || "خالی"),
+                correct: isCorrect
+            });
+
+            document.getElementById('score-val').innerText = score;
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.style.borderColor = "#00f3ff";
+                currentNumbers = currentNumbers.filter(n => n !== selectedNumber);
+                if(currentNumbers.length === 0) endGame();
+                else {
+                    drawWheel(0);
+                    document.getElementById('lamp-msg').innerText = "روی دکمه چرخش بزن تا شروع کنیم!";
+                }
+            }, 2500);
+        }
+
+        function launchBalloons() {
+            const colors = ['#39ff14', '#ff00ff', '#00f3ff', '#fff314'];
+            for(let i=0; i<15; i++) {
+                const b = document.createElement('div');
+                b.className = 'balloon';
+                b.style.left = Math.random() * 100 + 'vw';
+                b.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
+                b.style.boxShadow = `0 0 15px ${b.style.borderColor}, inset 0 0 10px ${b.style.borderColor}`;
+                b.style.animationDelay = (Math.random() * 1.5) + 's';
+                document.body.appendChild(b);
+                setTimeout(() => b.remove(), 5000);
+            }
+        }
+
+        function endGame() {
+            showScreen('screen-result');
+            const msg = score > 70 ? "فوق‌العاده بودی، تو یک دانشمند واقعی هستی! 🎓" : "خوب بود، با تمرین بیشتر عالی میشی! ✨";
+            document.getElementById('final-message').innerText = msg;
+            
+            const tbody = document.getElementById('result-body');
+            tbody.innerHTML = "";
+            gameResults.forEach(res => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${res.num}</td>
+                        <td>${res.user}</td>
+                        <td class="${res.correct ? 'success-text' : 'fail-text'}">${res.correct ? '✅' : '❌'}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

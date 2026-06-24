@@ -1,0 +1,696 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>آزمون اردوی قم - دبستان شهید انصاری</title>
+    <style>
+        @font-face {
+            font-family: "Vazir";
+            src: local("Vazir"), local("Vazir-Regular");
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Vazir", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #e0f3ff 0%, #fdf6e3 50%, #e8ffe7 100%);
+        }
+
+        /* هدر */
+        header {
+            background: linear-gradient(90deg, #0077ff, #00c4b3);
+            color: #fff;
+            padding: 18px 10px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        header h1 span.bus {
+            font-size: 1.6rem;
+        }
+        header p {
+            margin: 6px 0 0;
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 16px auto 60px;
+            padding: 0 10px 40px;
+        }
+
+        /* باکس داستان */
+        .story-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 2px dashed #ffb74d;
+            position: relative;
+        }
+        .story-box::before {
+            content: "📚 داستان اردو";
+            position: absolute;
+            top: -12px;
+            right: 16px;
+            background: #ffb74d;
+            color: #3b2b00;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: bold;
+        }
+        .story-box p {
+            margin: 0;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .author {
+            font-size: 0.85rem;
+            margin: 6px 2px 18px;
+            color: #555;
+        }
+
+        /* نوار پیشرفت و اطلاعات */
+        .info-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .info-chip {
+            background: #fff;
+            border-radius: 50px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .info-chip span.icon {
+            font-size: 1rem;
+        }
+
+        .progress-wrapper {
+            flex: 1 1 160px;
+        }
+        .progress-label {
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            color: #444;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: #d7e9ff;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #42a5f5, #66bb6a);
+            transition: width 0.4s ease;
+        }
+
+        /* کارت سوال */
+        .question-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 12px 14px 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+        .question-card::before {
+            content: attr(data-level);
+            position: absolute;
+            top: 8px;
+            left: -30px;
+            width: 120px;
+            text-align: center;
+            transform: rotate(-35deg);
+            background: #ffee58;
+            color: #5d4037;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 0;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #1976d2;
+            font-size: 0.95rem;
+        }
+        .difficulty-badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .difficulty-easy   { background: #66bb6a; }
+        .difficulty-medium { background: #ffa726; }
+        .difficulty-hard   { background: #ef5350; }
+
+        .question-text {
+            margin: 4px 0 8px;
+            font-size: 0.95rem;
+        }
+
+        /* گزینه‌ها */
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .options li {
+            margin: 4px 0;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
+        .option-label:hover {
+            background: #e3f2fd;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .option-label input[type="radio"] {
+            accent-color: #1976d2;
+            transform: scale(1.1);
+        }
+        .option-text {
+            font-size: 0.9rem;
+        }
+
+        /* دکمه‌ها */
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #42a5f5, #1e88e5);
+            color: #fff;
+        }
+        .btn-reset {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        /* نتیجه */
+        .result-box {
+            margin-top: 20px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            border: 1px solid #e0e0e0;
+            display: none;
+        }
+        .result-box h3 {
+            margin: 0 0 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .score-text {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .score-text span.highlight {
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px 6px;
+            text-align: center;
+        }
+        th {
+            background: #e3f2fd;
+        }
+        .correct {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .incorrect {
+            background: #ffcdd2;
+            color: #b71c1c;
+        }
+        .not-answered {
+            background: #eeeeee;
+            color: #616161;
+        }
+
+        .message {
+            margin-top: 6px;
+            font-size: 0.86rem;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.05rem;
+            }
+            .question-card {
+                padding: 10px 10px 12px;
+            }
+            .option-label {
+                padding: 6px 7px;
+            }
+            button {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1><span class="bus">🚌</span> آزمون اردوی زیارتی قم - دبستان شهید انصاری</h1>
+    <p>به بچه‌ها کمک کن با جواب دادن به این سوال‌ها امتیاز خوب بگیرن و دست پر راهی حرم بشن 🌸</p>
+</header>
+
+<main>
+    <section class="story-box">
+        <p>
+            قرار بود دانش اموزان دبستان شهید انصاری به اردوی زیارتی حرم حضرت معصومه سلام الله در قم مشرف شوند ،
+            به آنها کمک کنید تا با پاسخ دادن به این سوالات امتیاز خوبی کسب کنند و دست پر راهی شوند.
+        </p>
+    </section>
+    <div class="author">طراح آزمون: <strong>سارا قربان دوست</strong></div>
+
+    <div class="info-strip">
+        <div class="info-chip">
+            <span class="icon">🎯</span>
+            <span>نوع آزمون: چهارگزینه‌ای - سطح دبستان</span>
+        </div>
+        <div class="info-chip">
+            <span class="icon">⏱️</span>
+            <span>زمان پیشنهادی: حدود ۱۰ دقیقه</span>
+        </div>
+        <div class="progress-wrapper">
+            <div class="progress-label">پیشرفت پاسخ‌دهی:</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- سوال‌ها (می‌توانی بعداً بیشترشان کنی) -->
+    <form id="quizForm">
+
+        <!-- نمونه سوال ۱ (آسان) -->
+        <div class="question-card" data-level="آسان">
+            <div class="question-header">
+                <div class="question-number">سؤال ۱</div>
+                <div class="difficulty-badge difficulty-easy">
+                    🌱 آسان
+                </div>
+            </div>
+            <div class="question-text">
+                مقصد زیارتی این اردو کجاست؟
+            </div>
+            <ul class="options">
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="الف">
+                        <span class="option-text">الف) حرم حضرت معصومه (س) در قم</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="ب">
+                        <span class="option-text">ب) حرم امام رضا (ع)</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="ج">
+                        <span class="option-text">ج) حرم شاهچراغ (ع)</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="د">
+                        <span class="option-text">د) پارک شهر</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- نمونه سوال ۲ (آسان) -->
+        <div class="question-card" data-level="آسان">
+            <div class="question-header">
+                <div class="question-number">سؤال ۲</div>
+                <div class="difficulty-badge difficulty-easy">
+                    🌱 آسان
+                </div>
+            </div>
+            <div class="question-text">
+                دانش‌آموزان برای رفتن به حرم، بهتر است کدام رفتار را انجام دهند؟
+            </div>
+            <ul class="options">
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="الف">
+                        <span class="option-text">الف) شلوغ‌کاری و دویدن در حرم</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="ب">
+                        <span class="option-text">ب) رعایت احترام و آرام راه رفتن</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="ج">
+                        <span class="option-text">ج) خوردن خوراکی داخل شبستان</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="د">
+                        <span class="option-text">د) صحبت کردن با صدای بلند</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- نمونه سوال ۳ (متوسط) -->
+        <div class="question-card" data-level="متوسط">
+            <div class="question-header">
+                <div class="question-number">سؤال ۳</div>
+                <div class="difficulty-badge difficulty-medium">
+                    🌼 متوسط
+                </div>
+            </div>
+            <div class="question-text">
+                برای اینکه دانش‌آموزان «دست پر» از این اردو برگردند، کدام کار بهتر است؟
+            </div>
+            <ul class="options">
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="الف">
+                        <span class="option-text">الف) فقط عکس گرفتن با دوستان</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="ب">
+                        <span class="option-text">ب) گوش دادن به صحبت‌های معلم و روحانی و یادداشت نکته‌ها</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="ج">
+                        <span class="option-text">ج) بازی با موبایل در طول اردو</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="د">
+                        <span class="option-text">د) جدا شدن از گروه بدون اطلاع</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- نمونه سوال ۴ (متوسط) -->
+        <div class="question-card" data-level="متوسط">
+            <div class="question-header">
+                <div class="question-number">سؤال ۴</div>
+                <div class="difficulty-badge difficulty-medium">
+                    🌼 متوسط
+                </div>
+            </div>
+            <div class="question-text">
+                کدام گزینه یک چالش خوب برای دانش‌آموزان در این اردو است؟
+            </div>
+            <ul class="options">
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="الف">
+                        <span class="option-text">الف) حفظ سکوت و ادب در حرم برای چند دقیقه</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="ب">
+                        <span class="option-text">ب) مسابقه‌ی داد زدن در حیاط حرم</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="ج">
+                        <span class="option-text">ج) گم کردن وسایل خود</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="د">
+                        <span class="option-text">د) شوخی کردن با زائران</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- نمونه سوال ۵ (کمی سخت‌تر) -->
+        <div class="question-card" data-level="سخت">
+            <div class="question-header">
+                <div class="question-number">سؤال ۵</div>
+                <div class="difficulty-badge difficulty-hard">
+                    🔥 سخت
+                </div>
+            </div>
+            <div class="question-text">
+                اگر یکی از دانش‌آموزان در مسیر اردو دلتنگ شد یا احساس خستگی کرد، کدام کار بهترین رفتار دوستانه است؟
+            </div>
+            <ul class="options">
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="الف">
+                        <span class="option-text">الف) توجه نکردن و ادامه‌ی بازی خود</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="ب">
+                        <span class="option-text">ب) مسخره کردن او تا حواسش پرت شود</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="ج">
+                        <span class="option-text">ج) دلداری دادن، صحبت آرام و خبر دادن به معلم</span>
+                    </label>
+                </li>
+                <li>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="د">
+                        <span class="option-text">د) جدا شدن از گروه برای تنها گذاشتن او</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </form>
+
+    <div class="actions">
+        <button type="button" class="btn-primary" id="submitBtn">
+            ✅ تصحیح آزمون
+        </button>
+        <button type="button" class="btn-reset" id="resetBtn">
+            🔄 شروع دوباره
+        </button>
+    </div>
+
+    <section class="result-box" id="resultBox">
+        <h3>نتیجه آزمون 🎓</h3>
+        <div class="score-text">
+            تعداد پاسخ‌های درست: <span id="correctCount" class="highlight">0</span>  
+            از مجموع <span id="totalQuestions" class="highlight">0</span> سؤال  
+            (امتیاز: <span id="scorePercent" class="highlight">0%</span>)
+        </div>
+        <div id="resultMessage" class="message"></div>
+        <table>
+            <thead>
+            <tr>
+                <th>شماره سؤال</th>
+                <th>پاسخ شما</th>
+                <th>پاسخ صحیح</th>
+                <th>وضعیت</th>
+            </tr>
+            </thead>
+            <tbody id="resultTableBody"></tbody>
+        </table>
+    </section>
+</main>
+
+<script>
+    // پاسخ‌های صحیح
+    const correctAnswers = {
+        q1: "الف", // حرم حضرت معصومه (س) در قم
+        q2: "ب", // احترام و آرام راه رفتن
+        q3: "ب", // گوش دادن و یادداشت نکته‌ها
+        q4: "الف", // چالش حفظ سکوت
+        q5: "ج"  // رفتار دوستانه
+    };
+
+    const quizForm = document.getElementById("quizForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultBox = document.getElementById("resultBox");
+    const correctCountSpan = document.getElementById("correctCount");
+    const totalQuestionsSpan = document.getElementById("totalQuestions");
+    const scorePercentSpan = document.getElementById("scorePercent");
+    const resultTableBody = document.getElementById("resultTableBody");
+    const resultMessage = document.getElementById("resultMessage");
+    const progressBar = document.getElementById("progressBar");
+
+    const totalQuestions = Object.keys(correctAnswers).length;
+    totalQuestionsSpan.textContent = totalQuestions;
+
+    function updateProgress() {
+        let answered = 0;
+        for (let q in correctAnswers) {
+            const selected = quizForm.querySelector(`input[name="${q}"]:checked`);
+            if (selected) answered++;
+        }
+        const percent = Math.round((answered / totalQuestions) * 100);
+        progressBar.style.width = percent + "%";
+    }
+
+    quizForm.addEventListener("change", updateProgress);
+
+    submitBtn.addEventListener("click", () => {
+        let correctCount = 0;
+        resultTableBody.innerHTML = "";
+
+        for (let q in correctAnswers) {
+            const selected = quizForm.querySelector(`input[name="${q}"]:checked`);
+            const userAnswer = selected ? selected.value : "—";
+            const isCorrect = userAnswer === correctAnswers[q];
+
+            if (isCorrect) correctCount++;
+
+            const tr = document.createElement("tr");
+
+            const tdQ = document.createElement("td");
+            tdQ.textContent = q.replace("q", "سؤال ");
+            tr.appendChild(tdQ);
+
+            const tdUser = document.createElement("td");
+            tdUser.textContent = userAnswer;
+            tr.appendChild(tdUser);
+
+            const tdCorrect = document.createElement("td");
+            tdCorrect.textContent = correctAnswers[q];
+            tr.appendChild(tdCorrect);
+
+            const tdStatus = document.createElement("td");
+            if (!selected) {
+                tdStatus.textContent = "بی‌پاسخ";
+                tdStatus.classList.add("not-answered");
+            } else if (isCorrect) {
+                tdStatus.textContent = "درست";
+                tdStatus.classList.add("correct");
+            } else {
+                tdStatus.textContent = "غلط";
+                tdStatus.classList.add("incorrect");
+            }
+            tr.appendChild(tdStatus);
+
+            resultTableBody.appendChild(tr);
+        }
+
+        const scorePercent = Math.round((correctCount / totalQuestions) * 100);
+        correctCountSpan.textContent = correctCount;
+        scorePercentSpan.textContent = scorePercent + "%";
+
+        // پیام انگیزشی
+        let message = "";
+        if (scorePercent === 100) {
+            message = "آفرین! 🌟 تو می‌تونی در اردو هم الگوی بقیه دانش‌آموزها باشی.";
+        } else if (scorePercent >= 70) {
+            message = "خیلی خوب بود 👏 با کمی دقت بیشتر، دفعه‌ی بعد حتماً ۱۰۰ درصد می‌گیری.";
+        } else if (scorePercent >= 40) {
+            message = "بد نبود 😊 بیا دوباره سؤال‌ها را مرور کنیم تا برای اردو آماده‌تر شوی.";
+        } else {
+            message = "اشکالی ندارد 💪 این فقط یک تمرین است. می‌توانی دوباره شروع کنی و بهتر شوی.";
+        }
+        resultMessage.textContent = message;
+
+        resultBox.style.display = "block";
+    });
+
+    resetBtn.addEventListener("click", () => {
+        quizForm.reset();
+        resultBox.style.display = "none";
+        resultTableBody.innerHTML = "";
+        correctCountSpan.textContent = "0";
+        scorePercentSpan.textContent = "0%";
+        progressBar.style.width = "0%";
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بازی آموزشی فارسی</title>
+  <style>
+    :root{
+      --yellow:#ffe66d;
+      --yellow2:#fff5b7;
+      --pink:#ff8fb1;
+      --red:#d90429;
+      --red2:#ff4d6d;
+      --text:#4a2c2a;
+      --card:#fffaf0;
+      --green:#3a9d23;
+      --shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    *{
+      box-sizing:border-box;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top left, #fff 0 10%, transparent 10%),
+        radial-gradient(circle at top right, #fff 0 10%, transparent 10%),
+        linear-gradient(180deg, var(--yellow), var(--yellow2));
+      color:var(--text);
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    .rose-border{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:1;
+      overflow:hidden;
+    }
+
+    .rose{
+      position:absolute;
+      font-size:38px;
+      animation: sway 4s ease-in-out infinite;
+      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.15));
+    }
+
+    .rose.r1{top:10px; right:10px;}
+    .rose.r2{top:10px; left:10px;}
+    .rose.r3{bottom:10px; right:10px;}
+    .rose.r4{bottom:10px; left:10px;}
+    .rose.r5{top:45%; right:10px;}
+    .rose.r6{top:45%; left:10px;}
+    .rose.r7{top:20%; right:2%;}
+    .rose.r8{top:20%; left:2%;}
+    .rose.r9{bottom:20%; right:2%;}
+    .rose.r10{bottom:20%; left:2%;}
+
+    @keyframes sway{
+      0%,100%{ transform: translateY(0) rotate(0deg); }
+      50%{ transform: translateY(-6px) rotate(6deg); }
+    }
+
+    .container{
+      position:relative;
+      z-index:2;
+      max-width:900px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .header{
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,245,183,0.95));
+      border:4px solid #ffb703;
+      border-radius:24px;
+      box-shadow: var(--shadow);
+      text-align:center;
+      padding:18px 16px;
+      margin-bottom:18px;
+    }
+
+    .header h1{
+      margin:0 0 8px;
+      font-size:28px;
+      color:#c1121f;
+    }
+
+    .header p{
+      margin:0;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .score-box{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .score, .step{
+      flex:1;
+      min-width:200px;
+      background:var(--card);
+      border-radius:18px;
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+      border:2px dashed #ff8fab;
+      font-size:18px;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    .quiz-card{
+      background:rgba(255,255,255,0.96);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:24px;
+      border:4px solid #ffd166;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .quiz-card::before{
+      content:"🌸";
+      position:absolute;
+      top:12px;
+      left:18px;
+      font-size:26px;
+    }
+
+    .quiz-card::after{
+      content:"🌸";
+      position:absolute;
+      top:12px;
+      right:18px;
+      font-size:26px;
+    }
+
+    .question-title{
+      font-size:24px;
+      color:#d62828;
+      margin:0 0 14px;
+      font-weight:bold;
+    }
+
+    .question-text{
+      font-size:20px;
+      line-height:1.9;
+      margin-bottom:18px;
+      background:#fff8db;
+      padding:16px;
+      border-radius:18px;
+      border:2px solid #ffe08a;
+    }
+
+    .input-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    input[type="text"]{
+      flex:1;
+      min-width:220px;
+      padding:14px 16px;
+      border-radius:14px;
+      border:2px solid #f4a261;
+      outline:none;
+      font-size:18px;
+      background:#fffef6;
+    }
+
+    input[type="text"]:focus{
+      border-color:#d90429;
+      box-shadow:0 0 0 4px rgba(217,4,41,0.15);
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 18px;
+      font-size:18px;
+      cursor:pointer;
+      transition:0.25s;
+      font-weight:bold;
+    }
+
+    .btn-submit{
+      background:#ffb703;
+      color:#4a2c2a;
+    }
+
+    .btn-submit:hover{
+      transform:translateY(-2px);
+      background:#fca311;
+    }
+
+    .options{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .option{
+      background:#fff7d6;
+      border:2px solid #ffd166;
+      padding:14px 16px;
+      border-radius:16px;
+      cursor:pointer;
+      font-size:18px;
+      transition:0.25s;
+      text-align:right;
+    }
+
+    .option:hover{
+      background:#ffe29a;
+      transform:translateY(-2px);
+    }
+
+    .feedback{
+      min-height:56px;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      font-size:18px;
+      font-weight:bold;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+
+    .correct{
+      background:#d8f8d8;
+      color:#1b7f2a;
+      border:2px solid #5cb85c;
+    }
+
+    .wrong{
+      background:#ffe0e0;
+      color:#b00020;
+      border:2px solid #e76f51;
+    }
+
+    .hidden{ display:none; }
+
+    .final-box{
+      text-align:center;
+      padding:20px;
+      background:linear-gradient(180deg, #fff, #fff4c7);
+      border-radius:24px;
+      border:4px solid #ffb703;
+      box-shadow:var(--shadow);
+      margin-top:18px;
+    }
+
+    .final-box h2{
+      color:#c1121f;
+      font-size:30px;
+      margin:0 0 12px;
+    }
+
+    .final-box p{
+      font-size:22px;
+      line-height:2;
+      margin:8px 0;
+      font-weight:bold;
+    }
+
+    .flower{
+      position:fixed;
+      top:-40px;
+      font-size:30px;
+      z-index:9999;
+      pointer-events:none;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall{
+      to{
+        transform: translateY(110vh) rotate(360deg);
+        opacity:0.9;
+      }
+    }
+
+    .small-note{
+      font-size:15px;
+      color:#7a4f4f;
+      margin-top:8px;
+      text-align:center;
+    }
+
+    @media (max-width:600px){
+      .header h1{ font-size:22px; }
+      .question-title{ font-size:20px; }
+      .question-text{ font-size:18px; }
+      .final-box h2{ font-size:24px; }
+      .final-box p{ font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="rose-border" aria-hidden="true">
+    <div class="rose r1">🌹</div>
+    <div class="rose r2">🌹</div>
+    <div class="rose r3">🌹</div>
+    <div class="rose r4">🌹</div>
+    <div class="rose r5">🌹</div>
+    <div class="rose r6">🌹</div>
+    <div class="rose r7">🌹</div>
+    <div class="rose r8">🌹</div>
+    <div class="rose r9">🌹</div>
+    <div class="rose r10">🌹</div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>بازی آموزشی فارسی</h1>
+      <p>طراح بازی: کبری قربانی، دبستان دخترانه ی سما، واحد بندرانزلی</p>
+    </div>
+
+    <div class="score-box">
+      <div class="score">امتیاز: <span id="score">0</span></div>
+      <div class="step">سوال: <span id="step">1</span> از 12</div>
+    </div>
+
+    <div class="quiz-card" id="quizCard">
+      <h2 class="question-title" id="questionTitle"></h2>
+      <div class="question-text" id="questionText"></div>
+
+      <div id="answerArea"></div>
+
+      <div class="feedback hidden" id="feedback"></div>
+    </div>
+
+    <div class="final-box hidden" id="finalBox">
+      <h2>آفرین قهرمان کوچولو! 🌸</h2>
+      <p>امتیاز نهایی تو: <span id="finalScore"></span> از 12</p>
+      <p>هزاران شاخه گل رز تقدیم تو باد.</p>
+      <p>خانم معلم دوستت داره</p>
+    </div>
+
+    <div class="small-note">برای رفتن به سوال بعدی، جواب درست را وارد کن یا گزینه مناسب را انتخاب کن.</div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        type: "text",
+        title: "سوال ۱",
+        text: "شکل کامل کلمه ی (مور) ؟\n\nبه راهی در سلیمان دید موری",
+        answer: ["مورچه"]
+      },
+      {
+        type: "text",
+        title: "سوال ۲",
+        text: "شکل کامل کلمه ی (وزان) ؟\n\nوزان بار گران، هر دم خمیدی",
+        answer: ["و از آن", "واز آن"]
+      },
+      {
+        type: "text",
+        title: "سوال ۳",
+        text: "شکل کامل کلمه ی (برون) ؟\n\nزِ هر گَردی، برون افتادی از راه",
+        answer: ["بیرون"]
+      },
+      {
+        type: "text",
+        title: "سوال ۴",
+        text: "شکل کامل کلمه ی (کای) ؟\n\nبه تندی گفت: «کای مسکین نادان»",
+        answer: ["که ای", "که‌ای"]
+      },
+      {
+        type: "text",
+        title: "سوال ۵",
+        text: "شکل کامل کلمه ی (زین) ؟\n\nبیا زین رَه، به قصر پادشاهی",
+        answer: ["از این", "ازین"]
+      },
+      {
+        type: "text",
+        title: "سوال ۶",
+        text: "شکل کامل کلمه ی (گرت) ؟\n\nگرت همواره باید کامکاری",
+        answer: ["اگر تو را", "اگر ترا"]
+      },
+      {
+        type: "text",
+        title: "سوال ۷",
+        text: "شکل کامل کلمه ی (گه) ؟\n\nگه تدبیر، عاقل باش و بینا",
+        answer: ["گاه"]
+      },
+      {
+        type: "grammar",
+        title: "سوال ۸",
+        text: "در جمله زیر فاعل، مفعول، فعل را مشخص کن:\n\n«کم کم نماز را یادش میدهم.»",
+        answer: {
+          subject: ["من"],
+          object: ["نماز را", "نماز"],
+          verb: ["یادش میدهم", "می‌دهم", "میدهم"]
+        }
+      },
+      {
+        type: "grammar",
+        title: "سوال ۹",
+        text: "در جمله زیر فاعل، مفعول، فعل را مشخص کن:\n\n«پسرم راه چندساله را پیموده است.»",
+        answer: {
+          subject: ["پسرم", "پسر من"],
+          object: ["راه چندساله را", "راه چند ساله را", "راه چندساله"],
+          verb: ["پیموده است", "پیموده"]
+        }
+      },
+      {
+        type: "mcq",
+        title: "سوال ۱۰",
+        text: "در جمله ی «من تلاش میکنم چون هدف بزرگی دارم.» چون به چه معناست؟",
+        options: ["مثل و مانند", "برای اینکه، زیرا"],
+        answer: 1
+      },
+      {
+        type: "mcq",
+        title: "سوال ۱۱",
+        text: "در جمله ی «دوستم چون فرشته ها مهربان است.» چون به چه معناست؟",
+        options: ["مثل و مانند", "برای اینکه، زیرا"],
+        answer: 0
+      },
+      {
+        type: "mcq",
+        title: "سوال ۱۲",
+        text: "در جمله ی «من زیاد لباس پوشیده ام چون هوا سرد است.» چون به چه معناست؟",
+        options: ["مثل و مانند", "برای اینکه، زیرا"],
+        answer: 1
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const scoreEl = document.getElementById("score");
+    const stepEl = document.getElementById("step");
+    const questionTitleEl = document.getElementById("questionTitle");
+    const questionTextEl = document.getElementById("questionText");
+    const answerAreaEl = document.getElementById("answerArea");
+    const feedbackEl = document.getElementById("feedback");
+    const quizCard = document.getElementById("quizCard");
+    const finalBox = document.getElementById("finalBox");
+    const finalScoreEl = document.getElementById("finalScore");
+
+    function normalize(str){
+      return str
+        .toString()
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/ي/g, "ی")
+        .replace(/ك/g, "ک")
+        .replace(/[ًٌٍُِّٔـ]/g, "")
+        .replace(/\u200c/g, " ")
+        .trim();
+    }
+
+    function showQuestion(){
+      feedbackEl.className = "feedback hidden";
+      feedbackEl.textContent = "";
+      stepEl.textContent = current + 1;
+      const q = questions[current];
+      questionTitleEl.textContent = q.title;
+      questionTextEl.innerText = q.text;
+      answerAreaEl.innerHTML = "";
+
+      if(q.type === "text"){
+        answerAreaEl.innerHTML = `
+          <div class="input-row">
+            <input type="text" id="userAnswer" placeholder="جواب را بنویس..." />
+            <button class="btn btn-submit" onclick="checkTextAnswer()">ثبت جواب</button>
+          </div>
+        `;
+        setTimeout(() => document.getElementById("userAnswer").focus(), 100);
+      }
+
+      if(q.type === "grammar"){
+        answerAreaEl.innerHTML = `
+          <div class="input-row"><input type="text" id="subjectAnswer" placeholder="فاعل" /></div>
+          <div class="input-row"><input type="text" id="objectAnswer" placeholder="مفعول" /></div>
+          <div class="input-row"><input type="text" id="verbAnswer" placeholder="فعل" /></div>
+          <div class="input-row">
+            <button class="btn btn-submit" onclick="checkGrammarAnswer()">ثبت جواب</button>
+          </div>
+        `;
+        setTimeout(() => document.getElementById("subjectAnswer").focus(), 100);
+      }
+
+      if(q.type === "mcq"){
+        const optionsHTML = q.options.map((opt, index) => `
+          <div class="option" onclick="checkMCQAnswer(${index})">${opt}</div>
+        `).join("");
+        answerAreaEl.innerHTML = `<div class="options">${optionsHTML}</div>`;
+      }
+    }
+
+    function showFeedback(message, correct=true){
+      feedbackEl.className = "feedback " + (correct ? "correct" : "wrong");
+      feedbackEl.textContent = message;
+      feedbackEl.classList.remove("hidden");
+    }
+
+    function launchFlowers(){
+      const count = 14;
+      for(let i=0; i<count; i++){
+        const flower = document.createElement("div");
+        flower.className = "flower";
+        flower.textContent = "🌹";
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.fontSize = (22 + Math.random() * 18) + "px";
+        flower.style.animationDuration = (2.8 + Math.random() * 2.5) + "s";
+        flower.style.opacity = 0.8;
+        document.body.appendChild(flower);
+        setTimeout(() => flower.remove(), 6000);
+      }
+    }
+
+    function nextQuestion(){
+      current++;
+      if(current < questions.length){
+        showQuestion();
+      }else{
+        endQuiz();
+      }
+    }
+
+    function endQuiz(){
+      quizCard.classList.add("hidden");
+      finalBox.classList.remove("hidden");
+      finalScoreEl.textContent = score;
+    }
+
+    function checkTextAnswer(){
+      const q = questions[current];
+      const userAnswer = normalize(document.getElementById("userAnswer").value);
+      const isCorrect = q.answer.some(a => normalize(a) === userAnswer);
+
+      if(isCorrect){
+        score++;
+        scoreEl.textContent = score;
+        showFeedback("آفرین! جواب درست بود 🌸👏", true);
+        launchFlowers();
+        setTimeout(nextQuestion, 1400);
+      }else{
+        showFeedback("هنوز درست نیست، دوباره با دقت بنویس عزیزم 💛", false);
+      }
+    }
+
+    function checkGrammarAnswer(){
+      const q = questions[current];
+      const s = normalize(document.getElementById("subjectAnswer").value);
+      const o = normalize(document.getElementById("objectAnswer").value);
+      const v = normalize(document.getElementById("verbAnswer").value);
+
+      const subjectOk = q.answer.subject.some(a => normalize(a) === s);
+      const objectOk = q.answer.object.some(a => normalize(a) === o);
+      const verbOk = q.answer.verb.some(a => normalize(a) === v);
+
+      if(subjectOk && objectOk && verbOk){
+        score++;
+        scoreEl.textContent = score;
+        showFeedback("آفرین! خیلی خوب جواب دادی 🌷", true);
+        launchFlowers();
+        setTimeout(nextQuestion, 1400);
+      }else{
+        showFeedback("یک یا چند پاسخ هنوز درست نیست. دوباره امتحان کن 💖", false);
+      }
+    }
+
+    function checkMCQAnswer(index){
+      const q = questions[current];
+      if(index === q.answer){
+        score++;
+        scoreEl.textContent = score;
+        showFeedback("عالیه! پاسخ درست بود 🌸", true);
+        launchFlowers();
+        setTimeout(nextQuestion, 1400);
+      }else{
+        showFeedback("نه عزیزم، این گزینه درست نیست. یک بار دیگر انتخاب کن 💛", false);
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>

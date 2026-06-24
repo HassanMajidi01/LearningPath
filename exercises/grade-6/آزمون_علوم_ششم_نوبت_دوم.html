@@ -1,0 +1,615 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>دانشمندان کوچک دبستان شهید انصاری</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #c8f7ff, #fff4b8, #d8ffd8, #ffd6f5);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "🔬 🧪 🌿 ⚗️ 🧠 🔭 📘 🌈 🍀 🔬 🧪";
+      position: fixed;
+      top: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "⚛️ 🧫 🌳 ☀️ 🧬 🍃 🔎 🧪 🌼";
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.92);
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      padding: 25px;
+      margin-bottom: 20px;
+      border: 4px dashed #7ad7ff;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: #1d4e89;
+    }
+
+    .intro {
+      text-align: center;
+      line-height: 2;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .designer {
+      text-align: center;
+      color: #8e44ad;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .start-btn, .next-btn, .restart-btn, .submit-btn {
+      display: inline-block;
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      padding: 12px 25px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 15px 5px 0;
+      transition: 0.3s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    }
+
+    .start-btn:hover, .next-btn:hover, .restart-btn:hover, .submit-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .question-page {
+      display: none;
+    }
+
+    .question-title {
+      font-size: 22px;
+      color: #0f4c75;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      background: #f3fbff;
+      border: 2px solid #b3e5ff;
+      border-radius: 15px;
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: 0.25s;
+      font-size: 18px;
+    }
+
+    .option:hover {
+      background: #dff6ff;
+      transform: translateY(-2px);
+    }
+
+    .option input {
+      margin-left: 8px;
+      transform: scale(1.2);
+    }
+
+    .progress {
+      text-align: center;
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    #resultBox {
+      display: none;
+    }
+
+    .result-message {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+      line-height: 2;
+    }
+
+    .success {
+      color: #0c8f4f;
+    }
+
+    .fail {
+      color: #d63031;
+    }
+
+    .score {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #2d3436;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      overflow: hidden;
+      border-radius: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    th {
+      background: #74b9ff;
+      color: white;
+    }
+
+    .correct-row {
+      background: #d4f8d4;
+      color: #0b7a29;
+      font-weight: bold;
+    }
+
+    .wrong-row {
+      background: #ffd6d6;
+      color: #b00020;
+      font-weight: bold;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+      font-size: 15px;
+    }
+
+    @media(max-width: 700px){
+      .question-title {
+        font-size: 19px;
+      }
+      .option {
+        font-size: 16px;
+      }
+      .start-btn, .next-btn, .restart-btn, .submit-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="card" id="introPage">
+    <h1>🌿 دانشمندان کوچک دبستان شهید انصاری 🌿</h1>
+    <p class="intro">
+      دانشمندان کوچک دبستان شهید انصاری در حال کشف یه تونل جنگلی بودند...
+      <br>
+      در این تونل پر از رازهای علمی، برای رسیدن به نتیجه‌ی مطلوب باید به سوالات پاسخ بدهند.
+      <br>
+      اگر حداقل <strong>۵۰ درصد</strong> سوال‌ها را درست جواب بدهند، موفق می‌شوند و از تونل علمی عبور می‌کنند! ✨
+    </p>
+    <p class="designer">طراح: خانم قربان‌دوست</p>
+    <div style="text-align:center;">
+      <button class="start-btn" onclick="startQuiz()">شروع بازی 🚀</button>
+    </div>
+  </div>
+
+  <div id="quizContainer"></div>
+
+  <div class="card" id="resultBox">
+    <h2>📊 نتیجه آزمون</h2>
+    <div class="score" id="finalScore"></div>
+    <div class="result-message" id="resultMessage"></div>
+
+    <h3>جدول امتیاز</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>شماره سوال</th>
+          <th>نتیجه</th>
+          <th>پاسخ صحیح</th>
+        </tr>
+      </thead>
+      <tbody id="scoreTableBody"></tbody>
+    </table>
+
+    <div style="text-align:center;">
+      <button class="restart-btn" onclick="restartQuiz()">بازی مجدد 🔄</button>
+    </div>
+    <p class="footer-note">آفرین دانشمند کوچک! دوباره هم می‌توانی تلاش کنی 🌟</p>
+  </div>
+
+</div>
+
+<script>
+  const questions = [
+    {
+      question: "چهار مورد از اجزای میکروسکوپ را نام ببرید؟",
+      options: [
+        "عدسی، تنظیم کند و تنظیم تند، پیچ نگه‌دارنده، عدسی چشمی",
+        "پدال، زنجیر، چرخ، فرمان",
+        "برگ، ساقه، ریشه، گل",
+        "آهن‌ربا، باتری، سیم، لامپ"
+      ],
+      answer: 0
+    },
+    {
+      question: "اسم دیگر سلول چیست؟",
+      options: ["هسته", "یاخته", "بافت", "اندام"],
+      answer: 1
+    },
+    {
+      question: "در گذشته‌های دور برای دیدن اجسام ریز از چه چیزی استفاده می‌کردند؟",
+      options: ["تلسکوپ", "دوربین", "ذره‌بین", "قطب‌نما"],
+      answer: 2
+    },
+    {
+      question: "اولین کسی که میکروسکوپ را ساخت چه کسی بود؟",
+      options: ["ابوعلی سینا", "رابرت هوک", "ادیسون", "نیوتن"],
+      answer: 1
+    },
+    {
+      question: "رابرت هوک با میکروسکوپ چه چیزی را مشاهده کرد؟",
+      options: [
+        "یک دانه برنج",
+        "قطعه‌ای از چوب‌پنبه",
+        "یک برگ سبز",
+        "قطره باران"
+      ],
+      answer: 1
+    },
+    {
+      question: "کار مهم سبزینه چیست؟",
+      options: [
+        "جذب انرژی خورشید",
+        "ذخیره آب",
+        "حرکت دادن گیاه",
+        "تولید صدا"
+      ],
+      answer: 0
+    },
+    {
+      question: "فتوسنتز چیست؟",
+      options: [
+        "غذاسازی گیاهان با استفاده از انرژی خورشید",
+        "حرکت ریشه در خاک",
+        "جذب آب توسط برگ",
+        "خشک شدن گیاه"
+      ],
+      answer: 0
+    },
+    {
+      question: "محل اصلی فتوسنتز کجاست؟",
+      options: ["ساقه", "ریشه", "گل", "برگ"],
+      answer: 3
+    },
+    {
+      question: "سه مورد از فواید فتوسنتز کدام است؟",
+      options: [
+        "غذاسازی، تأمین اکسیژن، کاهش آلودگی هوا",
+        "ایجاد سرما، تولید صدا، جذب سنگ",
+        "ساخت فلز، حرکت جانوران، رشد چرخ",
+        "تولید دود، ایجاد آلودگی، خشک شدن خاک"
+      ],
+      answer: 0
+    },
+    {
+      question: "نیرو چیست؟",
+      options: [
+        "اثر متقابل بین دو جسم",
+        "فقط حرکت تند",
+        "فقط گرما",
+        "فقط نور"
+      ],
+      answer: 0
+    },
+    {
+      question: "چند جسم باید بر هم اثر کنند تا نیرو ظاهر شود؟",
+      options: ["یک جسم", "دو جسم", "سه جسم", "چهار جسم"],
+      answer: 1
+    },
+    {
+      question: "اصطکاک بیشتر در کدام مورد دیده می‌شود؟",
+      options: [
+        "هنگام ترمز گرفتن دوچرخه",
+        "وقتی هوا صاف است",
+        "وقتی خورشید می‌تابد",
+        "وقتی چراغ روشن است"
+      ],
+      answer: 0
+    },
+    {
+      question: "کدام مورد یک نوع نیرو است؟",
+      options: ["الکتریکی", "قاشق", "باران", "مداد"],
+      answer: 0
+    },
+    {
+      question: "قارچ‌ها چه چیزی را تجزیه می‌کنند؟",
+      options: [
+        "بقایای موجودات زنده",
+        "نور خورشید",
+        "سنگ‌های بزرگ",
+        "آب رودخانه"
+      ],
+      answer: 0
+    },
+    {
+      question: "تجزیه کردن توسط قارچ‌ها چه فایده‌ای دارد؟",
+      options: [
+        "مواد دوباره به طبیعت برمی‌گردند",
+        "هوا از بین می‌رود",
+        "خورشید خاموش می‌شود",
+        "زمین می‌چرخد"
+      ],
+      answer: 0
+    },
+    {
+      question: "کرکس‌ها خود را با چه چیزی سیر می‌کنند؟",
+      options: [
+        "ته‌مانده شکار جانوران دیگر",
+        "فقط برگ درختان",
+        "فقط دانه‌ها",
+        "فقط آب"
+      ],
+      answer: 0
+    },
+    {
+      question: "به درخت‌هایی که به طور طبیعی در یک منطقه وجود دارند چه می‌گویند؟",
+      options: ["درخت آهنی", "درخت بومی", "درخت مصنوعی", "درخت کویری"],
+      answer: 1
+    },
+    {
+      question: "به بیماری‌هایی که از فردی به فرد دیگر منتقل می‌شوند چه می‌گویند؟",
+      options: ["ساده", "واگیر", "کم‌خطر", "فصلی"],
+      answer: 1
+    },
+    {
+      question: "سد اول بدن چیست؟",
+      options: ["استخوان", "پوست", "مو", "چشم"],
+      answer: 1
+    },
+    {
+      question: "سد دوم دفاعی بدن چیست؟",
+      options: ["دندان‌ها", "گویچه‌های سفید", "ناخن‌ها", "استخوان‌ها"],
+      answer: 1
+    },
+    {
+      question: "صورت‌های مختلف انرژی کدام‌اند؟",
+      options: [
+        "صوتی، گرمایی، الکتریکی، مکانیکی، شیمیایی، هسته‌ای، نورانی",
+        "فقط گرما و سرما",
+        "فقط نور و باد",
+        "فقط حرکت و سکون"
+      ],
+      answer: 0
+    },
+    {
+      question: "نام دیگر یاخته چیست؟",
+      options: ["سلول", "برگ", "پوست", "دانه"],
+      answer: 0
+    },
+    {
+      question: "کلروفیل چیست؟",
+      options: [
+        "ماده سبزی در برگ که انرژی نور خورشید را جذب می‌کند",
+        "نوعی سنگ",
+        "نوعی جانور",
+        "بخشی از ریشه خشک"
+      ],
+      answer: 0
+    },
+    {
+      question: "گیاهان چه زمانی غذاسازی نمی‌کنند؟",
+      options: ["در فصل تابستان", "در فصل زمستان", "در بهار", "در روز بارانی"],
+      answer: 1
+    },
+    {
+      question: "برگ گیاهان انرژی نور خورشید را در کجا ذخیره می‌کنند؟",
+      options: [
+        "در مواد غذایی ساخته شده مانند نشاسته",
+        "در سنگ‌ها",
+        "در ریشه خشک",
+        "در هوای اطراف"
+      ],
+      answer: 0
+    },
+    {
+      question: "در هر منطقه چه درخت‌هایی باید کاشت؟",
+      options: [
+        "درخت‌هایی که به طور طبیعی در همان منطقه وجود دارند",
+        "فقط درخت‌های پلاستیکی",
+        "فقط درخت‌های خیلی بلند",
+        "فقط درخت‌های بیابانی در همه‌جا"
+      ],
+      answer: 0
+    },
+    {
+      question: "انواع انرژی را نام ببرید.",
+      options: [
+        "انرژی جنبشی و انرژی پتانسیل",
+        "انرژی سرد و گرم",
+        "انرژی خواب و بیداری",
+        "انرژی خاک و برگ"
+      ],
+      answer: 0
+    },
+    {
+      question: "یک خودرو از چه بخش‌هایی تشکیل شده است؟",
+      options: [
+        "بدنه، چرخ‌ها، موتور، فرمان، شیشه‌ها، چراغ، درب، لاستیک، رینگ",
+        "فقط صندلی و آینه",
+        "فقط رنگ و چراغ",
+        "فقط موتور و بوق"
+      ],
+      answer: 0
+    }
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+
+  function startQuiz() {
+    document.getElementById("introPage").style.display = "none";
+    renderQuestionPages();
+    showQuestion(0);
+  }
+
+  function renderQuestionPages() {
+    const quizContainer = document.getElementById("quizContainer");
+    quizContainer.innerHTML = "";
+
+    questions.forEach((q, index) => {
+      const page = document.createElement("div");
+      page.className = "card question-page";
+      page.id = "question-page-" + index;
+
+      let optionsHTML = "";
+      q.options.forEach((opt, i) => {
+        optionsHTML += `
+          <label class="option">
+            <input type="radio" name="q${index}" value="${i}" onchange="saveAnswer(${index}, ${i})">
+            ${opt}
+          </label>
+        `;
+      });
+
+      page.innerHTML = `
+        <div class="progress">سوال ${index + 1} از ${questions.length}</div>
+        <div class="question-title">${q.question}</div>
+        <div class="options">${optionsHTML}</div>
+        <div style="text-align:center;">
+          ${index < questions.length - 1 
+            ? `<button class="next-btn" onclick="nextQuestion(${index})">بعدی ➡️</button>`
+            : `<button class="submit-btn" onclick="finishQuiz()">پایان و مشاهده نتیجه ✅</button>`
+          }
+        </div>
+      `;
+      quizContainer.appendChild(page);
+    });
+  }
+
+  function showQuestion(index) {
+    document.querySelectorAll(".question-page").forEach(p => p.style.display = "none");
+    const page = document.getElementById("question-page-" + index);
+    if (page) page.style.display = "block";
+
+    const selected = userAnswers[index];
+    if (selected !== null) {
+      const radio = document.querySelector(`input[name="q${index}"][value="${selected}"]`);
+      if (radio) radio.checked = true;
+    }
+  }
+
+  function saveAnswer(qIndex, optionIndex) {
+    userAnswers[qIndex] = optionIndex;
+  }
+
+  function nextQuestion(index) {
+    if (userAnswers[index] === null) {
+      alert("لطفاً یکی از گزینه‌ها را انتخاب کنید 🌟");
+      return;
+    }
+    currentQuestion = index + 1;
+    showQuestion(currentQuestion);
+  }
+
+  function finishQuiz() {
+    if (userAnswers[currentQuestion] === null) {
+      alert("لطفاً یکی از گزینه‌ها را انتخاب کنید 🌟");
+      return;
+    }
+
+    document.getElementById("quizContainer").style.display = "none";
+    document.getElementById("resultBox").style.display = "block";
+
+    let correctCount = 0;
+    const tableBody = document.getElementById("scoreTableBody");
+    tableBody.innerHTML = "";
+
+    questions.forEach((q, index) => {
+      const isCorrect = userAnswers[index] === q.answer;
+      if (isCorrect) correctCount++;
+
+      const row = document.createElement("tr");
+      row.className = isCorrect ? "correct-row" : "wrong-row";
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${isCorrect ? "✅ درست" : "❌ غلط"}</td>
+        <td>${q.options[q.answer]}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    const percent = (correctCount / questions.length) * 100;
+    document.getElementById("finalScore").innerHTML =
+      `تعداد پاسخ صحیح: ${correctCount} از ${questions.length} <br> درصد موفقیت: ${percent.toFixed(0)}٪`;
+
+    const resultMessage = document.getElementById("resultMessage");
+    if (percent >= 50) {
+      resultMessage.className = "result-message success";
+      resultMessage.innerHTML = "🎉 آفرین! شما به نتیجه مطلوب رسیدید و در کشف تونل جنگلی موفق شدید! 🌿🔬";
+    } else {
+      resultMessage.className = "result-message fail";
+      resultMessage.innerHTML = "😌 هنوز به نتیجه مطلوب نرسیدی. دوباره تلاش کن و این بار با دقت بیشتر جواب بده! 🔄";
+    }
+  }
+
+  function restartQuiz() {
+    currentQuestion = 0;
+    userAnswers = new Array(questions.length).fill(null);
+
+    document.getElementById("resultBox").style.display = "none";
+    document.getElementById("quizContainer").style.display = "block";
+
+    renderQuestionPages();
+    showQuestion(0);
+  }
+</script>
+
+</body>
+</html>

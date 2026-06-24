@@ -1,0 +1,283 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>خانه کلمات مخالف</title>
+<style>
+  body {
+    font-family: Tahoma, Arial, sans-serif;
+    text-align: center;
+    background-color: #fdf6e3; /* رنگ گرم و آرام */
+    padding: 20px;
+  }
+  .house-container {
+    background: white;
+    border: 5px solid #d2691e;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 800px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .roof {
+    font-size: 50px;
+    margin-bottom: -10px;
+  }
+  h1 { color: #8b4513; }
+  .welcome-msg {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .game-area {
+    display: flex;
+    justify-content: space-between; /* جداسازی دو طرف */
+    flex-wrap: wrap;
+    background-color: #fffaf0;
+    padding: 20px;
+    border-radius: 15px;
+  }
+  .column {
+    flex: 1; /* flex: 1 باعث می‌شود هر بخش فضا را به طور مساوی تقسیم کند */
+    min-width: 200px;
+    display: flex;
+    flex-direction: column; /* تغییر به عمودی برای مرتب بودن */
+    align-items: center;
+    margin: 10px;
+  }
+  .column h3 { margin-bottom: 15px; color: #d2691e; }
+  .word-item {
+    background-color: #ff7f50;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: grab;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 16px;
+    user-select: none;
+  }
+  .word-item.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+  }
+  .word-item.correct {
+    background-color: #90ee90 !important; /* سبز برای درست */
+    border-color: green;
+    transform: scale(1.05);
+  }
+  .word-item.wrong {
+    background-color: #ffcccb !important; /* قرمز برای غلط */
+    animation: shake 0.5s;
+    border-color: red;
+  }
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+  #message {
+    margin-top: 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    min-height: 30px; /* برای جلوگیری از پرش صفحه */
+  }
+  #results {
+    margin-top: 30px;
+    text-align: right; /* راست چین کردن گزارش */
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  }
+  #results h2 { color: #8b4513; margin-bottom: 10px; }
+  #results div { margin-bottom: 8px; }
+  #results .correct-entry { color: green; }
+  #results .wrong-entry { color: red; }
+</style>
+</head>
+<body>
+
+<div class="house-container">
+  <div class="roof">🏠</div>
+  <h1>کلمات مخالف 👎 درس ۱۶ فارسی</h1>
+  <p class="welcome-msg">
+    سلام به دانش‌آموزان عزیز پایه ششم دبستان شهید انصاری! 👋<br>
+    لطفاً وارد خونه کلمات مخالف بشید و با دقت، کلمات متضاد رو پیدا کنید و کنار هم قرار بدید!
+  </p>
+
+  <div class="game-area">
+    <div class="column" id="left-column"><h3>مخالف‌ها</h3></div>
+    <div class="column" id="right-column"><h3>کلمات</h3></div>
+  </div>
+
+  <div id="message"></div>
+  <div id="results">
+    <h2>گزارش فعالیت:</h2>
+    <div id="report-content"></div>
+  </div>
+</div>
+
+<script>
+  const originalWords = [
+
+    { word: "محنت", opposite: "آسایش" },
+    { word: "تسلی", opposite: "آزردن" },
+    { word: "زوال", opposite: "هستی" },
+    { word: "ثابت", opposite: "سست" },
+    { word: "تعالی", opposite: "تنزل" },
+
+    { word: "اعتدال", opposite: "افراط" }
+  ];
+
+  let wordsForLeft = [...originalWords];
+  let wordsForRight = originalWords.map(item => ({ word: item.opposite, opposite: item.word }));
+
+  // بهم ریختن تصادفی کلمات
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  wordsForLeft = shuffle(wordsForLeft);
+  wordsForRight = shuffle(wordsForRight);
+
+  const leftContainer = document.getElementById('left-column');
+  const rightContainer = document.getElementById('right-column');
+  const messageDiv = document.getElementById('message');
+  const reportContentDiv = document.getElementById('report-content');
+
+  let draggedItem = null;
+  let userResults = []; // برای ذخیره نتایج کاربر
+
+  function createWordItem(item, isLeftColumn) {
+    const div = document.createElement('div');
+    div.className = 'word-item';
+    div.draggable = true;
+    div.dataset.word = item.word;
+    div.dataset.opposite = item.opposite;
+    div.textContent = item.word;
+
+    div.addEventListener('dragstart', (e) => {
+      draggedItem = div;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.word);
+      setTimeout(() => {
+        if (draggedItem) draggedItem.classList.add('dragging');
+      }, 0);
+    });
+
+    div.addEventListener('dragend', () => {
+      if (draggedItem) draggedItem.classList.remove('dragging');
+      draggedItem = null;
+    });
+    return div;
+  }
+
+  wordsForLeft.forEach(item => leftContainer.appendChild(createWordItem(item, true)));
+  wordsForRight.forEach(item => rightContainer.appendChild(createWordItem(item, false)));
+
+  document.querySelectorAll('#right-column .word-item').forEach(targetWord => {
+    targetWord.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    targetWord.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!draggedItem) return;
+
+      const droppedWordElement = targetWord;
+      const originalWord = draggedItem.dataset.word; // کلمه اصلی که کشیده شده
+      const droppedWord = droppedWordElement.dataset.word; // کلمه‌ای که روی آن رها شده
+      const correctOpposite = draggedItem.dataset.opposite; // متضاد صحیح کلمه اصلی
+
+      let isMatch = false;
+      if (droppedWord === correctOpposite) {
+        messageDiv.textContent = "آفرین! درست است.";
+        messageDiv.style.color = 'green';
+        draggedItem.classList.add('correct');
+        droppedWordElement.classList.add('correct');
+        isMatch = true;
+      } else {
+        messageDiv.textContent = "اشتباه! دوباره امتحان کنید.";
+        messageDiv.style.color = 'red';
+        draggedItem.classList.add('wrong');
+        droppedWordElement.classList.add('wrong');
+        isMatch = false;
+      }
+
+      // ذخیره نتیجه
+      userResults.push({
+        word1: originalWord,
+        word2: droppedWord,
+        correctPair: correctOpposite,
+        isCorrect: isMatch
+      });
+
+      updateReport();
+
+      // غیرفعال کردن و حذف عناصر بعد از پاسخ
+      draggedItem.draggable = false;
+      droppedWordElement.draggable = false;
+      // حذف موقت برای جلوگیری از استفاده مجدد، اگر جفت صحیح بود حذف دائمی
+      if (isMatch) {
+          setTimeout(() => {
+              draggedItem.remove();
+              droppedWordElement.remove();
+              checkGameCompletion();
+          }, 1000);
+      } else {
+          // اگر اشتباه بود، بعد از کمی تاخیر کلاس wrong را حذف کن
+           setTimeout(() => {
+              draggedItem.classList.remove('wrong');
+              droppedWordElement.classList.remove('wrong');
+              // عناصر اشتباه را موقتاً حذف نکن تا کاربر ببیند، اما اجازه کشیدن مجدد نده
+              draggedItem.draggable = false;
+              droppedWordElement.draggable = false;
+          }, 1000);
+      }
+      draggedItem = null; // پاک کردن مرجع
+
+    });
+  });
+
+  function updateReport() {
+    reportContentDiv.innerHTML = ''; // پاک کردن گزارش قبلی
+    userResults.forEach((result, index) => {
+      const entryDiv = document.createElement('div');
+      let statusText = '';
+      let entryClass = '';
+
+      if (result.isCorrect) {
+        statusText = 'صحیح';
+        entryClass = 'correct-entry';
+        entryDiv.innerHTML = `${index + 1}. ${result.word1} ↔ ${result.word2} - <strong class="${entryClass}">${statusText}</strong>`;
+      } else {
+        statusText = 'نادرست';
+        entryClass = 'wrong-entry';
+        // نمایش کلمه اشتباه و جواب صحیح
+        entryDiv.innerHTML = `${index + 1}. ${result.word1} ↔ ${result.word2} - <strong class="${entryClass}">${statusText}</strong> (جواب صحیح: ${result.correctPair})`;
+      }
+      reportContentDiv.appendChild(entryDiv);
+    });
+  }
+
+  function checkGameCompletion() {
+    // اگر همه کلمات حذف شدند، بازی تمام است
+    if (document.querySelectorAll('.word-item:not(.dragging)').length === 0) {
+       messageDiv.textContent = "تبریک! همه کلمات را درست جفت کردید!";
+       messageDiv.style.color = 'blue';
+    }
+  }
+
+</script>
+
+</body>
+</html>
+طراح : خانم قربان دوست

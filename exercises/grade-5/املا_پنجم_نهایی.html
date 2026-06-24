@@ -1,0 +1,185 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>آزمون املا پایه پنجم</title>
+
+<style>
+body{
+    font-family:tahoma;
+    background: linear-gradient(to bottom, green 33%, white 33%, white 66%, red 66%);
+    padding:20px;
+}
+.container{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+}
+h1,h2{text-align:center;}
+.question{
+    margin:8px 0;
+    padding:8px;
+    background:#f2f2f2;
+    border-radius:8px;
+}
+button{
+    padding:8px 15px;
+    font-size:15px;
+    background:green;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin:5px;
+}
+button:hover{background:red;}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+th,td{
+    border:1px solid black;
+    padding:6px;
+    text-align:center;
+}
+.correct{color:green;font-weight:bold;}
+.wrong{color:red;font-weight:bold;}
+#timer{
+    font-size:20px;
+    color:red;
+    font-weight:bold;
+    text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>آزمون املا پایه پنجم</h1>
+<h2>طراح: سارا قربان دوست<br>مدرسه شهید انصاری</h2>
+
+<p><b>دانش آموز فرهیخته دبستان شهید انصاری با انتخاب املای صحیح کلمات گزینه درست را علامت بزن.</b></p>
+
+نام دانش‌آموز:
+<input type="text" id="studentName">
+
+<div id="timer">زمان باقی‌مانده: 60 ثانیه</div>
+
+<form id="quizForm"></form>
+
+<button onclick="checkAnswers()">مشاهده نتایج</button>
+<button onclick="printReport()">چاپ کارنامه</button>
+<button onclick="restartQuiz()">آزمون مجدد</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+let timeLeft = 60;
+let timerInterval = setInterval(updateTimer,1000);
+
+function updateTimer(){
+    timeLeft--;
+    document.getElementById("timer").innerText=
+    "زمان باقی‌مانده: " + timeLeft + " ثانیه";
+    if(timeLeft<=0){
+        clearInterval(timerInterval);
+        checkAnswers();
+    }
+}
+
+const questions = [
+["مشهور","مشحور","مشهور"],
+["جرات","جرئت","جرئت"],
+["عاقبت","عاغبت","عاقبت"],
+["دایع","دایه","دایه"],
+["نقره","نغره","نقره"],
+["محان","مِهان","مِهان"],
+["سیمرق","سیمرغ","سیمرغ"],
+["گذاشتند","گزاشتند","گذاشتند"],
+["البرذ","البرز","البرز"],
+["جوار","جوال","جوار"],
+["دهانه قاری","دهانه غاری","دهانه غاری"],
+["پوزش","پوذش","پوزش"],
+["خاستار","خواستار","خواستار"],
+["ذال","زال","زال"],
+["طبل","تبل","طبل"],
+["لرزه","لرذه","لرزه"],
+["هراس انگیز","حراس انگیز","هراس انگیز"],
+["حادثه","حادسه","حادثه"],
+["رسد خانه","رصد خانه","رصد خانه"],
+["عضمت","عظمت","عظمت"],
+["مهیب","محیب","مهیب"],
+["قلعه","غلعه","قلعه"],
+["تشت","تشط","تشت"],
+["مقول","مغول","مغول"],
+["خواجه نصیرالدین توسی","خاجه نصیر الدین توسی","خواجه نصیرالدین توسی"],
+["جزب","جذب","جذب"],
+["شرایت","شرایط","شرایط"],
+["تحقیق","تحغیق","تحقیق"],
+["مراقه","مراغه","مراغه"]
+];
+
+const form = document.getElementById("quizForm");
+
+questions.forEach((q,i)=>{
+    form.innerHTML += `
+    <div class="question">
+    ${i+1})
+    <input type="radio" name="q${i}" value="${q[0]}"> ${q[0]}
+    <input type="radio" name="q${i}" value="${q[1]}"> ${q[1]}
+    </div>`;
+});
+
+function checkAnswers(){
+    clearInterval(timerInterval);
+    let score=0;
+    let table="<table><tr><th>سوال</th><th>نتیجه</th><th>پاسخ صحیح</th></tr>";
+
+    questions.forEach((q,i)=>{
+        let radios=document.getElementsByName("q"+i);
+        radios.forEach(r=>r.disabled=true);
+
+        const selected=document.querySelector(`input[name="q${i}"]:checked`);
+        if(selected && selected.value===q[2]){
+            score++;
+            table+=`<tr><td>${i+1}</td><td class="correct">✔️ درست</td><td>${q[2]}</td></tr>`;
+        }else{
+            table+=`<tr><td>${i+1}</td><td class="wrong">❌ غلط</td><td>${q[2]}</td></tr>`;
+        }
+    });
+
+    table+="</table>";
+
+    let percent=Math.round((score/questions.length)*100);
+    let name=document.getElementById("studentName").value;
+
+    let report=`
+    <h3>نام دانش‌آموز: ${name}</h3>
+    <h3>تعداد پاسخ صحیح: ${score} از ${questions.length}</h3>
+    <h3>درصد موفقیت: ${percent}% ✔️</h3>
+    ${table}`;
+
+    document.getElementById("result").innerHTML=report;
+
+    localStorage.setItem("lastResult",report);
+}
+
+function printReport(){
+    window.print();
+}
+
+function restartQuiz(){
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
+توضیح اینکه املای جرات و جرئت هردو صحیح میباشد 
+خواجه نصیرالدین توسی و طوسی هردو صحیح میباشد. 

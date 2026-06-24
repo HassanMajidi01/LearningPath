@@ -53,5 +53,49 @@ const scienceTopicsData = {
             
         ]
     },
+	"topic-4": {
+        title: "موجودات زنده وغیر زنده و جانوران",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScLxSlfvW6A_wGWuXBMl4zOXSqlM1km2VervUt6xdNs26Y0tQ/viewform?usp=header",
+        videos: [
+            {
+                title: "خلاصه درس چهارم علوم",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/tdhg6fa/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+            
+        ]
+    },
+	"topic-5": {
+        title: "دنیای گیاهان",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSf3fQGanob9hekozzF6lW1VhepMEUmvRDXUxE3chyqXCazUng/viewform?usp=header",
+        videos: [
+            {
+                title: "قسمت اول درس دنیای گیاهان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/eltvt49/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "قسمت دوم درس دنیای گیاهان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kgdfh1y/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "قسمت سوم درس دنیای گیاهان",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/nod6y2c/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+            
+        ]
+    },
+	"topic-6": {
+        title: "زمین خانه پر آب ما",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScBxe3viyS3g4bPmVEOo0CM9NsrnFLF0DLDE8MV3MnVmrNoPA/viewform?usp=header",
+        videos: [
+            {
+                title: "خلاصه درس 6 علوم",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/vyl1s48/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+            
+        ]
+    },
    
 };

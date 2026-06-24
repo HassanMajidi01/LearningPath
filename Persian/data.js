@@ -22,7 +22,7 @@ const lessonsData = {
          videos: [
             {
                 title: "آموزش نشانه آ با داستان",
-                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kafq52y/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kcw3u62/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -92,7 +92,7 @@ const lessonsData = {
         videos: [
             {
                 title: "داستان نشانه د",
-                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/axiq77e/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wvxc3vw/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -149,9 +149,11 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "بابا داس داد", scrambled: ["داد", "بابا", "داس"] },
-            { correct: "بابا با اَسب آمد", scrambled: ["آمد", "بابا", "اَسب", "با"] }
+            { correct: "بابا با اَسب آمد", scrambled: ["آمد", "بابا", "اَسب", "با"] },
+            { correct: "سَبا با سام آمَد", scrambled: ["آمَد", "سَبا", "سام", "با"] },
+            { correct: "سام با سَبَد آدامس داد", scrambled: ["آدامس", "سَبَد", "سام", "با", "داد"] }
          ],
-        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeKXvM3l5cFuZMavAto2DVMZ4TSNk2S6gSLCtX547KQPFMMDg/viewform?usp=header",
+        quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSe4LmTAE8rZMBTVgvQ8csv_H0jO-AnZK9wKpOtMVU7VeOBE_A/viewform?usp=header",
         videos: [
             {
                 title: "داستان نشانه س",
@@ -173,10 +175,20 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "او با اَدَب بود", scrambled: ["او", "با", "اَدَب", "بود"] },
-            { correct: "اوستا داس داد", scrambled: ["داد", "او", "داس"] }
+            { correct: "او داس داد", scrambled: ["داد", "او", "داس"] },
+            { correct: "با بابا بودَم", scrambled: ["با", "بابا", "بودَم"] },
+            { correct: "او با اَسب آمَد", scrambled: ["با", "او", "آمَد", "اَسب"] },
+            { correct: "اَسَد با اَسب آمَد", scrambled: ["اَسَد", "با", "اَسب", "آمَد"] },
+            { correct: "بابا با ما بود", scrambled: ["بابا", "با", "ما", "بود"] },
+            { correct: "دود بَد بو بود", scrambled: ["دود", "بَد", "بو", "بود"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeZnnVULNBWeQA4oVGALDaBYJl2TiUzxpCq25uu-Zp_8uoYzg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی صدای او",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/rrt857a/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-8": {
         title: "ت",
@@ -192,7 +204,18 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "بابا تاب بَست", scrambled: ["تاب", "بابا", "بَست"] },
-            { correct: "سام سوت داد", scrambled: ["سام", "سوت", "داد"] }
+            { correct: "سام تاب بَست", scrambled: ["تاب", "سام", "بَست"] },
+            { correct: "او با سام دوست اَست", scrambled: ["با", "او", "سام", "دوست", "اَست"] },
+            { correct: "سام با سَبَد توت داد", scrambled: ["با", "سام", "سَبَد", "توت", "داد"] },
+            { correct: "بابا با دَست تاب بَست", scrambled: ["با", "بابا", "دَست", "تاب", "بَست"] },
+            { correct: "بابا با اَسَد دَست داد", scrambled: ["با", "بابا", "دَست", "اَسَد", "داد"] },
+            { correct: "سام با اَسَد دوست اَست", scrambled: ["با", "سام", "دوست", "اَسَد", "اَست"] },
+            { correct: "سام سوت داد", scrambled: ["سام", "سوت", "داد"] },
+            { correct: "با سام دَست دادَم", scrambled: ["سام", "با", "دادَم", "دَست"] },
+            { correct: "او با دوستَم آمَد", scrambled: ["او", "با", "دوستَم", "آمَد"] },
+            { correct: "با دَستَم تاب بَستَم", scrambled: ["با", "دَستَم", "تاب", "بَستَم"] },
+            { correct: "سَما با سَبَد توت داد", scrambled: ["با", "سَبَد", "سما", "توت", "داد"] },
+            { correct: "سوت دَستَم بود", scrambled: ["دَستَم", "سوت", "بود"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdsCE74wjkbxEwy10_1P7SuRwb9EqkUk1ZKIwKDEfmtq63lHg/viewform?usp=header",
             videos: [
@@ -219,10 +242,36 @@ const lessonsData = {
             { correct: "مادَر دَر دَست بادام دارَد", scrambled: ["مادَر", "دَر", "دَست", "بادام", "دارَد"] },
             { correct: "مادَرَم سَر دَرد دارَد", scrambled: ["مادَرَم", "سَر", "دَرد", "دارَد"] },
             { correct: "آرام آرام باران آمَد", scrambled: ["آمَد", "باران", "آرام", "آرام"] },
+            { correct: "مادَر آرام آمَد", scrambled: ["آمَد", "مادَر", "آرام"] },
+            { correct: "رامسَر روستا دارَد", scrambled: ["رامسَر", "روستا", "دارَد"] },
+            { correct: "مار تَرس دارَد", scrambled: ["مار", "تَرس", "دارَد"] },
+            { correct: "دارا دَرس دارَد", scrambled: ["دارا", "دَرس", "دارَد"] },
+            { correct: "او دَر آستارا اَست", scrambled: ["او", "دَر", "آستارا", "اَست"] },
+            { correct: "آدَم اَبرو دارَد", scrambled: ["آدَم", "اَبرو", "دارَد"] },
+            { correct: "روستا آباد اَست", scrambled: ["روستا", "آباد", "اَست"] },
+            { correct: "سارا با دَست تاب را بَست", scrambled: ["سارا", "با", "دَست", "تاب", "را", "بَست"] },
+            { correct: "مادَر دَر دَست سَبَد دارَد", scrambled: ["دارَد", "سَبَد", "دَست", "دَر", "مادَر"] },
             { correct: "مادَر دَر باران آمد", scrambled: ["آمد", "باران", "دَر", "مادَر"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdb5Qnanos7ljL-kkfUPuEcQKPXuKX71zI-FbSSiCqnszL9wA/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+         videos: [
+            {
+                title: "لوحه خوانی نشانه ر",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/exvqbjd/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "نحوه حل تمرینات نگارش صفحه 51",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/qdim3me/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "مرور نشانه ها و صدا ها از آ تا د",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mhebznr/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "مرور نشانه ها از م تا ر",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/uhfnl18/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe></div>'
+            }
+        ]
     },
     "dars-10": {
         title: "ن",
@@ -241,7 +290,12 @@ const lessonsData = {
             { correct: "مادَر دَر دَست نان دارَد", scrambled: ["دارَد","نان", "دَست", "دَر", "مادَر"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSem4pvz5RqmHwfFTUxN-_7g6jfM83KRetVUKgOWpuCIKoimVw/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ن",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/e074y2c/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-11": {
         title: "ای",
@@ -285,8 +339,16 @@ const lessonsData = {
             { word: 'بازار', image: 'assets/images/bazar.webp', audio: 'assets/audio/bazar.mp3', highlight: 'ز' }
         ],
         sentenceScramble: [ 
-            { correct: " ایران زیبا اَست", scrambled: ["اَست","زیبا", "ایران"] },
-            { correct: "زَنبور مَن را زَد", scrambled: ["زَد", "را", "زَنبور", "من"] }
+            { correct: "ایران سَرسَبز اَست", scrambled: ["اَست","سَرسَبز", "ایران"] },
+            { correct: "بابا میز می سازَد", scrambled: ["بابا","میز", "می سازَد"] },
+            { correct: "این سَرباز ایرانی اَست", scrambled: ["اَست","سَرباز", "این", "ایرانی"] },
+            { correct: "آن سیب زیبا اَست", scrambled: ["اَست","زیبا", "آن", "سیب"] },
+            { correct: "مادر با سوزَن دامَن می دوزَد", scrambled: ["مادر","با", "سوزَن", "دامَن", "می دوزَد"] },
+            { correct: "ما آزادی را دوست داریم", scrambled: ["ما","آزادی", "را", "دوست", "داریم"] },
+            { correct: "زَری اَنار را اَز زَمین بَر می دارَد", scrambled: ["زَری","اَنار", "را", "اَز", "زَمین", "بَر می دارَد"] },
+            { correct: "ایران زیبا اَست", scrambled: ["اَست","زیبا", "ایران"] },
+            { correct: "میز زَرد اَست", scrambled: ["اَست","میز", "زَرد"] },
+            { correct: "زَنبور مَن را زَد", scrambled: ["زَد", "را", "زَنبور", "مَن"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSen1KmEA-F88Rb9TZ-V9ymuII6UcVSF3Y2Jd6jKqj7bKtHvgw/viewform?usp=header",
         videos: [
@@ -306,6 +368,19 @@ const lessonsData = {
             { word: 'اِ', image: 'assets/images/ee.webp', audio: 'assets/audio/ee.mp3', highlight: 'اِ' },
             { word: 'بیمارِستان', image: 'assets/images/bimarestan.webp', audio: 'assets/audio/bimarestan.mp3', highlight: 'اِ' },
             { word: 'مِداد', image: 'assets/images/medad.webp', audio: 'assets/audio/medad.mp3', highlight: 'ه' },
+            { word: 'سه', image: 'assets/images/3.webp', audio: 'assets/audio/3.mp3', highlight: 'ه' },
+            { word: 'اِمام', image: 'assets/images/emam.webp', audio: 'assets/audio/emam.mp3', highlight: 'اِ' },
+            { word: 'ماسه', image: 'assets/images/mase.webp', audio: 'assets/audio/mase.mp3', highlight: 'ه' },
+            { word: 'اِنسان', image: 'assets/images/ensan.webp', audio: 'assets/audio/ensan.mp3', highlight: 'اِ' },
+            { word: 'موزه', image: 'assets/images/mooze.webp', audio: 'assets/audio/mooze.mp3', highlight: 'ه' },
+            { word: 'بوسه', image: 'assets/images/boose.webp', audio: 'assets/audio/boose.mp3', highlight: 'ه' },
+            { word: 'دَنده', image: 'assets/images/dande.webp', audio: 'assets/audio/dande.mp3', highlight: 'ه' },
+            { word: 'ایستاده', image: 'assets/images/istade.webp', audio: 'assets/audio/istade.mp3', highlight: 'ه' },
+            { word: 'دَسته', image: 'assets/images/daste.webp', audio: 'assets/audio/daste.mp3', highlight: 'ه' },
+            { word: 'زِمِستان', image: 'assets/images/zemestan.webp', audio: 'assets/audio/zemestan.mp3', highlight: 'ِ' },
+            { word: 'نامه', image: 'assets/images/name.webp', audio: 'assets/audio/name.mp3', highlight: 'ه' },
+            { word: 'روزنامه', image: 'assets/images/roozname.webp', audio: 'assets/audio/roozname.mp3', highlight: 'ه' },
+            { word: 'سِتاره', image: 'assets/images/setare.webp', audio: 'assets/audio/setare.mp3', highlight: 'ه' },
             { word: 'مَدرِسه', image: 'assets/images/madrese.webp', audio: 'assets/audio/madrese.mp3', highlight: 'ه' }
         ],
         sentenceScramble: [ 
@@ -341,7 +416,12 @@ const lessonsData = {
             { correct: "اِمشَب شامی داریم", scrambled: ["داریم", "شامی", "اِمشَب"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScMlKtfqRthmMICS-vrtQ4YcvQFCwWth79X2vLoZ5AWSnsoQw/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "لوحه خوانی نشانه ش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/m7qb2eu/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-15": {
         title: "ی",
@@ -425,7 +505,11 @@ const lessonsData = {
         videos: [
             {
                 title: "بخش اول: آموزش نشانه و",
-                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/tukb7vb/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/iev9ofk/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "بخش دوم: لوحه خوانی نشانه و",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/hlooc95/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -515,6 +599,14 @@ const lessonsData = {
             {
                 title: "لوحه خوانی نشانه ف",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/fnd9fd9/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "آموزش نشانه ف با داستان ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/b8whc6m/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "روخوانی درس روز برفی",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mh22xb2/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },
@@ -769,7 +861,7 @@ const lessonsData = {
         ],
         sentenceScramble: [ 
             { correct: "مَن خواهرِ خوبی دارَم", scrambled: ["دارَم", "خوبی", "خواهرِ", "مَن"] },
-            { correct: "خواهَرَِم آزاده قَبل از خواب برایِ مَن کِتاب می خوانَد", scrambled: ["خواهَرِم", "آزاده", "قَبل", "از", "خواب", "برایِ", "مَن", "کِتاب", "می خوانَد"] },
+            { correct: "خواهرم آزاده قَبل از خواب برایِ مَن کِتاب می خوانَد", scrambled: ["خواهرم", "آزاده", "قَبل", "از", "خواب", "برایِ", "مَن", "کِتاب", "می خوانَد"] },
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScrPjW30ZvlNQEQAHny7sUPsDFxd1_V7_d04ppS07L8qx3V0g/viewform?usp=header",
          videos: [
@@ -810,6 +902,26 @@ const lessonsData = {
             {
                 title: "آموزش تشدید",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/ntbxn2l/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "روخوانی درس در بازار",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/lipz5mi/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "سوالات درک مطلب درس در بازار",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/kuukoq3/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "توضیح تمرینات صفحه 103 نگارش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mcy1879/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "توضیح تمرینات صفحه 104 نگارش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/mnk2z19/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "توضیح تمرینات صفحه 105 نگارش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/uwm0wpw/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
             
             
@@ -833,7 +945,22 @@ const lessonsData = {
             { correct: "آسمانِ صاف و آبیِ دریا خیلی دیدنی است", scrambled: ["آسمانِ", "صاف", "و", "آبیِ", "دریا", "خیلی", "دیدنی", "است"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLScKgEs_YZ1pUXRGKOLtQrSH8Tz67P6eYNpLxGSxvWuqTC4OWg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ص",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/tgx71y8/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "روخوانی درس صدای موج",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/hww4h84/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+			{
+                title: "توضیح نحوه حل صفحه 106 نگارش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/agghol1/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+            
+        ]
     },
     "dars-33": {
         title: "ذ",
@@ -853,7 +980,13 @@ const lessonsData = {
             { correct: "از دیدنِ شالیزار ها لذّت بردیم", scrambled: ["از", "دیدنِ", "شالیزار ها", "بردیم", "لذّت"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfuj0X5hlAL3ls_L52EjxiGcLC7rJBYxhG1_TJA-EaTs3Hg5A/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "روخوانی درس سفر دلپذیر",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/zrcbix5/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     },
     "dars-34": {
         title: "ع",
@@ -908,7 +1041,16 @@ const lessonsData = {
             { correct: "روزی که پیامبر مسلمانان به پیامبری برگزیده شد مبعث نام دارد", scrambled: ["روزی", "که", "پیامبر", "مسلمانان", "به", "پیامبری", "برگزیده", "شد", "مبعث", "نام", "دارد"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSeJOmQowa7EK7SFs1Q7CJUOOR7qCaXt-k3feyzVvSgXBFlg_g/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ث",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/oki6q3b/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "حل تمرینات صفحات 116 و 117 نگارش",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wgcxs2e/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+        ]
     },
     "dars-36": {
         title: "ح",
@@ -928,7 +1070,13 @@ const lessonsData = {
             { correct: "من امروز صُبح اِحساس خوبی داشتَم", scrambled: ["من", "امروز", "صُبح", "اِحساس", "خوبی", "داشتَم"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSd6HhbK1LNt8Apf-t4gFDTPGrf7X9athN7PRU5cFiTDnOrw_A/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ح",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/iske61f/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     },
     "dars-37": {
         title: "ض",
@@ -948,7 +1096,13 @@ const lessonsData = {
             { correct: "رضا مَریض است", scrambled: ["رضا", "مَریض", "است"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfjBilK2S1amh09l8qZCpxHNYq-aC4zoDSKArUQD4XCTQuFxg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ض",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/dwdd81v/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     },
     "dars-38": {
         title: "ط",
@@ -956,7 +1110,7 @@ const lessonsData = {
             { word: 'حیاط', image: 'assets/images/hayat.webp', audio: 'assets/audio/hayat.mp3', highlight: 'ط' },
             { word: 'سَطل', image: 'assets/images/satl.webp', audio: 'assets/audio/satl.mp3', highlight: 'ط' },
             { word: 'وطن', image: 'assets/images/iran.webp', audio: 'assets/audio/vatan.mp3', highlight: 'ط' },
-            { word: 'ط', image: 'assets/images/ta.webp', audio: 'assets/audio/taa.mp3', highlight: 'ط' },
+            { word: 'ط', image: 'assets/images/ta.webp', audio: 'assets/audio/t.mp3', highlight: 'ط' },
             { word: 'طاووس', image: 'assets/images/tavoos.webp', audio: 'assets/audio/tavoos.mp3', highlight: 'ط' },
             { word: 'مُستَطیل', image: 'assets/images/mostatil.webp', audio: 'assets/audio/mostatil.mp3', highlight: 'ط' },
             { word: 'طوطی', image: 'assets/images/tooti.webp', audio: 'assets/audio/tooti.mp3', highlight: 'ط' },
@@ -991,7 +1145,17 @@ const lessonsData = {
             { correct: "کلاغ و جغد دو مرغابی را دیدند", scrambled: ["کلاغ", "و", "جغد", "دو", "مرغابی", "را", "دیدند"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSfFJDc_9feY6Q3twYnRirk0f7fwXeYSaZjjnCZAyEIepU_mzg/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه غ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/ryv5mo6/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: "درس ۲۱ فارسی لاکپشت و مرغابی ها",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/nos3nas/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     },
     "dars-40": {
         title: "ظ",
@@ -1006,10 +1170,16 @@ const lessonsData = {
             { word: 'مُحافِظَت', image: 'assets/images/mohafezat.webp', audio: 'assets/audio/mohafezat.mp3', highlight: 'ظ' }
         ],
         sentenceScramble: [ 
-            { correct: "پبامبر اعظم از همان کودکی بسیار مهربان بود", scrambled: ["پیامبر", "اعظم", "از", "همان", "کودکی", "بسیار", "بسیار", "مهربان", "بود"] },
+            { correct: "پیامبر اعظم از همان کودکی بسیار مهربان بود", scrambled: ["پیامبر", "اعظم", "از", "همان", "کودکی", "بسیار","مهربان", "بود"] },
             { correct: "او هرگز در برابر ظلم آرام نمی نشست", scrambled: ["او", "هرگز", "در", "برابر", "ظلم", "آرام", "نمی نشست"] }
          ],
         quizLink: "https://docs.google.com/forms/d/e/1FAIpQLSdyd2RP-RjJQBYIv5F_-5BvgsoXr3l6vd81vmY-TEMSlzi5fQ/viewform?usp=header",
-        videoEmbed: 'YOUR_EMBED_CODE'
+        videos: [
+            {
+                title: "آموزش نشانه ظ",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/souwa83/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            }
+            
+        ]
     }
 };

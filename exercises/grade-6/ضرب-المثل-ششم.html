@@ -1,0 +1,423 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی ضرب‌المثل‌ها</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #e6f7ff; /* رنگ پس‌زمینه ملایم‌تر */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 650px; /* کمی عریض‌تر */
+            border: 3px solid #a0d2eb; /* حاشیه رنگی */
+        }
+        h1 {
+            color: #0077cc; /* رنگ عنوان */
+            margin-bottom: 25px;
+            font-size: 2.3em;
+        }
+        .question-section {
+            margin-bottom: 25px;
+            padding: 25px; /* کمی فضای بیشتر */
+            border-radius: 10px;
+            background-color: #f0f9ff; /* رنگ پس‌زمینه بخش سوال */
+            border: 2px solid #cce0f5;
+        }
+        .question-text {
+            font-size: 1.45em; /* کمی بزرگتر */
+            margin-bottom: 20px;
+            line-height: 1.7; /* خطوط خواناتر */
+            color: #005fa3;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap; /* برای نمایش در سطرها */
+            justify-content: center;
+            gap: 10px; /* فاصله بین دکمه‌ها */
+        }
+        .options button {
+            background-color: #64b5f6; /* رنگ دکمه‌ها */
+            color: white;
+            border: none;
+            padding: 12px 20px; /* تنظیم padding */
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            flex-basis: calc(50% - 5px); /* دو دکمه در هر سطر */
+            box-sizing: border-box;
+            height: 60px; /* ارتفاع ثابت برای دکمه‌ها */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .options button:hover {
+            background-color: #42a5f5; /* رنگ هاور */
+            transform: translateY(-2px);
+        }
+        .options button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .feedback {
+            margin-top: 25px; /* کمی فاصله بیشتر */
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            min-height: 50px; /* برای جلوگیری از جابجایی layout */
+            line-height: 1.5;
+        }
+        .feedback.correct {
+            color: #1b5e20; /* سبز تیره برای درست */
+            background-color: #dcedc8;
+            border: 1px solid #4CAF50;
+        }
+        .feedback.incorrect {
+            color: #880e4f; /* قرمز تیره برای غلط */
+            background-color: #f8bbd0;
+            border: 1px solid #f44336;
+        }
+        .score-table {
+            margin-top: 30px;
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .score-table th, .score-table td {
+            border: 1px solid #b3e5fc; /* رنگ حاشیه جدول */
+            padding: 12px;
+            text-align: center;
+        }
+        .score-table th {
+            background-color: #81d4fa; /* رنگ سر ستون جدول */
+            color: #004d40; /* رنگ متن سر ستون */
+            font-size: 1.15em;
+        }
+        .score-table td {
+            background-color: #e1f5fe; /* رنگ سلول های جدول */
+            font-size: 1.1em;
+        }
+        .restart-button {
+            background-color: #ff8f00; /* رنگ دکمه شروع مجدد */
+            color: white;
+            border: none;
+            padding: 13px 35px;
+            margin-top: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .restart-button:hover {
+            background-color: #ef6c00;
+            transform: translateY(-2px);
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .confetti > div {
+            position: absolute;
+            background-color: #f00;
+            width: 10px;
+            height: 10px;
+            bottom: 0;
+            opacity: 0;
+            animation: confetti-animation 2s ease-out forwards;
+        }
+        @keyframes confetti-animation {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>به بازی ضرب‌المثل‌ها خوش آمدید!</h1>
+        <div id="game-area">
+            <div class="question-section">
+                <div id="question-text" class="question-text"></div>
+                <div class="options" id="options"></div>
+                <div id="feedback" class="feedback"></div>
+            </div>
+            <button id="restart-button" class="restart-button" style="display: none;">بازی مجدد</button>
+        </div>
+        <div id="results-area" style="display: none;">
+            <h2>نتایج بازی</h2>
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th>مورد</th>
+                        <th>امتیاز</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body"></tbody>
+            </table>
+            <button id="restart-button-results" class="restart-button">بازی مجدد</button>
+        </div>
+        <div class="footer">
+            طراح: سارا قربان دوست
+        </div>
+    </div>
+
+    <script>
+        // Store original questions and shuffle them once at the start
+        const originalQuestions = [
+            {
+                question: "آن را که حساب پاک است، از محاسبه چه باک است؟",
+                options: ["کسی که گناهکار است", " از حسابرسی نترسیدن", "کسی که تقلب کرده", "کسی که طلبکار است"],
+                correct: 1,
+                explanation: "یعنی کسی که به دیگران خیانتی نکرده است، با این که بخواهند به اعمال او رسیدگی کنند، مشکلی ندارد."
+            },
+            {
+                question: "اون‌ وقت که جیک‌جیک مستونت بود، یاد زمستونت نبود؟",
+                options: ["خوش بود", " آینده نگرنبودن", "از زمستان می‌ترسید", " غصه خوردن"],
+                correct: 1,
+                explanation: "یعنی آن موقع که باید خودت را برای روزهای سخت آماده می‌کردی، به بی خیالی و خوش گذرانی مشغول بودی."
+            },
+            {
+                question: "باد آورده را باد می‌بره.",
+                options: ["پول حلال", " مفت بدست آمده", "ارثیه پدر", "پول قرض گرفته"],
+                correct: 1,
+                explanation: "یعنی کاری که براش زحمت نکشیدی و چیزی به دست آوردی، احتمالاً به راحتی از دست می‌رود."
+            },
+            {
+                question: "آشپز که دوتا شد، آش یا شور می‌شه یا بی‌نمک.",
+                options: ["غذای خوشمزه", "خراب شدن کار   ", "آشپزی گروهی", "مدیریت خوب"],
+                correct: 1,
+                explanation: "وقتی قرار باشد دو نفر در کاری شریک شوند، حتماً آن کار را خراب می‌کنند (درست انجام ندادن وظیفه در کار گروهی)."
+            },
+            {
+                question: "از کوزه همان برون تراود که در اوست.",
+                options: ["کوزه نو", "ذات و رفتار هر کس", "تولیدات جدید", "ظاهر فریبنده"],
+                correct: 1,
+                explanation: "گفتار و رفتار هر کس بر اساس ذات و درونیات اوست."
+            },
+            {
+                question: "از ماست که بر ماست.",
+                options: ["غریبه‌ها", " آسیب دیدن ازنزدیکان", "خوراک روزانه", "کار اشتباه"],
+                correct: 1,
+                explanation: "در موردی گفته می‌شود که شخصی از نزدیکان خود آسیب ببیند."
+            },
+            {
+                question: "از این ستون به آن ستون فرج است.",
+                options: ["ناامیدی مطلق", "راه چاره  ", "موضوعی پیچیده", "پایان ناگوار"],
+                correct: 1,
+                explanation: "این ضرب المثل را هنگامی به کار می‌برند که فردی ناامید است و او را دلداری می‌دهند که در اندک فرصتی راه چاره پیدا می‌شود (فرج به معنای گشایش در کار و رفع مشکل)."
+            },
+            {
+                question: "آستین نو بخور پلو.",
+                options: ["قناعت", "ظاهرسازی و فریب", "غذا خوردن", "کمک به دیگران"],
+                correct: 1,
+                explanation: "در موردی گفته می‌شود که افراد نادان را در لباس کهنه تحویل نمی‌گیرند و نادانان ظاهرساز را بر صدر می‌نشانند."
+            },
+            {
+                question: "آسه برو آسه بیا که گربه شاخت نزند.",
+                options: ["بی‌احتیاطی", "   حفظ امنیت", "دعوا با گربه", "تظاهر به ترس"],
+                correct: 1,
+                explanation: "یعنی برای آن که آسیبی متوجه تو نشود، نباید جلوی چشم دیگران عرض اندام کنی."
+            },
+            {
+                question: "آش نخورده و دهن سوخته.",
+                options: ["پشیمانی", "متهم به گناه نکرده ", "خسیس بودن", "سوختن دهان با غذای داغ"],
+                correct: 1,
+                explanation: "این مثل در مورد افرادی به کار می‌رود که بدون انجام گناهی، مجازات یا سرزنش شوند."
+            },
+            {
+                question: "آب پاکی را روی دستش ریخت.",
+                options: ["کمک کردن", "ناامید کردن ", "شستن دست", "دروغ گفتن"],
+                correct: 1,
+                explanation: "یعنی ناامید کردن کسی."
+            }
+        ];
+
+        let currentQuestions = []; // This will hold the shuffled questions for the current game
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questionsAnswered = { correct: 0, incorrect: 0 };
+        let gameActive = true;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsElement = document.getElementById('options');
+        const feedbackElement = document.getElementById('feedback');
+        const restartButton = document.getElementById('restart-button');
+        const gameArea = document.getElementById('game-area');
+        const resultsArea = document.getElementById('results-area');
+        const resultsBody = document.getElementById('results-body');
+        const restartButtonResults = document.getElementById('restart-button-results');
+
+        // Fisher-Yates (Knuth) Shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#B1A2CA', '#E0BBE4', '#FF9A8B', '#FFD166'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            document.body.appendChild(confettiContainer);
+
+            const numConfetti = 70; // Number of confetti pieces
+            for (let i = 0; i < numConfetti; i++) {
+                const confettiDiv = document.createElement('div');
+                confettiDiv.style.backgroundColor = getRandomColor();
+                confettiDiv.style.left = `${Math.random() * 100}%`;
+                confettiDiv.style.animationDelay = `${Math.random() * 0.8}s`;
+                const size = Math.random() * 15 + 5;
+                confettiDiv.style.width = `${size}px`;
+                confettiDiv.style.height = `${size}px`;
+                confettiDiv.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confettiContainer.appendChild(confettiDiv);
+            }
+
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 2500); // Confetti duration
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex < currentQuestions.length) {
+                const q = currentQuestions[currentQuestionIndex];
+                questionTextElement.textContent = q.question;
+                optionsElement.innerHTML = '';
+                // Shuffle options for each question to vary position
+                const shuffledOptions = [...q.options];
+                shuffleArray(shuffledOptions);
+
+                shuffledOptions.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    // Find the original index of the selected option to compare with the correct answer index
+                    const originalIndex = q.options.indexOf(option);
+                    button.onclick = () => selectAnswer(button, originalIndex, q.correct);
+                    optionsElement.appendChild(button);
+                });
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'feedback';
+                restartButton.style.display = 'none';
+            } else {
+                endGame();
+            }
+        }
+
+        function selectAnswer(button, selectedIndex, correctAnswerIndex) {
+            if (!gameActive) return;
+
+            const buttons = optionsElement.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            let isCorrect = false;
+            if (selectedIndex === correctAnswerIndex) {
+                score += 10;
+                questionsAnswered.correct++;
+                feedbackElement.textContent = `آفرین! ${currentQuestions[currentQuestionIndex].explanation}`;
+                feedbackElement.className = 'feedback correct';
+                isCorrect = true;
+                createConfetti();
+            } else {
+                questionsAnswered.incorrect++;
+                feedbackElement.textContent = `ای وای! پاسخ صحیح: ${currentQuestions[currentQuestionIndex].options[correctAnswerIndex]}. ${currentQuestions[currentQuestionIndex].explanation}`;
+                feedbackElement.className = 'feedback incorrect';
+            }
+            gameActive = false;
+
+            // Visual feedback for answers
+            buttons.forEach((btn, index) => {
+                const originalIndex = currentQuestions[currentQuestionIndex].options.indexOf(btn.textContent);
+                if (originalIndex === correctAnswerIndex) {
+                    btn.style.backgroundColor = '#66BB6A'; // Green for correct answer
+                } else if (originalIndex === selectedIndex) {
+                    btn.style.backgroundColor = '#EF5350'; // Red for selected incorrect answer
+                }
+                btn.style.color = 'white';
+            });
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                gameActive = true;
+                showQuestion();
+            }, 3000); // Longer pause to read feedback and explanation
+        }
+
+        function endGame() {
+            gameArea.style.display = 'none';
+            resultsArea.style.display = 'block';
+            resultsBody.innerHTML = '';
+
+            const rowCorrect = document.createElement('tr');
+            rowCorrect.innerHTML = `<td>پاسخ‌های صحیح</td><td>${questionsAnswered.correct}</td>`;
+            resultsBody.appendChild(rowCorrect);
+
+            const rowIncorrect = document.createElement('tr');
+            rowIncorrect.innerHTML = `<td>پاسخ‌های غلط</td><td>${questionsAnswered.incorrect}</td>`;
+            resultsBody.appendChild(rowIncorrect);
+
+            const rowTotalScore = document.createElement('tr');
+            rowTotalScore.innerHTML = `<td>امتیاز نهایی</td><td>${score}</td>`;
+            resultsBody.appendChild(rowTotalScore);
+        }
+
+        function restartGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            questionsAnswered = { correct: 0, incorrect: 0 };
+            gameActive = true;
+            // Shuffle questions for a new game
+            currentQuestions = [...originalQuestions]; // Reset to original
+            shuffleArray(currentQuestions); // Shuffle them
+            resultsArea.style.display = 'none';
+            gameArea.style.display = 'block';
+            showQuestion();
+        }
+
+        restartButton.onclick = restartGame;
+        restartButtonResults.onclick = restartGame;
+
+        // Initialize game
+        currentQuestions = [...originalQuestions]; // Make a copy to shuffle
+        shuffleArray(currentQuestions); // Shuffle for the first game
+        showQuestion();
+    </script>
+</body>
+</html>

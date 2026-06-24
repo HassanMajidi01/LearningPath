@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نینجای املای دوم دبستان</title>
+    
+    <style>
+        /* --- CSS VARIABLES & THEME --- */
+        :root {
+            --bg-dark: #121214;
+            --primary: #f59e0b;
+            --primary-hover: #d97706;
+            --success: #10b981;
+            --success-hover: #059669;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --surface: #1c1917;
+            --border-color: rgba(245, 158, 11, 0.2);
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, Tahoma, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* --- GAME CONTAINER & DOJO EFFECT --- */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #2d1f10 0%, #160f08 100%);
+            overflow: hidden;
+        }
+
+        #game-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        /* --- FLASH OVERLAY --- */
+        #flash-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: var(--danger);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+            transition: opacity 0.15s ease-out;
+        }
+
+        /* --- HUD LAYOUT --- */
+        #hud {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .hud-card {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 10px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            pointer-events: auto;
+        }
+
+        .score-title {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .score-val {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .highscore-val {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        #combo-alert {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            transform: scale(0);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lives-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .heart-icon {
+            width: 28px;
+            height: 28px;
+            fill: var(--danger);
+            filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
+            transition: transform 0.2s ease;
+        }
+
+        .heart-icon.empty {
+            fill: #4b5563;
+            filter: none;
+        }
+
+        /* --- CONTROL BUTTONS --- */
+        .ctrl-btn {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            transition: all 0.2s;
+        }
+
+        .ctrl-btn:active {
+            transform: scale(0.92);
+        }
+
+        #pause-btn {
+            top: 90px;
+            right: 16px;
+        }
+
+        #sound-btn {
+            top: 90px;
+            left: 16px;
+        }
+
+        .btn-svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* --- SCREEN OVERLAYS --- */
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dialog-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 32px 24px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .decorator-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .decorator-svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--primary);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .rules-text {
+            color: #d1d5db;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .rules-text span.success-tip {
+            color: #34d399;
+            font-weight: bold;
+        }
+
+        .rules-text span.danger-tip {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        /* --- DIFFICULTY CONTROLLER --- */
+        .difficulty-wrapper {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .difficulty-label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: right;
+        }
+
+        .difficulty-options {
+            display: grid;
+            grid-template-cols: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .diff-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .diff-btn.active {
+            background-color: var(--primary);
+            color: #1c1917;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+		
+		  /* --- NAME INPUT STYLES --- */
+        .name-wrapper {
+            width: 100%;
+            margin-bottom: 24px;
+            text-align: right;
+        }
+
+        .name-label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .name-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: var(--text-light);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            text-align: right;
+        }
+
+        .name-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+        }
+        /* --- ACTION BUTTONS --- */
+        .btn-action {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: linear-gradient(to left, var(--primary), #fbbf24);
+            color: #1c1917;
+            font-weight: 900;
+            font-size: 17px;
+            padding: 14px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.2);
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-action:active {
+            transform: translateY(1px);
+        }
+
+        .btn-action-secondary {
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-action-secondary:active {
+            transform: scale(0.98);
+        }
+
+        /* --- GAME OVER STATS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-cols: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-val {
+            font-size: 26px;
+            font-weight: 900;
+        }
+
+        .stat-val.primary {
+            color: var(--primary);
+        }
+
+        .stat-val.success {
+            color: var(--success);
+        }
+
+        /* --- LEARNING REVIEW SECTION --- */
+        #learning-section {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: right;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .learning-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .learning-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .learning-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .learning-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .item-wrong {
+            color: var(--danger);
+            text-decoration: line-through;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .item-arrow {
+            display: inline-flex;
+            width: 14px;
+            height: 14px;
+            fill: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .item-right {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Custom Scrollbar for review section */
+        #learning-section::-webkit-scrollbar {
+            width: 4px;
+        }
+        #learning-section::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #learning-section::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- Canvas for drawing game objects -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Red Flash Screen for Mistakes -->
+        <div id="flash-overlay"></div>
+
+        <!-- Dynamic Score & Lives HUD -->
+        <div id="hud">
+            <!-- Left: Score & Highscore -->
+            <div class="hud-card">
+                <span class="score-title">امتیاز</span>
+                <span id="score-val" class="score-val">0</span>
+                <span class="highscore-val">رکورد: <span id="highscore-val">0</span></span>
+            </div>
+
+            <!-- Middle: Dynamic Message alerts -->
+            <div id="combo-alert">
+                عالی! +۱۰
+            </div>
+
+            <!-- Right: Hearts (Lives) -->
+            <div class="hud-card" style="padding: 12px 16px;">
+                <div id="lives-container" class="lives-container">
+                    <!-- Dynamic Hearts -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Trigger Button -->
+        <button id="pause-btn" class="ctrl-btn" title="توقف">
+            <!-- Inline SVG Pause Icon -->
+            <svg class="btn-svg" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+        </button>
+
+        <!-- SOUND TOGGLE BUTTON -->
+        <button id="sound-btn" class="ctrl-btn" title="صدا">
+            <!-- Inline SVG Sound High Icon -->
+            <svg class="btn-svg" id="sound-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+        </button>
+
+        <!-- START SCREEN OVERLAY -->
+        <div id="start-screen" class="overlay">
+            <div class="dialog-card">
+                <!-- Sliced decoration SVG -->
+                <div class="decorator-circle">
+                    <svg class="decorator-svg" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.25z"/>
+                    </svg>
+                </div>
+                
+                <h1>نینجای املای دوم دبستان</h1>
+                <p class="rules-text">
+                    به دنیای کلمات خوش آمدید! میوه‌های مختلف به هوا پرتاب خواهند شد. روی هر میوه یک کلمه نوشته شده است. <br>
+                    <span class="success-tip">اگر املای کلمه درست بود آن را با انگشت یا ماوس سریع برش بزنید!</span><br>
+                    <span class="danger-tip">مواظب باشید! اگر کلمه‌ای با املای غلط را برش بزنید، یک جان از دست می‌دهید!</span>
+                </p>
+
+                <!-- Difficulty Selector -->
+                <div class="difficulty-wrapper">
+                    <span class="difficulty-label">انتخاب سطح دشواری بازی:</span>
+                    <div class="difficulty-options">
+                        <button onclick="setDifficulty('easy')" id="diff-easy" class="diff-btn">آسان</button>
+                        <button onclick="setDifficulty('medium')" id="diff-medium" class="diff-btn active">متوسط</button>
+                        <button onclick="setDifficulty('hard')" id="diff-hard" class="diff-btn">سخت</button>
+                    </div>
+                </div>
+				<div class="name-wrapper">
+                    <label for="player-name-input" class="name-label">نام شما:</label>
+                    <input type="text" id="player-name" class="name-input" placeholder="نام خود را وارد کنید..." maxlength="20" autocomplete="off">
+                </div>
+                <button id="play-btn" class="btn-action">
+                    <!-- Play icon SVG -->
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    شروع بازی نینجا
+                </button>
+            </div>
+        </div>
+
+        <!-- PAUSE SCREEN OVERLAY -->
+        <div id="pause-screen" class="overlay hidden">
+            <div class="dialog-card" style="max-width: 320px;">
+                <h2>بازی متوقف شد</h2>
+                <button id="resume-btn" class="btn-action" style="background: linear-gradient(to left, var(--success), #34d399); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);">
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    ادامه بازی
+                </button>
+                <button id="restart-pause-btn" class="btn-action-secondary">
+                    <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    شروع مجدد
+                </button>
+            </div>
+        </div>
+
+        <!-- GAME OVER SCREEN OVERLAY -->
+        <div id="gameover-screen" class="overlay hidden">
+            <div class="dialog-card" style="max-width: 440px;">
+                <div class="decorator-circle" style="background: rgba(239, 110, 110, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                    <!-- Skull icon SVG -->
+                    <svg class="decorator-svg" style="fill: var(--danger);" viewBox="0 0 24 24">
+                        <path d="M12 2C9 2 7 4 7 7c0 3 2.5 5 2.5 7h5c0-2 2.5-4 2.5-7 0-3-2-5-5-5zm-2.5 14h5a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1z"/>
+                    </svg>
+                </div>
+                
+                <h2 style="color: var(--danger); margin-bottom: 4px;">پایان بازی</h2>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 24px;">شما ۳ جان خود را از دست دادید.</p>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">امتیاز نهایی</span>
+                        <span id="final-score" class="stat-val primary">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">بهترین رکورد</span>
+                        <span id="final-highscore" class="stat-val success">0</span>
+                    </div>
+                </div>
+
+                <!-- Learning Section: Wrongly cut words -->
+                <div id="learning-section" class="hidden">
+                    <div class="learning-title">
+                        <!-- Graduation cap SVG -->
+                        <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24">
+                            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                        </svg>
+                        مرور اشتباهات املایی امروز:
+                    </div>
+                    <ul id="wrong-words-list" class="learning-list">
+                        <!-- Dynamic error items -->
+                    </ul>
+                </div>
+
+                <button id="restart-btn" class="btn-action" style="background: linear-gradient(to left, var(--danger), #f87171); box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2);">
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    تلاش دوباره
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. WORD DATABASE (Correct vs Incorrect spelling) ---
+        const wordPairs = [
+            { correct: "تپّه", incorrect: "طپّه" },
+            { correct: "روانه", incorrect: "روانهـ" },
+            { correct: "نقل", incorrect: "نغل" },
+            { correct: "صبحانه", incorrect: "سبحانه" },
+            { correct: "صحرا", incorrect: "سهرا" },
+            { correct: "سلطان", incorrect: "سلتان" },
+            { correct: "قورباغه", incorrect: "غورباقه" },
+            { correct: "کنجکاو", incorrect: "کنجغاو" },
+            { correct: "فصل", incorrect: "فسل" },
+            { correct: "شاهنامه", incorrect: "شاهنامح" },
+            { correct: "رهگذر", incorrect: "رهگزر" },
+            { correct: "محبّت", incorrect: "مهبّت" },
+            { correct: "مکّه", incorrect: "مکهـ" },
+            { correct: "ارّه", incorrect: "ارهـ" },
+            { correct: "سرآغاز", incorrect: "سرآغاذ" },
+            { correct: "مونس", incorrect: "مونص" },
+            { correct: "شروع", incorrect: "شروئ" },
+            { correct: "نشاط", incorrect: "نساط" },
+            { correct: "سپاسگزار", incorrect: "سپاسگذار" },
+            { correct: "موفّق", incorrect: "موفغ" },
+            { correct: "تشکّر", incorrect: "تشکر" },
+            { correct: "نظم", incorrect: "نزم" },
+            { correct: "پائیز", incorrect: "پاییز" },
+            { correct: "احوالپرسی", incorrect: "اهوالپرسی" },
+            { correct: "هنرمند", incorrect: "هنرمنط" },
+            { correct: "غافل", incorrect: "غافیل" },
+            { correct: "بنّا", incorrect: "بنا" },
+            { correct: "دقّت", incorrect: "دغت" },
+            { correct: "قرآن", incorrect: "غران" },
+            { correct: "نقّاشی", incorrect: "نغاشی" },
+            { correct: "عبّاس", incorrect: "عبّاص" },
+            { correct: "لبخند", incorrect: "لبخنط" },
+            { correct: "محمّد", incorrect: "مهمد" },
+            { correct: "پذیرایی", incorrect: "پزیرایی" },
+            { correct: "بقیّه", incorrect: "بقیهـ" },
+            { correct: "اوّل", incorrect: "اول" },
+            { correct: "معلّم", incorrect: "معلم" },
+            { correct: "ضرب المثل", incorrect: "زرب المثل" },
+            { correct: "آهسته", incorrect: "آهستح" },
+            { correct: "مزرعه", incorrect: "مذرعه" },
+            { correct: "تصمیم", incorrect: "تسمیم" },
+            { correct: "چغندر", incorrect: "چغندتر" },
+            { correct: "تعجّب", incorrect: "تعجب" },
+            { correct: "قصّه", incorrect: "غصّه" },
+            { correct: "مدّتی", incorrect: "مدتی" },
+            { correct: "خطرناک", incorrect: "خترناک" },
+            { correct: "میکروب", incorrect: "میکروب" },
+            { correct: "این طوری", incorrect: "این توری" },
+            { correct: "بی حوصله", incorrect: "بی هوسله" },
+            { correct: "استراحت", incorrect: "استراهت" },
+            { correct: "کثیف", incorrect: "کسیف" },
+            { correct: "تندرست", incorrect: "تندرسط" },
+            { correct: "پرتاب", incorrect: "پرتاپ" },
+            { correct: "صدا", incorrect: "سدا" },
+            { correct: "اتّفاق", incorrect: "اطفاق" },
+            { correct: "منتظر", incorrect: "منتذر" },
+            { correct: "خطر", incorrect: "ختر" },
+            { correct: "شغال", incorrect: "شوغال" },
+            { correct: "لذّت", incorrect: "لزّت" },
+            { correct: "مهم", incorrect: "مهیم" },
+            { correct: "مواظبت", incorrect: "مواذبت" },
+            { correct: "دقیقه", incorrect: "دغیغه" },
+            { correct: "اهمّیّت", incorrect: "اهمیت" },
+            { correct: "حنایی", incorrect: "هنایی" },
+            { correct: "طلا", incorrect: "تلا" },
+            { correct: "غصّه", incorrect: "غسه" },
+            { correct: "تعریف", incorrect: "تعریف" },
+            { correct: "نصیحت", incorrect: "نسیحت" },
+            { correct: "نگهداری", incorrect: "نگه داری" },
+            { correct: "مزد", incorrect: "مذد" },
+            { correct: "سیل", incorrect: "صیل" },
+            { correct: "قطره", incorrect: "غتره" },
+            { correct: "وانگهی", incorrect: "وانگهی" },
+            { correct: "گذشته", incorrect: "گزشته" },
+            { correct: "طوطی", incorrect: "توتی" },
+            { correct: "طول", incorrect: "تول" },
+            { correct: "برنا", incorrect: "برناء" },
+            { correct: "مطالعه", incorrect: "متالعه" },
+            { correct: "خشمگین", incorrect: "خشمغین" },
+            { correct: "صبر", incorrect: "سبر" },
+            { correct: "خوش اخلاق", incorrect: "خوش اخلاغ" },
+            { correct: "باعث", incorrect: "باعس" },
+            { correct: "سحرخیز", incorrect: "سحرخیز" },
+            { correct: "پاکیزه", incorrect: "پاکیذه" },
+            { correct: "رفتگر", incorrect: "روفتگر" },
+            { correct: "منظّم", incorrect: "منزم" },
+            { correct: "مرتّب", incorrect: "مرتب" },
+            { correct: "مامور", incorrect: "مأمور" },
+            { correct: "هورا", incorrect: "هورا" },
+            { correct: "خوش مزه", incorrect: "خوش مذه" },
+            { correct: "صحیح", incorrect: "سحیح" },
+            { correct: "دعا", incorrect: "دوا" },
+            { correct: "حاضر", incorrect: "حازر" },
+            { correct: "هیزم", incorrect: "حیزم" },
+            { correct: "پذیرفت", incorrect: "پزیرفت" },
+            { correct: "پیشنهاد", incorrect: "پیش نهاد" },
+            { correct: "چلچراغ", incorrect: "چلچراغ" },
+            { correct: "مغرب", incorrect: "مغرب" },
+            { correct: "وضو", incorrect: "وزو" },
+            { correct: "حرم", incorrect: "هرم" },
+            { correct: "حوصله", incorrect: "هوسله" },
+            { correct: "تکّه", incorrect: "تکه" },
+            { correct: "طاقچه", incorrect: "تاقچه" },
+            { correct: "پلّه", incorrect: "پله" },
+            { correct: "بغل", incorrect: "بغل" },
+            { correct: "غلتید", incorrect: "غلطید" },
+            { correct: "سفالگر", incorrect: "صفالگر" },
+            { correct: "ظرف", incorrect: "زرف" },
+            { correct: "رضا", incorrect: "رذا" },
+            { correct: "توس", incorrect: "طوس" },
+            { correct: "عظیم", incorrect: "ازیم" },
+            { correct: "پهلوان", incorrect: "پهلوان" },
+            { correct: "فردوس", incorrect: "فردوس" },
+            { correct: "شعر", incorrect: "شر" },
+            { correct: "اتفاقاً", incorrect: "اتفاقا" },
+            { correct: "جست و خیز", incorrect: "جست و خیز" },
+            { correct: "خار", incorrect: "خار" },
+            { correct: "کلاغ", inlineData: null, incorrect: "کلاغ" },
+            { correct: "نوک", incorrect: "نوک" },
+            { correct: "زیارتگاه", incorrect: "زیارت گاه" },
+            { correct: "حفظ", incorrect: "هفز" },
+            { correct: "قلّه", incorrect: "قله" },
+            { correct: "ارگ", incorrect: "ارگ" },
+            { correct: "آرامگاه", incorrect: "آرام گاه" },
+            { correct: "برج", incorrect: "برج" },
+            { correct: "ماسوله", incorrect: "ماصوله" },
+            { correct: "بیستون", incorrect: "بیستون" },
+            { correct: "عزیز", incorrect: "عذیذ" },
+            { correct: "نهر", incorrect: "نهر" },
+            { correct: "الله اکبر", incorrect: "اله اکبر" },
+            { correct: "تابیدن", incorrect: "تابیدن" },
+            { correct: "حیاط", incorrect: "حیات" },
+            { correct: "حوض", incorrect: "هوز" },
+            { correct: "صاف", incorrect: "ساف" },
+            { correct: "طبیعت", incorrect: "تبیعت" },
+            { correct: "سماق", incorrect: "سماغ" },
+            { correct: "عیدی", incorrect: "عیدی" },
+            { correct: "زیارت", incorrect: "زیارت" },
+            { correct: "درگذشتگان", incorrect: "درگزشتگان" },
+            { correct: "صاحب", incorrect: "ساحب" },
+            { correct: "کهنه", incorrect: "کهنه" },
+            { correct: "ترتیب", incorrect: "ترتیب" },
+            { correct: "موقع", incorrect: "موقعه" },
+            { correct: "مشورت", incorrect: "مشورت" },
+            { correct: "ویژه", incorrect: "ویژه" },
+            { correct: "جماعت", incorrect: "جماعت" },
+            { correct: "مراقب", incorrect: "مراقب" },
+            { correct: "عید", incorrect: "عید" }
+        ];
+
+        // --- 2. GAME STATE MANAGEMENT ---
+        let canvas = document.getElementById('gameCanvas');
+        let ctx = canvas.getContext('2d');
+        let scale = 1;
+
+        let score = 0;
+        let highscore = localStorage.getItem('ninja_spelling_highscore') || 0;
+        let lives = 3;
+        let gameActive = false;
+        let isPaused = false;
+        let soundEnabled = true;
+        let difficulty = 'medium';
+
+        let fruits = [];
+        let particles = [];
+        let splatters = [];
+        let sliceTrail = [];
+        let sliceActive = false;
+
+        let spawnTimer = null;
+        let spawnInterval = 1800; 
+        let speedFactor = 1.0;
+        
+        let wrongSlicesList = []; 
+
+        const FRUIT_STYLES = [
+            { name: 'Watermelon', outer: '#27ae60', inner: '#e74c3c', size: 55 },
+            { name: 'Apple', outer: '#c0392b', inner: '#f1c40f', size: 45 },
+            { name: 'Orange', outer: '#d35400', inner: '#f39c12', size: 48 },
+            { name: 'Coconut', outer: '#5c4033', inner: '#ffffff', size: 50 },
+            { name: 'Banana', outer: '#f1c40f', inner: '#fcf3cf', size: 45 }
+        ];
+
+        // --- LOCAL AUDIO SYNTHESIS ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSynthSound(type) {
+            if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'whoosh') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'splat') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1100, audioCtx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } else if (type === 'fail') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.45);
+                
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(155, audioCtx.currentTime);
+                osc2.frequency.linearRampToValueAtTime(45, audioCtx.currentTime + 0.45);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+                gain2.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain2.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+
+                osc.start();
+                osc2.start();
+                osc.stop(audioCtx.currentTime + 0.45);
+                osc2.stop(audioCtx.currentTime + 0.45);
+            }
+        }
+
+        // --- 3. RESPONSIVE CANVAS SETUP ---
+        function resizeCanvas() {
+            const container = document.getElementById('game-container');
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = container.clientWidth * dpr;
+            canvas.height = container.clientHeight * dpr;
+            scale = container.clientWidth / 800; 
+            if (scale < 0.5) scale = 0.5; 
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        document.getElementById('highscore-val').innerText = highscore;
+
+        function setDifficulty(level) {
+            difficulty = level;
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`diff-${level}`).classList.add('active');
+
+            if (level === 'easy') {
+                spawnInterval = 2200;
+                speedFactor = 0.8;
+            } else if (level === 'medium') {
+                spawnInterval = 1800;
+                speedFactor = 1.0;
+            } else if (level === 'hard') {
+                spawnInterval = 1300;
+                speedFactor = 1.25;
+            }
+        }
+
+        // --- 4. GAME OBJECTS ---
+        class Fruit {
+            constructor() {
+                const isCorrect = Math.random() < 0.65; 
+                const pair = wordPairs[Math.floor(Math.random() * wordPairs.length)];
+
+                this.text = isCorrect ? pair.correct : pair.incorrect;
+                this.isCorrectSpelling = isCorrect;
+                this.correctVersion = pair.correct;
+                this.incorrectVersion = pair.incorrect;
+
+                this.style = FRUIT_STYLES[Math.floor(Math.random() * FRUIT_STYLES.length)];
+                this.radius = this.style.size * scale;
+
+                const w = canvas.width / (window.devicePixelRatio || 1);
+                const h = canvas.height / (window.devicePixelRatio || 1);
+                
+                this.x = w * 0.15 + Math.random() * (w * 0.7);
+                this.y = h + this.radius;
+
+                this.gravity = 0.15 * scale * speedFactor;
+                this.vx = (Math.random() - 0.5) * 4 * scale;
+                
+                const targetY = h * 0.15 + Math.random() * (h * 0.35);
+                const dy = this.y - targetY;
+                this.vy = -Math.sqrt(2 * this.gravity * dy);
+
+                this.angle = Math.random() * Math.PI * 2;
+                this.angleVel = (Math.random() - 0.5) * 0.04;
+
+                this.sliced = false;
+                this.halves = [];
+            }
+
+            update() {
+                if (!this.sliced) {
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.angle += this.angleVel;
+                } else {
+                    this.halves.forEach(half => {
+                        half.vy += this.gravity * 1.2;
+                        half.x += half.vx;
+                        half.y += half.vy;
+                        half.angle += half.angleVel;
+                    });
+                }
+            }
+
+            draw() {
+                if (!this.sliced) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle);
+
+                    let grad = ctx.createRadialGradient(0, 0, this.radius * 0.1, 0, 0, this.radius);
+                    grad.addColorStop(0, this.style.inner);
+                    grad.addColorStop(0.85, this.style.inner);
+                    grad.addColorStop(1, this.style.outer);
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                    ctx.shadowBlur = 12;
+                    ctx.fill();
+
+                    if (this.style.name === 'Watermelon' || this.style.name === 'Orange') {
+                        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.radius * 0.8, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    ctx.restore();
+
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle * 0.15);
+
+                    ctx.font = `bold ${Math.max(16, 22 * scale)}px system-ui, -apple-system, sans-serif, Tahoma`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    ctx.lineWidth = 5;
+                    ctx.strokeStyle = '#000000';
+                    ctx.strokeText(this.text, 0, 0);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(this.text, 0, 0);
+
+                    ctx.restore();
+                } else {
+                    this.halves.forEach(half => {
+                        ctx.save();
+                        ctx.translate(half.x, half.y);
+                        ctx.rotate(half.angle);
+
+                        let grad = ctx.createRadialGradient(0, 0, this.radius * 0.1, 0, 0, this.radius);
+                        grad.addColorStop(0, this.style.inner);
+                        grad.addColorStop(0.85, this.style.inner);
+                        grad.addColorStop(1, this.style.outer);
+
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.radius, half.startAngle, half.endAngle);
+                        ctx.lineTo(0, 0);
+                        ctx.closePath();
+                        
+                        ctx.fillStyle = grad;
+                        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                        ctx.shadowBlur = 8;
+                        ctx.fill();
+
+                        ctx.restore();
+                    });
+                }
+            }
+
+            slice(sliceAngle) {
+                if (this.sliced) return;
+                this.sliced = true;
+
+                const pushSpeed = 4 * scale;
+                const half1 = {
+                    x: this.x,
+                    y: this.y,
+                    vx: this.vx + Math.cos(sliceAngle + Math.PI/2) * pushSpeed,
+                    vy: this.vy + Math.sin(sliceAngle + Math.PI/2) * pushSpeed,
+                    angle: this.angle,
+                    angleVel: this.angleVel - 0.05,
+                    startAngle: sliceAngle,
+                    endAngle: sliceAngle + Math.PI
+                };
+
+                const half2 = {
+                    x: this.x,
+                    y: this.y,
+                    vx: this.vx + Math.cos(sliceAngle - Math.PI/2) * pushSpeed,
+                    vy: this.vy + Math.sin(sliceAngle - Math.PI/2) * pushSpeed,
+                    angle: this.angle,
+                    angleVel: this.angleVel + 0.05,
+                    startAngle: sliceAngle + Math.PI,
+                    endAngle: sliceAngle + Math.PI * 2
+                };
+
+                this.halves = [half1, half2];
+
+                const particleCount = 15 + Math.floor(Math.random() * 10);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(this.x, this.y, this.style.inner));
+                }
+
+                if (Math.random() < 0.6) {
+                    splatters.push(new Splatter(this.x, this.y, this.style.inner));
+                }
+            }
+
+            isOutOfBounds() {
+                const h = canvas.height / (window.devicePixelRatio || 1);
+                if (!this.sliced) {
+                    return this.y > h + this.radius + 20 && this.vy > 0;
+                } else {
+                    return this.halves.every(half => half.y > h + this.radius + 20);
+                }
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = (2 + Math.random() * 5) * scale;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const speed = (2 + Math.random() * 6) * scale;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.gravity = 0.15 * scale;
+                this.alpha = 1.0;
+                this.decay = 0.015 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class Splatter {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = (20 + Math.random() * 25) * scale;
+                this.alpha = 0.6;
+                this.decay = 0.0008; 
+                this.subDrops = [];
+
+                const childCount = 3 + Math.floor(Math.random() * 4);
+                for (let i = 0; i < childCount; i++) {
+                    const ang = Math.random() * Math.PI * 2;
+                    const dist = (10 + Math.random() * 25) * scale;
+                    this.subDrops.push({
+                        dx: Math.cos(ang) * dist,
+                        dy: Math.sin(ang) * dist,
+                        radius: (4 + Math.random() * 8) * scale
+                    });
+                }
+            }
+
+            update() {
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                this.subDrops.forEach(drop => {
+                    ctx.beginPath();
+                    ctx.arc(this.x + drop.dx, this.y + drop.dy, drop.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.restore();
+            }
+        }
+
+        class FloatingText {
+            constructor(x, y, text, color) {
+                this.x = x;
+                this.y = y;
+                this.text = text;
+                this.color = color;
+                this.vy = -1.5 * scale;
+                this.alpha = 1.0;
+                this.decay = 0.02;
+            }
+
+            update() {
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.font = `bold ${Math.max(14, 18 * scale)}px system-ui, -apple-system, sans-serif, Tahoma`;
+                ctx.textAlign = 'center';
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#000000';
+                ctx.strokeText(this.text, this.x, this.y);
+                ctx.fillStyle = this.color;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.restore();
+            }
+        }
+        let floatingTexts = [];
+
+        // --- 5. TOUCH & MOUSE SWIPE MANAGEMENT ---
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handlePointerDown(e) {
+            if (!gameActive || isPaused) return;
+            sliceActive = true;
+            const pos = getMousePos(e);
+            sliceTrail = [{ x: pos.x, y: pos.y, time: Date.now() }];
+            playSynthSound('whoosh');
+        }
+
+        function handlePointerMove(e) {
+            if (!sliceActive || !gameActive || isPaused) return;
+            const pos = getMousePos(e);
+            const now = Date.now();
+            
+            sliceTrail.push({ x: pos.x, y: pos.y, time: now });
+
+            if (sliceTrail.length > 15) {
+                sliceTrail.shift();
+            }
+
+            checkCollisions();
+        }
+
+        function handlePointerUp() {
+            sliceActive = false;
+        }
+
+        canvas.addEventListener('mousedown', handlePointerDown);
+        canvas.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handlePointerDown(e);
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handlePointerMove(e);
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            handlePointerUp();
+        }, { passive: false });
+
+
+        // --- 6. COLLISION & SWIPE INTERSECTION LOGIC ---
+        function checkCollisions() {
+            if (sliceTrail.length < 2) return;
+
+            const p1 = sliceTrail[sliceTrail.length - 2];
+            const p2 = sliceTrail[sliceTrail.length - 1];
+
+            fruits.forEach(fruit => {
+                if (fruit.sliced) return;
+
+                if (checkLineCircleIntersection(p1, p2, fruit, fruit.radius)) {
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const sliceAngle = Math.atan2(dy, dx);
+
+                    fruit.slice(sliceAngle);
+                    handleFruitCut(fruit);
+                }
+            });
+        }
+
+        function checkLineCircleIntersection(p1, p2, circle, r) {
+            const x1 = p1.x;
+            const y1 = p1.y;
+            const x2 = p2.x;
+            const y2 = p2.y;
+            const cx = circle.x;
+            const cy = circle.y;
+
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const lenSq = dx * dx + dy * dy;
+
+            if (lenSq === 0) return false;
+
+            let t = ((cx - x1) * dx + (cy - y1) * dy) / lenSq;
+            t = Math.max(0, Math.min(1, t)); 
+
+            const closestX = x1 + t * dx;
+            const closestY = y1 + t * dy;
+
+            const distSq = (cx - closestX) * (cx - closestX) + (cy - closestY) * (cy - closestY);
+            return distSq < r * r;
+        }
+
+        // --- 7. FRUIT INTERACTION RESOLUTION ---
+        function handleFruitCut(fruit) {
+            if (fruit.isCorrectSpelling) {
+                score += 10;
+                document.getElementById('score-val').innerText = score;
+                playSynthSound('splat');
+
+                floatingTexts.push(new FloatingText(fruit.x, fruit.y - 15, "آفرین! ۱۰+", "#34d399"));
+
+                const banner = document.getElementById('combo-alert');
+                banner.innerText = "درست بود! ۱۰+";
+                banner.style.color = "#34d399";
+                banner.style.transform = "scale(1.2)";
+                setTimeout(() => {
+                    banner.style.transform = "scale(0)";
+                }, 800);
+
+            } else {
+                lives--;
+                updateLivesUI();
+                playSynthSound('fail');
+
+                wrongSlicesList.push({
+                    wrong: fruit.incorrectVersion,
+                    right: fruit.correctVersion
+                });
+
+                const overlay = document.getElementById('flash-overlay');
+                overlay.style.opacity = '0.7';
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                }, 200);
+
+                floatingTexts.push(new FloatingText(fruit.x, fruit.y - 15, "غلط املایی! ۱-", "#ef4444"));
+
+                const banner = document.getElementById('combo-alert');
+                banner.innerText = `املای درست: ${fruit.correctVersion}`;
+                banner.style.color = "#ef4444";
+                banner.style.transform = "scale(1.1)";
+                setTimeout(() => {
+                    banner.style.transform = "scale(0)";
+                }, 1500);
+
+                if (lives <= 0) {
+                    endGame();
+                }
+            }
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('lives-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                if (i < lives) {
+                    container.innerHTML += `
+                        <svg class="heart-icon" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>`;
+                } else {
+                    container.innerHTML += `
+                        <svg class="heart-icon empty" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>`;
+                }
+            }
+        }
+
+        // --- 8. SPAWNING ENGINE & GAME LOOPS ---
+        function spawnWave() {
+            if (!gameActive || isPaused) return;
+
+            const baseCount = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 1 : 2;
+            const extraCount = Math.floor(score / 150); 
+            const waveSize = Math.min(4, baseCount + extraCount);
+
+            for (let i = 0; i < waveSize; i++) {
+                setTimeout(() => {
+                    if (gameActive && !isPaused) {
+                        fruits.push(new Fruit());
+                    }
+                }, i * 300);
+            }
+
+            const nextInterval = Math.max(900, spawnInterval - (score * 1.5));
+            spawnTimer = setTimeout(spawnWave, nextInterval);
+        }
+
+        function drawFrame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            splatters = splatters.filter(splat => {
+                splat.update();
+                splat.draw();
+                return splat.alpha > 0;
+            });
+
+            fruits = fruits.filter(fruit => {
+                fruit.update();
+                fruit.draw();
+                return !fruit.isOutOfBounds();
+            });
+
+            particles = particles.filter(part => {
+                part.update();
+                part.draw();
+                return part.alpha > 0;
+            });
+
+            floatingTexts = floatingTexts.filter(ft => {
+                ft.update();
+                ft.draw();
+                return ft.alpha > 0;
+            });
+
+            drawSliceTrail();
+
+            if (gameActive && !isPaused) {
+                requestAnimationFrame(drawFrame);
+            }
+        }
+
+        function drawSliceTrail() {
+            if (sliceTrail.length < 2) return;
+
+            const now = Date.now();
+            ctx.save();
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            ctx.shadowBlur = 10;
+
+            for (let i = 1; i < sliceTrail.length; i++) {
+                const age = now - sliceTrail[i].time;
+                if (age > 180) continue; 
+
+                const alpha = Math.max(0, 1 - age / 180);
+                const width = Math.max(1, (10 - (sliceTrail.length - i) * 0.6) * scale);
+
+                ctx.beginPath();
+                ctx.moveTo(sliceTrail[i-1].x, sliceTrail[i-1].y);
+                ctx.lineTo(sliceTrail[i].x, sliceTrail[i].y);
+                ctx.strokeStyle = `rgba(255, 251, 235, ${alpha})`;
+                ctx.lineWidth = width;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // --- 9. START, PAUSE & OVERLAY TRIGGERS ---
+        document.getElementById('play-btn').addEventListener('click', startGame);
+        document.getElementById('pause-btn').addEventListener('click', togglePause);
+        document.getElementById('resume-btn').addEventListener('click', togglePause);
+        document.getElementById('restart-btn').addEventListener('click', startGame);
+        document.getElementById('restart-pause-btn').addEventListener('click', () => {
+            togglePause();
+            startGame();
+        });
+
+        document.getElementById('sound-btn').addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (soundEnabled) {
+                // Sound enabled SVG path
+                icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+            } else {
+                // Sound disabled SVG path
+                icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            }
+        });
+
+        function startGame() {
+            score = 0;
+            lives = 3;
+            fruits = [];
+            particles = [];
+            splatters = [];
+            sliceTrail = [];
+            wrongSlicesList = [];
+            isPaused = false;
+            gameActive = true;
+
+            document.getElementById('score-val').innerText = '0';
+            updateLivesUI();
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('pause-screen').classList.add('hidden');
+            document.getElementById('gameover-screen').classList.add('hidden');
+
+            clearTimeout(spawnTimer);
+            spawnWave();
+            requestAnimationFrame(drawFrame);
+        }
+
+        function togglePause() {
+            if (!gameActive) return;
+
+            isPaused = !isPaused;
+            const pauseOverlay = document.getElementById('pause-screen');
+
+            if (isPaused) {
+                pauseOverlay.classList.remove('hidden');
+                clearTimeout(spawnTimer);
+            } else {
+                pauseOverlay.classList.add('hidden');
+                spawnWave();
+                requestAnimationFrame(drawFrame);
+            }
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearTimeout(spawnTimer);
+			saveGameData();
+
+            if (score > highscore) {
+                highscore = score;
+                localStorage.setItem('ninja_spelling_highscore', highscore);
+                document.getElementById('highscore-val').innerText = highscore;
+            }
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-highscore').innerText = highscore;
+
+            const learningSection = document.getElementById('learning-section');
+            const wrongList = document.getElementById('wrong-words-list');
+            wrongList.innerHTML = '';
+
+            if (wrongSlicesList.length > 0) {
+                learningSection.classList.remove('hidden');
+                
+                const uniqueErrors = Array.from(new Set(wrongSlicesList.map(a => JSON.stringify(a)))).map(a => JSON.parse(a));
+
+                uniqueErrors.forEach(err => {
+                    wrongList.innerHTML += `
+                        <li class="learning-item">
+                            <span class="item-wrong">غلط: ${err.wrong}</span>
+                            <svg class="item-arrow" viewBox="0 0 24 24">
+                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                            </svg>
+                            <span class="item-right">صحیح: ${err.right}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                learningSection.classList.add('hidden');
+            }
+
+            document.getElementById('gameover-screen').classList.remove('hidden');
+        }
+
+		const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydpjekDRtQH71g2HAaq1l0mJGTABY86-VBzAUYMNFAyS5olDgec8FZB4dB8hzRC3n3/exec";
+
+function saveGameData() {
+
+    const playerName =
+        document.getElementById("player-name").value || "ناشناس";
+
+    const data = {
+        playerName: playerName,
+        score: score,
+        mistakeCount: wrongSlicesList.length,
+        wrongWords: wrongSlicesList.map(item => item.wrong),
+        difficulty: difficulty
+    };
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(data)
+    })
+    .catch(error => console.error(error));
+}
+    </script>
+</body>
+</html>

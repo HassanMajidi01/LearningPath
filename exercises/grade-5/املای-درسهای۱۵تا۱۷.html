@@ -1,0 +1,407 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بازی آموزشی فارسی</title>
+    <style>
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes wrongAnimation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        /* @font-face {
+            font-family: 'Vazir';
+            src: url('vazir.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        } */
+
+        body {
+            font-family: 'Vazir', Tahoma, sans-serif; /* فونت وزیر یا پیش‌فرض */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
+            text-align: center;
+            overflow-x: hidden;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 15px auto;
+            width: 70%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            color: #d63384;
+            font-size: 18px;
+            position: relative;
+            z-index: 100;
+        }
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 85%;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 35px;
+            border: 5px solid #ff69b4;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            z-index: 10;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff69b4, #ff9a9e);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: linear-gradient(45deg, #ff9a9e, #ff69b4);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.7);
+            transform: translateY(-2px);
+        }
+        .option-btn {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border: 3px solid #ffb6c1;
+            padding: 12px 25px;
+            margin: 8px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+            color: #5a3e46;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .option-btn:hover {
+            background: linear-gradient(135deg, #fda085 0%, #f6d365 100%);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
+        #word-display {
+            font-size: 36px;
+            color: #d63384;
+            margin: 30px 0;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        #username {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ffb6c1;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        #score {
+            font-size: 20px;
+            color: #e67e22;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .flower, .butterfly {
+            position: fixed;
+            animation-timing-function: linear;
+            z-index: 1000;
+            font-size: 24px;
+            opacity: 0.8;
+        }
+        .flower { animation-duration: 3s; }
+        .butterfly { animation-duration: 4s; font-size: 30px; }
+
+        .static-flower, .static-butterfly {
+            position: fixed;
+            z-index: 5;
+            opacity: 0.7;
+        }
+        .static-flower { font-size: 40px; }
+        .static-butterfly { font-size: 45px; animation-duration: 6s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-direction: alternate; }
+
+        .static-flower.pos1 { top: 10%; left: 5%; }
+        .static-flower.pos2 { top: 20%; right: 5%; transform: rotate(30deg); }
+        .static-flower.pos3 { bottom: 10%; left: 15%; transform: rotate(-20deg); }
+        .static-flower.pos4 { bottom: 20%; right: 15%; }
+
+        .static-butterfly.pos1 { top: 60%; left: 10%; }
+        .static-butterfly.pos2 { top: 70%; right: 10%; animation-name: butterfly-float; }
+        .static-butterfly.pos3 { bottom: 5%; left: 40%; transform: rotate(180deg); }
+        .static-butterfly.pos4 { top: 40%; left: 45%; animation-name: butterfly-float; animation-direction: alternate-reverse; animation-duration: 7s;}
+
+        @keyframes butterfly-float {
+            0% { transform: translateY(0px) rotate(180deg); }
+            100% { transform: translateY(30px) rotate(180deg); }
+        }
+
+        .wrong {
+            color: red;
+            font-size: 80px;
+            animation: wrongAnimation 0.6s ease-in-out;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+            z-index: 2000;
+        }
+        #end-screen h1 {
+            font-size: 36px; /* کمی کوچکتر برای جا شدن پیام‌های بیشتر */
+            color: #27ae60;
+            margin-bottom: 20px;
+            line-height: 1.4; /* افزایش ارتفاع خط برای خوانایی بهتر */
+        }
+        #final-msg {
+            font-size: 24px; /* کمی کوچکتر */
+            color: #8e44ad;
+            margin-top: 30px;
+        }
+        .question-mark {
+            font-size: 20px;
+            color: #555;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- عناصر ثابت در اطراف صفحه -->
+<div class="static-flower pos1">🌸</div>
+<div class="static-flower pos2">🌷</div>
+<div class="static-flower pos3">🌹</div>
+<div class="static-flower pos4">🌺</div>
+
+<div class="static-butterfly pos1">🦋</div>
+<div class="static-butterfly pos2">🦋</div>
+<div class="static-butterfly pos3">🦋</div>
+<div class="static-butterfly pos4">🦋</div>
+
+<div class="header">
+    <h3>طراح بازی: کبری قربانی، دبستان دخترانه ی سما، واحد بندر انزلی</h3>
+</div>
+
+<div id="start-screen" class="game-container">
+    <h1 style="color: #e91e63;">به بازی آموزشی خوش آمدی!</h1>
+    <p>لطفاً نام و نام خانوادگی خود را وارد کنید:</p>
+    <input type="text" id="username" placeholder="نام و نام خانوادگی">
+    <p style="margin-top: 15px;">این بازی شامل ۳۰ کلمه ناقص از درس‌های ۱۵ تا ۱۷ فارسی است.</p>
+    <p>شما باید حرف درست را انتخاب کنید تا کلمه کامل شود.</p>
+    <button class="btn" onclick="startGame()">شروع بازی</button>
+</div>
+
+<div id="game-screen" class="game-container hidden">
+    <div id="score">امتیاز: 0 / 30</div>
+    <div id="word-display"></div>
+    <div class="question-mark">کدام حرف مناسب است؟</div>
+    <div id="options"></div>
+</div>
+
+<div id="end-screen" class="game-container hidden">
+    <h1 id="end-title"></h1>
+    <p id="final-msg">نابرده رنج گنج میسّر نمی شود</p>
+    <button class="btn" onclick="restartGame()">بازی مجدد</button>
+</div>
+
+<script>
+    // @font-face {
+    //     font-family: 'Vazir';
+    //     src: url('vazir.woff2') format('woff2');
+    //     font-weight: normal;
+    //     font-style: normal;
+    // }
+
+    const questions = [
+        {word: "رهگ..ر", options: ["ذ", "ز", "ض", "ظ"], correct: "ذ"},
+        {word: "....ور", options: ["ص", "س", "ث"], correct: "س"},
+        {word: "ز....مت", options: ["ح", "ه"], correct: "ح"},
+        {word: "....عی", options: ["س", "ص", "ث"], correct: "س"},
+        {word: "فار...", options: ["غ", "ق"], correct: "غ"},
+        {word: "م....کین", options: ["ص", "ث", "س"], correct: "س"},
+        {word: "...صر", options: ["ق", "غ"], correct: "ق"},
+        {word: "قنا.....ت", options: ["ع", "ا", "ئ"], correct: "ع"},
+        {word: "....دبیر", options: ["ط", "ت"], correct: "ت"},
+        {word: "م....پار", options: ["س", "ص", "ث"], correct: "س"},
+        {word: "ب...ار", options: ["ه", "ح"], correct: "ه"},
+        {word: "ب....بودی", options: ["ه", "ح"], correct: "ه"},
+        {word: "ن...ر", options: ["ذ", "ز", "ظ", "ض"], correct: "ذ"},
+        {word: "به س...وه آمده ام", options: ["ت", "ط"], correct: "ت"},
+        {word: "...بیب", options: ["ط", "ت"], correct: "ط"},
+        {word: "..بدالله", options: ["ع", "ا"], correct: "ع"},
+        {word: "....یجان", options: ["ه", "ح"], correct: "ه"},
+        {word: "سپاسگ...ار", options: ["ذ", "ز", "ض", "ظ"], correct: "ز"},
+        {word: "ت...مل", options: ["ح", "ه"], correct: "ح"},
+        {word: "تا...یانه", options: ["ز", "ظ", "ض", "ذ"], correct: "ز"},
+        {word: "ج...ش", options: ["ه", "ح"], correct: "ه"},
+        {word: "آ....از", options: ["غ", "ق"], correct: "غ"},
+        {word: "آمو....گار", options: ["ز", "ذ", "ظ", "ض"], correct: "ز"},
+        {word: "دلب....تگی", options: ["ص", "س", "ث"], correct: "س"},
+        {word: "نیا...مند", options: ["ز", "ظ", "ض", "ذ"], correct: "ز"},
+        {word: "...مسر", options: ["ح", "ه"], correct: "ه"},
+        {word: "...یرت آور", options: ["ح", "ه"], correct: "ح"},
+        {word: "با...وش", options: ["ه", "ح"], correct: "ه"},
+        {word: "ل...ف", options: ["ت", "ط"], correct: "ط"},
+        {word: "ال....ی", options: ["ح", "ه"], correct: "ه"}
+    ];
+
+    let currentQIndex = 0;
+    let score = 0;
+    let username = "";
+    const totalQuestions = questions.length;
+
+    // Sample encouragement messages
+    const encouragementMessages = [
+        "عالی بود! کارت درسته!",
+        "آفرین! همینطوری ادامه بده!",
+        "چه جواب خوبی! فوق‌العاده‌ای!",
+        "احسنت! دقیق و درست!",
+        "عجب! کاملاً درسته!",
+        "مثل همیشه درخشان!",
+        "وای! چه هوش بالایی!",
+        "هر کلمه مثل یک ستاره می‌درخشه!"
+    ];
+
+    // Function to create falling elements (flowers or butterflies)
+    function createFallingElement(icon, duration, isFlower) {
+        const element = document.createElement('div');
+        element.className = isFlower ? 'flower' : 'butterfly';
+        element.innerHTML = icon;
+        element.style.left = Math.random() * 90 + 5 + "vw";
+        element.style.animationDuration = (Math.random() * 2 + duration) + "s";
+        document.body.appendChild(element);
+        setTimeout(() => element.remove(), (duration + 2) * 1000);
+    }
+
+    // Function to show correct answer feedback with Persian messages
+    function showCorrectFeedback() {
+        document.getElementById('score').innerText = "امتیاز: " + score + " / " + totalQuestions;
+        // Add some flowers and butterflies falling from top
+        for (let i = 0; i < 5; i++) {
+            createFallingElement("🌸", 2, true); // Flowers
+            setTimeout(() => createFallingElement("🦋", 3, false), 500 * i); // Butterflies
+        }
+        // Display a random encouragement message
+        const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+        // You could display this message in a temporary element if desired
+        // For now, it's just a console log or could be an alert
+        console.log("تشویق:", randomMessage); // Or show in an alert/toast
+    }
+
+    // Function to show wrong answer feedback
+    function showWrongFeedback() {
+        const wrongDiv = document.createElement('div');
+        wrongDiv.className = 'wrong';
+        wrongDiv.innerText = '❌';
+        document.body.appendChild(wrongDiv);
+        setTimeout(() => wrongDiv.remove(), 1000);
+    }
+
+    function startGame() {
+        username = document.getElementById('username').value.trim();
+        if (!username) {
+            alert("لطفاً نام و نام خانوادگی خود را وارد کنید.");
+            return;
+        }
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('score').innerText = "امتیاز: 0 / " + totalQuestions;
+        currentQIndex = 0;
+        score = 0;
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentQIndex >= questions.length) {
+            showEndScreen();
+            return;
+        }
+        const q = questions[currentQIndex];
+        document.getElementById('word-display').innerText = q.word;
+        const optsDiv = document.getElementById('options');
+        optsDiv.innerHTML = "";
+
+        const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+        shuffledOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedAnswer) {
+        const q = questions[currentQIndex];
+        let wordElement = document.getElementById('word-display');
+        let originalWord = q.word;
+
+        if (selectedAnswer === q.correct) {
+            score++;
+            showCorrectFeedback();
+            // Update word display with correct letter
+            wordElement.innerHTML = originalWord.replace('..', `<span style="color: green; font-weight: bold;">${q.correct}</span>`);
+            currentQIndex++;
+            setTimeout(showQuestion, 1500);
+        } else {
+            showWrongFeedback();
+            // Show correct answer after wrong guess
+            wordElement.innerHTML = originalWord.replace('..', `<span style="color: red; font-weight: bold;">${q.correct}</span>`);
+            setTimeout(() => {
+                 alert(`اشتباه بود! پاسخ درست: ${q.correct}`);
+                 nextQuestion();
+             }, 800);
+             return;
+        }
+    }
+
+    function nextQuestion() {
+        currentQIndex++;
+        showQuestion();
+    }
+
+    function showEndScreen() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.remove('hidden');
+        let endTitleMessage = `آفرین ${username}! `;
+        let finalMsg = "نابرده رنج گنج میسّر نمی شود";
+
+        if (score === totalQuestions) {
+            endTitleMessage += "همه جواب‌ها درست بود! عالی هستی!";
+            document.getElementById('end-title').style.color = "#27ae60"; // Green
+        } else if (score >= totalQuestions * 0.7) {
+            endTitleMessage += `امتیازت ${score}/${totalQuestions} شد! کارت عالی بود!`;
+            document.getElementById('end-title').style.color = "#f39c12"; // Orange
+        } else {
+            endTitleMessage += `امتیازت ${score}/${totalQuestions} شد. تلاش بیشتری کن!`;
+            document.getElementById('end-title').style.color = "#c0392b"; // Red
+        }
+
+        document.getElementById('end-title').innerText = endTitleMessage;
+        document.getElementById('final-msg').innerText = finalMsg;
+    }
+
+    function restartGame() {
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('start-screen').classList.remove('hidden');
+        document.getElementById('username').value = "";
+    }
+</script>
+
+</body>
+</html>

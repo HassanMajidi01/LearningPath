@@ -1,0 +1,555 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی دسته‌بندی حروف</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            max-width: 1200px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .drop-zones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            min-height: 100vh;
+        }
+
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            border: 4px dashed #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 20px;
+            min-height: 300px;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(255, 255, 200, 0.95);
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .drop-zone-letter {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            overflow-y: auto;
+            max-height: 70%;
+        }
+
+        .word-drop {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .word-drop.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .word-drop.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            animation: shake 0.5s;
+        }
+
+        .word-drop img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+
+        .word-drop-text {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .falling-drop {
+            position: fixed;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border: 4px solid white;
+            border-radius: 50% 50% 50% 0;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            cursor: grab;
+            z-index: 1000;
+            transform: rotate(-45deg);
+            animation: fall 2s ease-in-out forwards;
+            pointer-events: auto;
+        }
+
+        .falling-drop:active {
+            cursor: grabbing;
+        }
+
+        .falling-drop.dragging {
+            animation: none;
+            pointer-events: none;
+        }
+
+        .falling-drop-content {
+            transform: rotate(45deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .falling-drop img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -150px;
+                opacity: 0;
+                transform: rotate(-45deg) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                top: 50vh;
+                transform: translateY(-50%) rotate(-45deg) scale(1);
+            }
+        }
+
+        .check-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 2000;
+            transition: all 0.3s ease;
+        }
+
+        .check-button:hover {
+            background: #45a049;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .check-button:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4caf50;
+            display: none;
+            z-index: 3000;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .drop-zone-letter {
+                font-size: 2.5rem;
+            }
+
+            .word-drop {
+                width: 80px;
+                height: 80px;
+                font-size: 0.85rem;
+            }
+
+            .word-drop img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .falling-drop {
+                width: 100px;
+                height: 100px;
+                font-size: 1rem;
+            }
+
+            .falling-drop img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .check-button {
+                font-size: 1.1rem;
+                padding: 12px 30px;
+            }
+
+            .success-message {
+                font-size: 1.5rem;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .drop-zone-letter {
+                font-size: 2rem;
+            }
+
+            .word-drop {
+                width: 70px;
+                height: 70px;
+                font-size: 0.75rem;
+            }
+
+            .word-drop img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .falling-drop {
+                width: 90px;
+                height: 90px;
+                font-size: 0.9rem;
+            }
+
+            .falling-drop img {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="drop-zones">
+            <div class="drop-zone" data-letter="ز">
+                <div class="drop-zone-letter">ز</div>
+                <div class="drop-zone-words"></div>
+            </div>
+            <div class="drop-zone" data-letter="ذ">
+                <div class="drop-zone-letter">ذ</div>
+                <div class="drop-zone-words"></div>
+            </div>
+            <div class="drop-zone" data-letter="ظ">
+                <div class="drop-zone-letter">ظ</div>
+                <div class="drop-zone-words"></div>
+            </div>
+            <div class="drop-zone" data-letter="ض">
+                <div class="drop-zone-letter">ض</div>
+                <div class="drop-zone-words"></div>
+            </div>
+        </div>
+    </div>
+
+    <button class="check-button">بررسی</button>
+    <div class="success-message">🎉 آفرین! همه درست بود! 🎉</div>
+
+    <script>
+        const words = [
+                  { word: 'موز', letter: 'ز', emoji: '🍌', hidden: 'مو_' },
+            { word: 'زباله', letter: 'ز', emoji: '🗑️', hidden: '_باله' },
+            { word: 'زمان', letter: 'ز', emoji: '⏰', hidden: '_مان' },
+            { word: 'ذرّت', letter: 'ذ', emoji: '🌽', hidden: '_رّت' },
+            { word: 'ذرّه‌بین', letter: 'ذ', emoji: '🔍', hidden: '_رّه‌بین' },
+            { word: 'لذیذ', letter: 'ذ', emoji: '😋', hidden: 'ل_یـ_' },
+            { word: 'مریض', letter: 'ض', emoji: '🤒', hidden: 'مری_' },
+            { word: 'اضافه', letter: 'ض', emoji: '➕', hidden: 'ا_افه' },
+            { word: 'فضانورد', letter: 'ض', emoji: '👨‍🚀', hidden: 'ف_انورد' },
+            { word: 'ظهر', letter: 'ظ', emoji: '🌞', hidden: '_هر' },
+            { word: 'ظرف', letter: 'ظ', emoji: '🍽️', hidden: '_رف' },
+            { word: 'ظالم', letter: 'ظ', emoji: '😈', hidden: '_الم' }
+        ];
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        const shuffledWords = shuffleArray(words);
+        let currentWordIndex = 0;
+        let droppedWords = [];
+        let currentDragElement = null;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+
+        function createFallingDrop() {
+            if (currentWordIndex >= shuffledWords.length) {
+                document.querySelector('.check-button').style.display = 'block';
+                return;
+            }
+
+            const wordData = shuffledWords[currentWordIndex];
+            const drop = document.createElement('div');
+            drop.className = 'falling-drop';
+            drop.dataset.word = wordData.word;
+            drop.dataset.letter = wordData.letter;
+            drop.dataset.hidden = wordData.hidden;
+            drop.dataset.emoji = wordData.emoji;
+            
+            drop.innerHTML = `
+                <div class="falling-drop-content">
+                    <div style="font-size: 2.5rem;">${wordData.emoji}</div>
+                    <div>${wordData.hidden}</div>
+                </div>
+            `;
+
+            drop.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+            drop.style.top = '-150px';
+
+            document.body.appendChild(drop);
+
+            drop.addEventListener('mousedown', startDrag);
+            drop.addEventListener('touchstart', startDrag, { passive: false });
+
+            currentWordIndex++;
+        }
+
+        function startDrag(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            currentDragElement = e.target.closest('.falling-drop');
+            if (!currentDragElement) return;
+            
+            isDragging = true;
+            currentDragElement.classList.add('dragging');
+            
+            const rect = currentDragElement.getBoundingClientRect();
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+            
+            offsetX = clientX - rect.left;
+            offsetY = clientY - rect.top;
+
+            currentDragElement.style.cursor = 'grabbing';
+            currentDragElement.style.zIndex = '10000';
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!currentDragElement || !isDragging) return;
+            e.preventDefault();
+
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+            currentDragElement.style.left = (clientX - offsetX) + 'px';
+            currentDragElement.style.top = (clientY - offsetY) + 'px';
+            currentDragElement.style.transform = 'rotate(-45deg)';
+
+            const dropZones = document.querySelectorAll('.drop-zone');
+            dropZones.forEach(zone => zone.classList.remove('drag-over'));
+
+            currentDragElement.style.pointerEvents = 'none';
+            const elementBelow = document.elementFromPoint(clientX, clientY);
+            currentDragElement.style.pointerEvents = 'auto';
+            
+            const dropZone = elementBelow?.closest('.drop-zone');
+            if (dropZone) {
+                dropZone.classList.add('drag-over');
+            }
+        }
+
+        function endDrag(e) {
+            if (!currentDragElement || !isDragging) return;
+
+            const clientX = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchend' ? e.changedTouches[0].clientY : e.clientY;
+
+            currentDragElement.style.pointerEvents = 'none';
+            const elementBelow = document.elementFromPoint(clientX, clientY);
+            currentDragElement.style.pointerEvents = 'auto';
+            
+            const dropZone = elementBelow?.closest('.drop-zone');
+
+            document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('drag-over'));
+
+            if (dropZone) {
+                const wordData = {
+                    word: currentDragElement.dataset.word,
+                    correctLetter: currentDragElement.dataset.letter,
+                    droppedLetter: dropZone.dataset.letter,
+                    emoji: currentDragElement.dataset.emoji,
+                    hidden: currentDragElement.dataset.hidden
+                };
+
+                droppedWords.push(wordData);
+
+                const wordElement = document.createElement('div');
+                wordElement.className = 'word-drop';
+                wordElement.dataset.word = wordData.word;
+                wordElement.dataset.correctLetter = wordData.correctLetter;
+                wordElement.innerHTML = `
+                    <div style="font-size: 1.8rem;">${wordData.emoji}</div>
+                    <div class="word-drop-text">${wordData.hidden}</div>
+                `;
+
+                dropZone.querySelector('.drop-zone-words').appendChild(wordElement);
+                currentDragElement.remove();
+
+                setTimeout(createFallingDrop, 800);
+            } else {
+                currentDragElement.classList.remove('dragging');
+                currentDragElement.style.cursor = 'grab';
+            }
+
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchend', endDrag);
+
+            isDragging = false;
+            currentDragElement = null;
+        }
+
+        document.querySelector('.check-button').addEventListener('click', checkAnswers);
+
+        function checkAnswers() {
+            const wordElements = document.querySelectorAll('.word-drop');
+            let allCorrect = true;
+            const incorrectWords = [];
+
+            wordElements.forEach(wordEl => {
+                const word = wordEl.dataset.word;
+                const correctLetter = wordEl.dataset.correctLetter;
+                const dropZone = wordEl.closest('.drop-zone');
+                const droppedLetter = dropZone.dataset.letter;
+
+                if (correctLetter === droppedLetter) {
+                    wordEl.classList.add('correct');
+                    wordEl.classList.remove('incorrect');
+                    const fullWord = words.find(w => w.word === word);
+                    wordEl.querySelector('.word-drop-text').textContent = fullWord.word;
+                } else {
+                    wordEl.classList.add('incorrect');
+                    wordEl.classList.remove('correct');
+                    allCorrect = false;
+                    incorrectWords.push({ element: wordEl, data: words.find(w => w.word === word) });
+                }
+            });
+
+            if (allCorrect) {
+                document.querySelector('.success-message').style.display = 'block';
+                document.querySelector('.check-button').style.display = 'none';
+                setTimeout(() => {
+                    document.querySelector('.success-message').style.display = 'none';
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    incorrectWords.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.element.remove();
+                            const drop = document.createElement('div');
+                            drop.className = 'falling-drop';
+                            drop.dataset.word = item.data.word;
+                            drop.dataset.letter = item.data.letter;
+                            drop.dataset.hidden = item.data.hidden;
+                            drop.dataset.emoji = item.data.emoji;
+                            
+                            drop.innerHTML = `
+                                <div class="falling-drop-content">
+                                    <div style="font-size: 2.5rem;">${item.data.emoji}</div>
+                                    <div>${item.data.hidden}</div>
+                                </div>
+                            `;
+
+                            drop.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+                            drop.style.top = '-150px';
+
+                            document.body.appendChild(drop);
+
+                            drop.addEventListener('mousedown', startDrag);
+                            drop.addEventListener('touchstart', startDrag, { passive: false });
+                        }, index * 800);
+                    });
+                }, 1000);
+            }
+        }
+
+        createFallingDrop();
+    </script>
+</body>
+</html>

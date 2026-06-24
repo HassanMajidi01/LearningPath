@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بانک تمرین‌ها</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* اطمینان از اعمال پس‌زمینه تیره در صورت لود نشدن استایل اصلی */
+        body {
+            background: linear-gradient(135deg, #232946, #1a1a2e, #283e51, #0f2027);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* استایل دکمه خانه دقیقاً مشابه فایل اصلی */
+        .home-button {
+            position: fixed;
+            top: 20px; 
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            width: 50px; 
+            height: 50px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* استایل‌های مخصوص صفحه تمرین */
+        .exercises-header {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .grade-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .grade-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .grade-btn:hover, .grade-btn.active {
+            background: rgba(102, 126, 234, 0.7);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; /* برای مخفی کردن و نمایش با جاوا اسکریپت */
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .exercise-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .exercise-title {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .exercise-author {
+            color: #f1c40f; /* رنگ طلایی/زرد برای نام طراح */
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 10px;
+            border-radius: 10px;
+        }
+
+        .exercise-subject {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .exercise-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-family: 'Vazirmatn', sans-serif;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            margin-top: auto;
+            width: 80%;
+        }
+
+        .exercise-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <!-- دکمه خانه اصلاح شده -->
+    <a href="/" class="home-button">🏠</a>
+
+    <div class="container">
+        <main class="main-content" style="width: 100%; padding-top: 20px;">
+            <div class="exercises-header">
+                <h1>📚 بانک تمرین‌ها</h1>
+                <p>تمرین مورد نظر خود را انتخاب کنید</p>
+            </div>
+
+            <!-- فیلتر پایه‌ها (ویژگی data-target اضافه شد) -->
+            <div class="grade-filters">
+                <button class="grade-btn active" data-target="all">همه</button>
+                <button class="grade-btn" data-target="grade-1">پایه اول</button>
+                <button class="grade-btn" data-target="grade-2">پایه دوم</button>
+                <button class="grade-btn" data-target="grade-3">پایه سوم</button>
+                <button class="grade-btn" data-target="grade-4">پایه چهارم</button>
+                <button class="grade-btn" data-target="grade-5">پایه پنجم</button>
+                <button class="grade-btn" data-target="grade-6">پایه ششم</button>
+            </div>
+
+            <!-- شبکه کارت‌های تمرین (ویژگی data-grade اضافه شد) -->
+            <div class="exercises-grid">
+                
+                <!-- کارت پایه اول -->
+                <div class="exercise-card" data-grade="grade-1">
+                    <div class="exercise-icon">🔢</div>
+                    <h3 class="exercise-title">شمارش شکل ها</h3>
+                    <div class="exercise-author">👤 طراح:آزیتا موافق   </div>
+                    <div class="exercise-subject">ریاضی - پایه اول</div>
+                    <a href="grade-1/شمارش_باشکل.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-1">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">دسته بندی غ و ق</h3>
+                    <div class="exercise-author">👤 طراح: سید محمد حسن مجیدی کیوی</div>
+                    <div class="exercise-subject">فارسی - پایه اول</div>
+                    <a href="grade-1/ghain-ghaf-category.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-1">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">دسته بندی ض، ظ، ز و ذ</h3>
+                    <div class="exercise-author">👤 طراح: سید محمد حسن مجیدی کیوی</div>
+                    <div class="exercise-subject">فارسی - پایه اول</div>
+                    <a href="grade-1/دسته_بندی_ظ_ض_ذ_ز.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-1">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title">داستان تعاملی شاهنامه از اول تا هفت خوان رستم</h3>
+                    <div class="exercise-author">👤 طراح: سید محمد حسن مجیدی کیوی</div>
+                    <div class="exercise-subject">فارسی - پایه اول</div>
+                    <a href="grade-1/داستان_تعاملی_شاهنامه.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+
+				<!-- کارت پایه دوم -->
+				<div class="exercise-card" data-grade="grade-2">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">بازی فروت نینجای کلمات</h3>
+                    <div class="exercise-author">👤 طراح: ساجده فلاح</div>
+                    <div class="exercise-subject">فارسی - پایه دوم</div>
+                    <a href="grade-2/fruit-ninja-spelling.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+				<div class="exercise-card" data-grade="grade-2">
+                    <div class="exercise-icon">🔢</div>
+                    <h3 class="exercise-title"> گردونه زوج و فرد</h3>
+                    <div class="exercise-author">👤 طراح: ساجده فلاح</div>
+                    <div class="exercise-subject">ریاضی - پایه دوم</div>
+                    <a href="grade-2/گردونه-زوج-فرد.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+				<!-- کارت های پایه چهارم -->
+				<div class="exercise-card" data-grade="grade-4">
+                    <div class="exercise-icon">🔢</div>
+                    <h3 class="exercise-title">آزمون اعداد اعشاری</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">ریاضی - پایه چهارم</div>
+                    <a href="grade-4/آزمون-اعداد-اعشاری.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+
+				<!-- کارت های پایه پنجم -->
+				
+				<div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">🔢</div>
+                    <h3 class="exercise-title">مرور فصل 6 و 7</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">ریاضی - پایه پنجم</div>
+                    <a href="grade-5/ریاضی-پایه-پنجم-مرور-فصل۶-۷.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+				<div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">☪️</div>
+                    <h3 class="exercise-title">آزمون دروس 15 تا 17</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">هدیه - پایه پنجم</div>
+                    <a href="grade-5/هدیه-15-تا-17.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title"> کلمات مترادف درس های 15 تا17</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">فارسی - پایه پنجم</div>
+                    <a href="grade-5/بازی-کلمات-مترادف-درسهای۱۵تا۱۷.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title">فارسی 15 تا 17</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">فارسی - پایه پنجم</div>
+                    <a href="grade-5/فارسی-15تا۱۷.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">املای درس۱۷ </h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">فارسی - پایه پنجم</div>
+                    <a href="grade-5/پنجم_املای_درس۱۷_فارسی.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">املای درس های 15 تا 17 </h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">فارسی - پایه پنجم</div>
+                    <a href="grade-5/املای-درسهای۱۵تا۱۷.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📝</div>
+                    <h3 class="exercise-title">املای نهایی </h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">فارسی - پایه پنجم</div>
+                    <a href="grade-5/املا_پنجم_نهایی.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">📐</div>
+                    <h3 class="exercise-title">محیط دایره و مساحت لوزی و ذوزنقه</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">ریاضی - پایه پنجم</div>
+                    <a href="grade-5/محیط_دایره_مساحت_لوزی_ذوزنقه.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">🔢</div>
+                    <h3 class="exercise-title">آزمون فصل 7</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">ریاضی - پایه پنجم</div>
+                    <a href="grade-5/پنجم_فصل۷_ریاضی.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">🥛</div>
+                    <h3 class="exercise-title">گنجایش</h3>
+                    <div class="exercise-author">👤 طراح: کبری قربانی</div>
+                    <div class="exercise-subject">ریاضی - پایه پنجم</div>
+                    <a href="grade-5/گنجایش.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-5">
+                    <div class="exercise-icon">🧪</div>
+                    <h3 class="exercise-title">آزمون نوبت دوم</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">علوم - پایه پنجم</div>
+                    <a href="grade-5/آزمون_علوم_پنجم_نوبت_دوم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+
+                <!-- کارت پایه ششم -->
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title">کلمات متضاد</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">فارسی - پایه ششم</div>
+                    <a href="grade-6/antonyms.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title">آرایه های ادبی</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">فارسی - پایه ششم</div>
+                    <a href="grade-6/آرایه-ادبی-ششم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">📖</div>
+                    <h3 class="exercise-title">ضرب المثل ها</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">فارسی - پایه ششم</div>
+                    <a href="grade-6/ضرب-المثل-ششم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">🌍</div>
+                    <h3 class="exercise-title">آزمون درس 23</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">مطالعات - پایه ششم</div>
+                    <a href="grade-6/آزمون_درس23_مطالعات_پای_ششم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">☪️</div>
+                    <h3 class="exercise-title">آزمون درس آخر</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">هدیه - پایه ششم</div>
+                    <a href="grade-6/آزمون_هدیه_ششم_درس_آخر.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">☪️</div>
+                    <h3 class="exercise-title">آزمون پایانی هدیه </h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">هدیه - پایه ششم</div>
+                    <a href="grade-6/آزمون-نهایی-هدیه-ششم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                <div class="exercise-card" data-grade="grade-6">
+                    <div class="exercise-icon">🧪</div>
+                    <h3 class="exercise-title">آزمون نوبت دوم</h3>
+                    <div class="exercise-author">👤 طراح: سارا قربان دوست</div>
+                    <div class="exercise-subject">علوم - پایه ششم</div>
+                    <a href="grade-6/آزمون_علوم_ششم_نوبت_دوم.html" target="blank" class="exercise-btn">شروع تمرین</a>
+                </div>
+                
+
+            </div>
+        </main>
+    </div>
+
+    <!-- اسکریپت برای فیلتر کردن کارت‌ها -->
+    <script>
+        const filterBtns = document.querySelectorAll('.grade-btn');
+        const exerciseCards = document.querySelectorAll('.exercise-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1. حذف کلاس active از همه دکمه‌ها و افزودن به دکمه کلیک شده
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // 2. گرفتن مقدار پایه مورد نظر
+                const targetGrade = btn.getAttribute('data-target');
+
+                // 3. نمایش یا مخفی کردن کارت‌ها
+                exerciseCards.forEach(card => {
+                    if (targetGrade === 'all' || card.getAttribute('data-grade') === targetGrade) {
+                        card.style.display = 'flex'; // نمایش کارت
+                    } else {
+                        card.style.display = 'none'; // مخفی کردن کارت
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

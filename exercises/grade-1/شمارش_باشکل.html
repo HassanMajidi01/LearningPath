@@ -1,0 +1,130 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بازی ریاضی من</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f7f9fc; text-align: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 30px; display: inline-block; width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .emoji-box { font-size: 50px; margin: 20px 0; }
+        
+        /* کادر مقصد */
+        #drop-zone { border: 4px dashed #4a90e2; width: 150px; height: 100px; margin: 20px auto; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #4a90e2; background: #ebf5ff; transition: background-color 0.3s, border-color 0.3s; }
+        #drop-zone.hover { background-color: #d0e7ff; border-color: #357abd; } /* برای نشون دادن حالت هاور */
+
+        /* اعداد */
+        .option { display: inline-block; margin: 10px; padding: 15px 25px; background: #ffca28; border-radius: 15px; font-size: 24px; font-weight: bold; cursor: pointer; user-select: none; transition: background-color 0.3s, transform 0.3s; }
+        .option:hover { background: #f5b000; transform: scale(1.05); }
+        .option.selected { background-color: #4CAF50; color: white; transform: scale(1.1); } /* وقتی عدد انتخاب شده */
+        
+        #feedback { margin-top: 20px; font-weight: bold; min-height: 25px; } /* min-height برای جلوگیری از جابجایی صفحه */
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="game">
+        <h2>روی عدد مورد نظرت کلیک کن!</h2>
+        <div id="emoji-display" class="emoji-box"></div>
+        
+        <!-- کادر مقصد -->
+        <div id="drop-zone" onclick="placeNumber()">؟</div>
+        
+        <div id="options-container"></div>
+        <div id="feedback"></div>
+    </div>
+</div>
+
+<script>
+    let currentCorrectNumber = 0; // عدد درست برای سوال فعلی
+    let selectedNumber = null; // عددی که کاربر انتخاب کرده
+    let optionsContainer = document.getElementById('options-container');
+    let dropZone = document.getElementById('drop-zone');
+    let feedbackElement = document.getElementById('feedback');
+    let emojiDisplay = document.getElementById('emoji-display');
+
+    function nextQuestion() {
+        selectedNumber = null; // ریست کردن عدد انتخاب شده
+        feedbackElement.innerText = "";
+        dropZone.innerText = "؟";
+        dropZone.classList.remove('hover'); // حذف حالت hover
+
+        // تولید عدد درست و گزینه‌ها
+        currentCorrectNumber = Math.floor(Math.random() * 9) + 1; // عددی بین 1 تا 9
+        
+        // نمایش ایموجی‌ها
+        const emojiChoices = ['🍎', '🍓', '🍇', '🍉', '🍍'];
+        const emoji = emojiChoices[Math.floor(Math.random() * emojiChoices.length)];
+        emojiDisplay.innerText = Array(currentCorrectNumber).fill(emoji).join(' ');
+
+        // تولید گزینه‌ها (عدد درست و دو عدد نزدیک)
+        let numbers = [currentCorrectNumber];
+        // اضافه کردن اعداد نزدیک به صورت تصادفی
+        while (numbers.length < 3) {
+            let randNum = Math.floor(Math.random() * 9) + 1;
+            if (!numbers.includes(randNum)) {
+                numbers.push(randNum);
+            }
+        }
+        numbers.sort(() => Math.random() - 0.5); // مخلوط کردن گزینه‌ها
+
+        optionsContainer.innerHTML = ''; // پاک کردن گزینه‌های قبلی
+        numbers.forEach(n => {
+            let div = document.createElement('div');
+            div.className = 'option';
+            div.innerText = n;
+            div.onclick = () => selectOption(n, div); // وقتی روی عدد کلیک میشه، selectOption صدا زده میشه
+            optionsContainer.appendChild(div);
+        });
+    }
+
+    function selectOption(number, element) {
+        // حذف کلاس 'selected' از گزینه قبلی (اگر وجود داشته باشد)
+        optionsContainer.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // انتخاب گزینه جدید
+        selectedNumber = number;
+        element.classList.add('selected'); // نمایش وضعیت انتخاب شده
+        dropZone.innerText = selectedNumber; // نمایش عدد انتخاب شده در کادر
+        dropZone.classList.add('hover'); // برای نمایش حالت فعال بودن کادر
+        feedbackElement.innerText = `عدد ${selectedNumber} انتخاب شد. برای تایید کلیک کنید.`;
+        feedbackElement.style.color = "#333";
+    }
+
+    function placeNumber() {
+        if (selectedNumber === null) {
+            feedbackElement.innerText = "لطفا ابتدا یکی از اعداد را انتخاب کنید.";
+            feedbackElement.style.color = "orange";
+            return;
+        }
+
+        if (selectedNumber === currentCorrectNumber) {
+            feedbackElement.innerText = "✅ آفرین! درست بود";
+            feedbackElement.style.color = "green";
+            dropZone.classList.add('correct'); // اضافه کردن استایل برای پاسخ درست (اختیاری)
+            setTimeout(() => {
+                nextQuestion();
+                dropZone.classList.remove('correct'); // پاک کردن استایل
+            }, 1500);
+        } else {
+            feedbackElement.innerText = "❌ اشتباه! دوباره تلاش کن";
+            feedbackElement.style.color = "red";
+            dropZone.classList.add('wrong'); // اضافه کردن استایل برای پاسخ غلط (اختیاری)
+             setTimeout(() => {
+                // اگر اشتباه بود، دوباره انتخاب رو ریست می‌کنیم
+                selectedNumber = null;
+                dropZone.innerText = "؟";
+                dropZone.classList.remove('hover', 'wrong');
+                feedbackElement.innerText = "";
+            }, 1500);
+        }
+    }
+
+    // شروع بازی با اولین سوال
+    nextQuestion();
+</script>
+
+</body>
+</html>

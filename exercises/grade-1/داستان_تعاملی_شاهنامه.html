@@ -1,0 +1,562 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داستان تعاملی شاهنامه</title>
+    <style>
+        /* @font-face {
+            font-family: 'Vazir';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/Vazir.woff2') format('woff2');
+        } */
+        body {
+            font-family: 'Vazir', Tahoma, Arial, sans-serif;
+            background-color: #f4f1ea;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #game-container {
+            background-color: #fff;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 3px solid #8b5a2b;
+        }
+        #header {
+            background-color: #8b5a2b;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #score-display {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #reset-btn {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        #content {
+            padding: 25px;
+            text-align: center;
+        }
+        #story-text {
+            font-size: 1.3em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background-color: #4cae4c;
+        }
+        .btn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-height: 25px;
+        }
+        .correct { color: #5cb85c; }
+        .wrong { color: #d9534f; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="header">
+        <div>امتیاز شما: <span id="score-display">0</span></div>
+        <button id="reset-btn" onclick="resetGame()">شروع مجدد بازی</button>
+    </div>
+    <div id="content">
+        <div id="story-text">در حال بارگذاری داستان...</div>
+        <div id="options" class="options-container"></div>
+        <div id="feedback-message" class="feedback"></div>
+    </div>
+</div>
+
+<script>
+    const storyNodes = {
+        start: {
+            text: "به دنیای زیبای شاهنامه خوش آمدی! روزی روزگاری در زمان‌های خیلی دور، پادشاهی بود به نام «کیومرث». او نخستین پادشاه بود و در کوهستان زندگی می‌کرد. کیومرث برای گشت و گذار نیاز به یک حیوان پرسرعت داشت.",
+            type: "story",
+            choices: [
+                { text: "ادامه داستان...", next: "challenge_1" }
+            ]
+        },
+        challenge_1: {
+            text: "چالش اول: به کیومرث کمک کن! نام حیوانی که با حروف (ا - س - ب) نوشته می‌شود چیست؟",
+            type: "challenge",
+            options: [
+                { text: "طوطی", isCorrect: false },
+                { text: "اسب", isCorrect: true },
+                { text: "صدف", isCorrect: false }
+            ],
+            correctNext: "node_hushang",
+            points: 10
+        },
+        node_hushang: {
+            text: "آفرین! کیومرث سوار بر اسب شد و سال‌ها به خوبی پادشاهی کرد. سال‌ها گذشت تا نوبت به پادشاهی «هوشنگ» رسید. روزی هوشنگ به کوه رفته بود که مار سیاهی دید. او سنگی برداشت و به سمت مار پرتاب کرد. سنگ به سنگ دیگری خورد و جرقه‌ای زد...",
+            type: "story",
+            choices: [
+                { text: "ببینیم چه اتفاقی افتاد...", next: "challenge_2" }
+            ]
+        },
+        challenge_2: {
+            text: "چالش دوم: جای خالی را پر کن. از برخورد سنگ‌ها با هم، ....... به وجود آمد.",
+            type: "challenge",
+            options: [
+                { text: "آتش", isCorrect: true },
+                { text: "آب", isCorrect: false },
+                { text: "طلا", isCorrect: false }
+            ],
+            correctNext: "node_tahmuras",
+            points: 15
+        },
+        node_tahmuras: {
+            text: "هزار آفرین! پس از هوشنگ، «طهمورث» پادشاه شد. او به مردم یاد داد که چگونه از پشم گوسفند برای خود چیزهای مفیدی ببافند تا در زمستان سرد، گرم بمانند.",
+            type: "story",
+            choices: [
+                { text: "ببینیم طهمورث چه ساخت...", next: "challenge_3" }
+            ]
+        },
+        challenge_3: {
+            text: "چالش سوم: با حروف (ل - ب - ا - س) چه کلمه‌ای ساخته می‌شود که ما آن را می‌پوشیم؟",
+            type: "challenge",
+            options: [
+                { text: "سبد", isCorrect: false },
+                { text: "لباس", isCorrect: true },
+                { text: "کفش", isCorrect: false }
+            ],
+            correctNext: "node_jamshid",
+            points: 15
+        },
+        node_jamshid: {
+            text: "عالی بود! طهمورث دیوها را هم شکست داد و از آن‌ها خواندن و نوشتن یاد گرفت. بعد از او، پادشاهی بزرگ به نام «جمشید» بر تخت نشست. او در روز اول بهار جشنی بزرگ برپا کرد که هنوز هم ما آن را جشن می‌گیریم.",
+            type: "story",
+            choices: [
+                { text: "اسم این جشن چیست؟", next: "challenge_4" }
+            ]
+        },
+        challenge_4: {
+            text: "چالش چهارم: نام جشن زیبای ما ایرانی‌ها در روز اول بهار چیست؟",
+            type: "challenge",
+            options: [
+                { text: "یلدا", isCorrect: false },
+                { text: "نوروز", isCorrect: true },
+                { text: "مهرگان", isCorrect: false }
+            ],
+            correctNext: "node_zahhak",
+            points: 20
+        },
+        node_zahhak: {
+            text: "بسیار عالی! اما سال‌ها بعد، پادشاهی ظالم به نام «ضحاک» جای جمشید را گرفت. ضحاک پادشاه بدی بود و روی شانه‌هایش دو حیوان خزنده و خطرناک روییده بودند.",
+            type: "story",
+            choices: [
+                { text: "ببینیم چه حیوانی بود...", next: "challenge_5" }
+            ]
+        },
+        challenge_5: {
+            text: "چالش پنجم: نام این حیوان که می‌خزد و با حروف (م - ا - ر) نوشته می‌شود چیست؟",
+            type: "challenge",
+            options: [
+                { text: "موش", isCorrect: false },
+                { text: "مار", isCorrect: true },
+                { text: "ماهی", isCorrect: false }
+            ],
+            correctNext: "node_kaveh",
+            points: 15
+        },
+        node_kaveh: {
+            text: "درست است! مردم از دست ضحاک خیلی ناراحت بودند. تا اینکه یک مرد شجاع و زحمتکش به نام «کاوه» تصمیم گرفت در برابر او بایستد. کاوه مردی بود که با پتک روی آهن می‌کوبید و ابزار می‌ساخت.",
+            type: "story",
+            choices: [
+                { text: "شغل کاوه چه بود؟", next: "challenge_6" }
+            ]
+        },
+        challenge_6: {
+            text: "چالش ششم: به کسی که با آهن کار می‌کند و وسیله می‌سازد چه می‌گویند؟",
+            type: "challenge",
+            options: [
+                { text: "نجار", isCorrect: false },
+                { text: "آهنگر", isCorrect: true },
+                { text: "نانوا", isCorrect: false }
+            ],
+            correctNext: "node_fereydun",
+            points: 20
+        },
+        node_fereydun: {
+            text: "آفرین! کاوه آهنگر، به کمک جوان شجاعی به نام «فریدون»، ضحاک را شکست دادند. پس از این ماجراها، نوبت به پهلوانان می‌رسد. پهلوانی به نام سام صاحب پسری شد که موهایش مثل برف سفید بود. نام او را «زال» گذاشتند.",
+            type: "story",
+            choices: [
+                { text: "ببینیم چه اتفاقی برای زال افتاد...", next: "node_simorgh" }
+            ]
+        },
+        node_simorgh: {
+            text: "سام از دیدن موهای سفید زال ناراحت شد و او را در کوه بلندی رها کرد. اما یک پرنده بزرگ و مهربان و جادویی، نوزاد را پیدا کرد و او را مثل فرزند خودش بزرگ کرد.",
+            type: "story",
+            choices: [
+                { text: "نام این پرنده چیست؟", next: "challenge_7" }
+            ]
+        },
+        challenge_7: {
+            text: "چالش هفتم: پرنده افسانه‌ای و مهربان شاهنامه چه نام دارد؟",
+            type: "challenge",
+            options: [
+                { text: "عقاب", isCorrect: false },
+                { text: "سیمرغ", isCorrect: true },
+                { text: "قو", isCorrect: false }
+            ],
+            correctNext: "node_feather",
+            points: 20
+        },
+        node_feather: {
+            text: "دقیقاً! سیمرغ زال را بزرگ کرد. وقتی زال مرد جوانی شد، پدرش سام از کار خود پشیمان شد و به دنبال او آمد. سیمرغ هنگام خداحافظی، یک هدیه به زال داد تا اگر زمانی به کمک نیاز داشت، آن را در آتش بیندازد تا سیمرغ به کمکش بیاید.",
+            type: "story",
+            choices: [
+                { text: "سیمرغ چه چیزی به زال داد؟", next: "challenge_8" }
+            ]
+        },
+        challenge_8: {
+            text: "چالش هشتم: سیمرغ چه چیزی از خودش به زال هدیه داد؟",
+            type: "challenge",
+            options: [
+                { text: "یک پر", isCorrect: true },
+                { text: "یک تخم مرغ", isCorrect: false },
+                { text: "یک شاخه", isCorrect: false }
+            ],
+            correctNext: "node_rostam",
+            points: 15
+        },
+        node_rostam: {
+            text: "درست است! سال‌ها بعد، زال با دختری زیبا به نام رودابه ازدواج کرد. آن‌ها صاحب پسری شدند که از همان کودکی بسیار قوی و بزرگ بود. نام او را «رستم» گذاشتند. رستم در جوانی چنان قوی شد که نیازمند اسبی قدرتمند بود که بتواند وزن او را تحمل کند.",
+            type: "story",
+            choices: [
+                { text: "ببینیم رستم کدام اسب را انتخاب کرد...", next: "node_rakhsh" }
+            ]
+        },
+        node_rakhsh: {
+            text: "رستم در میان اسب‌های فراوان، اسبی زیبا و قوی پیدا کرد که بدن آن پر از خال‌های قرمز روی زمینه سفید بود، درست مثل گلبرگ‌های گل رز. رستم نام این اسب را «رخش» گذاشت.",
+            type: "story",
+            choices: [
+                { text: "معنی رخش چه بود؟", next: "challenge_10" }
+            ]
+        },
+        challenge_10: {
+            text: "چالش دهم: اسب رستم چه نام داشت؟",
+            type: "challenge",
+            options: [
+                { text: "شبدیز", isCorrect: false },
+                { text: "رخش", isCorrect: true },
+                { text: "طوفان", isCorrect: false }
+            ],
+            correctNext: "node_kavus",
+            points: 15
+        },
+        node_kavus: {
+            text: "عالی! رستم و رخش دوستان جدانشدنی شدند. در همان زمان پادشاهی به نام کی‌کاووس تصمیم گرفت به سرزمین مازندران حمله کند، اما توسط دیوها اسیر شد. بزرگترین دشمن او دیوی بود که بدنی کاملاً سفید داشت.",
+            type: "story",
+            choices: [
+                { text: "نام این دیو چه بود؟", next: "challenge_11" }
+            ]
+        },
+        challenge_11: {
+            text: "چالش یازدهم: کلمه متضاد (مخالف) «سیاه» چیست؟ (برای پیدا کردن نام دیو)",
+            type: "challenge",
+            options: [
+                { text: "قرمز", isCorrect: false },
+                { text: "سپید (سفید)", isCorrect: true },
+                { text: "زرد", isCorrect: false }
+            ],
+            correctNext: "node_khan1",
+            points: 15
+        },
+        node_khan1: {
+            text: "درست است! نام او دیو سپید بود. رستم سوار بر رخش شد تا پادشاه را نجات دهد. او در مسیر خود باید از هفت مرحله سخت عبور می‌کرد که به آن «هفت‌خوان» می‌گویند. در خوان اول، رستم خسته بود و خوابید. ناگهان حیوان درنده‌ای که به او سلطان جنگل می‌گویند به او حمله کرد، اما رخش با او جنگید و او را شکست داد.",
+            type: "story",
+            choices: [
+                { text: "رخش با چه حیوانی جنگید؟", next: "challenge_12" }
+            ]
+        },
+        challenge_12: {
+            text: "چالش دوازدهم: کدام حیوان به پادشاه یا سلطان جنگل معروف است؟",
+            type: "challenge",
+            options: [
+                { text: "گرگ", isCorrect: false },
+                { text: "شیر", isCorrect: true },
+                { text: "پلنگ", isCorrect: false }
+            ],
+            correctNext: "node_khan2",
+            points: 20
+        },
+        node_khan2: {
+            text: "بسیار عالی! رستم از خواب بیدار شد و از رخش تشکر کرد. در خوان دوم، آن‌ها به یک بیابان خیلی گرم و خشک رسیدند. آفتاب به شدت می‌تابید و رستم و رخش خیلی تشنه شده بودند.",
+            type: "story",
+            choices: [
+                { text: "چگونه تشنگی‌شان را برطرف کنند؟", next: "challenge_13" }
+            ]
+        },
+        challenge_13: {
+            text: "چالش سیزدهم: وقتی خیلی تشنه می‌شویم، چه چیزی باید بنوشیم تا حالمان خوب شود؟",
+            type: "challenge",
+            options: [
+                { text: "آب", isCorrect: true },
+                { text: "نان", isCorrect: false },
+                { text: "نمک", isCorrect: false }
+            ],
+            correctNext: "node_khan3",
+            points: 15
+        },
+        node_khan3: {
+            text: "آفرین! یک گوسفند کوهی به آن‌ها راه چشمه آب را نشان داد و آن‌ها نجات پیدا کردند. در خوان سوم، وقتی شب شد و رستم خوابیده بود، یک حیوان افسانه‌ای و ترسناک که از دهانش آتش بیرون می‌آمد به آن‌ها نزدیک شد. رستم بیدار شد و با شمشیرش او را شکست داد.",
+            type: "story",
+            choices: [
+                { text: "نام این حیوان چیست؟", next: "challenge_14" }
+            ]
+        },
+        challenge_14: {
+            text: "چالش چهاردهم: نام این حیوان افسانه‌ای که آتش از دهانش بیرون می‌آید چیست؟",
+            type: "challenge",
+            options: [
+                { text: "خرس", isCorrect: false },
+                { text: "اژدها", isCorrect: true },
+                { text: "عقاب", isCorrect: false }
+            ],
+            correctNext: "node_khan4",
+            points: 20
+        },
+        node_khan4: {
+            text: "درست است! در خوان چهارم، رستم در مسیر خود به یک میز پر از غذا و یک زن رسید که با جادو خودش را شبیه یک انسان خوب درآورده بود. اما وقتی رستم نام خدا را بر زبان آورد، جادوی او باطل شد و چهره‌ی واقعی و زشت او معلوم شد.",
+            type: "story",
+            choices: [
+                { text: "چهره او چگونه بود؟", next: "challenge_15" }
+            ]
+        },
+        challenge_15: {
+            text: "چالش پانزدهم: کلمه متضاد (مخالف) «زیبا» چیست؟",
+            type: "challenge",
+            options: [
+                { text: "بزرگ", isCorrect: false },
+                { text: "تاریک", isCorrect: false },
+                { text: "زشت", isCorrect: true }
+            ],
+            correctNext: "node_khan5",
+            points: 15
+        },
+        node_khan5: {
+            text: "عالی! رستم زن جادوگر را نیز شکست داد. در خوان پنجم، او در تاریکی شب به یک جنگل رسید و با پهلوانی به نام «اولاد» روبرو شد. رستم اولاد را شکست داد اما او را نکشت. او به اولاد گفت اگر جای پادشاه و دیو سپید را به من نشان دهی، آزادت می‌کنم.",
+            type: "story",
+            choices: [
+                { text: "اولاد چه نقشی برای رستم پیدا کرد؟", next: "challenge_16" }
+            ]
+        },
+        challenge_16: {
+            text: "چالش شانزدهم: کسی که در مسیرهای سخت به ما راه را نشان می‌دهد چه نام دارد؟",
+            type: "challenge",
+            options: [
+                { text: "دشمن", isCorrect: false },
+                { text: "راهنما", isCorrect: true },
+                { text: "مسافر", isCorrect: false }
+            ],
+            correctNext: "node_khan6",
+            points: 15
+        },
+        node_khan6: {
+            text: "بله، اولاد راهنمای رستم شد. در خوان ششم، رستم به فرمانده دیوها که «ارژنگ دیو» نام داشت رسید. رستم با چنان سرعتی او را شکست داد که بقیه دیوها از ترس فرار کردند.",
+            type: "story",
+            choices: [
+                { text: "رستم حالا به چه کسی می‌رسد؟", next: "node_khan7" }
+            ]
+        },
+        node_khan7: {
+            text: "رستم بالاخره به خوان هفتم رسید! غار تاریک و وحشتناک «دیو سپید». رستم وارد غار تاریک شد تا بزرگترین دیو را شکست دهد.",
+            type: "story",
+            choices: [
+                { text: "فضای غار چگونه بود؟", next: "challenge_17" }
+            ]
+        },
+        challenge_17: {
+            text: "چالش هفدهم: متضاد (مخالف) کلمه «روشن» چیست؟",
+            type: "challenge",
+            options: [
+                { text: "تاریک", isCorrect: true },
+                { text: "سرد", isCorrect: false },
+                { text: "گرم", isCorrect: false }
+            ],
+            correctNext: "node_cure",
+            points: 15
+        },
+        node_cure: {
+            text: "آفرین! رستم در یک نبرد سخت، دیو سپید را شکست داد. پادشاه (کی‌کاووس) و سربازانش توسط دیوها جادو شده و نابینا شده بودند. رستم با استفاده از خون دیو سپید، جادو را باطل کرد و بینایی را به آن‌ها برگرداند.",
+            type: "story",
+            choices: [
+                { text: "پادشاه چه چیزی را دوباره به دست آورد؟", next: "challenge_18" }
+            ]
+        },
+        challenge_18: {
+            text: "چالش هجدهم: ما با کدام عضو بدن خود می‌بینیم؟",
+            type: "challenge",
+            options: [
+                { text: "گوش", isCorrect: false },
+                { text: "چشم", isCorrect: true },
+                { text: "دست", isCorrect: false }
+            ],
+            correctNext: "end_game",
+            points: 20
+        },
+        end_game: {
+            text: "هزاران آفرین! تو همراه با رستم توانستی از تمام هفت‌خوان با موفقیت عبور کنی و پادشاه را نجات دهی. تو نشان دادی که مثل پهلوانان شاهنامه باهوش، شجاع و دانا هستی. داستان ما در اینجا به پایان می‌رسد!",
+            type: "story",
+            choices: []
+        }
+    };
+
+    let currentNode = 'start';
+    let score = 0;
+    let currentFailedAttempts = 0; // شمارنده تعداد اشتباهات در هر مرحله
+
+    function initGame() {
+        try {
+            const savedNode = localStorage.getItem('shahnameh_node');
+            const savedScore = localStorage.getItem('shahnameh_score');
+
+            if (savedNode && storyNodes[savedNode]) {
+                currentNode = savedNode;
+            }
+            if (savedScore) {
+                score = parseInt(savedScore, 10);
+            }
+        } catch (e) {
+            console.warn("Local Storage در دسترس نیست.");
+        }
+
+        updateUI();
+    }
+
+    function updateUI() {
+        document.getElementById('score-display').innerText = score;
+        
+        try {
+            localStorage.setItem('shahnameh_node', currentNode);
+            localStorage.setItem('shahnameh_score', score);
+        } catch (e) {}
+
+        const nodeData = storyNodes[currentNode];
+        document.getElementById('story-text').innerText = nodeData.text;
+        
+        const optionsContainer = document.getElementById('options');
+        optionsContainer.innerHTML = '';
+        document.getElementById('feedback-message').innerText = '';
+        document.getElementById('feedback-message').className = 'feedback';
+
+        if (nodeData.type === 'story') {
+            nodeData.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.innerText = choice.text;
+                btn.onclick = () => goToNode(choice.next);
+                optionsContainer.appendChild(btn);
+            });
+        } else if (nodeData.type === 'challenge') {
+            nodeData.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.innerText = option.text;
+                btn.onclick = () => checkAnswer(option.isCorrect, nodeData.correctNext, nodeData.points);
+                optionsContainer.appendChild(btn);
+            });
+        }
+    }
+
+    function goToNode(nodeId) {
+        currentNode = nodeId;
+        currentFailedAttempts = 0; // صفر کردن شمارنده اشتباهات هنگام رفتن به مرحله جدید
+        updateUI();
+    }
+
+    function checkAnswer(isCorrect, nextNode, defaultPoints) {
+        const feedback = document.getElementById('feedback-message');
+        
+        if (isCorrect) {
+            let earnedPoints = 0;
+            
+            // تعیین امتیاز بر اساس تعداد اشتباهات
+            if (currentFailedAttempts === 0) {
+                earnedPoints = defaultPoints; // بار اول: امتیاز کامل
+            } else if (currentFailedAttempts === 1) {
+                earnedPoints = 5; // بار دوم: 5 امتیاز
+            } else {
+                earnedPoints = 0; // بار سوم به بعد: 0 امتیاز
+            }
+
+            score += earnedPoints;
+            document.getElementById('score-display').innerText = score;
+            try { localStorage.setItem('shahnameh_score', score); } catch(e) {}
+            
+            feedback.innerText = "آفرین! پاسخ درست بود (+ " + earnedPoints + " امتیاز)";
+            feedback.className = "feedback correct";
+            
+            // غیرفعال کردن دکمه‌ها تا زمان رفتن به مرحله بعد
+            const buttons = document.querySelectorAll('#options .btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            setTimeout(() => {
+                goToNode(nextNode);
+            }, 1500);
+            
+        } else {
+            currentFailedAttempts++; // ثبت یک اشتباه
+            feedback.innerText = "اشتباه بود! دوباره تلاش کن.";
+            feedback.className = "feedback wrong";
+        }
+    }
+
+    function resetGame() {
+        if(confirm("آیا مطمئنی می‌خواهی بازی را از اول شروع کنی؟ تمام امتیازات پاک می‌شود.")) {
+            try {
+                localStorage.removeItem('shahnameh_node');
+                localStorage.removeItem('shahnameh_score');
+            } catch(e) {}
+            currentNode = 'start';
+            score = 0;
+            currentFailedAttempts = 0;
+            updateUI();
+        }
+    }
+
+    window.onload = initGame;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بازی املای فرشته کوچک</title>
+    <style>
+        :root {
+            --bg-color: #9370db;
+            --container-bg: rgba(255, 255, 255, 0.2);
+            --accent-pink: #ff85c1;
+            --dark-green-box: #2e7d32; /* سبز پررنگ جدید */
+            --text-dark: #2e003e;
+        }
+
+        body {
+            background: linear-gradient(135deg, #d8b4fe, var(--bg-color));
+            font-family: 'Tahoma', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .container {
+            background: var(--container-bg);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 40px;
+            border: 3px solid white;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .designer-box {
+            background-color: var(--dark-green-box);
+            color: white; /* متن سفید برای خوانایی بهتر در سبز تیره */
+            padding: 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 15px;
+            border: 1px solid #1b5e20;
+        }
+
+        h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 1.8em; margin-bottom: 10px; }
+
+        .question-box {
+            font-size: 20px;
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: var(--text-dark);
+            font-weight: bold;
+            line-height: 1.8;
+        }
+
+        input {
+            width: 70%;
+            padding: 12px;
+            border-radius: 15px;
+            border: none;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        button {
+            background: var(--accent-pink);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { transform: scale(1.05); }
+
+        #feedback { margin-top: 15px; font-weight: bold; height: 30px; font-size: 18px; }
+        .score-board { font-size: 20px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="designer-box">طراح سوال: کبری قربانی، دبستان دخترانه سما، واحد بندر انزلی</div>
+    <h1>🌸 بازی املای گل‌ها 🌸</h1>
+    <div class="score-board">امتیاز تو: <span id="score">0</span></div>
+    <div class="question-box" id="question">در حال بارگذاری...</div>
+    <input type="text" id="answer" placeholder="کلمه جا‌خالی را بنویس...">
+    <br>
+    <button onclick="checkAnswer()">ثبت پاسخ ✅</button>
+    <div id="feedback"></div>
+</div>
+
+<script>
+    const quizData = [
+        { q: "به راهی در ..... دید موری", a: "سلیمان" },
+        { q: "به .....، خویش را هر سو کشیدی", a: "زحمت" },
+        { q: "که ..... گشته از هر کس، جز از خویش", a: "فارغ" },
+        { q: "چرا باید چنین ..... خوردن", a: "خونابه" },
+        { q: "بیا زین ره، به ..... پادشاهی", a: "قصر" },
+        { q: "ره است اینجا و مردم .....", a: "رهگذارند" },
+        { q: "مکش ..... این بار گران را", a: "بیهوده" },
+        { q: "که موران را، ..... خوشتر از سور", a: "قناعت" },
+        { q: "گه تدبیر، ..... باش و بینا", a: "عاقل" },
+        { q: "که شد ..... پیری، جوانی", a: "پیرایه ی" }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        document.getElementById('question').innerText = quizData[currentQ].q;
+        document.getElementById('answer').value = "";
+        document.getElementById('feedback').innerText = "";
+    }
+
+    function checkAnswer() {
+        const userAns = document.getElementById('answer').value.trim();
+        const feedback = document.getElementById('feedback');
+        
+        if (userAns === quizData[currentQ].a) {
+            score += 2;
+            document.getElementById('score').innerText = score;
+            feedback.style.color = "#ffffff";
+            feedback.innerText = "آفرین دختر زرنگ! درست بود! 🌟";
+            currentQ++;
+            if (currentQ < quizData.length) {
+                setTimeout(loadQuestion, 1500);
+            } else {
+                document.querySelector('.container').innerHTML = 
+                    "<h1>🎉 عالی بودی! 🎉</h1>" + 
+                    "<p style='font-size: 22px;'>امتیاز نهایی تو: " + score + " از ۲۰</p>" +
+                    "<button onclick='location.reload()'>شروع مجدد 🔄</button>";
+            }
+        } else {
+            feedback.style.color = "#ffeb3b";
+            feedback.innerText = "یه بار دیگه امتحان کن عزیزم! 🌸";
+        }
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>

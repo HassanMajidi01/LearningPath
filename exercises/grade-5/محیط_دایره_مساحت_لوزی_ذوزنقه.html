@@ -1,0 +1,805 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <title>آموزش محیط و مساحت - پایه پنجم</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Vazirmatn", "IranSans", sans-serif;
+            background: linear-gradient(135deg, #b9f6ca, #a5d6a7);
+            color: #1b5e20;
+        }
+
+        .app-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #e8f5e9;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 20px 25px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* روبان بالای صفحه */
+        .header-ribbon {
+            background: #2e7d32;
+            color: #e8f5e9;
+            padding: 12px 18px;
+            border-radius: 12px;
+            position: relative;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .header-ribbon::before,
+        .header-ribbon::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            background: #1b5e20;
+            border-radius: 50%;
+            opacity: 0.25;
+        }
+
+        .header-ribbon::before {
+            right: -20px;
+            transform: translateY(-50%);
+        }
+        .header-ribbon::after {
+            left: -20px;
+            transform: translateY(-50%);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1b5e20;
+            margin: 10px 0 5px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .score-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #c8e6c9;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .score-pill {
+            background: #2e7d32;
+            color: #e8f5e9;
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            border-radius: 999px;
+            background: #a5d6a7;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #43a047, #66bb6a);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .question-card::after {
+            content: "★";
+            position: absolute;
+            font-size: 34px;
+            color: rgba(76,175,80,0.18);
+            left: 15px;
+            top: 10px;
+            transform: rotate(-18deg);
+        }
+
+        .shape-area {
+            flex: 1 1 260px;
+            min-height: 170px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e8f5e9;
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-text-area {
+            flex: 1 1 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .question-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1b5e20;
+        }
+
+        .question-body {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #558b2f;
+            margin-top: 6px;
+        }
+
+        .input-row {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"] {
+            padding: 6px 8px;
+            border-radius: 10px;
+            border: 1px solid #a5d6a7;
+            font-size: 15px;
+            width: 90px;
+            direction: ltr;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #43a047, #66bb6a);
+            color: white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+        }
+
+        .feedback {
+            margin-top: 10px;
+            min-height: 24px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            color: #1b5e20;
+        }
+
+        .feedback.wrong {
+            color: #c62828;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #fce4ec;
+            color: #ad1457;
+            margin-right: 6px;
+        }
+
+        .shape-label {
+            position: absolute;
+            bottom: 6px;
+            right: 8px;
+            font-size: 11px;
+            background: rgba(255,255,255,0.8);
+            padding: 3px 8px;
+            border-radius: 999px;
+            color: #1b5e20;
+        }
+
+        /* پایان بخش */
+        .end-screen {
+            text-align: center;
+            padding: 30px 10px 10px;
+        }
+
+        .end-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #1b5e20;
+        }
+
+        .medal {
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+
+        .restart-btn {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+        }
+
+        /* اشکال فانتزی دور کارت */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(129,199,132,0.4);
+            pointer-events: none;
+        }
+
+        .bubble.b1 { width: 60px; height: 60px; top: -20px; right: 40px; }
+        .bubble.b2 { width: 90px; height: 90px; bottom: -40px; left: 10px; }
+        .bubble.b3 { width: 35px; height: 35px; bottom: 20px; right: -10px; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header-ribbon">
+        طراح سؤال: ڪبری قربانی<br/>
+        دبستان دخترانه‌ی سما، بندرانزلی
+    </div>
+
+    <h1>بازیِ محیط و مساحت 🌿</h1>
+    <div class="subtitle">
+        ۱۰ سؤال جذاب درباره‌ی محیط دایره و نیم‌دایره و مساحت لوزی و ذوزنقه
+    </div>
+
+    <div class="score-panel">
+        <div>سؤال: <span id="questionIndex">1</span> از 10</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="score-pill">
+            امتیاز: <span id="score">0</span>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="bubble b1"></div>
+        <div class="bubble b2"></div>
+        <div class="bubble b3"></div>
+
+        <div class="shape-area">
+            <svg id="shapeCanvas" width="260" height="170"></svg>
+            <div class="shape-label" id="shapeLabel"></div>
+        </div>
+
+        <div class="question-text-area">
+            <div>
+                <div class="question-title" id="questionTitle">
+                    سؤال ۱
+                </div>
+                <div class="question-body" id="questionBody">
+                    ...
+                </div>
+                <div class="hint" id="hint">
+                    ...
+                </div>
+
+                <div class="input-row">
+                    <label for="answerInput">جواب نهایی:</label>
+                    <input type="number" id="answerInput" />
+                    <span id="unitSpan"></span>
+                    <button id="checkBtn">بررسی جواب</button>
+                </div>
+            </div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <div class="end-screen" id="endScreen" style="display:none;">
+        <div class="medal" id="medalIcon">🏅</div>
+        <div class="end-title" id="endTitle">آفرین!</div>
+        <p id="endText"></p>
+        <button class="restart-btn" id="restartBtn">شروع دوباره 🔁</button>
+    </div>
+</div>
+
+<script>
+    // ثابت‌ها
+    const PI = 3; // برای پایه پنجم و حذف اعشار
+
+    // تولید مجموعه‌ی ۱۰ سؤال
+    function generateQuestions() {
+        const questions = [];
+
+        // چند شعاع مختلف برای دایره‌ها
+        const circleRadii = [2, 3, 4, 5];
+        const rhombusDiagonals = [
+            [4, 6],
+            [5, 8],
+            [6, 10],
+            [7, 9]
+        ];
+        const trapezoids = [
+            // [بزرگ, کوچک, ارتفاع]
+            [6, 4, 4],
+            [8, 4, 3],
+            [10, 6, 3],
+            [12, 8, 4]
+        ];
+
+        // ۳ سؤال محیط دایره
+        for (let i = 0; i < 3; i++) {
+            const r = circleRadii[i];
+            const perimeter = 2 * PI * r; // بدون اعشار به خاطر PI=3
+            questions.push({
+                type: "circle",
+                text: `دایره‌ای با شعاع ${r} سانتی‌متر داریم. محیط این دایره چند سانتی‌متر است؟`,
+                shortTitle: "محیط دایره",
+                hint: "فرمول محیط دایره: ۲ × π × شعاع (اینجا π را برابر ۳ در نظر بگیر)",
+                unit: "سانتی‌متر",
+                answer: perimeter,
+                params: { r }
+            });
+        }
+
+        // ۲ سؤال محیط نیم‌دایره
+        const semiRadii = [2, 3];
+        for (let i = 0; i < 2; i++) {
+            const r = semiRadii[i];
+            // محیط نیم‌دایره = نصف محیط دایره + قطر
+            const halfCircle = PI * r; // چون محیط دایره = 2 * PI * r => نصفش = PI * r
+            const diameter = 2 * r;
+            const perimeter = halfCircle + diameter; // باز هم بدون اعشار
+            questions.push({
+                type: "semicircle",
+                text: `نیم‌دایره‌ای با شعاع ${r} سانتی‌متر داریم. محیط این نیم‌دایره چند سانتی‌متر است؟ (لبه‌ی صاف پایین را هم حساب کن)`,
+                shortTitle: "محیط نیم‌دایره",
+                hint: "محیط نیم‌دایره = نصف محیط دایره + قطر",
+                unit: "سانتی‌متر",
+                answer: perimeter,
+                params: { r }
+            });
+        }
+
+        // ۳ سؤال مساحت لوزی
+        for (let i = 0; i < 3; i++) {
+            const d1 = rhombusDiagonals[i][0];
+            const d2 = rhombusDiagonals[i][1];
+            const area = (d1 * d2) / 2;
+            // همه‌ی مقادیر طوری انتخاب شده‌اند که جواب صحیح عدد صحیح باشد
+            questions.push({
+                type: "rhombus",
+                text: `لوزی‌ای داریم که قطرهای آن ${d1} سانتی‌متر و ${d2} سانتی‌متر هستند. مساحت این لوزی چند سانتی‌متر مربع است؟`,
+                shortTitle: "مساحت لوزی",
+                hint: "فرمول مساحت لوزی: (قطر بزرگ × قطر کوچک) ÷ ۲",
+                unit: "سانتی‌متر مربع",
+                answer: area,
+                params: { d1, d2 }
+            });
+        }
+
+        // ۲ سؤال مساحت ذوزنقه
+        for (let i = 0; i < 2; i++) {
+            const a = trapezoids[i][0];
+            const b = trapezoids[i][1];
+            const h = trapezoids[i][2];
+            const area = ((a + b) * h) / 2;
+            questions.push({
+                type: "trapezoid",
+                text: `ذوزنقه‌ای داریم که قاعده‌های آن ${a} سانتی‌متر و ${b} سانتی‌متر و ارتفاع آن ${h} سانتی‌متر است. مساحت این ذوزنقه چند سانتی‌متر مربع است؟`,
+                shortTitle: "مساحت ذوزنقه",
+                hint: "فرمول مساحت ذوزنقه: (جمع دو قاعده × ارتفاع) ÷ ۲",
+                unit: "سانتی‌متر مربع",
+                answer: area,
+                params: { a, b, h }
+            });
+        }
+
+        return questions;
+    }
+
+    let questions = generateQuestions();
+    let currentIndex = 0;
+    let score = 0;
+
+    const questionIndexSpan = document.getElementById("questionIndex");
+    const scoreSpan = document.getElementById("score");
+    const progressFill = document.getElementById("progressFill");
+    const questionTitle = document.getElementById("questionTitle");
+    const questionBody = document.getElementById("questionBody");
+    const hintSpan = document.getElementById("hint");
+    const unitSpan = document.getElementById("unitSpan");
+    const answerInput = document.getElementById("answerInput");
+    const checkBtn = document.getElementById("checkBtn");
+    const feedbackDiv = document.getElementById("feedback");
+    const shapeCanvas = document.getElementById("shapeCanvas");
+    const shapeLabel = document.getElementById("shapeLabel");
+
+    const endScreen = document.getElementById("endScreen");
+    const endTitle = document.getElementById("endTitle");
+    const endText = document.getElementById("endText");
+    const medalIcon = document.getElementById("medalIcon");
+    const restartBtn = document.getElementById("restartBtn");
+    const questionCard = document.querySelector(".question-card");
+
+    function clearSVG() {
+        while (shapeCanvas.firstChild) {
+            shapeCanvas.removeChild(shapeCanvas.firstChild);
+        }
+    }
+
+    // رسم اشکال
+    function drawCircle(r) {
+        clearSVG();
+        const cx = 130;
+        const cy = 85;
+        const scale = 15; // تبدیل شعاع به پیکسل
+        const radiusPx = r * scale;
+
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", cx);
+        circle.setAttribute("cy", cy);
+        circle.setAttribute("r", radiusPx);
+        circle.setAttribute("fill", "#c8e6c9");
+        circle.setAttribute("stroke", "#2e7d32");
+        circle.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(circle);
+
+        // شعاع
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", cx);
+        line.setAttribute("y1", cy);
+        line.setAttribute("x2", cx + radiusPx);
+        line.setAttribute("y2", cy);
+        line.setAttribute("stroke", "#388e3c");
+        line.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(line);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", cx + radiusPx/2);
+        text.setAttribute("y", cy - 8);
+        text.setAttribute("fill", "#1b5e20");
+        text.setAttribute("font-size", "12");
+        text.setAttribute("text-anchor", "middle");
+        text.textContent = r + " cm";
+        shapeCanvas.appendChild(text);
+
+        shapeLabel.textContent = "دایره";
+    }
+
+    function drawSemiCircle(r) {
+        clearSVG();
+        const cx = 130;
+        const cy = 110;
+        const scale = 15;
+        const radiusPx = r * scale;
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const startX = cx - radiusPx;
+        const endX = cx + radiusPx;
+        const startY = cy;
+        const arcY = cy;
+
+        const d = `
+            M ${startX} ${startY}
+            A ${radiusPx} ${radiusPx} 0 0 1 ${endX} ${arcY}
+            L ${endX} ${startY}
+            L ${startX} ${startY}
+            Z
+        `;
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "#c8e6c9");
+        path.setAttribute("stroke", "#2e7d32");
+        path.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(path);
+
+        // شعاع
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", cx);
+        line.setAttribute("y1", cy);
+        line.setAttribute("x2", cx);
+        line.setAttribute("y2", cy - radiusPx);
+        line.setAttribute("stroke", "#388e3c");
+        line.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(line);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", cx + 5);
+        text.setAttribute("y", cy - radiusPx/2);
+        text.setAttribute("fill", "#1b5e20");
+        text.setAttribute("font-size", "12");
+        text.textContent = r + " cm";
+        shapeCanvas.appendChild(text);
+
+        shapeLabel.textContent = "نیم‌دایره";
+    }
+
+    function drawRhombus(d1, d2) {
+        clearSVG();
+        const cx = 130;
+        const cy = 85;
+        const scale = 8;
+        const D1 = d1 * scale;
+        const D2 = d2 * scale;
+
+        const points = [
+            [cx, cy - D2/2],
+            [cx + D1/2, cy],
+            [cx, cy + D2/2],
+            [cx - D1/2, cy]
+        ].map(p => p.join(",")).join(" ");
+
+        const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        poly.setAttribute("points", points);
+        poly.setAttribute("fill", "#c8e6c9");
+        poly.setAttribute("stroke", "#2e7d32");
+        poly.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(poly);
+
+        // قطرها
+        const d1Line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        d1Line.setAttribute("x1", cx - D1/2);
+        d1Line.setAttribute("y1", cy);
+        d1Line.setAttribute("x2", cx + D1/2);
+        d1Line.setAttribute("y2", cy);
+        d1Line.setAttribute("stroke", "#388e3c");
+        d1Line.setAttribute("stroke-width", "2");
+        shapeCanvas.appendChild(d1Line);
+
+        const d2Line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        d2Line.setAttribute("x1", cx);
+        d2Line.setAttribute("y1", cy - D2/2);
+        d2Line.setAttribute("x2", cx);
+        d2Line.setAttribute("y2", cy + D2/2);
+        d2Line.setAttribute("stroke", "#388e3c");
+        d2Line.setAttribute("stroke-width", "2");
+        shapeCanvas.appendChild(d2Line);
+
+        const txt1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt1.setAttribute("x", cx);
+        txt1.setAttribute("y", cy - 6);
+        txt1.setAttribute("fill", "#1b5e20");
+        txt1.setAttribute("font-size", "11");
+        txt1.setAttribute("text-anchor", "middle");
+        txt1.textContent = d1 + " cm";
+        shapeCanvas.appendChild(txt1);
+
+        const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt2.setAttribute("x", cx + 6);
+        txt2.setAttribute("y", cy + 18);
+        txt2.setAttribute("fill", "#1b5e20");
+        txt2.setAttribute("font-size", "11");
+        txt2.textContent = d2 + " cm";
+        shapeCanvas.appendChild(txt2);
+
+        shapeLabel.textContent = "لوزی";
+    }
+
+    function drawTrapezoid(a, b, h) {
+        clearSVG();
+        const baseY = 120;
+        const scale = 10;
+        const widthA = a * scale;
+        const widthB = b * scale;
+        const height = h * scale;
+
+        const cx = 130;
+        const x1 = cx - widthA/2;
+        const x2 = cx + widthA/2;
+        const x3 = cx - widthB/2;
+        const x4 = cx + widthB/2;
+        const y1 = baseY;
+        const y2 = baseY - height;
+
+        const points = [
+            [x1, y1],
+            [x2, y1],
+            [x4, y2],
+            [x3, y2]
+        ].map(p => p.join(",")).join(" ");
+
+        const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        poly.setAttribute("points", points);
+        poly.setAttribute("fill", "#c8e6c9");
+        poly.setAttribute("stroke", "#2e7d32");
+        poly.setAttribute("stroke-width", "3");
+        shapeCanvas.appendChild(poly);
+
+        // قاعده‌ها
+        const base1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        base1.setAttribute("x1", x1);
+        base1.setAttribute("y1", y1);
+        base1.setAttribute("x2", x2);
+        base1.setAttribute("y2", y1);
+        base1.setAttribute("stroke", "#388e3c");
+        base1.setAttribute("stroke-width", "2");
+        shapeCanvas.appendChild(base1);
+
+        const base2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        base2.setAttribute("x1", x3);
+        base2.setAttribute("y1", y2);
+        base2.setAttribute("x2", x4);
+        base2.setAttribute("y2", y2);
+        base2.setAttribute("stroke", "#388e3c");
+        base2.setAttribute("stroke-width", "2");
+        shapeCanvas.appendChild(base2);
+
+        const txt1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt1.setAttribute("x", cx);
+        txt1.setAttribute("y", y1 + 14);
+        txt1.setAttribute("fill", "#1b5e20");
+        txt1.setAttribute("font-size", "11");
+        txt1.setAttribute("text-anchor", "middle");
+        txt1.textContent = a + " cm";
+        shapeCanvas.appendChild(txt1);
+
+        const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt2.setAttribute("x", cx);
+        txt2.setAttribute("y", y2 - 6);
+        txt2.setAttribute("fill", "#1b5e20");
+        txt2.setAttribute("font-size", "11");
+        txt2.setAttribute("text-anchor", "middle");
+        txt2.textContent = b + " cm";
+        shapeCanvas.appendChild(txt2);
+
+        // ارتفاع
+        const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        hLine.setAttribute("x1", x1);
+        hLine.setAttribute("y1", y1);
+        hLine.setAttribute("x2", x1);
+        hLine.setAttribute("y2", y2);
+        hLine.setAttribute("stroke", "#2e7d32");
+        hLine.setAttribute("stroke-width", "2");
+        shapeCanvas.appendChild(hLine);
+
+        const txtH = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txtH.setAttribute("x", x1 + 12);
+        txtH.setAttribute("y", (y1 + y2)/2);
+        txtH.setAttribute("fill", "#1b5e20");
+        txtH.setAttribute("font-size", "11");
+        txtH.textContent = h + " cm";
+        shapeCanvas.appendChild(txtH);
+
+        shapeLabel.textContent = "ذوزنقه";
+    }
+
+    // نمایش یک سؤال
+    function showQuestion(index) {
+        const q = questions[index];
+        questionIndexSpan.textContent = index + 1;
+        progressFill.style.width = ((index) / questions.length) * 100 + "%";
+        scoreSpan.textContent = score;
+
+        questionTitle.innerHTML = `سؤال ${index + 1} <span class="badge">${q.shortTitle}</span>`;
+        questionBody.textContent = q.text;
+        hintSpan.textContent = q.hint;
+        unitSpan.textContent = q.unit ? "(" + q.unit + ")" : "";
+        feedbackDiv.textContent = "";
+        feedbackDiv.className = "feedback";
+        answerInput.value = "";
+        answerInput.focus();
+
+        // رسم شکل مناسب
+        if (q.type === "circle") {
+            drawCircle(q.params.r);
+        } else if (q.type === "semicircle") {
+            drawSemiCircle(q.params.r);
+        } else if (q.type === "rhombus") {
+            drawRhombus(q.params.d1, q.params.d2);
+        } else if (q.type === "trapezoid") {
+            drawTrapezoid(q.params.a, q.params.b, q.params.h);
+        }
+    }
+
+    // پایان بازی
+    function showEndScreen() {
+        questionCard.style.display = "none";
+        endScreen.style.display = "block";
+        progressFill.style.width = "100%";
+
+        let message;
+        let medal;
+        if (score === 10) {
+            medal = "🏆";
+            message = "عالی! همه‌ی سؤال‌ها را درست جواب دادی. تو یک ستاره‌ی هندسه هستی!";
+        } else if (score >= 7) {
+            medal = "🥇";
+            message = "آفرین! کارتو خیلی خوب انجام دادی، فقط کمی تمرین بیشتر!";
+        } else if (score >= 4) {
+            medal = "🥈";
+            message = "خوبه! با کمی تمرین و دقت بیشتر، کاملاً می‌تونی عالی بشی.";
+        } else {
+            medal = "🥉";
+            message = "ناامید نشو. یک بار دیگر امتحان کن تا بهتر و بهتر بشی.";
+        }
+
+        medalIcon.textContent = medal;
+        endTitle.textContent = "پایان بازی 🌿";
+        endText.textContent = `امتیاز تو: ${score} از ۱۰. ${message}`;
+    }
+
+    function checkAnswer() {
+        const q = questions[currentIndex];
+        const userValue = Number(answerInput.value);
+
+        if (answerInput.value.trim() === "") {
+            feedbackDiv.textContent = "اول جواب خودت را داخل کادر بنویس.";
+            feedbackDiv.className = "feedback wrong";
+            return;
+        }
+
+        if (userValue === q.answer) {
+            feedbackDiv.textContent = "آفرین! جواب درست است. 🌸 امتیاز +۱";
+            feedbackDiv.className = "feedback correct";
+            score++;
+            scoreSpan.textContent = score;
+
+            // بعد از کمی تأخیر، سؤال بعدی
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    showQuestion(currentIndex);
+                } else {
+                    showEndScreen();
+                }
+            }, 1000);
+        } else {
+            feedbackDiv.textContent = "هنوز کامل درست نشده. یک بار دیگر با دقت امتحان کن.";
+            feedbackDiv.className = "feedback wrong";
+        }
+    }
+
+    checkBtn.addEventListener("click", checkAnswer);
+    answerInput.addEventListener("keyup", function (e) {
+        if (e.key === "Enter") {
+            checkAnswer();
+        }
+    });
+
+    restartBtn.addEventListener("click", function () {
+        // شروع دوباره با تولید سؤال‌های جدید
+        questions = generateQuestions();
+        currentIndex = 0;
+        score = 0;
+        endScreen.style.display = "none";
+        questionCard.style.display = "flex";
+        showQuestion(0);
+    });
+
+    // شروع اولیه
+    showQuestion(0);
+</script>
+</body>
+</html>

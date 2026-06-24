@@ -1,0 +1,432 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون اعداد اعشاری</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #5a2d82; /* رنگ بنفش تیره */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #8e44ad; /* رنگ بنفش روشن‌تر */
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .question {
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .question p {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        .options label:hover {
+            background-color: #ecf0f1;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #8e44ad; /* رنگ دکمه رادیویی */
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none; /* در ابتدا مخفی است */
+        }
+        .solution {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 8px;
+            display: none; /* در ابتدا مخفی است */
+        }
+
+        .correct-answer-text {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        /* Input field styling */
+        .input-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #5a2d82;
+        }
+        .input-section input[type="text"] {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+            font-size: 1em;
+            text-align: center;
+        }
+        .input-section button {
+            padding: 10px 20px;
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .input-section button:hover {
+            background-color: #5a2d82;
+        }
+
+        .score-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ddd;
+            display: none; /* در ابتدا مخفی است */
+        }
+        .score-title {
+            font-size: 1.3em;
+            color: #c0392b;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .score-message {
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+        .score-message.excellent { color: #27ae60; font-weight: bold; }
+        .score-message.good { color: #f39c12; font-weight: bold; }
+        .score-message.medium { color: #e67e22; font-weight: bold; }
+        .score-message.needs-work { color: #c0392b; font-weight: bold; }
+
+        .final-answers {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f6f3;
+            border-radius: 5px;
+            border: 1px solid #1abc9c;
+            text-align: left;
+            display: none; /* در ابتدا مخفی است */
+        }
+        .final-answers h3 {
+            color: #16a085;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .final-answers p {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 آزمون اعداد اعشاری</h1>
+        <div class="input-section" id="user-input-section">
+            <label for="user-name">دوست من، لطفاً نام و نام خانوادگی خود را وارد کنید:</label>
+            <input type="text" id="user-name" placeholder="نام و نام خانوادگی">
+            <button onclick="startQuiz()">شروع آزمون</button>
+        </div>
+
+        <div class="question-section" style="display: none;" id="questions-area">
+            <p>سلام <strong id="user-greeting"></strong>! بیا با هم این آزمون جذاب رو حل کنیم و ببینیم چقدر اعداد اعشاری رو یاد گرفتی. هر سؤال ۱ امتیاز داره!</p>
+
+            <div class="question" id="q1">
+                <p>۱) اگر یک کیک را به ۱۰ قسمت مساوی تقسیم کنیم و ۳ قسمت را برداریم، این عدد کدام است؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="a"> الف) ۳/۰</label>
+                    <label><input type="radio" name="q1" value="b"> ب) ۰/۳</label>
+                    <label><input type="radio" name="q1" value="c"> ج) ۱۰/۳</label>
+                    <label><input type="radio" name="q1" value="d"> د) ۳/۱۰</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ب) ۰/۳</div>
+            </div>
+
+            <div class="question" id="q2">
+                <p>۲) در عدد ۵/۸، کدام بخش عدد کامل را نشان می‌دهد؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="a"> الف) ۸</label>
+                    <label><input type="radio" name="q2" value="b"> ب) ۵</label>
+                    <label><input type="radio" name="q2" value="c"> ج) ۵ و ۸ با هم</label>
+                    <label><input type="radio" name="q2" value="d"> د) هیچ‌کدام</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ب) ۵</div>
+            </div>
+
+            <div class="question" id="q3">
+                <p>۳) اگر ۰/۶ کیک داشته باشی و ۰/۲ از آن را بخوری، چقدر باقی می‌ماند؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="a"> الف) ۰/۳</label>
+                    <label><input type="radio" name="q3" value="b"> ب) ۰/۴</label>
+                    <label><input type="radio" name="q3" value="c"> ج) ۰/۸</label>
+                    <label><input type="radio" name="q3" value="d"> د) ۱/۲</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ب) ۰/۴</div>
+            </div>
+
+            <div class="question" id="q4">
+                <p>۴) نقش / در عددهای اعشاری چیست؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="a"> الف) فقط برای زیبایی است</label>
+                    <label><input type="radio" name="q4" value="b"> ب) جداکننده‌ی بخش کامل و بخش اعشاری است</label>
+                    <label><input type="radio" name="q4" value="c"> ج) یعنی باید جمع کنیم</label>
+                    <label><input type="radio" name="q4" value="d"> د) یعنی عدد را تقسیم کنیم</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ب) جداکننده‌ی بخش کامل و بخش اعشاری است</div>
+            </div>
+
+            <div class="question" id="q5">
+                <p>۵) اگر ۱/۰ کیک داشته باشی، این یعنی چه؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="a"> الف) هیچ کیکی نداری</label>
+                    <label><input type="radio" name="q5" value="b"> ب) یک کیک کامل داری</label>
+                    <label><input type="radio" name="q5" value="c"> ج) نصف کیک داری</label>
+                    <label><input type="radio" name="q5" value="d"> د) ۱۰ کیک داری</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ب) یک کیک کامل داری</div>
+            </div>
+
+            <div class="question" id="q6">
+                <p>۶) کدام عدد از همه کوچک‌تر است؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="a"> الف) ۰/۹</label>
+                    <label><input type="radio" name="q6" value="b"> ب) ۰/۴</label>
+                    <label><input type="radio" name="q6" value="c"> ج) ۰/۱</label>
+                    <label><input type="radio" name="q6" value="d"> د) ۰/۷</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: ج) ۰/۱</div>
+            </div>
+
+            <div class="question" id="q7">
+                <p>۷) اگر ۰/۵ + ۰/۲ را حساب کنیم، جواب چیست؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="a"> الف) ۰/۷</label>
+                    <label><input type="radio" name="q7" value="b"> ب) ۰/۳</label>
+                    <label><input type="radio" name="q7" value="c"> ج) ۰/۲</label>
+                    <label><input type="radio" name="q7" value="d"> د) ۱/۷</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: الف) ۰/۷</div>
+            </div>
+
+            <div class="question" id="q8">
+                <p>۸) کدام عبارت درست‌تر است؟</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="a"> الف) ۰/۱ یعنی یک دهم</label>
+                    <label><input type="radio" name="q8" value="b"> ب) ۰/۱ یعنی یک واحد کامل</label>
+                    <label><input type="radio" name="q8" value="c"> ج) ۰/۱ یعنی ده</label>
+                    <label><input type="radio" name="q8" value="d"> د) ۰/۱ یعنی صفر</label>
+                </div>
+                <div class="feedback"></div>
+                <div class="solution">جواب درست: الف) ۰/۱ یعنی یک دهم</div>
+            </div>
+        </div>
+
+        <div class="score-section" id="results-area" style="display: none;">
+            <h2 id="results-title"></h2>
+            <p class="score-title">امتیاز کل شما: <span id="total-score">۰</span> از ۸</p>
+            <p class="score-message" id="score-message"></p>
+            <div class="final-answers" id="final-answers-section">
+                <h3>پاسخ‌های صحیح:</h3>
+                <!-- Answers will be populated here -->
+            </div>
+            <button onclick="showAnswers()" style="margin-top: 20px;">نمایش پاسخ‌ها</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = {
+            q1: 'b', q2: 'b', q3: 'b', q4: 'b',
+            q5: 'b', q6: 'c', q7: 'a', q8: 'a'
+        };
+        const questionDetails = {
+            q1: { text: "۱) اگر یک کیک را به ۱۰ قسمت مساوی تقسیم کنیم و ۳ قسمت را برداریم، این عدد کدام است؟", options: {"الف) ۳/۰": "a", "ب) ۰/۳": "b", "ج) ۱۰/۳": "c", "د) ۳/۱۰": "d"}, correct: "b"},
+            q2: { text: "۲) در عدد ۵/۸، کدام بخش عدد کامل را نشان می‌دهد؟", options: {"الف) ۸": "a", "ب) ۵": "b", "ج) ۵ و ۸ با هم": "c", "د) هیچ‌کدام": "d"}, correct: "b"},
+            q3: { text: "۳) اگر ۰/۶ کیک داشته باشی و ۰/۲ از آن را بخوری، چقدر باقی می‌ماند؟", options: {"الف) ۰/۳": "a", "ب) ۰/۴": "b", "ج) ۰/۸": "c", "د) ۱/۲": "d"}, correct: "b"},
+            q4: { text: "۴) نقش / در عددهای اعشاری چیست؟", options: {"الف) فقط برای زیبایی است": "a", "ب) جداکننده‌ی بخش کامل و بخش اعشاری است": "b", "ج) یعنی باید جمع کنیم": "c", "د) یعنی عدد را تقسیم کنیم": "d"}, correct: "b"},
+            q5: { text: "۵) اگر ۱/۰ کیک داشته باشی، این یعنی چه؟", options: {"الف) هیچ کیکی نداری": "a", "ب) یک کیک کامل داری": "b", "ج) نصف کیک داری": "c", "د) ۱۰ کیک داری": "d"}, correct: "b"},
+            q6: { text: "۶) کدام عدد از همه کوچک‌تر است؟", options: {"الف) ۰/۹": "a", "ب) ۰/۴": "b", "ج) ۰/۱": "c", "د) ۰/۷": "d"}, correct: "c"},
+            q7: { text: "۷) اگر ۰/۵ + ۰/۲ را حساب کنیم، جواب چیست؟", options: {"الف) ۰/۷": "a", "ب) ۰/۳": "b", "ج) ۰/۲": "c", "د) ۱/۷": "d"}, correct: "a"},
+            q8: { text: "۸) کدام عبارت درست‌تر است؟", options: {"الف) ۰/۱ یعنی یک دهم": "a", "ب) ۰/۱ یعنی یک واحد کامل": "b", "ج) ۰/۱ یعنی ده": "c", "د) ۰/۱ یعنی صفر": "d"}, correct: "a"}
+        };
+
+        const totalQuestions = Object.keys(questions).length;
+        let score = 0;
+        const totalScoreElement = document.getElementById('total-score');
+        const scoreMessageElement = document.getElementById('score-message');
+        const questionsArea = document.getElementById('questions-area');
+        const resultsArea = document.getElementById('results-area');
+        const userInputSection = document.getElementById('user-input-section');
+        const userGreetingElement = document.getElementById('user-greeting');
+        const resultsTitleElement = document.getElementById('results-title');
+        const finalAnswersSection = document.getElementById('final-answers-section');
+
+        function startQuiz() {
+            const userNameInput = document.getElementById('user-name');
+            const userName = userNameInput.value.trim();
+
+            if (userName) {
+                userGreetingElement.textContent = userName;
+                userInputSection.style.display = 'none';
+                questionsArea.style.display = 'block';
+            } else {
+                alert('لطفاً نام و نام خانوادگی خود را وارد کنید.');
+            }
+        }
+
+        document.querySelectorAll('.question input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const questionId = radio.name;
+                const userAnswer = radio.value;
+                const questionElement = document.getElementById(questionId);
+                const feedbackElement = questionElement.querySelector('.feedback');
+                const solutionElement = questionElement.querySelector('.solution');
+                const correctAns = questions[questionId];
+                const qDetail = questionDetails[questionId];
+
+                // Reset previous feedback and solution visibility
+                feedbackElement.innerHTML = '';
+                feedbackElement.style.display = 'none';
+                solutionElement.style.display = 'none'; // Hide solution initially
+
+                // Check if already answered to avoid double counting score
+                const answered = questionElement.dataset.answered === 'true';
+
+                if (!answered) {
+                    if (userAnswer === correctAns) {
+                        score++;
+                        feedbackElement.innerHTML = '👍 عالی!';
+                        feedbackElement.style.color = '#27ae60';
+                        feedbackElement.style.display = 'block';
+                    } else {
+                        feedbackElement.innerHTML = '😞 ای وای!';
+                        feedbackElement.style.color = '#c0392b';
+                        feedbackElement.style.display = 'block';
+                    }
+                    questionElement.dataset.answered = 'true'; // Mark as answered
+                    // Increment score only once per question
+                    updateScore();
+                } else {
+                    // If already answered and user clicks again, just update feedback based on current selection
+                    if (userAnswer === correctAns) {
+                        feedbackElement.innerHTML = '👍 عالی!';
+                        feedbackElement.style.color = '#27ae60';
+                        feedbackElement.style.display = 'block';
+                    } else {
+                        feedbackElement.innerHTML = '😞 ای وای!';
+                        feedbackElement.style.color = '#c0392b';
+                        feedbackElement.style.display = 'block';
+                    }
+                }
+            });
+        });
+
+        function updateScore() {
+            totalScoreElement.textContent = score;
+            let message = '';
+            let messageClass = '';
+
+            if (score === totalQuestions) {
+                message = 'فوق‌العاده! شما در اعداد اعشاری استادید! 🌟';
+                messageClass = 'excellent';
+            } else if (score >= totalQuestions * 0.8) {
+                message = 'خیلی خوبه! فقط کمی تمرین بیشتر لازم داری.';
+                messageClass = 'good';
+            } else if (score >= totalQuestions * 0.5) {
+                message = 'خوبه، ولی باید یه‌کم بیشتر روی اعداد اعشاری کار کنی.';
+                messageClass = 'medium';
+            } else {
+                message = 'ای وای! بیا دوباره با هم مرور کنیم و تمرین کنیم.';
+                messageClass = 'needs-work';
+            }
+            scoreMessageElement.textContent = message;
+            scoreMessageElement.className = 'score-message ' + messageClass;
+
+            // Enable showing results only when all questions are answered
+            let allAnswered = true;
+            document.querySelectorAll('.question').forEach(qElement => {
+                if (qElement.dataset.answered !== 'true') {
+                    allAnswered = false;
+                }
+            });
+
+            if (allAnswered) {
+                questionsArea.style.display = 'none';
+                resultsArea.style.display = 'block';
+                resultsTitleElement.textContent = `${document.getElementById('user-greeting').textContent} عزیز، نتیجه آزمون شما:`;
+            }
+        }
+
+        function showAnswers() {
+            document.querySelectorAll('.question').forEach(qElement => {
+                const qId = qElement.id;
+                const solutionElement = qElement.querySelector('.solution');
+                solutionElement.style.display = 'block'; // Show solutions
+            });
+
+            // Populate final answers section
+            let answersHtml = '';
+            for (const qId in questionDetails) {
+                const qData = questionDetails[qId];
+                const correctValue = qData.correct;
+                let correctText = '';
+                for (const optionText in qData.options) {
+                    if (qData.options[optionText] === correctValue) {
+                        correctText = optionText;
+                        break;
+                    }
+                }
+                answersHtml += `<p><strong>${qData.text.split(')')[0]})</strong> ${correctText}</p>`;
+            }
+            finalAnswersSection.innerHTML = `<h3>پاسخ‌های صحیح:</h3>${answersHtml}`;
+            finalAnswersSection.style.display = 'block';
+
+            // Hide the "Show Answers" button after it's clicked
+            event.target.style.display = 'none';
+        }
+
+        // Initialize score display on page load
+        updateScore();
+    </script>
+</body>
+</html>
+طراح : ساراقربان دوست

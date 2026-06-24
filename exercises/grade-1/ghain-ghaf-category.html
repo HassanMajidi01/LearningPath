@@ -1,0 +1,594 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی آموزشی قطره‌ها - ق و غ</title>
+    <style>
+        /* @import url('https://v1.fontapi.ir/css/Vazir'); */
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazir', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 80px;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 { margin: 5px 0; font-size: 24px; color: #333; }
+        p { margin: 5px 0; font-size: 14px; color: #555; }
+
+        .game-area {
+            flex: 1;
+            display: flex;
+            position: relative;
+            min-height: 60vh;
+        }
+
+        .zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-left: 2px dashed rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+        .zone:first-child { border-left: none; }
+
+        .zone-title {
+            font-size: 40px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .list-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .drop {
+            width: 110px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset 10px -10px 20px rgba(0,0,0,0.05), inset -10px 10px 20px rgba(255,255,255,0.8), 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            transition: background-color 0.4s ease;
+        }
+
+        .drop-active {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            cursor: grab;
+            z-index: 999;
+            touch-action: none;
+            animation: dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .drop-active:active { cursor: grabbing; }
+
+        @keyframes dropIn {
+            0% { transform: translate(-50%, -250%); opacity: 0; }
+            100% { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .drop .emoji { font-size: 35px; line-height: 1; margin-bottom: 5px;}
+        .drop .word { font-size: 18px; font-weight: bold; color: #222; }
+
+        .drop-mini {
+            position: relative;
+            width: 80px; height: 80px;
+            cursor: default;
+            z-index: 1;
+            transition: all 1s ease;
+        }
+        .drop-mini .emoji { font-size: 25px; }
+        .drop-mini .word { font-size: 14px; }
+
+        .fade-out {
+            opacity: 0 !important;
+            transform: scale(0) !important;
+        }
+
+        .btn-container {
+            text-align: center;
+            padding: 15px;
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-family: inherit;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        button:hover { background-color: #45a049; }
+        button:active { transform: scale(0.95); }
+
+        #success-msg {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 28px;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            color: #2e7d32;
+            font-weight: bold;
+            opacity: 1;
+            transition: opacity 1.5s ease; /* انیمیشن محو شدن پیام */
+        }
+
+        /* سیستم پوششی صفحات ورود و اتمام بازی مطابق تم اصلی */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Vazir', sans-serif;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #3498db;
+        }
+
+        .status-msg {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .status-msg.loading {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-msg.success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-msg.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .summary-list {
+            text-align: right;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-right: 4px solid #3498db;
+        }
+
+        .summary-item {
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #334155;
+        }
+
+        .badge-incorrect {
+            background: #ffe4e6;
+            color: #be123c;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-block;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>بازی قطره‌ها 💧</h1>
+        <p>قطره را بگیرید و به سمت راست (غ) یا چپ (ق) بکشید.</p>
+    </header>
+
+    <!-- صفحه ورود نام کاربر -->
+    <div class="overlay" id="start-overlay">
+        <div class="card">
+            <h2>خوش آمدید! 🎉</h2>
+            <p>لطفاً نام و نام خانوادگی خود را وارد کنید تا نتایج شما در کارنامه ثبت شود.</p>
+            <div class="input-group">
+                <label for="username-input">نام دانش‌آموز:</label>
+                <input type="text" id="username-input" placeholder="مثال: علی محمدی" required>
+                <div id="name-validation-error" style="color: #e74c3c; display: none; margin-top: 8px; font-weight: bold; font-size: 13px;">لطفاً ابتدا نام خود را وارد کنید.</div>
+            </div>
+            <button class="btn" style="background-color: #3498db; padding: 12px 40px; border-radius: 12px;" onclick="startGame()">شروع بازی 🚀</button>
+        </div>
+    </div>
+
+    <!-- محتوای اصلی بازی -->
+    <div class="game-area" id="gameArea">
+        <div class="zone" id="zone-gh">
+            <div class="zone-title">غ</div>
+            <div class="list-container" id="gh-list"></div>
+        </div>
+        <div class="zone" id="zone-q">
+            <div class="zone-title">ق</div>
+            <div class="list-container" id="q-list"></div>
+        </div>
+    </div>
+
+    <div class="btn-container" id="btnContainer">
+        <button onclick="checkAnswers()">بررسی پاسخ‌ها ✔️</button>
+    </div>
+
+    <div id="success-msg">
+        🎉 آفرین! همه رو درست گفتی! 🎉
+    </div>
+
+    <!-- صفحه نمایش نتایج نهایی و ذخیره‌سازی -->
+    <div class="overlay" id="end-overlay" style="display: none;">
+        <div class="card">
+            <h2>بازی با موفقیت تمام شد! 🏆</h2>
+            <p>عملکرد شما با موفقیت ثبت گردید.</p>
+            
+            <div class="summary-list">
+                <div class="summary-item">👤 نام بازیکن: <strong id="res-name">-</strong></div>
+                <div class="summary-item">⏱️ تعداد دفعات بررسی: <strong id="res-attempts">-</strong></div>
+                <div class="summary-item">❌ تعداد خطاها: <strong id="res-errors" style="color: #e74c3c;">-</strong></div>
+                <div class="summary-item">📝 کلمات اشتباه: <div id="res-incorrect" style="margin-top: 5px;">-</div></div>
+            </div>
+
+            <!-- وضعیت ذخیره داده‌ها در شیت -->
+            <div id="save-status" class="status-msg"></div>
+
+            <button class="btn" onclick="location.reload()" style="background-color: #3498db; padding: 12px 40px; border-radius: 12px; margin-top: 15px;">بازی مجدد 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // آدرس وب‌اپ اختصاصی گوگل اسکریپت شما
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfv_yJyboj3HOculZ5VVvKbp6UB8NQnoZdESg72ows43H0en10Xm_DVRx5fZObopyR_w/exec";
+
+        // مجموعه کلمات و اطلاعات دسته‌بندی آن‌ها (جاخالی + استیکرها کاملاً اورجینال شما)
+        const wordsData = [
+            { word: "تیغ", blank: "تیـ⭕", ans: "غ", emoji: "🪒" },
+            { word: "جوجه تیغی", blank: "جوجه تیـ⭕ـی", ans: "غ", emoji: "🦔" },
+            { word: "مرغابی", blank: "مر⭕ابی", ans: "غ", emoji: "🦆" },
+            { word: "کلاغ", blank: "کلا⭕", ans: "غ", emoji: "🐦" },
+            { word: "چراغ", blank: "چرا⭕", ans: "غ", emoji: "💡" },
+            { word: "غذا", blank: "⭕ذا", ans: "غ", emoji: "🍲" },
+            { word: "پیغمبر", blank: "پیـ⭕ـمبر", ans: "غ", emoji: "👳" },
+            { word: "غنچه", blank: "⭕نچه", ans: "غ", emoji: "🌷" },
+            { word: "قاصدک", blank: "⭕اصدک", ans: "ق", emoji: "🌼" },
+            { word: "قاشق", blank: "⭕اش⭕", ans: "ق", emoji: "🥄" },
+            { word: "قایق", blank: "⭕ای⭕", ans: "ق", emoji: "⛵" },
+            { word: "قوری", blank: "⭕وری", ans: "ق", emoji: "🫖" },
+            { word: "بشقاب", blank: "بشـ⭕ـاب", ans: "ق", emoji: "🍽️" },
+            { word: "قناری", blank: "⭕ناری", ans: "ق", emoji: "🐤" },
+            { word: "منقار", blank: "منـ⭕ـار", ans: "ق", emoji: "🦜" },
+            { word: "غروب", blank: "⭕روب", ans: "غ", emoji: "🌇" },
+            { word: "غاز", blank: "⭕از", ans: "غ", emoji: "🦢" },
+            { word: "باغبان", blank: "با⭕بان", ans: "غ", emoji: "👨‍🌾" },
+            { word: "جغد", blank: "جـ⭕ـد", ans: "غ", emoji: "🦉" },
+            { word: "جیغ", blank: "جیـ⭕", ans: "غ", emoji: "😱" },
+            { word: "بوقلمون", blank: "بو⭕لمون", ans: "ق", emoji: "🦃" },
+            { word: "بوق", blank: "بو⭕", ans: "ق", emoji: "📣" },
+            { word: "دوغ", blank: "دو⭕", ans: "غ", emoji: "🥛" },
+            { word: "شلوغ", blank: "شلو⭕", ans: "غ", emoji: "👥" },
+            { word: "غمگین", blank: "⭕مگین", ans: "غ", emoji: "😔" },
+            { word: "نقطه", blank: "نـ⭕ـطه", ans: "ق", emoji: "🔴" },
+            { word: "قلم", blank: "⭕لم", ans: "ق", emoji: "🖊️" },
+            { word: "داغ", blank: "دا⭕", ans: "غ", emoji: "🔥" },
+            { word: "غصّه", blank: "⭕صّه", ans: "غ", emoji: "😢" },
+            { word: "قصّه", blank: "⭕صّه", ans: "ق", emoji: "📖" }
+        ];
+
+        wordsData.sort(() => Math.random() - 0.5);
+
+        let queue = [...wordsData];
+        let currentDrop = null;
+        let placedItems = [];
+
+        // متغیرهای آماری ثبت کارنامه
+        let errorCount = 0;
+        let totalAttempts = 0;
+        let incorrectWords = [];
+        let username = "";
+
+        const qList = document.getElementById('q-list');
+        const ghList = document.getElementById('gh-list');
+        const btnContainer = document.getElementById('btnContainer');
+        const successMsg = document.getElementById('success-msg');
+
+        // شروع بازی پس از وارد کردن نام
+        function startGame() {
+            const nameInput = document.getElementById('username-input').value.trim();
+            if (!nameInput) {
+                document.getElementById('name-validation-error').style.display = 'block';
+                return;
+            }
+            username = nameInput;
+            document.getElementById('start-overlay').style.display = 'none';
+            nextDrop();
+        }
+
+        function createDrop(item) {
+            const drop = document.createElement('div');
+            drop.className = 'drop drop-active';
+            drop.innerHTML = `<div class="emoji">${item.emoji}</div><div class="word">${item.blank}</div>`;
+            drop.itemData = item;
+            
+            let isDragging = false;
+            let startX, currentX = 0;
+
+            const startDrag = (e) => {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                drop.style.animation = 'none'; 
+                drop.style.transition = 'none';
+            };
+
+            const drag = (e) => {
+                if (!isDragging) return;
+                e.preventDefault(); 
+                let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                currentX = clientX - startX;
+                drop.style.transform = `translate(calc(-50% + ${currentX}px), -50%) rotate(${currentX * 0.1}deg)`;
+            };
+
+            const endDrag = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                drop.style.transition = 'transform 0.3s ease';
+                
+                if (currentX > 80) { 
+                    placeDrop('غ');
+                } else if (currentX < -80) { 
+                    placeDrop('ق');
+                } else {
+                    drop.style.transform = 'translate(-50%, -50%)'; 
+                }
+                currentX = 0;
+            };
+
+            drop.addEventListener('mousedown', startDrag);
+            window.addEventListener('mousemove', drag, {passive: false});
+            window.addEventListener('mouseup', endDrag);
+
+            drop.addEventListener('touchstart', startDrag, {passive: false});
+            window.addEventListener('touchmove', drag, {passive: false});
+            window.addEventListener('touchend', endDrag);
+
+            document.body.appendChild(drop);
+            currentDrop = drop;
+        }
+
+        function placeDrop(side) {
+            const item = currentDrop.itemData;
+            currentDrop.remove();
+            
+            const miniDrop = document.createElement('div');
+            miniDrop.className = 'drop drop-mini';
+            miniDrop.innerHTML = `<div class="emoji">${item.emoji}</div><div class="word">${item.blank}</div>`;
+            miniDrop.itemData = item;
+            miniDrop.chosenSide = side;
+
+            if (side === 'ق') {
+                qList.appendChild(miniDrop);
+            } else {
+                ghList.appendChild(miniDrop);
+            }
+
+            placedItems.push(miniDrop);
+            nextDrop();
+        }
+
+        function nextDrop() {
+            if (queue.length > 0) {
+                createDrop(queue.pop());
+            } else {
+                btnContainer.style.display = 'block';
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
+        }
+
+        function checkAnswers() {
+            let hasError = false;
+            const itemsToPop = [];
+
+            totalAttempts++; // اضافه شدن تعداد تلاش‌ها
+
+            placedItems.forEach(drop => {
+                if (drop.chosenSide === drop.itemData.ans) {
+                    drop.style.backgroundColor = 'rgba(100, 255, 100, 0.8)';
+                    drop.querySelector('.word').innerText = drop.itemData.word; 
+                } else {
+                    hasError = true;
+                    drop.style.backgroundColor = 'rgba(255, 100, 100, 0.9)';
+                    itemsToPop.push(drop);
+
+                    // محاسبه خطاها و کلمات اشتباه
+                    errorCount++;
+                    if (!incorrectWords.includes(drop.itemData.word)) {
+                        incorrectWords.push(drop.itemData.word);
+                    }
+                }
+            });
+
+            if (hasError) {
+                btnContainer.style.display = 'none'; 
+                
+                setTimeout(() => {
+                    itemsToPop.forEach(drop => {
+                        drop.classList.add('fade-out'); 
+                        setTimeout(() => {
+                            drop.remove();
+                            queue.push(drop.itemData); 
+                        }, 1000); 
+                    });
+                    
+                    placedItems = placedItems.filter(d => !itemsToPop.includes(d));
+                    
+                    setTimeout(() => {
+                        queue.sort(() => Math.random() - 0.5);
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                        nextDrop();
+                    }, 1200);
+                }, 1500);
+            } else {
+                btnContainer.style.display = 'none';
+                
+                // نمایش پیام موفقیت
+                successMsg.style.display = 'block';
+                successMsg.style.opacity = '1';
+
+                // محو شدن خودکار بعد از ۳ ثانیه و فراخوانی پایان نهایی بازی
+                setTimeout(() => {
+                    successMsg.style.opacity = '0';
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                        endGame(); // اتمام بازی و ارسال کارنامه
+                    }, 1500); // صبر برای اتمام ترانزیشن CSS
+                }, 3000);
+            }
+        }
+
+        // اتمام نهایی بازی و نمایش کارنامه
+        function endGame() {
+            document.getElementById('end-overlay').style.display = 'flex';
+            
+            document.getElementById('res-name').innerText = username;
+            document.getElementById('res-attempts').innerText = totalAttempts;
+            document.getElementById('res-errors').innerText = errorCount;
+
+            const incorrectContainer = document.getElementById('res-incorrect');
+            if (incorrectWords.length > 0) {
+                incorrectContainer.innerHTML = incorrectWords.map(w => `<span class="badge-incorrect">${w}</span>`).join(' ');
+            } else {
+                incorrectContainer.innerHTML = '<span style="color: #2ec4b6;">بدون خطا! فوق‌العاده بود 🌟</span>';
+            }
+
+            // آماده‌سازی اطلاعات جهت ثبت در گوگل شیت
+            const gameData = {
+                username: username,
+                datetime: new Date().toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' }),
+                errors: errorCount,
+                incorrect_words: incorrectWords.length > 0 ? incorrectWords.join('، ') : "بدون خطا",
+                attempts: totalAttempts
+            };
+
+            sendDataToGoogleAppsScript(gameData);
+        }
+
+        // ارسال امن نتایج به گوگل اپس اسکریپت
+        async function sendDataToGoogleAppsScript(data) {
+            const statusDiv = document.getElementById('save-status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status-msg loading';
+            statusDiv.innerText = "⏳ در حال ذخیره اتوماتیک کارنامه در گوگل شیت شما...";
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                statusDiv.className = 'status-msg success';
+                statusDiv.innerText = "✅ کارنامه شما با موفقیت در گوگل شیت معلم ثبت شد!";
+            } catch (err) {
+                console.error(err);
+                statusDiv.className = 'status-msg error';
+                statusDiv.innerText = "❌ خطا در ذخیره خودکار. اما کارنامه شما صادر گردید.";
+            }
+        }
+    </script>
+</body>
+</html>

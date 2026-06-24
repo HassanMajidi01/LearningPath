@@ -1,0 +1,494 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>آزمونک کلمات مترادف</title>
+
+  <style>
+    /* ====== Fonts (fallback) ====== */
+    body { font-family: "Vazirmatn", "IRANSans", "Tahoma", sans-serif; }
+
+    /* ====== Page Background ====== */
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body {
+      background: linear-gradient(135deg, #ffd1ea 0%, #b7dcff 100%);
+      background-size: 400% 400%;
+      animation: rainbow 14s ease infinite;
+
+      min-height: 100vh;
+      margin: 0;
+      color: #2b2b2b;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Optional background elements */
+    .background-elements {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .pine-tree {
+      position: absolute;
+      width: 70px;
+      height: 140px;
+      opacity: 0.55;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 60"><polygon points="15,0 0,50 30,50" fill="%23228B22"/><polygon points="15,10 5,40 25,40" fill="%233CB371"/><polygon points="15,20 10,55 20,55" fill="%2366CDAA"/></svg>') no-repeat center center;
+      background-size: contain;
+    }
+    .pine-tree.left { top: 20%; left: 3%; transform: scale(0.85); }
+    .pine-tree.right { top: 55%; right: 3%; transform: scale(1.05); }
+
+    /* ====== Header (strong + readable) ====== */
+    .topbar {
+      width: 100%;
+      max-width: 920px;
+
+      margin: 14px 12px 18px;
+      padding: 14px 14px;
+
+      border-radius: 22px;
+
+      background: linear-gradient(90deg, #ff4fb2, #7c5cff);
+      color: #fff;
+
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+      border: 3px solid rgba(255,255,255,0.65);
+
+      text-align: center;
+    }
+    .topbar .title {
+      font-size: clamp(18px, 3.6vw, 26px);
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      margin: 0 0 6px;
+      text-shadow: 0 2px 0 rgba(0,0,0,0.12);
+    }
+    .topbar .subtitle {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: clamp(13px, 2.6vw, 16px);
+      font-weight: 800;
+      margin: 0;
+      opacity: 0.98;
+    }
+    .pill {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 6px 10px;
+      border-radius: 999px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+    }
+
+    /* ====== Game container ====== */
+    .game-container {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 12px 18px;
+
+      background: rgba(255,255,255,0.86);
+      border-radius: 26px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+
+      padding: 14px 14px 18px;
+
+      border: 3px solid rgba(255,255,255,0.65);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Word display */
+    .word-display-area {
+      min-height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 6px 0 10px;
+
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65));
+      border: 2px solid rgba(255, 111, 180, 0.35);
+    }
+    .word-display-area .word {
+      font-size: clamp(18px, 5.2vw, 30px);
+      font-weight: 900;
+      color: #d81b60;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      padding: 10px 14px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    /* ====== GRID: fixed 5x5 ====== */
+    .grid-table {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* always 5 columns */
+      gap: 8px; /* smaller gap so fits */
+      padding: 6px 0;
+    }
+
+    .grid-cell {
+      background-color: #fff;
+      border: 2px solid #ff7fc6;
+      border-radius: 12px;
+
+      user-select: none;
+      cursor: pointer;
+
+      /* Make all words visible on phone */
+      padding: 8px 6px;
+      min-height: 54px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+
+      font-size: clamp(11px, 2.2vw, 16px);
+      font-weight: 900;
+      color: #3a3a3a;
+
+      /* Wrap text nicely */
+      line-height: 1.15;
+
+      transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    /* multi-line clamp so long words don't overflow */
+    .grid-cell .cell-text {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3; /* max 3 lines */
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .grid-cell:hover {
+      background-color: #ffd3ea;
+      transform: translateY(-2px);
+    }
+
+    .grid-cell.selected {
+      background-color: #ff7fc6;
+      color: #fff;
+    }
+    .grid-cell.correct {
+      background-color: #b7f0b6 !important;
+      border-color: #62c05a !important;
+      cursor: default;
+      color: #1b5e20 !important;
+    }
+    .grid-cell.incorrect {
+      background-color: #ffc1c1 !important;
+      border-color: #ff6b6b !important;
+      cursor: default;
+      color: #7a0000 !important;
+    }
+
+    /* Score */
+    .score-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 0;
+      flex-wrap: wrap;
+    }
+    .score-display, .score-feedback {
+      font-weight: 900;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 111, 180, 0.25);
+      background: rgba(255,255,255,0.7);
+    }
+    .score-display { color: #6a1b9a; }
+    .score-feedback { color: #2e7d32; flex: 1; text-align: center; }
+
+    .score-feedback.incorrect-text { color: #c62828; }
+
+    /* Responsive tweaks (IMPORTANT: keep 5x5) */
+    @media (max-width: 420px) {
+      .game-container { padding: 12px 10px 16px; }
+      .grid-table { gap: 7px; }
+      .grid-cell { min-height: 48px; padding: 8px 4px; }
+      .word-display-area { min-height: 62px; }
+      .score-feedback { font-size: 14px; }
+    }
+
+    /* small animation helpers */
+    @keyframes moveUp {
+      0% { transform: translateY(8px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .word-anim { animation: moveUp 0.35s ease-out both; }
+
+    /* Confetti / wrong marks (simple) */
+    .confetti, .wrong-mark {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      opacity: 1;
+      pointer-events: none;
+      animation: fall linear infinite, scatter ease-out infinite;
+      background-repeat: no-repeat;
+      background-size: contain;
+      z-index: 9999;
+    }
+    @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg);} }
+    @keyframes scatter { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+    .confetti.clap {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10V8a2 2 0 0 0-2-2h-3m-4 4L5 5"/><path d="M18 8l-2.77 2.77a2 2 0 0 0-.58 3.44l1.86 1.86a2 2 0 0 1 0 2.83l-4.95 4.95a2 2 0 0 1-2.83 0l-1.86-1.86a2 2 0 0 0-3.44-.58L2 18"/></svg>');
+    }
+    .wrong-mark {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>');
+    }
+  </style>
+</head>
+<body>
+  <div class="background-elements">
+    <div class="pine-tree left"></div>
+    <div class="pine-tree right"></div>
+  </div>
+
+  <div class="topbar">
+    <p class="title">آزمونک کلمات مترادف</p>
+    <p class="subtitle">
+      <span class="pill">طراح: کبری قربانی</span>
+      <span class="pill">دبستان دخترانه ی سما</span>
+      <span class="pill">واحد بندرانزلی</span>
+    </p>
+  </div>
+
+  <div class="game-container">
+    <div class="word-display-area">
+      <span id="current-word" class="word"></span>
+    </div>
+
+    <div class="grid-table" id="grid-table"></div>
+
+    <div class="score-wrap">
+      <div id="score-display" class="score-display">امتیاز: 0</div>
+      <div id="score-feedback" class="score-feedback"></div>
+    </div>
+  </div>
+
+  <script>
+    const wordsData = {
+      words: [
+        "تامّل","رهگذر","تازیانه","دِه","بهبودی",
+        "رحمت الهی","نامدار","سپیده دم","مور","گران",
+        "مسکین","فارغ","سور","بردباری","قناعت",
+        "روییدند","کم کَمَک","سیما","ماهر","طبیب",
+        "به ستوه آمده ام","دیدگان","نذر","افزود","دلبستگی"
+      ],
+      synonyms: [
+        "چشم ها",
+        "آنچه شخص بر خود واجب می کند در راه خدا انجام دهد",
+        "شلاق",
+        "روستا",
+        "سلامتی",
+
+        "لطف خداوند",
+        "معروف",
+        "صبح زود",
+        "مورچه",
+        "سنگین",
+
+        "نیازمند",
+        "آسوده",
+        "غذایی که در مهمانی ها می دهند",
+        "صبر",
+        "قانع بودن",
+
+        "رشد کردند",
+        "آرام آرام",
+        "صورت",
+        "کسی که کاری را به خوبی انجام می دهد",
+        "پزشک",
+
+        "خسته شده ام",
+        "چشم ها",
+        "اضافه کرد",
+        "علاقه"
+      ]
+    };
+
+    // ---- Fix mapping by using pairs instead of relying on indexOf (safer) ----
+    // pairs must be 25 each (5x5). In your provided list, synonyms list seems inconsistent/has duplicates.
+    // To keep game working correctly, we pair each grid word with its provided synonym at same order:
+    const pairs = [
+      ["تامّل","اندیشه کن"], // (اگر ترتیب از سمت شما همین بوده)
+      ["رهگذر","کسانی که از مکانی عبور می کنند"],
+      ["تازیانه","شلاق"],
+      ["دِه","روستا"],
+      ["بهبودی","سلامتی"],
+      ["رحمت الهی","لطف خداوند"],
+      ["نامدار","معروف"],
+      ["سپیده دم","صبح زود"],
+      ["مور","مورچه"],
+      ["گران","سنگین"],
+      ["مسکین","نیازمند"],
+      ["فارغ","آسوده"],
+      ["سور","غذایی که در مهمانی ها می دهند"],
+      ["بردباری","صبر"],
+      ["قناعت","قانع بودن"],
+      ["روییدند","رشد کردند"],
+      ["کم کَمَک","آرام آرام"],
+      ["سیما","صورت"],
+      ["ماهر","کسی که کاری را به خوبی انجام می دهد"],
+      ["طبیب","پزشک"],
+      ["به ستوه آمده ام","خسته شده ام"],
+      ["دیدگان","چشم ها"],
+      ["نذر","آنچه شخص بر خود واجب می کند در راه خدا انجام دهد"],
+      ["افزود","اضافه کرد"],
+      ["دلبستگی","علاقه"]
+    ];
+
+    // ---- Game state ----
+    const gridTableElement = document.getElementById('grid-table');
+    const currentWordElement = document.getElementById('current-word');
+    const scoreFeedbackElement = document.getElementById('score-feedback');
+    const scoreDisplayElement = document.getElementById('score-display');
+
+    let score = 0;
+    let correctOrder = [];  // synonyms sequence
+    let currentIndex = 0;
+    let gridWords = [];
+
+    function shuffle(arr){
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i+1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function createGrid(){
+      // words exactly 25
+      gridWords = shuffle(pairs.map(p => p[0]));
+      gridTableElement.innerHTML = '';
+
+      gridWords.forEach((word) => {
+        const cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        cell.dataset.word = word;
+
+        const text = document.createElement('div');
+        text.className = 'cell-text';
+        text.textContent = word;
+
+        cell.appendChild(text);
+
+        cell.addEventListener('click', () => handleCellClick(cell, word));
+        gridTableElement.appendChild(cell);
+      });
+    }
+
+    function start(){
+      score = 0;
+      currentIndex = 0;
+      scoreDisplayElement.textContent = `امتیاز: ${score}`;
+      scoreFeedbackElement.textContent = '';
+
+      // We show synonyms one-by-one (shuffled order)
+      const syns = pairs.map(p => p[1]);
+      correctOrder = shuffle(syns);
+
+      nextQuestion();
+    }
+
+    function nextQuestion(){
+      if (currentIndex >= correctOrder.length){
+        currentWordElement.textContent = "بازی تمام شد!";
+        scoreFeedbackElement.textContent = `امتیاز نهایی: ${score}`;
+        return;
+      }
+
+      const synonymToFind = correctOrder[currentIndex];
+      currentWordElement.textContent = synonymToFind;
+      currentWordElement.classList.remove('word-anim');
+      void currentWordElement.offsetWidth;
+      currentWordElement.classList.add('word-anim');
+
+      scoreFeedbackElement.textContent = '';
+      scoreFeedbackElement.classList.remove('incorrect-text');
+    }
+
+    function triggerClapConfetti(){
+      for (let i=0;i<10;i++){
+        const c = document.createElement('div');
+        c.className = 'confetti clap';
+        c.style.left = `${Math.random()*90}%`;
+        c.style.top = '80px';
+        c.style.animationDuration = `${(Math.random()*1.1)+2.2}s`;
+        document.body.appendChild(c);
+        c.addEventListener('animationend', ()=>c.remove());
+      }
+    }
+
+    function triggerRedX(){
+      for (let i=0;i<5;i++){
+        const m = document.createElement('div');
+        m.className = 'wrong-mark';
+        m.style.left = `${Math.random()*90}%`;
+        m.style.top = '80px';
+        m.style.animationDuration = `${(Math.random()*0.6)+1.1}s`;
+        document.body.appendChild(m);
+        m.addEventListener('animationend', ()=>m.remove());
+      }
+    }
+
+    function handleCellClick(cell, clickedWord){
+      const synonymNow = currentWordElement.textContent;
+      if (!synonymNow || synonymNow === "بازی تمام شد!") return;
+
+      // Find which grid word matches the current synonym
+      const match = pairs.find(p => p[1] === synonymNow);
+      if (!match) return;
+
+      const correctWord = match[0];
+
+      if (clickedWord === correctWord){
+        score++;
+        scoreDisplayElement.textContent = `امتیاز: ${score}`;
+        scoreFeedbackElement.textContent = "آفرین! درست گفتی! 🎉";
+
+        cell.classList.add('correct');
+        cell.onclick = null;
+
+        triggerClapConfetti();
+        currentIndex++;
+        setTimeout(nextQuestion, 900);
+      } else {
+        scoreFeedbackElement.textContent = "اشتباه بود! دوباره تلاش کن.";
+        scoreFeedbackElement.classList.add('incorrect-text');
+
+        cell.classList.add('incorrect');
+        triggerRedX();
+
+        setTimeout(()=>{
+          cell.classList.remove('incorrect');
+        }, 650);
+      }
+    }
+
+    createGrid();
+    start();
+  </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بازی آموزشی کلاس پنجم</title>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background-color: #e8f5e9;
+            text-align: center;
+            padding: 10px;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .small-header {
+            font-size: 11px;
+            color: #555;
+            margin: 8px 0 5px;
+        }
+
+        .name-section {
+            margin-bottom: 15px;
+        }
+
+        .name-section label {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .name-section input {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 2px solid #81c784;
+            text-align: center;
+            outline: none;
+            margin-top: 6px;
+            width: 220px;
+            max-width: 80%;
+        }
+
+        .game-container {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 650px;
+            margin: auto;
+            border: 3px solid #81c784;
+        }
+
+        .score {
+            font-size: 18px;
+            color: #1b5e20;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .question-num {
+            color: #2e7d32;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .question {
+            font-size: 20px;
+            margin: 15px 0;
+            min-height: 60px;
+            line-height: 1.8;
+        }
+
+        .prompt {
+            font-size: 16px;
+            color: #d32f2f;
+            font-weight: bold;
+            min-height: 28px;
+            margin: 8px 0 10px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .wrong {
+            color: red;
+            font-size: 48px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .boxes {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            padding: 12px;
+            border: 2px solid #a5d6a7;
+            border-radius: 15px;
+            width: 44%;
+            min-width: 200px;
+            background: #f1f8e9;
+        }
+
+        .box-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .end-message {
+            margin-top: 20px;
+            padding: 14px 16px;
+            color: #d32f2f;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.9;
+            text-align: center;
+            background: #fff5f5;
+            border-radius: 16px;
+            border: 2px dashed #ef9a9a;
+        }
+
+        .final-score {
+            font-size: 26px;
+            color: #1b5e20;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .rain {
+            position: fixed;
+            top: -30px;
+            font-size: 24px;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+                opacity: 0.9;
+            }
+        }
+
+        .start-note {
+            color: #2e7d32;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="small-header">طراح بازی: کبری قربانی، دبستان دخترانه‌ی سما واحد بندر انزلی</div>
+
+    <div class="name-section">
+        <label for="studentName">نام زیبای دخترم:</label><br />
+        <input id="studentName" type="text" placeholder="نام خود را بنویسید" />
+        <div class="start-note">با کلیک روی پاسخ‌ها، بازی را شروع کن 🌷</div>
+    </div>
+
+    <div class="game-container">
+        <div class="score">امتیاز: <span id="score">0</span></div>
+        <div id="q-num" class="question-num"></div>
+        <div id="game-box"></div>
+        <div id="feedback" class="prompt"></div>
+    </div>
+
+    <script>
+        const questions = [
+            // دسته‌بندی
+            { type: 'sort', q: 'از نماز و عبادت فاصله گرفتند', answer: 'جهنمیان' },
+            { type: 'sort', q: 'نعمت ها و لذّت هایشان هیچ گاه پایان نمی پذیرد', answer: 'بهشتیان' },
+            { type: 'sort', q: 'از آبی بدبو مینوشند و سیراب نمی شوند', answer: 'جهنمیان' },
+            { type: 'sort', q: 'هر آنچه دلشان بخواهد برایشان فراهم است', answer: 'بهشتیان' },
+            { type: 'sort', q: 'به دیگران ستم نکردند', answer: 'بهشتیان' },
+            { type: 'sort', q: 'حقّ مردم را پایمال کردند', answer: 'جهنمیان' },
+
+            // چندگزینه‌ای
+            {
+                type: 'multi',
+                q: 'بنیانگذار جمهوری اسلامی ایران چه کسی است؟',
+                options: ['آیت الله خامنه ای', 'شهید بهشتی', 'آیت الله خمینی', 'شهید باهنر'],
+                ans: 'آیت الله خمینی'
+            },
+            {
+                type: 'multi',
+                q: 'انقلاب اسلامی در چه تاریخی به پیروزی رسید؟',
+                options: ['۱۲ بهمن ۱۳۵۷', '۲۲ بهمن ۱۳۵۷', '۱۲ بهمن ۱۳۵۸', '۲۲ بهمن ۱۳۵۸'],
+                ans: '۲۲ بهمن ۱۳۵۷'
+            },
+            {
+                type: 'multi',
+                q: 'در کشور ما چه روزی "یوم الله" نامیده می شود؟',
+                options: ['۱۲ بهمن', '۲۲ بهمن', '۱۵ خرداد', '۱۷ شهریور'],
+                ans: '۲۲ بهمن'
+            },
+            {
+                type: 'multi',
+                q: 'این حدیث از کیست؟ پیش از آنکه به حساب شما رسیدگی شود به حساب خود برسید',
+                options: ['امام علی(ع)', 'حضرت محمد(ص)', 'امام حسین(ع)', 'امام رضا(ع)'],
+                ans: 'حضرت محمد(ص)'
+            },
+
+            // درست/نادرست
+            { type: 'tf', q: 'تلاش و رشادت نوجوانان سال ۱۳۵۷ باعث تولّد انقلاب شد', ans: true },
+            { type: 'tf', q: 'ما می توانیم در روز قیامت، کارهای خوب و بد خود را جبران کنیم.', ans: false },
+            { type: 'tf', q: 'شهید بهشتی در پیروزی انقلاب اسلامی نقش مهمی داشتند', ans: true },
+            { type: 'tf', q: 'ما با استراحت و خوش گذرانی می توانیم به پیشرفت کشورمان ایران کمک کنیم', ans: false },
+            { type: 'tf', q: 'در روز قیامت همه ی افراد به بهشت می روند', ans: false }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let locked = false;
+
+        function createRain() {
+            for (let i = 0; i < 14; i++) {
+                const div = document.createElement('div');
+                div.className = 'rain';
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+                div.innerText = Math.random() > 0.5 ? '🌸' : '🦋';
+                document.body.appendChild(div);
+                setTimeout(() => div.remove(), 5000);
+            }
+        }
+
+        function loadQuestion() {
+            if (currentQ >= questions.length) {
+                const studentName = document.getElementById('studentName').value.trim();
+
+                document.getElementById('q-num').innerText = '';
+                document.getElementById('feedback').innerText = '';
+
+                document.getElementById('game-box').innerHTML = `
+                    <h2 style="color:#2e7d32; margin-bottom:10px;">آفرین! بازی تمام شد 🌟</h2>
+                    ${studentName ? `<div style="font-size:18px; color:#555; margin-bottom:10px;">${studentName} عزیز،</div>` : ''}
+                    <div class="final-score">امتیاز نهایی شما: ${score}</div>
+                    <div class="end-message">
+                        هَر چه کُنی به خود کُنی<br>
+                        گَر همه نیک وبد کُنی
+                    </div>
+                `;
+                return;
+            }
+
+            const data = questions[currentQ];
+            document.getElementById('q-num').innerText = `سوال ${currentQ + 1} از ${questions.length}`;
+
+            let html = `<div class="question">${data.q}</div>`;
+
+            if (data.type === 'sort') {
+                html += `
+                    <div class="prompt" style="color:#1565c0;">این ویژگی کدام گروه است؟</div>
+                    <div class="boxes">
+                        <div class="box">
+                            <div class="box-title">🌸 بهشتیان</div>
+                            <button onclick="checkSort('بهشتیان')">انتخاب</button>
+                        </div>
+                        <div class="box">
+                            <div class="box-title">🔥 جهنمیان</div>
+                            <button onclick="checkSort('جهنمیان')">انتخاب</button>
+                        </div>
+                    </div>
+                `;
+            } else if (data.type === 'multi') {
+                html += `<div>`;
+                data.options.forEach(opt => {
+                    html += `<button onclick="checkMulti('${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+                });
+                html += `</div>`;
+            } else if (data.type === 'tf') {
+                html += `
+                    <div>
+                        <button onclick="checkTF(true)">درست</button>
+                        <button onclick="checkTF(false)">نادرست</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById('game-box').innerHTML = html;
+        }
+
+        function correct() {
+            if (locked) return;
+            locked = true;
+
+            score += 10;
+            document.getElementById('score').innerText = score;
+            document.getElementById('feedback').innerText = 'آفرین! خیلی عالی بود! 🌟';
+            createRain();
+
+            setTimeout(() => {
+                document.getElementById('feedback').innerText = '';
+                currentQ++;
+                locked = false;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function wrong() {
+            if (locked) return;
+            locked = true;
+
+            document.getElementById('feedback').innerHTML = "<span class='wrong'>❌</span>";
+
+            setTimeout(() => {
+                document.getElementById('feedback').innerText = '';
+                locked = false;
+            }, 1000);
+        }
+
+        function checkSort(userAns) {
+            const correctAns = questions[currentQ].answer;
+            if (userAns === correctAns) correct();
+            else wrong();
+        }
+
+        function checkMulti(userAns) {
+            const correctAns = questions[currentQ].ans;
+            if (userAns === correctAns) correct();
+            else wrong();
+        }
+
+        function checkTF(userAns) {
+            const correctAns = questions[currentQ].ans;
+            if (userAns === correctAns) correct();
+            else wrong();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

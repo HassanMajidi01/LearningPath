@@ -42,7 +42,45 @@ const quranTopicsData = {
             { text: 'نـ<span class="red">َ</span>', audio: "/Persian/assets/audio/na.mp3" }, { text: 'ن<span class="red">ا</span>', audio: "/Persian/assets/audio/naa.mp3" }, { text: 'ن<span class="red">و</span>', audio: "/Persian/assets/audio/noo.mp3" }
         ]
     },
-    "topic-7": {
+	"topic-5": {
+        title: "لوحه 5",
+        tiles: [
+            { text: "اَبا", audio: "/Persian/assets/audio/aba.mp3" },
+            { text: "دَنا", audio: "/Persian/assets/audio/dana.mp3" },
+            { text: "سارَ", audio: "/Persian/assets/audio/sara.mp3" },
+            { text: "اَمَرَ", audio: "/Persian/assets/audio/amara.mp3" },
+            { text: "اَرادَ", audio: "/Persian/assets/audio/arada.mp3" },
+            { text: "اَبانا", audio: "/Persian/assets/audio/abana.mp3" },
+            { text: "سَنا", audio: "/Persian/assets/audio/sana.mp3" },
+            { text: "تابَ", audio: "/Persian/assets/audio/taba.mp3" },
+            { text: "اَرادا", audio: "/Persian/assets/audio/aradaa.mp3" }
+        ]
+    },
+	"topic-6": {
+        title: "لوحه 6",
+        tiles: [
+            { text: "ایـ", audio: "/Persian/assets/audio/e.mp3" },
+            { text: "بیـ", audio: "/Persian/assets/audio/bi.mp3" },
+            { text: "تیـ", audio: "/Persian/assets/audio/ti.mp3" },
+            { text: "دیـ", audio: "/Persian/assets/audio/di.mp3" },
+            { text: "ریـ", audio: "/Persian/assets/audio/ri.mp3" },
+            { text: "زیـ", audio: "/Persian/assets/audio/zi.mp3" },
+            { text: "سیـ", audio: "/Persian/assets/audio/si.mp3" },
+            { text: "میـ", audio: "/Persian/assets/audio/mi.mp3" },
+            { text: "نیـ", audio: "/Persian/assets/audio/ni.mp3" },
+            { text: "ای", audio: "/Persian/assets/audio/e.mp3" },
+            { text: "بی", audio: "/Persian/assets/audio/bi.mp3" },
+            { text: "تی", audio: "/Persian/assets/audio/ti.mp3" },
+            { text: "دی", audio: "/Persian/assets/audio/di.mp3" },
+            { text: "ری", audio: "/Persian/assets/audio/ri.mp3" },
+            { text: "زی", audio: "/Persian/assets/audio/zi.mp3" },
+            { text: "سی", audio: "/Persian/assets/audio/si.mp3" },
+            { text: "می", audio: "/Persian/assets/audio/mi.mp3" },
+            { text: "نی", audio: "/Persian/assets/audio/ni.mp3" }
+
+        ]
+    },
+	"topic-7": {
         title: "لوحه 7",
         tiles: [
             { text: "آدَمَ", audio: "/Persian/assets/audio/adama.mp3" },
@@ -56,7 +94,7 @@ const quranTopicsData = {
             { text: "تَتوبا", audio: "/Persian/assets/audio/tatooba.mp3" }
         ]
     },
-    "topic-8": {
+	"topic-8": {
         title: "لوحه 8 سوره ناس",
         tiles: [
             { text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحيمِ", audio: "/Persian/assets/audio/basmalah.mp3" },
@@ -97,5 +135,35 @@ const quranTopicsData = {
             { text: "آیاتِنا", audio: "/Persian/assets/audio/ayatena.mp3" }
         ]
     },
-    
+	"topic-11": {
+        title: "لوحه ی 11",
+        tiles: [
+            { text: 'بـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/bo.mp3" },
+            { text: 'تـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/to.mp3" },
+            { text: 'د<span class="red">ُ</span>', audio: "/Persian/assets/audio/do.mp3" }, 
+            { text: 'ر<span class="red">ُ</span>', audio: "/Persian/assets/audio/ro.mp3" },
+            { text: 'ز<span class="red">ُ</span>', audio: "/Persian/assets/audio/zo.mp3" },
+            { text: 'سـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/so.mp3" },
+            { text: 'شـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/sho.mp3" },
+            { text: 'مـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/mo.mp3" },
+            { text: 'نـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/no.mp3" },
+            { text: 'کـ<span class="red">ُ</span>', audio: "/Persian/assets/audio/ko.mp3" },
+            { text: 'و<span class="red">ُ</span>', audio: "/Persian/assets/audio/vo.mp3" }
+        ]
+    },
+	"topic-12": {
+        title: "لوحه 12",
+        tiles: [
+            { text: "کِتابُنا", audio: "/Persian/assets/audio/ketabona.mp3" },
+            { text: "اَساوِرَ", audio: "/Persian/assets/audio/asavera.mp3" },
+            { text: "اُنیبُ", audio: "/Persian/assets/audio/onibo.mp3" },
+            { text: "کُتِبَ", audio: "/Persian/assets/audio/koteba.mp3" },
+            { text: "اوتینا", audio: "/Persian/assets/audio/ootina.mp3" },
+            { text: "یُنادی", audio: "/Persian/assets/audio/yonadi.mp3" },
+            { text: "یُنیبُ", audio: "/Persian/assets/audio/yonibo.mp3" },
+            { text: "آتاکَ", audio: "/Persian/assets/audio/ataka.mp3" },
+            { text: "سَنَزیدُ", audio: "/Persian/assets/audio/sanazido.mp3" }
+        ]
+    }
+
 };
