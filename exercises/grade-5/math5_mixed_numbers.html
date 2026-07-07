@@ -1,0 +1,268 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>بازی ریاضی پنجم</title>
+
+<style>
+body{
+font-family:tahoma;
+background:#f5e6c8;
+margin:0;
+text-align:center;
+overflow-x:hidden;
+}
+
+.header{
+background:#cfe8ff;
+padding:12px;
+font-weight:bold;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:20px;
+}
+
+.option{
+background:white;
+margin:10px auto;
+padding:12px;
+width:60%;
+border-radius:12px;
+cursor:pointer;
+border:2px solid #ddd;
+font-size:18px;
+transition: 0.3s;
+}
+
+.option:hover{
+background:#ffe6f2;
+}
+
+.feedback{
+font-size:22px;
+margin-top:20px;
+min-height:40px;
+font-weight:bold;
+}
+
+.score{
+font-size:22px;
+margin:10px;
+color: #2c3e50;
+}
+
+button{
+padding:10px 20px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.start{
+background:#27ae60;
+color:white;
+font-size:22px;
+}
+
+input{
+padding:8px;
+margin:5px;
+width:220px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* انیمیشن بارش ستاره‌های کم‌رنگ */
+.star-fall{
+position:fixed;
+top:-20px;
+font-size:20px;
+opacity:0.3;
+animation:fall linear forwards;
+z-index: -1;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh);
+}
+}
+
+.certificate{
+background:white;
+border:4px solid gold;
+padding:30px;
+margin-top:20px;
+border-radius: 15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+طراح بازی : کبری قربانی، دبستان دخترانه ی سما واحد بندر انزلی
+</div>
+
+<div class="container">
+
+<div id="startPage">
+<p style="font-size: 18px; line-height: 1.6;">
+دختر عزیزم ، با دقت سوالات را بخوان و در یک برگه آن را حل کن و بعد پاسخ درست را وارد کن.  <br>
+اگر پاسخ درست بدهی <b>۲ امتیاز</b> می‌گیری 💪  <br>
+اگر پاسخ اشتباه بدهی <b>۱ امتیاز</b> از دست می‌دهی 😔  <br><br>
+اگر ۱۰ امتیاز یا بیشتر بگیری تقدیرنامه خواهی گرفت.
+</p>
+<button class="start" onclick="goInfo()">شروع</button>
+</div>
+
+<div id="infoPage" style="display:none">
+<h3>مشخصات خود را وارد کن</h3>
+<input id="name" placeholder="نام"><br>
+<input id="family" placeholder="نام خانوادگی"><br>
+<input id="grade" placeholder="پایه"><br>
+<input id="class" placeholder="نام کلاس"><br>
+<input id="teacher" placeholder="نام معلم"><br><br>
+<button onclick="startGame()">شروع سوالات</button>
+</div>
+
+<div id="gamePage" style="display:none">
+<div class="score">امتیاز: <span id="score">0</span></div>
+<div id="question" style="font-size:22px; margin:20px;"></div>
+<div id="options"></div>
+<div class="feedback" id="feedback"></div>
+</div>
+
+<div id="certificate" class="certificate" style="display:none"></div>
+
+</div>
+
+<script>
+let score = 0;
+let current = 0;
+
+const questions = [
+{q:"سوال۱ الگوی زیر را کامل کن. ۲ساعت و ۳۰ دقیقه-۲ساعت و۴۰ دقیقه-۲ساعت و ۵۰ دقیقه-.........",options:["۳ساعت","۲ساعت و۵۵دقیقه","۳ساعت و۱۰دقیقه","۲ساعت و۴۵دقیقه"],answer:"۳ساعت"},
+{q:"سوال۲ یسنا یک کتاب را در مدّت ۴ساعت و ۷ دقیقه و ۴۸ ثانیه تمام کرد و ثنا همان کتاب را در مدّت ۴ ساعت و ۸ دقیقه و ۳۲ ثانیه تمام کرد. کدام یک از آن ها خواندن کتاب را دیرتر تمام کرده است؟",options:["یسنا","ثنا"],answer:"ثنا"},
+{q:"سوال۳ جرم یک لپ تاپ ۲۴۰۰ گرم است.یعنی .....کیلو گرم و .....گرم",options:["۲کیلوگرم و۴۰۰گرم","۲کیلو و۴۰گرم","۱کیلو و۴۰۰گرم"],answer:"۲کیلوگرم و۴۰۰گرم"},
+{q:"سوال۴ عرض راهروی یک ساختمان ۲۱۸۳ میلی متراست.یعنی ......مترو.......سانتی متر و......میلی متر",options:["۲متر ۱۸سانتی متر ۳میلی متر","۲متر ۸۳سانتی متر","۲متر ۱۰سانتی متر"],answer:"۲متر ۱۸سانتی متر ۳میلی متر"},
+{q:"سوال۵ اتوبوس گردشگران درساعت ۸:۳۰ دقیقه ی صبح حرکت کرد تا یک مسیر ۵ساعت و۴۵ دقیقه ای را برای گردش در یک شهرتاریخی ایران طی کند.این اتوبوس در چه ساعتی به مقصد رسید؟",options:["۱۴:۱۵","۱۳:۴۵","۱۴:۰۰"],answer:"۱۴:۱۵"},
+{q:"سوال۶ امروز ۱۲ تیر ماه سال۱۴۰۵ است. ۸سال و ۳ماه و ۲۵ روز دیگر چه تاریخی است؟",options:["۷ آبان ۱۴۱۳","۷ مهر ۱۴۱۳","۷ آبان ۱۴۱۲"],answer:"۷ آبان ۱۴۱۳"},
+{q:"سوال۷ زهرا ۴ کیلو و۷۰۰ گرم سیب و ۶کیلو و ۹۰۰گرم خیار خریده است.او در مجموع چند کیلوگرم و چندگرم میوه خریده است؟",options:["۱۱کیلو و۶۰۰گرم","۱۰کیلو","۱۲کیلو"],answer:"۱۱کیلو و۶۰۰گرم"},
+{q:"سوال۸ سوگل ۱متر و ۲۰ سانتی متر پارچه برای مانتو و ۸۰سانتی متر برای مقنعه خریده است.او در مجموع چندمتر پارچه خریده است؟",options:["۲متر","۱متر","۳متر"],answer:"۲متر"},
+{q:"سوال۹ خورشید ساعت۷ و ۳۵ دقیقه و ۴۸ ثانیه غروب کرده است.اگر طول روز ۱۳ ساعت و ۱۶ دقیقه و ۱۷ ثانیه باشد طلوع خورشید چه ساعتی بوده است؟",options:["۶:۱۹:۳۱","۶:۲۰:۰۰","۶:۱۰:۳۱"],answer:"۶:۱۹:۳۱"},
+{q:"سوال۱۰ ربع یک دقیقه یعنی .....ثانیه",options:["۱۵","۲۰","۱۰"],answer:"۱۵"}
+];
+
+const praises = ["آفرین 👏", "خیلی عالی 🌟", "درست حل کردی ⭐", "احسنت 💎", "تو خیلی زرنگی 🌸", "عالی بود 👏"];
+
+function shuffle(arr){
+    return arr.sort(() => Math.random() - 0.5);
+}
+
+function goInfo(){
+    document.getElementById("startPage").style.display="none";
+    document.getElementById("infoPage").style.display="block";
+}
+
+function startGame(){
+    document.getElementById("infoPage").style.display="none";
+    document.getElementById("gamePage").style.display="block";
+    showQuestion();
+}
+
+function showQuestion(){
+    if(current >= questions.length){
+        if(score >= 10) showCertificate();
+        else document.getElementById("feedback").innerHTML = "بازی تمام شد. امتیاز شما: " + score;
+        return;
+    }
+
+    let q = questions[current];
+    document.getElementById("question").innerText = q.q;
+    document.getElementById("feedback").innerHTML = "";
+    
+    let opts = shuffle([...q.options]);
+    let optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    opts.forEach(opt => {
+        let div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt;
+        div.onclick = () => check(opt, q.answer);
+        optionsDiv.appendChild(div);
+    });
+}
+
+function check(selected, correct){
+    let feedback = document.getElementById("feedback");
+    let scoreEl = document.getElementById("score");
+
+    if(selected === correct){
+        score += 2;
+        let randomPraise = praises[Math.floor(Math.random() * praises.length)];
+        feedback.innerHTML = `<span style="color: green;">${randomPraise} ✅</span>`;
+    } else {
+        score -= 1;
+        feedback.innerHTML = `<span style="color: red;">پاسخ اشتباه ❌ جواب درست: ${correct}</span>`;
+    }
+
+    scoreEl.innerText = score;
+    current++;
+
+    // غیرفعال کردن گزینه‌ها بعد از کلیک برای جلوگیری از کلیک مجدد
+    let allOptions = document.querySelectorAll(".option");
+    allOptions.forEach(opt => opt.style.pointerEvents = "none");
+
+    setTimeout(() => {
+        allOptions.forEach(opt => opt.style.pointerEvents = "auto");
+        showQuestion();
+    }, 2000);
+}
+
+function showCertificate(){
+    let name = document.getElementById("name").value;
+    let family = document.getElementById("family").value;
+    let grade = document.getElementById("grade").value;
+    let classn = document.getElementById("class").value;
+    let teacher = document.getElementById("teacher").value;
+
+    let cert = document.getElementById("certificate");
+    cert.innerHTML = `
+        <h2 style="color: #d4af37;">🏆 تقدیرنامه 🏆</h2>
+        <p style="font-size: 20px;">دانش‌آموز عزیز <b>${name} ${family}</b></p>
+        <p style="font-size: 18px;">پایه <b>${grade}</b> کلاس <b>${classn}</b></p>
+        <p style="font-size: 18px; line-height: 1.8;">
+            تو با تلاش و دقت توانستی در بازی آموزشی ریاضی امتیاز عالی کسب کنی.<br>
+            امیدوارم همیشه با تلاش و پشتکار در مسیر یادگیری و پیشرفت گام برداری و در درس ریاضی موفق باشی.
+        </p>
+        <p style="font-size: 18px;">از طرف معلمت: <b>${teacher}</b></p>
+        <br>
+        <button onclick="window.print()" style="background:#3498db; color:white;">چاپ تقدیرنامه</button>
+    `;
+    document.getElementById("gamePage").style.display = "none";
+    cert.style.display = "block";
+}
+
+// بارش ستاره‌های ملایم
+setInterval(() => {
+    let star = document.createElement("div");
+    star.className = "star-fall";
+    star.innerHTML = "⭐";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDuration = (5 + Math.random() * 5) + "s";
+    star.style.opacity = (0.1 + Math.random() * 0.3); // خیلی کم‌رنگ
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 10000);
+}, 500);
+
+</script>
+
+</body>
+</html>

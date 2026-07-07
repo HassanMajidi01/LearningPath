@@ -1,0 +1,381 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>بازی ریاضی کلاس پنجم - مخصوص دختران قهرمان</title>
+
+<style>
+
+body{
+font-family:tahoma;
+background:#ffe6f0;
+text-align:center;
+margin:0;
+color: #444;
+}
+
+.header{
+background:#6be26b;
+padding:15px;
+font-size:20px;
+font-weight:bold;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.container{
+margin-top:25px;
+padding: 20px;
+}
+
+/* استایل متن راهنما */
+.guide-text {
+    color: #d81b60;
+    font-size: 17px;
+    max-width: 500px;
+    margin: 20px auto;
+    line-height: 1.8;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px dashed #ff66aa;
+}
+
+button{
+padding:12px 24px;
+font-size:18px;
+border:none;
+border-radius:15px;
+cursor:pointer;
+margin:8px;
+transition: transform 0.2s;
+}
+
+button:active { transform: scale(0.95); }
+
+.start{background: #4CAF50; color:white; font-weight: bold; box-shadow: 0 4px #2E7D32;}
+
+.next{background:#4CAF50; color:white; display:none; box-shadow: 0 4px #2E7D32;}
+
+.option{
+display:block;
+margin:10px auto;
+width:280px;
+background:white;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.option:hover { background: #fff0f5; }
+
+input{
+padding:12px;
+font-size:18px;
+border-radius:12px;
+border:2px solid #ff66aa;
+text-align: center;
+}
+
+.question{
+font-size:24px;
+margin:20px;
+font-weight: bold;
+color: #333;
+}
+
+.score{
+font-size:20px;
+margin:10px;
+}
+
+.progress{
+width:70%;
+height:20px;
+background:#ddd;
+margin:10px auto;
+border-radius:10px;
+overflow:hidden;
+border: 1px solid #ccc;
+}
+
+.bar{
+height:100%;
+width:0%;
+background: linear-gradient(to left, #ff66aa, #ff99cc);
+transition: width 0.5s;
+}
+
+.timer{
+font-size:20px;
+color:#d81b60;
+font-weight: bold;
+}
+
+.card{
+display:inline-block;
+background:white;
+border:2px solid #ff66aa;
+border-radius:12px;
+padding:15px 20px;
+margin:8px;
+font-size:24px;
+cursor:pointer;
+box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.answerBox{
+border:3px dashed #ff66aa;
+width:240px;
+height:60px;
+margin:15px auto;
+line-height:60px;
+font-size:28px;
+background:white;
+border-radius: 15px;
+}
+
+.feedback{
+font-size:22px;
+margin-top:15px;
+min-height:40px;
+}
+
+.correct{color:green; font-weight:bold;}
+.wrong{color:red; font-weight:bold;}
+
+.medal{font-size:80px; margin: 20px 0;}
+
+.flower{
+position:fixed;
+top:-50px;
+font-size:30px;
+animation:fall 3s linear forwards;
+z-index: 100;
+}
+
+@keyframes fall{
+to{ transform:translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+.certificate{
+border:8px double #ff66aa;
+padding:30px;
+width:80%;
+max-width: 500px;
+margin:20px auto;
+background:white;
+border-radius: 20px;
+box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+طراح بازی : کبری قربانی، دبستان دخترانه ی سما واحد بندر انزلی
+</div>
+
+<div id="startScreen" class="container">
+    <h2>🌸 خوش آمدی دختر قهرمان! 🌸</h2>
+    <p>نام زیبای خود را وارد کن:</p>
+    <input id="playerName" placeholder="نام شما...">
+    <br><br>
+    <button class="start" onclick="startGame()">🚀 شروع بازی</button>
+    
+    <div class="guide-text">
+        دخترم، با دقّت سوالات را بخوان و پاسخ بده و توجّه داشته باش که باید در زمان مشخص شده پاسخ بدهی و اگر اولین بار نتیجه ی مطلوب را کسب نکردی دوباره سعی کنی و با تمرکز بیشتری پاسخ بدهی.
+    </div>
+</div>
+
+<div id="gameScreen" style="display:none">
+    <h3 id="playerDisplay"></h3>
+    <div class="score">
+        مرحله: <span id="level">1</span> | امتیاز: <span id="score">0</span>
+    </div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="timer">⏳ زمان باقی‌مانده: <span id="time">20</span> ثانیه</div>
+    
+    <div class="question" id="question"></div>
+    
+    <div id="options"></div>
+    
+    <div id="cardArea" style="display:none">
+        <div class="answerBox" id="answerBox"></div>
+        <div id="cards"></div>
+        <br>
+        <button style="background:#ff66aa; color:white;" onclick="submitCard()">✅ ثبت پاسخ</button>
+    </div>
+
+    <button class="next" id="nextBtn" onclick="nextQuestion()">سوال بعدی ➡️</button>
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<div id="endScreen" style="display:none">
+    <div class="certificate">
+        <h2>🏆 لوح تقدیر 🏆</h2>
+        <h3 id="studentName"></h3>
+        <p>با درخشش در بازی ریاضی کلاس پنجم</p>
+        <div class="medal" id="medal"></div>
+        <h3 id="finalScore"></h3>
+        <p style="color:#d81b60; font-weight:bold;">خانم قربانی به تو افتخار می‌کند! 🌸</p>
+    </div>
+    <button class="start" onclick="location.reload()">🔄 بازی دوباره</button>
+</div>
+
+<audio id="clap">
+    <source src="https://www.soundjay.com/human/applause-8.mp3">
+</audio>
+
+<script>
+let score = 0;
+let current = 0;
+let level = 1;
+let timer;
+let timeLeft = 20;
+let builtNumber = "";
+
+// لیست جامع سوالات با اصلاح املای صدهزار
+const questions = [
+    { type: "test", q: "ارزش رقم ۸ در عدد ۳۸,۲۵۰ چه قدر است؟", options: ["هزار", "ده هزار", "صدهزار", "یکان"], answer: "هزار" },
+    { type: "test", q: "در عدد ۷۳,۴۰۶,۱۸۹,۵۴۷ کدام رقم در مرتبه صدگان میلیون است؟", options: ["۴", "۶", "۳", "۱"], answer: "۴" },
+    { type: "test", q: "۱۶ صده هزار منهای ۷ صده هزار برابر است با:", options: ["۹ صده هزار", "۷ صده هزار", "۱۰ صده هزار"], answer: "۹ صده هزار" },
+    { type: "test", q: "عدد ۴۳,۰۰۰,۰۰۰ از عدد ۴۳,۰۰۰ چند برابر است؟", options: ["۱۰۰", "۱۰۰۰", "۱۰", "۴۳"], answer: "۱۰۰۰" },
+    { type: "test", q: "در عدد ۵,۶۷۸، رقم ۶ در چه مرتبه‌ای قرار دارد؟", options: ["صدگان", "دهگان", "یکان", "هزار"], answer: "صدگان" },
+    { type: "buildMax", q: "با کارت‌های ۴ ، ۰ ، ۹ ، ۷ ، ۲ بزرگترین عدد پنج رقمی را بساز:", answer: "97420" },
+    { type: "buildMin", q: "با کارت‌های ۴ ، ۰ ، ۹ ، ۷ ، ۲ کوچکترین عدد پنج رقمی را بساز:", answer: "20479" },
+    { type: "test", q: "یک میلیون منهای ۷۰۰,۰۰۰ برابر است با:", options: ["۳۰۰,۰۰۰", "۴۰۰,۰۰۰", "۲۰۰,۰۰۰"], answer: "۳۰۰,۰۰۰" },
+    { type: "test", q: "کدام عدد در مرتبه میلیون قرار دارد؟", options: ["۵,۰۰۰,۰۰۰", "۵۰۰,۰۰۰", "۵۰,۰۰۰"], answer: "۵,۰۰۰,۰۰۰" },
+    { type: "test", q: "۷ صده هزار + ۳ صده هزار برابر است با:", options: ["۱ میلیون", "۱۰ هزار", "۱۰۰ هزار"], answer: "۱ میلیون" }
+];
+
+function startGame() {
+    let name = document.getElementById("playerName").value;
+    if(!name) { alert("لطفاً نام خود را بنویس دختر عزیزم!"); return; }
+    
+    document.getElementById("studentName").innerText = name;
+    document.getElementById("playerDisplay").innerText = "دانش‌آموز ستاره: " + name;
+    
+    // نمایش سوالات به ترتیب (حذف Shuffle برای رعایت درخواست کاربر)
+    // اگر می‌خواهید دوباره تصادفی شود، خط زیر را فعال کنید:
+    // questions.sort(() => Math.random() - 0.5);
+    
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("gameScreen").style.display = "block";
+    loadQuestion();
+}
+
+function loadQuestion() {
+    builtNumber = "";
+    document.getElementById("answerBox").innerText = "";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("nextBtn").style.display = "none";
+    
+    let q = questions[current];
+    document.getElementById("question").innerText = q.q;
+    updateProgress();
+    startTimer();
+
+    if (q.type === "test") {
+        document.getElementById("cardArea").style.display = "none";
+        let html = "";
+        q.options.forEach(opt => {
+            html += `<button class="option" onclick="checkAnswer('${opt}')">${opt}</button>`;
+        });
+        document.getElementById("options").innerHTML = html;
+    } else {
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("cardArea").style.display = "block";
+        let nums = ["4", "0", "9", "7", "2"];
+        nums.sort(() => Math.random() - 0.5);
+        let html = "";
+        nums.forEach(n => {
+            html += `<div class="card" onclick="addDigit('${n}')">${n}</div>`;
+        });
+        document.getElementById("cards").innerHTML = html;
+    }
+}
+
+function startTimer() {
+    clearInterval(timer);
+    timeLeft = 20;
+    document.getElementById("time").innerText = timeLeft;
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("time").innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            checkAnswer("timeout");
+        }
+    }, 1000);
+}
+
+function addDigit(n) {
+    if (builtNumber.length < 5) {
+        builtNumber += n;
+        document.getElementById("answerBox").innerText = builtNumber;
+    }
+}
+
+function submitCard() {
+    checkAnswer(builtNumber);
+}
+
+function checkAnswer(ans) {
+    clearInterval(timer);
+    let correct = questions[current].answer;
+    
+    if (ans == correct) {
+        score++;
+        flowerRain();
+        document.getElementById("clap").play();
+        document.getElementById("feedback").innerHTML = "<span class='correct'>🌸 آفرین! تو فوق‌العاده‌ای! 🌸</span>";
+    } else {
+        score--;
+        document.getElementById("feedback").innerHTML = `<span class='wrong'>❌ اشکالی ندارد عزیزم، پاسخ درست: ${correct}</span>`;
+    }
+    
+    document.getElementById("score").innerText = score;
+    document.getElementById("nextBtn").style.display = "inline-block";
+}
+
+function nextQuestion() {
+    current++;
+    if (current < questions.length) {
+        if (current === 3) level = 2;
+        if (current === 7) level = 3;
+        document.getElementById("level").innerText = level;
+        loadQuestion();
+    } else {
+        endGame();
+    }
+}
+
+function updateProgress() {
+    let percent = (current / questions.length) * 100;
+    document.getElementById("bar").style.width = percent + "%";
+}
+
+function flowerRain() {
+    for (let i = 0; i < 15; i++) {
+        let f = document.createElement("div");
+        f.className = "flower";
+        f.innerText = ["🌸", "✨", "💖", "🌷"][Math.floor(Math.random()*4)];
+        f.style.left = Math.random() * 100 + "%";
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 3000);
+    }
+}
+
+function endGame() {
+    document.getElementById("gameScreen").style.display = "none";
+    document.getElementById("endScreen").style.display = "block";
+    document.getElementById("finalScore").innerText = "امتیاز نهایی شما: " + score;
+    
+    if (score >= 8) document.getElementById("medal").innerText = "🥇";
+    else if (score >= 5) document.getElementById("medal").innerText = "🥈";
+    else document.getElementById("medal").innerText = "🥉";
+}
+</script>
+
+</body>
+</html>
