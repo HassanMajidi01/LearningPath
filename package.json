@@ -1,0 +1,14 @@
+{
+  "name": "learning-path",
+  "version": "1.0.0",
+  "description": "Learning Path App",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'No build needed'"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

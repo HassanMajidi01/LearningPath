@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebarOverlay.classList.remove('visible');
         });
     }
+
+    // مدیریت باز کردن منو با کلیک بر روی دکمه شروع در وسط صفحه
+    if (mainContent) {
+        mainContent.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.welcome-cta') || e.target.closest('.welcome-menu-trigger');
+            if (trigger && sidebar) {
+                sidebar.classList.add('open');
+                if (sidebarOverlay) sidebarOverlay.classList.add('visible');
+            }
+        });
+    }
 });
 
 // --- Core Functions ---
@@ -278,11 +289,14 @@ function renderVideos(lesson) {
 // 4. Default View
 function showWelcomeMessage() {
     mainContent.innerHTML = `
-        <div class="welcome-screen fade-in">
-            <h1>سلام قهرمان! 👋</h1>
-            <p>به کلاس دوم خوش آمدی.</p>
-            <p>از منوی سمت راست یک درس را انتخاب کن تا شروع کنیم.</p>
-            <i class="fas fa-star" style="font-size: 3rem; color: #ffd700; margin-top: 20px;"></i>
+        <div class="welcome-container welcome-screen fade-in">
+            <div class="welcome-icon">👋</div>
+            <h1>سلام قهرمان!</h1>
+            <p class="welcome-subtitle">به کلاس دوم خوش آمدی.</p>
+            <div class="welcome-cta welcome-menu-trigger">
+                <span class="cta-arrow">📚</span>
+                <p>مشاهده فهرست بخش‌ها</p>
+            </div>
         </div>
     `;
 }

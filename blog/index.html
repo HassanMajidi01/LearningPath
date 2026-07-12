@@ -6,20 +6,50 @@
   <title>بلاگ — edu-kiashahr</title>
   <link rel="stylesheet" href="blog.css">
   <link rel="stylesheet" href="../home-style.css">
+  <link rel="stylesheet" href="../shared-layout.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body>
-  <div class="header-container">
-      <header class="main-header">
-          <a href="../index.html" class="logo">آموزش و پرورش بندر کیاشهر</a>
-          <nav class="main-nav">
-              <a href="../index.html">خانه</a>
-              <a href="../Persian/index.html">فارسی</a>
-              <a href="../math/index.html">ریاضی</a>
-              <a href="index.html" class="active">بلاگ</a>
+<body style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
+  <div class="global-header-container">
+      <header class="global-header" role="banner">
+          <a href="../index.html" class="global-logo">
+              <span class="global-logo-icon">🎓</span>
+              <span class="global-logo-text">آموزش و پرورش بندر کیاشهر</span>
+          </a>
+          <nav class="global-nav" aria-label="منوی اصلی" role="navigation">
+              <a href="../index.html" class="global-nav-link">🏠 خانه</a>
+              <a href="../Persian/index.html" class="global-nav-link">📚 فارسی اول</a>
+              <a href="../Persian2/index.html" class="global-nav-link">📖 فارسی دوم</a>
+              <a href="../math/index.html" class="global-nav-link">🧮 ریاضی</a>
+              <a href="../science/index.html" class="global-nav-link">🔬 علوم</a>
+              <a href="../quran/index.html" class="global-nav-link">🕌 قرآن</a>
+              <a href="../exercises/exercises.html" class="global-nav-link">✍️ تمرین‌ها</a>
+              <a href="../blog/index.html" class="global-nav-link">📰 بلاگ</a>
           </nav>
+          <button class="global-menu-toggle" aria-label="باز کردن منو">☰</button>
       </header>
   </div>
-    <div class="blog-page">
+
+  <!-- Mobile Menu Drawer -->
+  <div class="global-drawer-overlay"></div>
+  <div class="global-mobile-drawer" role="dialog" aria-modal="true" aria-label="منوی موبایل">
+      <div class="global-drawer-header">
+          <span class="global-drawer-title">منوی دسترسی سریع</span>
+          <button class="global-drawer-close" aria-label="بستن منو">×</button>
+      </div>
+      <nav class="global-drawer-nav">
+          <a href="../index.html" class="global-drawer-link">🏠 خانه</a>
+          <a href="../Persian/index.html" class="global-drawer-link">📚 فارسی اول</a>
+          <a href="../Persian2/index.html" class="global-drawer-link">📖 فارسی دوم</a>
+          <a href="../math/index.html" class="global-drawer-link">🧮 ریاضی</a>
+          <a href="../science/index.html" class="global-drawer-link">🔬 علوم</a>
+          <a href="../quran/index.html" class="global-drawer-link">🕌 قرآن</a>
+          <a href="../exercises/exercises.html" class="global-drawer-link">✍️ تمرین‌ها</a>
+          <a href="../blog/index.html" class="global-drawer-link">📰 بلاگ</a>
+      </nav>
+  </div>
+
+  <div class="blog-page" style="flex: 1 0 auto;">
     <div id="blog-list"></div>
     <div style="margin-top:18px">
         <div class="blog-actions">
@@ -33,8 +63,70 @@
     </div>
   </div>
 
+  <footer class="global-footer" role="contentinfo" style="margin-top: auto;">
+      <div class="global-footer-grid">
+          <div class="global-footer-col global-footer-brand">
+              <h3>آموزش و پرورش بندر کیاشهر</h3>
+              <p class="global-footer-desc">
+                  پورتال جامع آموزشی اداره آموزش و پرورش بندر کیاشهر با هدف تسهیل، نوسازی و جذاب‌سازی فرایند یادگیری برای دانش‌آموزان دبستانی گیلان طراحی شده است. ما با بهره‌گیری از ابزارهای تعاملی مدرن، بازی‌های آموزشی خلاقانه و فیلم‌های جذاب، راه را برای موفقیت و شکوفایی کودکان گران‌قدر هموار می‌کنیم.
+              </p>
+          </div>
+          <div class="global-footer-col">
+              <h4 class="global-footer-title">دسترسی سریع</h4>
+              <ul class="global-footer-links">
+                  <li><a href="../Persian/index.html" class="global-footer-link">فارسی کلاس اول</a></li>
+                  <li><a href="../Persian2/index.html" class="global-footer-link">فارسی کلاس دوم</a></li>
+                  <li><a href="../math/index.html" class="global-footer-link">ریاضی پایه اول</a></li>
+                  <li><a href="../science/index.html" class="global-footer-link">علوم پایه اول</a></li>
+                  <li><a href="../quran/index.html" class="global-footer-link">آموزش قرآن اول</a></li>
+              </ul>
+          </div>
+          <div class="global-footer-col">
+              <h4 class="global-footer-title">بخش‌های سایت</h4>
+              <ul class="global-footer-links">
+                  <li><a href="../index.html" class="global-footer-link">صفحه اصلی خانه</a></li>
+                  <li><a href="../exercises/exercises.html" class="global-footer-link">بانک تمرینات تعاملی</a></li>
+                  <li><a href="../blog/index.html" class="global-footer-link">بلاگ و مقالات آموزشی</a></li>
+              </ul>
+          </div>
+          <div class="global-footer-col">
+              <h4 class="global-footer-title">راه‌های ارتباطی</h4>
+              <ul class="global-footer-contact">
+                  <li class="global-footer-contact-item">
+                      <span class="global-footer-contact-icon">📍</span>
+                      <span>استان گیلان، بندر کیاشهر، اداره آموزش و پرورش بندر کیاشهر</span>
+                  </li>
+                  <li class="global-footer-contact-item">
+                      <span class="global-footer-contact-icon">📞</span>
+                      <span>تلفن: 013 4282 2202</span>
+                  </li>
+                  <li class="global-footer-contact-item">
+                      <span class="global-footer-contact-icon">✉️</span>
+                      <span>ایمیل: hassanmajidi1999@gmail.com</span>
+                  </li>
+              </ul>
+              <div class="global-footer-socials">
+                  <a href="https://www.aparat.com/majidischool" target="_blank" class="global-footer-social-btn aparat" title="آپارات"><i class="fa-brands fa-square-youtube"></i></a>
+                  <a href="https://beta.bale.ai/@majidischool" target="_blank" class="global-footer-social-btn bale" title="بله"><i class="fa-solid fa-square-envelope"></i></a>
+                  <a href="https://t.me/majidischool" target="_blank" class="global-footer-social-btn telegram" title="تلگرام"><i class="fa-brands fa-telegram"></i></a>
+                  <a href="https://www.linkedin.com/in/hassan-majidi-45b186195" target="_blank" class="global-footer-social-btn linkedin" title="لینکدین"><i class="fa-brands fa-linkedin"></i></a>
+              </div>
+          </div>
+      </div>
+      <div class="global-footer-bottom">
+          <div class="global-footer-copyright">
+              <p>© ۱۴۰۵ - تمام حقوق مادی و معنوی این پورتال آموزشی متعلق به اداره آموزش و پرورش بندر کیاشهر و طراح پلتفرم <a href="https://www.linkedin.com/in/hassan-majidi-45b186195" target="_blank" rel="noopener noreferrer">سید محمد حسن مجیدی کیوی</a> است.</p>
+          </div>
+          <div class="global-footer-bottom-links">
+              <a href="../index.html" class="global-footer-bottom-link">قوانین استفاده</a>
+              <a href="../index.html" class="global-footer-bottom-link">حریم خصوصی</a>
+          </div>
+      </div>
+  </footer>
+
   <script src="data.js"></script>
   <script src="blog.js"></script>
+  <script src="../shared-layout.js"></script>
   <script>
     (function(){
       const root = document.getElementById('blog-list');

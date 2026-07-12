@@ -68,13 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function showWelcomeMessage() {
          mainContent.innerHTML = `
             <div class="welcome-container">
-                <div class="welcome-icon">📚</div>
+                <div class="welcome-icon">🕌</div>
                 <h1>به کلاس قرآن خوش آمدید!</h1>
-                <p class="welcome-subtitle">برای شروع، یک مبحث را از منوی سمت راست انتخاب کنید.</p>
-                <div class="welcome-cta">
-                <span class="cta-arrow">👉</span>
-                    <p>یک درس را انتخاب کن</p>
-                    
+                <p class="welcome-subtitle">برای شروع، یک مبحث را انتخاب کنید.</p>
+                <div class="welcome-cta welcome-menu-trigger">
+                    <span class="cta-arrow">📚</span>
+                    <p>مشاهده فهرست بخش‌ها</p>
                 </div>
             </div>
         `;
@@ -90,6 +89,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- مدیریت رویدادها ---
 
+    // مدیریت باز کردن منو با کلیک بر روی دکمه شروع در وسط صفحه
+    mainContent.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.welcome-cta') || e.target.closest('.welcome-menu-trigger');
+        if (trigger) {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('visible');
+        }
+    });
+
     sidebar.addEventListener('click', (e) => {
         // اگر روی عنوان اصلی مبحث کلیک شد
         const topicTitle = e.target.closest('.topic-title');
@@ -101,10 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // مدیریت باز و بسته شدن سایدبار در موبایل
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        sidebarOverlay.classList.toggle('visible');
-    });
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('visible');
+        });
+    }
 
     sidebarOverlay.addEventListener('click', () => {
         sidebar.classList.remove('open');

@@ -221,12 +221,20 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="welcome-icon">🎉</div>
             <h1>به دنیای حروف و کلمات خوش آمدی!</h1>
             <p class="welcome-subtitle">اینجا یادگیری زبان فارسی مثل یک بازی شیرینه.</p>
-            <div class="welcome-cta">
-                <span class="cta-arrow">👉</span>
-                <p>برای شروع ماجراجویی، از منوی سمت راست یک نشانه انتخاب کن.</p>
+            <div class="welcome-cta welcome-menu-trigger">
+                <span class="cta-arrow">📚</span>
+                <p>مشاهده فهرست بخش‌ها</p>
             </div>
         </div>
     `;
+
+    // مدیریت باز کردن منو با کلیک بر روی دکمه شروع در وسط صفحه
+    mainContent.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.welcome-cta') || e.target.closest('.welcome-menu-trigger');
+        if (trigger) {
+            openSidebar();
+        }
+    });
 
     // If the page includes a local launcher (select + start button), set it up here.
     // This moves the small inline script that used to live in `index.html` into main.js

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بانک تمرین‌ها</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../shared-layout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         /* اطمینان از اعمال پس‌زمینه تیره در صورت لود نشدن استایل اصلی */
         body {
@@ -15,6 +17,9 @@
             font-family: 'Vazirmatn', sans-serif;
             min-height: 100vh;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         @keyframes gradient-animation {
@@ -23,34 +28,10 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* استایل دکمه خانه دقیقاً مشابه فایل اصلی */
-        .home-button {
-            position: fixed;
-            top: 20px; 
-            left: 20px;
-            z-index: 1001;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 50%;
-            width: 50px; 
-            height: 50px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        .home-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
         /* استایل‌های مخصوص صفحه تمرین */
         .exercises-header {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 30px;
             margin-bottom: 30px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
@@ -155,10 +136,46 @@
     </style>
 </head>
 <body>
-    <!-- دکمه خانه اصلاح شده -->
-    <a href="/" class="home-button">🏠</a>
+    <div class="global-header-container">
+        <header class="global-header" role="banner">
+            <a href="../index.html" class="global-logo">
+                <span class="global-logo-icon">🎓</span>
+                <span class="global-logo-text">آموزش و پرورش بندر کیاشهر</span>
+            </a>
+            <nav class="global-nav" aria-label="منوی اصلی" role="navigation">
+                <a href="../index.html" class="global-nav-link">🏠 خانه</a>
+                <a href="../Persian/index.html" class="global-nav-link">📚 فارسی اول</a>
+                <a href="../Persian2/index.html" class="global-nav-link">📖 فارسی دوم</a>
+                <a href="../math/index.html" class="global-nav-link">🧮 ریاضی</a>
+                <a href="../science/index.html" class="global-nav-link">🔬 علوم</a>
+                <a href="../quran/index.html" class="global-nav-link">🕌 قرآن</a>
+                <a href="../exercises/exercises.html" class="global-nav-link">✍️ تمرین‌ها</a>
+                <a href="../blog/index.html" class="global-nav-link">📰 بلاگ</a>
+            </nav>
+            <button class="global-menu-toggle" aria-label="باز کردن منو">☰</button>
+        </header>
+    </div>
 
-    <div class="container">
+    <!-- Mobile Menu Drawer -->
+    <div class="global-drawer-overlay"></div>
+    <div class="global-mobile-drawer" role="dialog" aria-modal="true" aria-label="منوی موبایل">
+        <div class="global-drawer-header">
+            <span class="global-drawer-title">منوی دسترسی سریع</span>
+            <button class="global-drawer-close" aria-label="بستن منو">×</button>
+        </div>
+        <nav class="global-drawer-nav">
+            <a href="../index.html" class="global-drawer-link">🏠 خانه</a>
+            <a href="../Persian/index.html" class="global-drawer-link">📚 فارسی اول</a>
+            <a href="../Persian2/index.html" class="global-drawer-link">📖 فارسی دوم</a>
+            <a href="../math/index.html" class="global-drawer-link">🧮 ریاضی</a>
+            <a href="../science/index.html" class="global-drawer-link">🔬 علوم</a>
+            <a href="../quran/index.html" class="global-drawer-link">🕌 قرآن</a>
+            <a href="../exercises/exercises.html" class="global-drawer-link">✍️ تمرین‌ها</a>
+            <a href="../blog/index.html" class="global-drawer-link">📰 بلاگ</a>
+        </nav>
+    </div>
+
+    <div class="container" style="flex: 1 0 auto; width: 100%;">
         <main class="main-content" style="width: 100%; padding-top: 20px;">
             <div class="exercises-header">
                 <h1>📚 بانک تمرین‌ها</h1>
@@ -384,6 +401,67 @@
         </main>
     </div>
 
+    <footer class="global-footer" role="contentinfo" style="margin-top: auto;">
+        <div class="global-footer-grid">
+            <div class="global-footer-col global-footer-brand">
+                <h3>آموزش و پرورش بندر کیاشهر</h3>
+                <p class="global-footer-desc">
+                    پورتال جامع آموزشی اداره آموزش و پرورش بندر کیاشهر با هدف تسهیل، نوسازی و جذاب‌سازی فرایند یادگیری برای دانش‌آموزان دبستانی گیلان طراحی شده است. ما با بهره‌گیری از ابزارهای تعاملی مدرن، بازی‌های آموزشی خلاقانه و فیلم‌های جذاب، راه را برای موفقیت و شکوفایی کودکان گران‌قدر هموار می‌کنیم.
+                </p>
+            </div>
+            <div class="global-footer-col">
+                <h4 class="global-footer-title">دسترسی سریع</h4>
+                <ul class="global-footer-links">
+                    <li><a href="../Persian/index.html" class="global-footer-link">فارسی کلاس اول</a></li>
+                    <li><a href="../Persian2/index.html" class="global-footer-link">فارسی کلاس دوم</a></li>
+                    <li><a href="../math/index.html" class="global-footer-link">ریاضی پایه اول</a></li>
+                    <li><a href="../science/index.html" class="global-footer-link">علوم پایه اول</a></li>
+                    <li><a href="../quran/index.html" class="global-footer-link">آموزش قرآن اول</a></li>
+                </ul>
+            </div>
+            <div class="global-footer-col">
+                <h4 class="global-footer-title">بخش‌های سایت</h4>
+                <ul class="global-footer-links">
+                    <li><a href="../index.html" class="global-footer-link">صفحه اصلی خانه</a></li>
+                    <li><a href="../exercises/exercises.html" class="global-footer-link">بانک تمرینات تعاملی</a></li>
+                    <li><a href="../blog/index.html" class="global-footer-link">بلاگ و مقالات آموزشی</a></li>
+                </ul>
+            </div>
+            <div class="global-footer-col">
+                <h4 class="global-footer-title">راه‌های ارتباطی</h4>
+                <ul class="global-footer-contact">
+                    <li class="global-footer-contact-item">
+                        <span class="global-footer-contact-icon">📍</span>
+                        <span>استان گیلان، بندر کیاشهر، اداره آموزش و پرورش بندر کیاشهر</span>
+                    </li>
+                    <li class="global-footer-contact-item">
+                        <span class="global-footer-contact-icon">📞</span>
+                        <span>تلفن: 013 4282 2202</span>
+                    </li>
+                    <li class="global-footer-contact-item">
+                        <span class="global-footer-contact-icon">✉️</span>
+                        <span>ایمیل: hassanmajidi1999@gmail.com</span>
+                    </li>
+                </ul>
+                <div class="global-footer-socials">
+                    <a href="https://www.aparat.com/majidischool" target="_blank" class="global-footer-social-btn aparat" title="آپارات"><i class="fa-brands fa-square-youtube"></i></a>
+                    <a href="https://beta.bale.ai/@majidischool" target="_blank" class="global-footer-social-btn bale" title="بله"><i class="fa-solid fa-square-envelope"></i></a>
+                    <a href="https://t.me/majidischool" target="_blank" class="global-footer-social-btn telegram" title="تلگرام"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://www.linkedin.com/in/hassan-majidi-45b186195" target="_blank" class="global-footer-social-btn linkedin" title="لینکدین"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="global-footer-bottom">
+            <div class="global-footer-copyright">
+                <p>© ۱۴۰۵ - تمام حقوق مادی و معنوی این پورتال آموزشی متعلق به اداره آموزش و پرورش بندر کیاشهر و طراح پلتفرم <a href="https://www.linkedin.com/in/hassan-majidi-45b186195" target="_blank" rel="noopener noreferrer">سید محمد حسن مجیدی کیوی</a> است.</p>
+            </div>
+            <div class="global-footer-bottom-links">
+                <a href="../index.html" class="global-footer-bottom-link">قوانین استفاده</a>
+                <a href="../index.html" class="global-footer-bottom-link">حریم خصوصی</a>
+            </div>
+        </div>
+    </footer>
+
     <!-- اسکریپت برای فیلتر کردن کارت‌ها -->
     <script>
         const filterBtns = document.querySelectorAll('.grade-btn');
@@ -409,5 +487,6 @@
             });
         });
     </script>
+    <script src="../shared-layout.js"></script>
 </body>
 </html>
