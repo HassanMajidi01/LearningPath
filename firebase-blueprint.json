@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "App user profile (student or teacher)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "passwordHash": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "username", "email", "passwordHash", "role", "createdAt"]
+    },
+    "Progress": {
+      "title": "Progress",
+      "description": "Student exercise performance or lesson completion progress",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentEmail": { "type": "string" },
+        "type": { "type": "string", "enum": ["exercise", "lesson"] },
+        "subject": { "type": "string" },
+        "title": { "type": "string" },
+        "score": { "type": "number" },
+        "stars": { "type": "number" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "studentName", "studentEmail", "type", "subject", "title", "score", "stars", "timestamp"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Teacher feedback and comments on student performance",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "comment": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "studentId", "teacherName", "comment", "timestamp"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Users collection keyed by userID"
+    },
+    "progress/{progressId}": {
+      "schema": { "$ref": "#/entities/Progress" },
+      "description": "Student progress items"
+    },
+    "feedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/Feedback" },
+      "description": "Teacher feedback items"
+    }
+  }
+}

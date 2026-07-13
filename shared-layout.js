@@ -1,5 +1,23 @@
 /* shared-layout.js - Unified Layout Logic & Responsive Navigation Menu */
 
+// Load shared-auth.js dynamically relative to root directory to support all subfolders
+(function() {
+    const authScript = document.createElement('script');
+    const path = window.location.pathname;
+    let relativePath = './shared-auth.js';
+    
+    if (path.includes('/Persian/') || path.includes('/Persian2/') || path.includes('/math/') || path.includes('/science/') || path.includes('/quran/') || path.includes('/blog/') || path.includes('/exercises/')) {
+        relativePath = '../shared-auth.js';
+        if (path.includes('/exercises/grade-')) {
+            relativePath = '../../shared-auth.js';
+        }
+    }
+    
+    authScript.src = relativePath;
+    authScript.defer = true;
+    document.head.appendChild(authScript);
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialize Hamburger Menu / Mobile Drawer
     const initMobileMenu = () => {

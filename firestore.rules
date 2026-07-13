@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitives & Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Validation Helpers
+    function isValidUser(data) {
+      return data.keys().hasAll(['id', 'username', 'email', 'passwordHash', 'role', 'createdAt'])
+        && data.keys().size() == 6
+        && data.id is string && data.id.size() <= 128
+        && data.username is string && data.username.size() <= 100
+        && data.email is string && data.email.size() <= 150
+        && data.passwordHash is string && data.passwordHash.size() <= 200
+        && data.role is string && (data.role == 'student' || data.role == 'teacher')
+        && data.createdAt is string;
+    }
+
+    function isValidProgress(data) {
+      return data.keys().hasAll(['id', 'userId', 'studentName', 'studentEmail', 'type', 'subject', 'title', 'score', 'stars', 'timestamp'])
+        && (data.keys().size() == 10 || (data.keys().size() == 11 && data.keys().hasAll(['details'])))
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.studentName is string && data.studentName.size() <= 100
+        && data.studentEmail is string && data.studentEmail.size() <= 150
+        && data.type is string && (data.type == 'exercise' || data.type == 'lesson')
+        && data.subject is string && data.subject.size() <= 100
+        && data.title is string && data.title.size() <= 200
+        && data.score is number && data.score >= 0 && data.score <= 1000
+        && data.stars is number && data.stars >= 0 && data.stars <= 100
+        && data.timestamp is string;
+    }
+
+    function isValidFeedback(data) {
+      return data.keys().hasAll(['id', 'studentId', 'teacherName', 'comment', 'timestamp'])
+        && data.keys().size() == 5
+        && data.id is string && data.id.size() <= 128
+        && data.studentId is string && data.studentId.size() <= 128
+        && data.teacherName is string && data.teacherName.size() <= 100
+        && data.comment is string && data.comment.size() <= 1000
+        && data.timestamp is string;
+    }
+
+    // Collections
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    match /progress/{progressId} {
+      allow read, write: if true;
+    }
+
+    match /feedback/{feedbackId} {
+      allow read, write: if true;
+    }
+  }
+}

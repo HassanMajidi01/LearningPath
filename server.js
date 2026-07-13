@@ -4,8 +4,16 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Support parsing of JSON and URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Serve the current directory as static files
 app.use(express.static(process.cwd()));
+
+// Mount API routes
+const apiRouter = require('./server-api');
+app.use('/api', apiRouter);
 
 // Fallback to index.html for unknown routes if needed, 
 // though this seems to be a multi-page app (has Persian/index.html, math/index.html etc.)
