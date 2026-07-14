@@ -122,6 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const contentLink = e.target.closest('.submenu a');
         if (contentLink) {
             e.preventDefault();
+            document.querySelectorAll('.submenu a').forEach(el => el.classList.remove('active'));
+            contentLink.classList.add('active');
             const topicId = contentLink.dataset.topicId;
             const contentType = contentLink.dataset.contentType;
 

@@ -2,6 +2,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap');
 
+html {
+    direction: rtl;
+    overflow-x: hidden;
+    width: 100%;
+}
+
 :root {
     --brand-primary: #3b82f6;
     --brand-secondary: #10b981;
@@ -14,6 +20,11 @@
 /* --- Shared Font & Baseline --- */
 body {
     font-family: 'Vazirmatn', sans-serif !important;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+   
 }
 
 /* --- Header Styling (Glassmorphism & Responsive) --- */
@@ -589,4 +600,83 @@ body.app-page .home-button {
         100% { transform: translateY(-4px); }
     }
 }
+
+/* --- Floating Exercise Navigation (for full-screen games) --- */
+.global-exercise-back-btn {
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 10005 !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    padding: 8px 16px !important;
+    border-radius: 30px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    direction: rtl !important;
+    pointer-events: auto !important;
+}
+
+.global-exercise-back-btn:hover {
+    transform: translateY(-2px) !important;
+    background: #3b82f6 !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+}
+
+.global-exercise-menu-btn {
+    position: fixed !important;
+    top: 15px !important;
+    right: 15px !important;
+    z-index: 10005 !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    font-size: 1.2rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    pointer-events: auto !important;
+}
+
+.global-exercise-menu-btn:hover {
+    transform: translateY(-2px) rotate(90deg) !important;
+    background: #10b981 !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+}
+
+body.is-scrollable-exercise {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+    background-color: #0f172a !important; /* Elegant dark background */
+}
+
+.global-scrollable-exercise-wrapper {
+    flex: 1 0 auto !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 40px auto !important;
+    padding: 0 20px !important;
+    box-sizing: border-box !important;
+}
+
 

@@ -618,6 +618,576 @@
     // 2. Initialize App and DOM elements
     let currentUser = null;
 
+    // --- Direct Firebase Client-Side fallback helpers ---
+    let firebaseDb = null;
+    let firebaseConfig = null;
+    // --- Google Sheets Apps Script Web App URL ---
+    // آدرس وب‌اپ گوگل اپس اسکریپت خود را (که با /exec خاتمه می‌یابد) در خط زیر قرار دهید:
+    let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxKAVxfcLWWU9ZwcOO6G3bJ2kdA6vVhBWf1DmXtF7VSKRMbT7UYhUU-lk2fZ78whPdc/exec'; // لینک وب‌اپ خود را در این قسمت قرار دهید
+
+
+    function sha256Simple(ascii) {
+        function rightRotate(value, amount) {
+            return (value >>> amount) | (value << (32 - amount));
+        }
+        
+        var mathPow = Math.pow;
+        var maxWord = mathPow(2, 32);
+        var lengthProperty = 'length';
+        var i, j;
+        var result = '';
+
+        var words = [];
+        var asciiLength = ascii[lengthProperty];
+        var hash = sha256Simple.h = sha256Simple.h || [];
+        var k = sha256Simple.k = sha256Simple.k || [];
+        var primeCounter = k[lengthProperty];
+
+        var isComposite = {};
+        for (var candidate = 2; primeCounter < 64; candidate++) {
+            if (!isComposite[candidate]) {
+                for (i = 0; i < 313; i += candidate) {
+                    isComposite[i] = 1;
+                }
+                hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
+                k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+            }
+        }
+        
+        ascii += '\x80';
+        while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
+        for (i = 0; i < ascii[lengthProperty]; i++) {
+            j = ascii.charCodeAt(i);
+            if (j >> 8) return; 
+            words[i >> 2] |= j << ((3 - i % 4) * 8);
+        }
+        words[words[lengthProperty]] = ((asciiLength / maxWord) * 8) | 0;
+        words[words[lengthProperty]] = (asciiLength * 8);
+        
+        var w = [];
+        var a, b, c, d, e, f, g, h, temp1, temp2;
+        var hashLength = hash[lengthProperty];
+        var wordsLength = words[lengthProperty];
+        for (i = 0; i < wordsLength; i += 16) {
+            var w = words.slice(i, i + 16);
+            var oldHash = hash.slice(0);
+            
+            a = hash[0]; b = hash[1]; c = hash[2]; d = hash[3];
+            e = hash[4]; f = hash[5]; g = hash[6]; h = hash[7];
+
+            for (j = 0; j < 64; j++) {
+                if (j >= 16) {
+                    var s0 = rightRotate(w[j - 15], 7) ^ rightRotate(w[j - 15], 18) ^ (w[j - 15] >>> 3);
+                    var s1 = rightRotate(w[j - 2], 17) ^ rightRotate(w[j - 2], 19) ^ (w[j - 2] >>> 10);
+                    w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
+                }
+                
+                var ch = (e & f) ^ (~e & g);
+                var maj = (a & b) ^ (a & c) ^ (b & c);
+                var t1 = (h + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) + ch + k[j] + (w[j] || 0)) | 0;
+                var t2 = ((rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + maj) | 0;
+                
+                h = g;
+                g = f;
+                f = e;
+                e = (d + t1) | 0;
+                d = c;
+                c = b;
+                b = a;
+                a = (t1 + t2) | 0;
+            }
+            
+            for (j = 0; j < 8; j++) {
+                hash[j] = (hash[j] + oldHash[j]) | 0;
+            }
+        }
+        
+        for (i = 0; i < 8; i++) {
+            for (j = 3; j + 1; j--) {
+                var b = (hash[i] >> (j * 8)) & 255;
+                result += ((b < 16) ? '0' : '') + b.toString(16);
+            }
+        }
+        return result;
+    }
+
+    async function hashPassword(password) {
+        if (window.crypto && window.crypto.subtle) {
+            try {
+                const msgBuffer = new TextEncoder().encode(password);
+                const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
+            } catch (e) {
+                console.error("Subtle crypto hash error:", e);
+            }
+        }
+        return sha256Simple(password);
+    }
+
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = src;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+        });
+    }
+
+    async function initClientFirebase() {
+        if (firebaseDb) return firebaseDb;
+        try {
+            const configRes = await fetch('/firebase-applet-config.json');
+            firebaseConfig = await configRes.json();
+            
+            if (typeof firebase === 'undefined') {
+                await loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
+                await loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js');
+            }
+            
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            firebaseDb = firebase.firestore();
+            return firebaseDb;
+        } catch (e) {
+            console.error("Client Firebase initialization failed:", e);
+            return null;
+        }
+    }
+
+    async function callApiOffline(url, options = {}) {
+        const getLocalItem = (key, defaultVal = []) => {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : defaultVal;
+            } catch (e) {
+                return defaultVal;
+            }
+        };
+
+        const setLocalItem = (key, val) => {
+            try {
+                localStorage.setItem(key, JSON.stringify(val));
+            } catch (e) {
+                console.error("Offline storage write error:", e);
+            }
+        };
+
+        if (url === '/api/auth/login') {
+            const body = JSON.parse(options.body);
+            const email = body.email.toLowerCase().trim();
+            const password = body.password;
+            const passwordHash = await hashPassword(password);
+
+            const users = getLocalItem('edu_fallback_users');
+            const user = users.find(u => u.email.toLowerCase().trim() === email);
+            if (!user) {
+                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
+            }
+            if (user.passwordHash !== passwordHash) {
+                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
+            }
+            const { passwordHash: _, ...userResponse } = user;
+            return { success: true, user: userResponse, message: 'ورود آفلاین با موفقیت انجام شد.' };
+        }
+
+        if (url === '/api/auth/register') {
+            const body = JSON.parse(options.body);
+            const { username, email, password, role } = body;
+            
+            const users = getLocalItem('edu_fallback_users');
+            const exists = users.some(u => u.email.toLowerCase().trim() === email.toLowerCase().trim());
+            if (exists) {
+                return { success: false, message: 'کاربری با این ایمیل قبلاً ثبت‌نام کرده است.' };
+            }
+
+            const prefix = role === 'teacher' ? 'TCH' : 'STD';
+            let isUnique = false;
+            let newId = '';
+            while (!isUnique) {
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                newId = `${prefix}-${randomNum}`;
+                if (!users.some(u => u.id === newId)) {
+                    isUnique = true;
+                }
+            }
+
+            const newUser = {
+                id: newId,
+                username,
+                email: email.toLowerCase().trim(),
+                passwordHash: await hashPassword(password),
+                role,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            setLocalItem('edu_fallback_users', users);
+            
+            const { passwordHash: _, ...userResponse } = newUser;
+            return { success: true, user: userResponse, message: 'ثبت‌نام آفلاین با موفقیت انجام شد. از این پس می‌توانید وارد حساب خود شوید.' };
+        }
+
+        if (url.startsWith('/api/student/self/')) {
+            const studentId = url.split('/').pop();
+            const users = getLocalItem('edu_fallback_users');
+            const student = users.find(u => u.id === studentId);
+            if (!student) {
+                return { success: false, message: 'دانش‌آموز یافت نشد.' };
+            }
+
+            const progress = getLocalItem('edu_fallback_progress').filter(p => p.userId === studentId);
+            const feedback = getLocalItem('edu_fallback_feedback').filter(f => f.studentId === studentId);
+
+            return { success: true, progress, feedback };
+        }
+
+        if (url.startsWith('/api/student/progress/')) {
+            const studentId = url.split('/').pop();
+            const users = getLocalItem('edu_fallback_users');
+            const student = users.find(u => u.id === studentId);
+            if (!student || student.role !== 'student') {
+                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
+            }
+
+            const progress = getLocalItem('edu_fallback_progress').filter(p => p.userId === studentId);
+            const feedback = getLocalItem('edu_fallback_feedback').filter(f => f.studentId === studentId);
+
+            return {
+                success: true,
+                student: {
+                    id: student.id,
+                    username: student.username,
+                    email: student.email,
+                    createdAt: student.createdAt
+                },
+                progress,
+                feedback
+            };
+        }
+
+        if (url === '/api/teacher/feedback') {
+            const body = JSON.parse(options.body);
+            const { studentId, teacherName, comment } = body;
+
+            const users = getLocalItem('edu_fallback_users');
+            const student = users.find(u => u.id === studentId);
+            if (!student) {
+                return { success: false, message: 'دانش‌آموز یافت نشد.' };
+            }
+
+            const feedbackId = 'FBB-' + Math.floor(100000 + Math.random() * 900000);
+            const newFeedback = {
+                id: feedbackId,
+                studentId,
+                teacherName,
+                comment,
+                timestamp: new Date().toISOString()
+            };
+
+            const feedbacks = getLocalItem('edu_fallback_feedback');
+            feedbacks.push(newFeedback);
+            setLocalItem('edu_fallback_feedback', feedbacks);
+
+            return { success: true, feedback: newFeedback, message: 'بازخورد شما با موفقیت ثبت شد.' };
+        }
+
+        if (url === '/api/student/progress') {
+            const body = JSON.parse(options.body);
+            const { userId, type, subject, title, score, stars, details } = body;
+
+            const users = getLocalItem('edu_fallback_users');
+            const user = users.find(u => u.id === userId);
+            if (!user) {
+                return { success: false, message: 'کاربر یافت نشد.' };
+            }
+
+            const progressId = 'PRG-' + Math.floor(100000 + Math.random() * 900000);
+            const newProgress = {
+                id: progressId,
+                userId,
+                studentName: user.username,
+                studentEmail: user.email,
+                type,
+                subject,
+                title,
+                score: Number(score) || 0,
+                stars: Number(stars) || 0,
+                details: details || '',
+                timestamp: new Date().toISOString()
+            };
+
+            const progressList = getLocalItem('edu_fallback_progress');
+            progressList.push(newProgress);
+            setLocalItem('edu_fallback_progress', progressList);
+
+            return { success: true, progress: newProgress, message: 'پیشرفت شما با موفقیت ذخیره شد!' };
+        }
+
+        throw new Error('مسیر درخواست تعریف نشده است.');
+    }
+
+    async function callApi(url, options = {}) {
+        // 0. Intercept and route to Google Sheets Apps Script if configured
+        if (appsScriptUrl) {
+            let action = '';
+            let payload = {};
+            
+            if (url === '/api/auth/login') {
+                action = 'login';
+                const body = JSON.parse(options.body || '{}');
+                payload = {
+                    email: body.email,
+                    passwordHash: await hashPassword(body.password)
+                };
+            } else if (url === '/api/auth/register') {
+                action = 'register';
+                const body = JSON.parse(options.body || '{}');
+                payload = {
+                    username: body.username,
+                    email: body.email,
+                    passwordHash: await hashPassword(body.password),
+                    role: body.role
+                };
+            } else if (url === '/api/student/progress') {
+                action = 'saveProgress';
+                payload = JSON.parse(options.body || '{}');
+            } else if (url.startsWith('/api/student/self/')) {
+                action = 'getSelfData';
+                payload = { studentId: url.split('/').pop() };
+            } else if (url.startsWith('/api/student/progress/')) {
+                action = 'getProgress';
+                payload = { studentId: url.split('/').pop() };
+            } else if (url === '/api/teacher/feedback') {
+                action = 'saveFeedback';
+                payload = JSON.parse(options.body || '{}');
+            }
+
+            if (action) {
+                try {
+                    const gasRes = await fetch(appsScriptUrl, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify({ action, ...payload })
+                    });
+                    if (gasRes.ok) {
+                        const data = await gasRes.json();
+                        return data;
+                    } else {
+                        console.error('Apps Script Web App returned status:', gasRes.status);
+                        throw new Error('خطا در پاسخ وب‌اپ گوگل شیت');
+                    }
+                } catch (gasError) {
+                    console.error('Google Sheets Apps Script call failed:', gasError);
+                    showToast('خطا در ارتباط با وب‌اپ گوگل شیت. لطفا آدرس را در تنظیمات بررسی کنید.', false);
+                    throw gasError;
+                }
+            }
+        }
+
+        // 1. Try calling the normal /api/ first
+        try {
+            const res = await fetch(url, options);
+            if (res.ok) {
+                const data = await res.json();
+                return data;
+            } else if (res.status === 404) {
+                console.warn(`API route ${url} not found (404), falling back to client-side Firebase.`);
+            } else {
+                const text = await res.text();
+                console.warn(`API returned status ${res.status}: ${text}. Falling back.`);
+            }
+        } catch (e) {
+            console.warn(`API call to ${url} failed, attempting client-side Firebase fallback. Error:`, e);
+        }
+
+        // 2. Fallback to direct client-side Firebase
+        let db = null;
+        try {
+            db = await initClientFirebase();
+        } catch (fbError) {
+            console.warn("Direct Firebase initialization threw an error:", fbError);
+        }
+
+        if (!db) {
+            console.warn("Client-side Firebase not available. Falling back to local/offline storage database...");
+            return await callApiOffline(url, options);
+        }
+
+        if (url === '/api/auth/login') {
+            const body = JSON.parse(options.body);
+            const email = body.email.toLowerCase();
+            const password = body.password;
+            const passwordHash = await hashPassword(password);
+
+            const usersRef = db.collection('users');
+            const querySnapshot = await usersRef.where('email', '==', email).get();
+            if (querySnapshot.empty) {
+                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
+            }
+            const user = querySnapshot.docs[0].data();
+            if (user.passwordHash !== passwordHash) {
+                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
+            }
+            const { passwordHash: _, ...userResponse } = user;
+            return { success: true, user: userResponse, message: 'ورود با موفقیت انجام شد.' };
+        }
+
+        if (url === '/api/auth/register') {
+            const body = JSON.parse(options.body);
+            const { username, email, password, role } = body;
+            
+            const usersRef = db.collection('users');
+            const querySnapshot = await usersRef.where('email', '==', email.toLowerCase()).get();
+            if (!querySnapshot.empty) {
+                return { success: false, message: 'کاربری با این ایمیل قبلاً ثبت‌نام کرده است.' };
+            }
+
+            const prefix = role === 'teacher' ? 'TCH' : 'STD';
+            let isUnique = false;
+            let newId = '';
+            while (!isUnique) {
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                newId = `${prefix}-${randomNum}`;
+                const docSnap = await usersRef.doc(newId).get();
+                if (!docSnap.exists) {
+                    isUnique = true;
+                }
+            }
+
+            const newUser = {
+                id: newId,
+                username,
+                email: email.toLowerCase(),
+                passwordHash: await hashPassword(password),
+                role,
+                createdAt: new Date().toISOString()
+            };
+
+            await usersRef.doc(newId).set(newUser);
+            const { passwordHash: _, ...userResponse } = newUser;
+            return { success: true, user: userResponse, message: 'ثبت‌نام با موفقیت انجام شد.' };
+        }
+
+        if (url.startsWith('/api/student/self/')) {
+            const studentId = url.split('/').pop();
+            const usersRef = db.collection('users');
+            const studentSnap = await usersRef.doc(studentId).get();
+            if (!studentSnap.exists) {
+                return { success: false, message: 'دانش‌آموز یافت نشد.' };
+            }
+
+            const progressRef = db.collection('progress');
+            const progressSnap = await progressRef.where('userId', '==', studentId).get();
+            const progress = [];
+            progressSnap.forEach(doc => progress.push(doc.data()));
+
+            const feedbackRef = db.collection('feedback');
+            const feedbackSnap = await feedbackRef.where('studentId', '==', studentId).get();
+            const feedback = [];
+            feedbackSnap.forEach(doc => feedback.push(doc.data()));
+
+            return { success: true, progress, feedback };
+        }
+
+        if (url.startsWith('/api/student/progress/')) {
+            const studentId = url.split('/').pop();
+            const usersRef = db.collection('users');
+            const studentSnap = await usersRef.doc(studentId).get();
+            if (!studentSnap.exists) {
+                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
+            }
+
+            const student = studentSnap.data();
+            if (student.role !== 'student') {
+                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
+            }
+
+            const progressRef = db.collection('progress');
+            const progressSnap = await progressRef.where('userId', '==', studentId).get();
+            const progress = [];
+            progressSnap.forEach(doc => progress.push(doc.data()));
+
+            const feedbackRef = db.collection('feedback');
+            const feedbackSnap = await feedbackRef.where('studentId', '==', studentId).get();
+            const feedback = [];
+            feedbackSnap.forEach(doc => feedback.push(doc.data()));
+
+            return {
+                success: true,
+                student: {
+                    id: student.id,
+                    username: student.username,
+                    email: student.email,
+                    createdAt: student.createdAt
+                },
+                progress,
+                feedback
+            };
+        }
+
+        if (url === '/api/teacher/feedback') {
+            const body = JSON.parse(options.body);
+            const { studentId, teacherName, comment } = body;
+
+            const usersRef = db.collection('users');
+            const studentSnap = await usersRef.doc(studentId).get();
+            if (!studentSnap.exists) {
+                return { success: false, message: 'دانش‌آموز یافت نشد.' };
+            }
+
+            const feedbackId = 'FBB-' + Math.floor(100000 + Math.random() * 900000);
+            const newFeedback = {
+                id: feedbackId,
+                studentId,
+                teacherName,
+                comment,
+                timestamp: new Date().toISOString()
+            };
+
+            await db.collection('feedback').doc(feedbackId).set(newFeedback);
+            return { success: true, feedback: newFeedback, message: 'بازخورد شما با موفقیت ثبت شد و برای دانش‌آموز قابل مشاهده است.' };
+        }
+
+        if (url === '/api/student/progress') {
+            const body = JSON.parse(options.body);
+            const { userId, type, subject, title, score, stars, details } = body;
+
+            const usersRef = db.collection('users');
+            const userSnap = await usersRef.doc(userId).get();
+            if (!userSnap.exists) {
+                return { success: false, message: 'کاربر یافت نشد.' };
+            }
+
+            const user = userSnap.data();
+            const progressId = 'PRG-' + Math.floor(100000 + Math.random() * 900000);
+            const newProgress = {
+                id: progressId,
+                userId,
+                studentName: user.username,
+                studentEmail: user.email,
+                type,
+                subject,
+                title,
+                score: Number(score) || 0,
+                stars: Number(stars) || 0,
+                details: details || '',
+                timestamp: new Date().toISOString()
+            };
+
+            await db.collection('progress').doc(progressId).set(newProgress);
+            return { success: true, progress: newProgress, message: 'پیشرفت شما با موفقیت ذخیره شد!' };
+        }
+
+        throw new Error('مسیر درخواست تعریف نشده است.');
+    }
+
     // Load active session on init
     try {
         const stored = localStorage.getItem('edu_kiashahr_user');
@@ -815,8 +1385,461 @@
             <p style="text-align: center; font-size: 0.8rem; color: var(--edu-text-muted); margin-top: 15px;">
                 💡 برای ورود تستی معلمان از ایمیل <b>teacher@kiashahr.ir</b> و دانش‌آموزان از <b>student@kiashahr.ir</b> با رمز <b>123456</b> استفاده کنید.
             </p>
-        `;
+         `;
         showModal('ورود و ثبت‌نام در پلتفرم', authHtml);
+    };
+
+    window.toggleDbSettings = () => {
+        const container = document.getElementById('eduDbSettingsContainer');
+        const icon = document.getElementById('eduDbToggleIcon');
+        if (container.style.display === 'none') {
+            container.style.display = 'block';
+            icon.innerText = '▲';
+            const currentUrl = localStorage.getItem('edu_apps_script_url') || '';
+            document.getElementById('eduAppsScriptUrlInput').value = currentUrl;
+        } else {
+            container.style.display = 'none';
+            icon.innerText = '▼';
+        }
+    };
+
+    window.saveDbSettings = () => {
+        const urlInput = document.getElementById('eduAppsScriptUrlInput').value.trim();
+        if (urlInput && !urlInput.startsWith('https://script.google.com/')) {
+            showToast('آدرس وب‌اپ نامعتبر است. باید با https://script.google.com شروع شود.', false);
+            return;
+        }
+        
+        if (urlInput) {
+            localStorage.setItem('edu_apps_script_url', urlInput);
+            appsScriptUrl = urlInput;
+            showToast('اتصال به گوگل شیت با موفقیت ذخیره شد! 🎉', true);
+        } else {
+            localStorage.removeItem('edu_apps_script_url');
+            appsScriptUrl = '';
+            showToast('تنظیمات پاک شد. سیستم به پایگاه داده پیش‌فرض بازگشت.', true);
+        }
+    };
+
+    window.showAppsScriptInstructions = () => {
+        const scriptCode = `// Google Apps Script Database for "آموزش و پرورش بندر کیاشهر"
+// این اسکریپت را کپی کرده و در بخش Extensions -> Apps Script فایل گوگل شیت خود قرار دهید.
+
+function doGet(e) {
+  return ContentService.createTextOutput(JSON.stringify({
+    success: true,
+    message: "وب‌اپ فعال است! اتصال برقرار شد."
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+    
+    initDatabase();
+    
+    if (action === 'register') {
+      return handleRegister(data);
+    } else if (action === 'login') {
+      return handleLogin(data);
+    } else if (action === 'saveProgress') {
+      return handleSaveProgress(data);
+    } else if (action === 'getSelfData') {
+      return handleGetSelfData(data);
+    } else if (action === 'getProgress') {
+      return handleGetProgress(data);
+    } else if (action === 'saveFeedback') {
+      return handleSaveFeedback(data);
+    } else {
+      return jsonResponse({ success: false, message: 'عملیات تعریف نشده: ' + action });
+    }
+  } catch (error) {
+    return jsonResponse({ success: false, message: 'خطای سرور گوگل اپس اسکریپت: ' + error.toString() });
+  }
+}
+
+function jsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function initDatabase() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. users sheet
+  let usersSheet = ss.getSheetByName('users');
+  if (!usersSheet) {
+    usersSheet = ss.insertSheet('users');
+    usersSheet.appendRow(['id', 'username', 'email', 'passwordHash', 'role', 'createdAt']);
+    usersSheet.getRange(1, 1, 1, 6).setFontWeight('bold').setBackground('#eff6ff');
+  }
+  
+  // 2. progress sheet
+  let progressSheet = ss.getSheetByName('progress');
+  if (!progressSheet) {
+    progressSheet = ss.insertSheet('progress');
+    progressSheet.appendRow(['id', 'userId', 'studentName', 'studentEmail', 'type', 'subject', 'title', 'score', 'stars', 'details', 'timestamp']);
+    progressSheet.getRange(1, 1, 1, 11).setFontWeight('bold').setBackground('#ecfdf5');
+  }
+  
+  // 3. feedback sheet
+  let feedbackSheet = ss.getSheetByName('feedback');
+  if (!feedbackSheet) {
+    feedbackSheet = ss.insertSheet('feedback');
+    feedbackSheet.appendRow(['id', 'studentId', 'teacherName', 'comment', 'timestamp']);
+    feedbackSheet.getRange(1, 1, 1, 5).setFontWeight('bold').setBackground('#fef3c7');
+  }
+}
+
+function handleRegister(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('users');
+  const rows = sheet.getDataRange().getValues();
+  
+  const email = data.email.toLowerCase().trim();
+  
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][2].toString().toLowerCase().trim() === email) {
+      return jsonResponse({ success: false, message: 'کاربری با این ایمیل قبلاً ثبت‌نام کرده است.' });
+    }
+  }
+  
+  const prefix = data.role === 'teacher' ? 'TCH' : 'STD';
+  let isUnique = false;
+  let newId = '';
+  while (!isUnique) {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    newId = prefix + '-' + randomNum;
+    
+    let exists = false;
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i][0].toString() === newId) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists) {
+      isUnique = true;
+    }
+  }
+  
+  const newUser = [
+    newId,
+    data.username,
+    email,
+    data.passwordHash,
+    data.role,
+    new Date().toISOString()
+  ];
+  
+  sheet.appendRow(newUser);
+  
+  return jsonResponse({
+    success: true,
+    user: {
+      id: newId,
+      username: data.username,
+      email: email,
+      role: data.role,
+      createdAt: newUser[5]
+    },
+    message: 'ثبت‌نام با موفقیت انجام شد.'
+  });
+}
+
+function handleLogin(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('users');
+  const rows = sheet.getDataRange().getValues();
+  
+  const email = data.email.toLowerCase().trim();
+  const passwordHash = data.passwordHash;
+  
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][2].toString().toLowerCase().trim() === email) {
+      if (rows[i][3].toString() === passwordHash) {
+        return jsonResponse({
+          success: true,
+          user: {
+            id: rows[i][0].toString(),
+            username: rows[i][1].toString(),
+            email: rows[i][2].toString(),
+            role: rows[i][4].toString(),
+            createdAt: rows[i][5].toString()
+          },
+          message: 'ورود موفقیت‌آمیز بود.'
+        });
+      } else {
+        return jsonResponse({ success: false, message: 'ایمیل یا رمز عبور اشتباه است.' });
+      }
+    }
+  }
+  
+  return jsonResponse({ success: false, message: 'ایمیل یا رمز عبور اشتباه است.' });
+}
+
+function handleSaveProgress(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  const usersSheet = ss.getSheetByName('users');
+  const userRows = usersSheet.getDataRange().getValues();
+  let user = null;
+  
+  for (let i = 1; i < userRows.length; i++) {
+    if (userRows[i][0].toString() === data.userId) {
+      user = {
+        id: userRows[i][0].toString(),
+        username: userRows[i][1].toString(),
+        email: userRows[i][2].toString()
+      };
+      break;
+    }
+  }
+  
+  if (!user) {
+    return jsonResponse({ success: false, message: 'کاربر یافت نشد.' });
+  }
+  
+  const progressSheet = ss.getSheetByName('progress');
+  const progressId = 'PRG-' + Math.floor(100000 + Math.random() * 900000);
+  
+  const newProgress = [
+    progressId,
+    data.userId,
+    user.username,
+    user.email,
+    data.type,
+    data.subject,
+    data.title,
+    Number(data.score) || 0,
+    Number(data.stars) || 0,
+    data.details || '',
+    new Date().toISOString()
+  ];
+  
+  progressSheet.appendRow(newProgress);
+  
+  return jsonResponse({
+    success: true,
+    progress: {
+      id: progressId,
+      userId: data.userId,
+      studentName: user.username,
+      studentEmail: user.email,
+      type: data.type,
+      subject: data.subject,
+      title: data.title,
+      score: Number(data.score) || 0,
+      stars: Number(data.stars) || 0,
+      details: data.details || '',
+      timestamp: newProgress[10]
+    },
+    message: 'پیشرفت شما ثبت شد!'
+  });
+}
+
+function handleGetSelfData(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  const progressSheet = ss.getSheetByName('progress');
+  const progressRows = progressSheet.getDataRange().getValues();
+  const progress = [];
+  
+  for (let i = 1; i < progressRows.length; i++) {
+    if (progressRows[i][1].toString() === data.studentId) {
+      progress.push({
+        id: progressRows[i][0].toString(),
+        userId: progressRows[i][1].toString(),
+        studentName: progressRows[i][2].toString(),
+        studentEmail: progressRows[i][3].toString(),
+        type: progressRows[i][4].toString(),
+        subject: progressRows[i][5].toString(),
+        title: progressRows[i][6].toString(),
+        score: Number(progressRows[i][7]),
+        stars: Number(progressRows[i][8]),
+        details: progressRows[i][9].toString(),
+        timestamp: progressRows[i][10].toString()
+      });
+    }
+  }
+  
+  const feedbackSheet = ss.getSheetByName('feedback');
+  const feedbackRows = feedbackSheet.getDataRange().getValues();
+  const feedback = [];
+  
+  for (let i = 1; i < feedbackRows.length; i++) {
+    if (feedbackRows[i][1].toString() === data.studentId) {
+      feedback.push({
+        id: feedbackRows[i][0].toString(),
+        studentId: feedbackRows[i][1].toString(),
+        teacherName: feedbackRows[i][2].toString(),
+        comment: feedbackRows[i][3].toString(),
+        timestamp: feedbackRows[i][4].toString()
+      });
+    }
+  }
+  
+  return jsonResponse({
+    success: true,
+    progress: progress,
+    feedback: feedback
+  });
+}
+
+function handleGetProgress(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const usersSheet = ss.getSheetByName('users');
+  const userRows = usersSheet.getDataRange().getValues();
+  let student = null;
+  
+  for (let i = 1; i < userRows.length; i++) {
+    if (userRows[i][0].toString() === data.studentId) {
+      student = {
+        id: userRows[i][0].toString(),
+        username: userRows[i][1].toString(),
+        email: userRows[i][2].toString(),
+        role: userRows[i][4].toString(),
+        createdAt: userRows[i][5].toString()
+      };
+      break;
+    }
+  }
+  
+  if (!student || student.role !== 'student') {
+    return jsonResponse({ success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' });
+  }
+  
+  const progressSheet = ss.getSheetByName('progress');
+  const progressRows = progressSheet.getDataRange().getValues();
+  const progress = [];
+  
+  for (let i = 1; i < progressRows.length; i++) {
+    if (progressRows[i][1].toString() === data.studentId) {
+      progress.push({
+        id: progressRows[i][0].toString(),
+        userId: progressRows[i][1].toString(),
+        studentName: progressRows[i][2].toString(),
+        studentEmail: progressRows[i][3].toString(),
+        type: progressRows[i][4].toString(),
+        subject: progressRows[i][5].toString(),
+        title: progressRows[i][6].toString(),
+        score: Number(progressRows[i][7]),
+        stars: Number(progressRows[i][8]),
+        details: progressRows[i][9].toString(),
+        timestamp: progressRows[i][10].toString()
+      });
+    }
+  }
+  
+  const feedbackSheet = ss.getSheetByName('feedback');
+  const feedbackRows = feedbackSheet.getDataRange().getValues();
+  const feedback = [];
+  
+  for (let i = 1; i < feedbackRows.length; i++) {
+    if (feedbackRows[i][1].toString() === data.studentId) {
+      feedback.push({
+        id: feedbackRows[i][0].toString(),
+        studentId: feedbackRows[i][1].toString(),
+        teacherName: feedbackRows[i][2].toString(),
+        comment: feedbackRows[i][3].toString(),
+        timestamp: feedbackRows[i][4].toString()
+      });
+    }
+  }
+  
+  return jsonResponse({
+    success: true,
+    student: student,
+    progress: progress,
+    feedback: feedback
+  });
+}
+
+function handleSaveFeedback(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  const usersSheet = ss.getSheetByName('users');
+  const userRows = usersSheet.getDataRange().getValues();
+  let studentExists = false;
+  
+  for (let i = 1; i < userRows.length; i++) {
+    if (userRows[i][0].toString() === data.studentId) {
+      studentExists = true;
+      break;
+    }
+  }
+  
+  if (!studentExists) {
+    return jsonResponse({ success: false, message: 'دانش‌آموز یافت نشد.' });
+  }
+  
+  const feedbackSheet = ss.getSheetByName('feedback');
+  const feedbackId = 'FBB-' + Math.floor(100000 + Math.random() * 900000);
+  
+  const newFeedback = [
+    feedbackId,
+    data.studentId,
+    data.teacherName,
+    data.comment,
+    new Date().toISOString()
+  ];
+  
+  feedbackSheet.appendRow(newFeedback);
+  
+  return jsonResponse({
+    success: true,
+    feedback: {
+      id: feedbackId,
+      studentId: data.studentId,
+      teacherName: data.teacherName,
+      comment: data.comment,
+      timestamp: newFeedback[4]
+    },
+    message: 'بازخورد با موفقیت ثبت شد.'
+  });
+}
+`;
+
+        const codeModalHtml = `
+            <div style="direction: rtl; text-align: right; font-family: 'Vazirmatn', sans-serif;">
+                <p style="font-size: 0.85rem; line-height: 1.6; color: var(--edu-text-dark); margin-bottom: 12px;">
+                    راهنمای راه‌اندازی سریع پایگاه داده گوگل شیت:
+                    <br>
+                    ۱. یک فایل <b>Google Sheet</b> جدید بسازید.
+                    <br>
+                    ۲. از منوی بالا روی <b>Extensions</b> (افزونه‌ها) و سپس <b>Apps Script</b> کلیک کنید.
+                    <br>
+                    ۳. کدهای پیش‌فرض را پاک کرده و کدهای زیر را پیست کنید:
+                </p>
+                <textarea id="appsScriptCodeBlock" readonly style="width: 100%; height: 180px; font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; direction: ltr; text-align: left; background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--edu-border);">${scriptCode}</textarea>
+                <button type="button" class="edu-submit-btn" style="margin-top: 10px; padding: 10px;" onclick="copyAppsScriptCode()">📋 کپی کردن کدهای اسکریپت</button>
+                
+                <p style="font-size: 0.85rem; line-height: 1.6; color: var(--edu-text-dark); margin-top: 15px;">
+                    ۴. از بالا سمت راست روی دکمه آبی **Deploy** و سپس **New deployment** بزنید.
+                    <br>
+                    ۵. نوع را روی **Web app** بگذارید.
+                    <br>
+                    ۶. فیلد **Execute as** روی **Me** و فیلد **Who has access** روی **Anyone** باشد.
+                    <br>
+                    ۷. دکمه **Deploy** را بزنید و دسترسی‌ها را تایید کنید. آدرس **URL** وب‌اپ تولیدشده را در کادر تنظیمات پایگاه داده ذخیره کنید.
+                </p>
+                <button type="button" class="edu-submit-btn" style="background: #64748b !important; margin-top: 15px; padding: 10px;" onclick="backToAuthModal()">⬅️ بازگشت به صفحه ورود</button>
+            </div>
+        `;
+        showModal('راهنمای اتصال به گوگل شیت 📊', codeModalHtml);
+    };
+
+    window.copyAppsScriptCode = () => {
+        const copyText = document.getElementById("appsScriptCodeBlock");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        showToast('کدهای اسکریپت با موفقیت کپی شدند!', true);
+    };
+
+    window.backToAuthModal = () => {
+        openAuthModal();
     };
 
     // Form submission handlers
@@ -830,12 +1853,11 @@
         }
 
         try {
-            const res = await fetch('/api/auth/login', {
+            const data = await callApi('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            const data = await res.json();
             if (data.success) {
                 currentUser = data.user;
                 localStorage.setItem('edu_kiashahr_user', JSON.stringify(currentUser));
@@ -869,12 +1891,11 @@
         }
 
         try {
-            const res = await fetch('/api/auth/register', {
+            const data = await callApi('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password, role })
             });
-            const data = await res.json();
             if (data.success) {
                 currentUser = data.user;
                 localStorage.setItem('edu_kiashahr_user', JSON.stringify(currentUser));
@@ -917,8 +1938,7 @@
         `);
 
         try {
-            const res = await fetch(`/api/student/self/${currentUser.id}`);
-            const data = await res.json();
+            const data = await callApi(`/api/student/self/${currentUser.id}`);
 
             if (!data.success) {
                 showToast(data.message, false);
@@ -1139,8 +2159,7 @@
         `;
 
         try {
-            const res = await fetch(`/api/student/progress/${studentId}`);
-            const data = await res.json();
+            const data = await callApi(`/api/student/progress/${studentId}`);
 
             searchBtn.innerText = 'بررسی پیشرفت';
             searchBtn.disabled = false;
@@ -1370,7 +2389,7 @@
         }
 
         try {
-            const res = await fetch('/api/teacher/feedback', {
+            const data = await callApi('/api/teacher/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1379,7 +2398,6 @@
                     comment
                 })
             });
-            const data = await res.json();
             if (data.success) {
                 showToast(data.message, true);
                 document.getElementById('teacherComment').value = '';
@@ -1559,97 +2577,464 @@
     const renderExerciseTrackerWidget = () => {
         if (!currentUser || currentUser.role !== 'student') return; // Only students record progress
 
-        // Extract exercise name from title
         const exerciseName = document.title || 'تمرین تعاملی';
         const subject = getSubjectFromPath(window.location.pathname);
 
         const widget = document.createElement('div');
         widget.className = 'edu-tracker-widget';
         widget.id = 'eduFloatingTracker';
+        widget.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)';
+        widget.style.boxShadow = '0 10px 25px -5px rgba(59, 130, 246, 0.4)';
+        widget.style.pointerEvents = 'none'; // Purely informational
         widget.innerHTML = `
-            <span>🏆</span>
-            <span>ثبت امتیاز در پروفایل</span>
+            <span>🎮</span>
+            <span>ثبت خودکار فعال است</span>
         `;
         document.body.appendChild(widget);
 
-        widget.addEventListener('click', () => {
-            // Auto-detect score if the game has a global score variable
-            let detectedScore = 100;
+        let exerciseSaved = false;
+        let interactionsCount = 0;
+        let timeElapsed = 0;
+
+        // Detect user interactions to make sure they're actually playing
+        const registerInteraction = () => {
+            interactionsCount++;
+        };
+        document.addEventListener('click', registerInteraction);
+        document.addEventListener('keydown', registerInteraction);
+
+        const detectScore = () => {
+            let scoreVal = 100;
+            // 1. Check window variables
             if (typeof window.score !== 'undefined') {
-                detectedScore = Number(window.score);
+                scoreVal = Number(window.score);
             } else if (typeof score !== 'undefined') {
-                detectedScore = Number(score);
+                scoreVal = Number(score);
+            } else if (typeof window.gameScore !== 'undefined') {
+                scoreVal = Number(window.gameScore);
             }
+            // 2. Read from common element IDs if available
+            const scoreElement = document.getElementById('score-val') || document.getElementById('score') || document.getElementById('final-score');
+            if (scoreElement) {
+                const parsed = parseInt(scoreElement.innerText.replace(/[^0-9]/g, ''));
+                if (!isNaN(parsed)) {
+                    scoreVal = parsed;
+                }
+            }
+            return scoreVal;
+        };
 
-            const selfReportHtml = `
-                <p style="font-size: 0.9rem; color: var(--edu-text-muted); margin-bottom: 20px;">
-                    آفرین قهرمان! شما با موفقیت تمرین <b>"${exerciseName}"</b> را حل کردید. امتیاز به دست آمده را تایید کنید تا در پرونده تحصیلی شما ثبت شود.
-                </p>
-                <div class="edu-form-group">
-                    <label class="edu-form-label">امتیاز کسب شده (از ۱۰۰)</label>
-                    <input type="number" id="trackerReportScore" class="edu-form-input" min="0" max="100" value="${detectedScore}" required style="text-align: center; font-size: 1.5rem; font-weight: 800; color: var(--edu-primary-dark);">
-                </div>
+        const autoSaveExerciseProgress = async (scoreToSave) => {
+            if (exerciseSaved) return;
+            exerciseSaved = true;
 
-                <div class="edu-form-group">
-                    <label class="edu-form-label" style="text-align: center;">ارزیابی شما از این تمرین (ستاره ⭐)</label>
-                    <div class="edu-stars-container">
-                        <span class="edu-star-input active" data-value="1" onclick="selectTrackerStars(1)">★</span>
-                        <span class="edu-star-input active" data-value="2" onclick="selectTrackerStars(2)">★</span>
-                        <span class="edu-star-input active" data-value="3" onclick="selectTrackerStars(3)">★</span>
-                        <span class="edu-star-input active" data-value="4" onclick="selectTrackerStars(4)">★</span>
-                        <span class="edu-star-input active" data-value="5" onclick="selectTrackerStars(5)">★</span>
-                    </div>
-                </div>
-
-                <button class="edu-submit-btn" onclick="submitProgressReport('${subject}', '${exerciseName}', 'exercise')">ثبت دائمی در کارنامه</button>
+            widget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            widget.style.boxShadow = '0 10px 25px -5px rgba(16, 185, 129, 0.4)';
+            widget.innerHTML = `
+                <span>⚡</span>
+                <span>در حال ثبت امتیاز...</span>
             `;
 
-            showModal('ثبت نتیجه تمرین در پروفایل', selfReportHtml);
+            // Give 1 point and 1 star for this activity as requested
+            const success = await submitProgressReport(subject, exerciseName, 'exercise', 1, 1, true);
+            if (success) {
+                widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                widget.innerHTML = `
+                    <span>✅</span>
+                    <span>امتیاز ۱ ثبت شد!</span>
+                `;
+            } else {
+                widget.style.background = 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)';
+                widget.innerHTML = `
+                    <span>❌</span>
+                    <span>خطا در ثبت خودکار!</span>
+                `;
+                // Reset flag on failure to allow retry if they trigger it again
+                exerciseSaved = false;
+            }
+        };
 
-            // Configure star selectors
-            window.activeTrackerStars = 5;
-            window.selectTrackerStars = (stars) => {
-                window.activeTrackerStars = stars;
-                const starElements = document.querySelectorAll('.edu-star-input');
-                starElements.forEach(el => {
-                    const val = Number(el.getAttribute('data-value'));
-                    if (val <= stars) {
-                        el.classList.add('active');
-                    } else {
-                        el.classList.remove('active');
-                    }
-                });
-            };
-        });
+        // 1. Wrap common end game methods dynamically
+        const wrapEndGameFunctions = () => {
+            const fns = ['endGame', 'showEndScreen', 'showResult', 'finishGame', 'gameOver'];
+            fns.forEach(fnName => {
+                if (typeof window[fnName] === 'function' && !window[fnName]._isWrapped) {
+                    const original = window[fnName];
+                    window[fnName] = function(...args) {
+                        const scoreVal = detectScore();
+                        autoSaveExerciseProgress(scoreVal);
+                        return original.apply(this, args);
+                    };
+                    window[fnName]._isWrapped = true;
+                }
+            });
+        };
+
+        // Periodically check and wrap newly defined functions
+        const wrapInterval = setInterval(wrapEndGameFunctions, 1000);
+
+        // 2. DOM Observation for End Screens becoming visible
+        const checkEndScreenVisibility = () => {
+            if (exerciseSaved) return;
+
+            const endElements = [
+                document.getElementById('endScreen'),
+                document.getElementById('screen-result'),
+                document.getElementById('result-screen'),
+                document.querySelector('.end-screen'),
+                document.querySelector('.result-container')
+            ];
+
+            for (const el of endElements) {
+                if (el && el.style.display !== 'none' && getComputedStyle(el).display !== 'none') {
+                    const scoreVal = detectScore();
+                    autoSaveExerciseProgress(scoreVal);
+                    break;
+                }
+            }
+        };
+        const domInterval = setInterval(checkEndScreenVisibility, 1000);
+
+        // 3. Time fallback for endless exercises (e.g. counting shapes)
+        const timeFallbackInterval = setInterval(() => {
+            if (exerciseSaved) {
+                clearInterval(timeFallbackInterval);
+                clearInterval(wrapInterval);
+                clearInterval(domInterval);
+                document.removeEventListener('click', registerInteraction);
+                document.removeEventListener('keydown', registerInteraction);
+                return;
+            }
+
+            timeElapsed += 2;
+
+            // If stayed for 40 seconds and interacted at least 3 times
+            if (timeElapsed >= 40 && interactionsCount >= 3) {
+                const scoreVal = detectScore();
+                autoSaveExerciseProgress(scoreVal);
+            }
+        }, 2000);
     };
 
     // Tracker Widget inside book lessons (Quran, Persian, Math, Science)
+    let lastActiveLesson = null;
+    let lastActiveActivityType = null;
+    const lessonSavedSet = new Set();
+    
+    // State storage for interactions
+    let activeFlippedCardsSet = new Set();
+    let activeQuranTilesSet = new Set();
+    let videoWatchTimeElapsed = 0;
+    let quizClicked = false;
+    let fallbackSecondsRemaining = 40; // reduced slightly to 40 for premium feel
+    let lessonInteractionsCount = 0;
+    let videoTimer = null;
+    let fallbackTimer = null;
+
     const renderLessonTrackerWidget = () => {
         if (!currentUser || currentUser.role !== 'student') return; // Only students
 
+        // Setup global/document-level listener for interaction counts
+        const registerLessonInteraction = () => {
+            lessonInteractionsCount++;
+        };
+        document.removeEventListener('click', registerLessonInteraction);
+        document.removeEventListener('keydown', registerLessonInteraction);
+        document.addEventListener('click', registerLessonInteraction);
+        document.addEventListener('keydown', registerLessonInteraction);
+
         // Since lessons are loaded dynamically when clicking on a sidebar title, we want to know the current active lesson name!
-        // We can periodically query the main-content header (e.g. h1, h2) or sidebar selection.
         const checkActiveLesson = () => {
+            const path = window.location.pathname;
             let lessonName = '';
             
-            // Try to find an active item in sidebar
-            const activeSidebarItem = document.querySelector('.sidebar a.active, .sidebar li.active, .sidebar-link.active, .topic-item.active, .topic-title.active');
-            if (activeSidebarItem) {
-                lessonName = activeSidebarItem.innerText.trim();
-            } else {
-                // Fallback to active display title
-                const displayHeader = document.querySelector('#main-content h1, #main-content h2, .main-content h1, .main-content h2, h1, h2');
-                if (displayHeader) {
-                    lessonName = displayHeader.innerText.trim();
+            // 1. Grade 1 Persian (/Persian/)
+            if (path.includes('/Persian/') && !path.includes('/Persian2/')) {
+                const activeLi = document.querySelector('#sidebar .submenu li.active');
+                if (activeLi) {
+                    const parentLesson = activeLi.closest('.lesson-item');
+                    if (parentLesson) {
+                        const titleEl = parentLesson.querySelector('.lesson-title');
+                        if (titleEl) {
+                            lessonName = titleEl.innerText.trim();
+                        }
+                    }
+                }
+                if (!lessonName) {
+                    const activeTitle = document.querySelector('#sidebar .lesson-title.active');
+                    if (activeTitle) {
+                        lessonName = activeTitle.innerText.trim();
+                    }
+                }
+            }
+            // 2. Grade 2 Persian (/Persian2/)
+            else if (path.includes('/Persian2/')) {
+                const activeSpan = document.querySelector('#sidebar .submenu .submenu-item.active');
+                if (activeSpan) {
+                    const parentLesson = activeSpan.closest('.lesson-item');
+                    if (parentLesson) {
+                        const titleEl = parentLesson.querySelector('.lesson-header span');
+                        if (titleEl) {
+                            lessonName = titleEl.innerText.trim();
+                        }
+                    }
+                }
+            }
+            // 3. Science
+            else if (path.includes('/science/')) {
+                const activeA = document.querySelector('#sidebar .submenu a.active');
+                if (activeA) {
+                    const parentLesson = activeA.closest('.lesson-item');
+                    if (parentLesson) {
+                        const titleEl = parentLesson.querySelector('.topic-title');
+                        if (titleEl) {
+                            lessonName = titleEl.innerText.trim();
+                        }
+                    }
+                }
+            }
+            // 4. Quran
+            else if (path.includes('/quran/')) {
+                const activeTopic = document.querySelector('#sidebar .topic-title.active');
+                if (activeTopic) {
+                    lessonName = activeTopic.innerText.trim();
+                }
+            }
+            
+            // Fallback: If no custom lesson was found, look at generic active sidebar items or title header
+            if (!lessonName) {
+                const activeSidebarItem = document.querySelector('.sidebar a.active, .sidebar li.active, .sidebar-link.active, .topic-item.active, .topic-title.active, .lesson-item .submenu-item.active');
+                if (activeSidebarItem) {
+                    lessonName = activeSidebarItem.innerText.trim();
+                } else {
+                    const displayHeader = document.querySelector('#main-content h1, #main-content h2, .main-content h1, .main-content h2, h1, h2, .topic-main-title');
+                    if (displayHeader) {
+                        lessonName = displayHeader.innerText.trim();
+                    }
                 }
             }
 
-            // Remove typical welcome messages
-            if (!lessonName || lessonName.includes('خوش آمدید') || lessonName.includes('قهرمان') || lessonName.includes('آموزش و پرورش')) {
+            // Clean typical prefixes/emojis from lessonName
+            if (lessonName) {
+                lessonName = lessonName.replace(/^[🗂🎥🎮🕌📚✍️🔑🎵🔍🏆📺🎥🕹️🃏🗣️📖🤖✨✅⏳❌🎯★⭐\s]+/, '').trim();
+            }
+
+            // Ignore welcome/generic messages
+            if (!lessonName || lessonName.includes('خوش آمدید') || lessonName.includes('قهرمان') || lessonName.includes('آموزش و پرورش') || lessonName.includes('کلاس اول') || lessonName.includes('پایهٔ اول') || lessonName.includes('پایهٔ دوم')) {
                 return null;
             }
 
             return lessonName;
+        };
+
+        const getActivityFarsiName = (type) => {
+            const names = {
+                'memory': 'بازی کارت حافظه',
+                'scramble': 'بازی جمله‌سازی',
+                'listen-tap': 'تمرین شنیداری',
+                'word-sound': 'تمرین پیدا کردن کلمه',
+                'flashcards': 'فلش‌کارت کلمات',
+                'quran': 'تمرین تلفظ لوحه‌ها',
+                'video': 'ویدئوی آموزشی',
+                'quiz': 'آزمونک درس',
+                'match-game': 'بازی وصل کردنی'
+            };
+            return names[type] || 'مطالعه بخش';
+        };
+
+        const detectActiveActivity = () => {
+            // 1. Memory Game
+            if (document.querySelector('.memory-game, #memory-board')) {
+                const cards = document.querySelectorAll('.memory-card');
+                const isCompleted = cards.length > 0 && Array.from(cards).every(c => c.classList.contains('flip') || c.classList.contains('matched'));
+                return {
+                    type: 'memory',
+                    label: isCompleted ? '🎮 بازی حافظه حل شد!' : '🎮 حل کامل بازی کارت حافظه',
+                    check: () => isCompleted
+                };
+            }
+            // 2. Sentence Scramble
+            if (document.querySelector('.scramble-container')) {
+                const isCompleted = !!document.querySelector('.results-summary') || 
+                                   (document.getElementById('progress-bar-fill') && document.getElementById('progress-bar-fill').style.width === '100%') ||
+                                   (document.querySelector('.feedback') && document.querySelector('.feedback').textContent.includes('تمرین تمام شد'));
+                return {
+                    type: 'scramble',
+                    label: isCompleted ? '✍️ بازی جمله‌سازی حل شد!' : '✍️ مرتب کردن جمله‌ها',
+                    check: () => isCompleted
+                };
+            }
+            // 3. Listen & Tap Game
+            if (document.querySelector('.lt-score, #lt-score, .listen-and-tap-container')) {
+                const feedback = document.querySelector('#feedback') || document.querySelector('.feedback');
+                const isCompleted = !!(feedback && feedback.textContent.includes('بازی به پایان رسید'));
+                return {
+                    type: 'listen-tap',
+                    label: isCompleted ? '🎵 تمرین شنیداری انجام شد!' : '🎵 انجام کامل تمرین شنیداری',
+                    check: () => isCompleted
+                };
+            }
+            // 4. Word Sound Exercise
+            if (document.querySelector('.word-sound-exercise-container')) {
+                const corrects = document.querySelectorAll('.exercise-word.correct');
+                const isCompleted = corrects.length >= 3;
+                return {
+                    type: 'word-sound',
+                    label: `🔍 یافتن کلمات با صدای هدف (${Math.min(3, corrects.length)}/۳)`,
+                    check: () => isCompleted
+                };
+            }
+            // 5. Flashcards
+            if (document.querySelector('.flashcard, .flashcard-grid')) {
+                const count = activeFlippedCardsSet ? activeFlippedCardsSet.size : 0;
+                const isCompleted = count >= 4;
+                return {
+                    type: 'flashcards',
+                    label: `🗂️ مرور فلش‌کارت‌ها (${Math.min(4, count)}/۴)`,
+                    check: () => isCompleted,
+                    setup: () => {
+                        document.querySelectorAll('.flashcard').forEach((card, idx) => {
+                            if (!card.dataset.trackerBound) {
+                                card.dataset.trackerBound = 'true';
+                                card.addEventListener('click', () => {
+                                    activeFlippedCardsSet.add(idx);
+                                    updateLessonWidget();
+                                });
+                            }
+                        });
+                    }
+                };
+            }
+            // 6. Quran Tiles
+            if (document.querySelector('.quran-tile, .tiles-container')) {
+                const count = activeQuranTilesSet ? activeQuranTilesSet.size : 0;
+                const isCompleted = count >= 4;
+                return {
+                    type: 'quran',
+                    label: `🕌 شنیدن تلفظ لوحه‌ها (${Math.min(4, count)}/۴)`,
+                    check: () => isCompleted,
+                    setup: () => {
+                        document.querySelectorAll('.quran-tile').forEach((tile, idx) => {
+                            if (!tile.dataset.trackerBound) {
+                                tile.dataset.trackerBound = 'true';
+                                tile.addEventListener('click', () => {
+                                    activeQuranTilesSet.add(idx);
+                                    updateLessonWidget();
+                                });
+                            }
+                        });
+                    }
+                };
+            }
+            // 7. Videos
+            if (document.querySelector('.video-container, .video-item, iframe')) {
+                const isCompleted = videoWatchTimeElapsed >= 15;
+                return {
+                    type: 'video',
+                    label: `📺 تماشای ویدئو (${Math.min(15, videoWatchTimeElapsed)}/۱۵ ثانیه)`,
+                    check: () => isCompleted,
+                    setup: () => {
+                        if (!videoTimer) {
+                            videoTimer = setInterval(() => {
+                                videoWatchTimeElapsed++;
+                                updateLessonWidget();
+                            }, 1000);
+                        }
+                    }
+                };
+            }
+            // 8. Quiz
+            if (document.querySelector('.quiz-container, .quiz-launch-pad, .start-quiz-btn')) {
+                const isCompleted = !!quizClicked;
+                return {
+                    type: 'quiz',
+                    label: isCompleted ? '🏆 آزمون شروع شد!' : '🏆 شروع آزمونک درس',
+                    check: () => isCompleted,
+                    setup: () => {
+                        const btn = document.querySelector('.start-quiz-btn, .quiz-launch-pad button, .quiz-launch-pad a');
+                        if (btn && !btn.dataset.trackerBound) {
+                            btn.dataset.trackerBound = 'true';
+                            btn.addEventListener('click', () => {
+                                quizClicked = true;
+                                updateLessonWidget();
+                            });
+                        }
+                    }
+                };
+            }
+            // 9. Match Game (Persian 2)
+            if (document.querySelector('.match-finish') || (window._matchState && document.querySelector('.match-grid .match-finish'))) {
+                return {
+                    type: 'match-game',
+                    label: '🎮 بازی وصل کردنی حل شد!',
+                    check: () => true
+                };
+            } else if (window._matchState) {
+                return {
+                    type: 'match-game',
+                    label: '🎮 حل بازی وصل کردنی',
+                    check: () => {
+                        const state = window._matchState;
+                        return state.current >= state.rounds.length - 1 && state.matchesThisRound >= state.pronouns.length;
+                    }
+                };
+            }
+            
+            // Fallback for general page with interaction
+            const isCompleted = fallbackSecondsRemaining <= 0;
+            return {
+                type: 'fallback',
+                label: `🎯 حضور فعال در درس (${Math.max(0, fallbackSecondsRemaining)}s)`,
+                check: () => isCompleted,
+                setup: () => {
+                    if (!fallbackTimer) {
+                        fallbackTimer = setInterval(() => {
+                            if (lessonInteractionsCount >= 2 && fallbackSecondsRemaining > 0) {
+                                fallbackSecondsRemaining--;
+                            }
+                            updateLessonWidget();
+                        }, 1000);
+                    }
+                }
+            };
+        };
+
+        const autoSaveLessonProgress = async (lessonName, activityType, displayName) => {
+            const saveKey = `${lessonName} - ${activityType}`;
+            if (lessonSavedSet.has(saveKey)) return;
+            lessonSavedSet.add(saveKey);
+
+            let widget = document.getElementById('eduFloatingTracker');
+            if (widget) {
+                widget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                widget.style.boxShadow = '0 10px 25px -5px rgba(16, 185, 129, 0.4)';
+                widget.innerHTML = `
+                    <span>⚡</span>
+                    <span>در حال ثبت پیشرفت...</span>
+                `;
+            }
+
+            const subject = getSubjectFromPath(window.location.pathname);
+            const reportTitle = `${displayName} - ${lessonName}`;
+            // Give 1 point and 1 star for each completed activity as requested
+            const success = await submitProgressReport(subject, reportTitle, 'lesson', 1, 1, true);
+            
+            if (widget) {
+                if (success) {
+                    widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                    widget.innerHTML = `
+                        <span>✅</span>
+                        <span>بخش ${displayName} با موفقیت ثبت شد!</span>
+                    `;
+                } else {
+                    widget.style.background = 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)';
+                    widget.innerHTML = `
+                        <span>❌</span>
+                        <span>خطا در ثبت خودکار!</span>
+                    `;
+                    lessonSavedSet.delete(saveKey); // allow retry
+                }
+            }
         };
 
         const updateLessonWidget = () => {
@@ -1665,73 +3050,82 @@
                 widget = document.createElement('div');
                 widget.className = 'edu-tracker-widget';
                 widget.id = 'eduFloatingTracker';
-                widget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                widget.style.boxShadow = '0 10px 25px -5px rgba(16, 185, 129, 0.4)';
+                widget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)';
+                widget.style.boxShadow = '0 10px 25px -5px rgba(79, 70, 229, 0.4)';
+                widget.style.pointerEvents = 'none'; // Purely informational
                 document.body.appendChild(widget);
             }
 
             widget.style.display = 'flex';
-            widget.innerHTML = `
-                <span>📖</span>
-                <span>ثبت مطالعه این بخش</span>
-            `;
 
-            // Reset and configure click listener for this lesson
-            // Remove old click listeners via replacement
-            const newWidget = widget.cloneNode(true);
-            widget.parentNode.replaceChild(newWidget, widget);
+            const currentActivity = detectActiveActivity();
+            const activityType = currentActivity ? currentActivity.type : 'fallback';
+            const activityDisplayName = getActivityFarsiName(activityType);
 
-            newWidget.addEventListener('click', () => {
-                const subject = getSubjectFromPath(window.location.pathname);
-                const completeHtml = `
-                    <p style="font-size: 0.9rem; color: var(--edu-text-muted); margin-bottom: 20px;">
-                        آفرین قهرمان! شما با موفقیت بخش <b>"${lessonName}"</b> از کتاب <b>${getSubjectFarsi(subject)}</b> را مطالعه کردید. ثبت مطالعه به منزله تکمیل این بخش از درس است.
-                    </p>
-                    <div class="edu-form-group">
-                        <label class="edu-form-label" style="text-align: center;">ارزیابی شما از یادگیری این درس (ستاره ⭐)</label>
-                        <div class="edu-stars-container">
-                            <span class="edu-star-input active" data-value="1" onclick="selectTrackerStars(1)">★</span>
-                            <span class="edu-star-input active" data-value="2" onclick="selectTrackerStars(2)">★</span>
-                            <span class="edu-star-input active" data-value="3" onclick="selectTrackerStars(3)">★</span>
-                            <span class="edu-star-input active" data-value="4" onclick="selectTrackerStars(4)">★</span>
-                            <span class="edu-star-input active" data-value="5" onclick="selectTrackerStars(5)">★</span>
-                        </div>
-                    </div>
+            // Check if this lesson or activity has changed
+            if (lessonName !== lastActiveLesson || activityType !== lastActiveActivityType) {
+                lastActiveLesson = lessonName;
+                lastActiveActivityType = activityType;
 
-                    <button class="edu-submit-btn" onclick="submitProgressReport('${subject}', 'مطالعه بخش: ${lessonName}', 'lesson')">ثبت در کارنامه تحصیلی</button>
+                // Reset specific states
+                activeFlippedCardsSet = new Set();
+                activeQuranTilesSet = new Set();
+                videoWatchTimeElapsed = 0;
+                quizClicked = false;
+                fallbackSecondsRemaining = 40;
+                lessonInteractionsCount = 0;
+
+                if (videoTimer) {
+                    clearInterval(videoTimer);
+                    videoTimer = null;
+                }
+                if (fallbackTimer) {
+                    clearInterval(fallbackTimer);
+                    fallbackTimer = null;
+                }
+            }
+
+            // Setup listeners if needed
+            if (currentActivity && currentActivity.setup) {
+                currentActivity.setup();
+            }
+
+            const saveKey = `${lessonName} - ${activityType}`;
+            if (lessonSavedSet.has(saveKey)) {
+                widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                widget.innerHTML = `
+                    <span>✅</span>
+                    <span>${activityDisplayName} ثبت شد</span>
                 `;
+                return;
+            }
 
-                showModal('ثبت پیشرفت مطالعه درس', completeHtml);
-
-                window.activeTrackerStars = 5;
-                window.selectTrackerStars = (stars) => {
-                    window.activeTrackerStars = stars;
-                    const starElements = document.querySelectorAll('.edu-star-input');
-                    starElements.forEach(el => {
-                        const val = Number(el.getAttribute('data-value'));
-                        if (val <= stars) {
-                            el.classList.add('active');
-                        } else {
-                            el.classList.remove('active');
-                        }
-                    });
-                };
-            });
+            // Check completion criteria
+            if (currentActivity && currentActivity.check()) {
+                autoSaveLessonProgress(lessonName, activityType, activityDisplayName);
+            } else {
+                widget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)';
+                widget.style.boxShadow = '0 10px 25px -5px rgba(79, 70, 229, 0.4)';
+                widget.innerHTML = `
+                    <span>🎯</span>
+                    <span>${currentActivity ? currentActivity.label : 'در حال انجام فعالیت...'} - ${lessonName}</span>
+                `;
+            }
         };
 
         // Run once on start and observe for page/lesson switches
         setTimeout(updateLessonWidget, 1000);
 
         // Periodically check in case dynamic scripts change content without changing route path
-        setInterval(updateLessonWidget, 3000);
+        setInterval(updateLessonWidget, 2000);
     };
 
-    window.submitProgressReport = async (subject, title, type) => {
-        const score = document.getElementById('trackerReportScore') ? Number(document.getElementById('trackerReportScore').value) : 100;
-        const stars = window.activeTrackerStars || 5;
+    window.submitProgressReport = async (subject, title, type, customScore, customStars, isSilent = false) => {
+        const score = typeof customScore !== 'undefined' ? customScore : (document.getElementById('trackerReportScore') ? Number(document.getElementById('trackerReportScore').value) : 1);
+        const stars = typeof customStars !== 'undefined' ? customStars : (window.activeTrackerStars || 1);
 
         try {
-            const res = await fetch('/api/student/progress', {
+            const data = await callApi('/api/student/progress', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1744,18 +3138,28 @@
                     details: type === 'lesson' ? 'مطالعه کامل کتاب درسی' : 'حل تمرین تعاملی آنلاین'
                 })
             });
-            const data = await res.json();
             if (data.success) {
-                showToast(data.message, true);
-                closeModal();
+                if (!isSilent) {
+                    showToast(data.message, true);
+                    closeModal();
+                } else {
+                    showToast(`✨ پیشرفت شما در "${title.replace('مطالعه بخش: ', '')}" خودکار ذخیره شد!`, true);
+                }
                 
                 // Add tiny visual celebration effects
                 triggerConfettiEffect();
+                return true;
             } else {
-                showToast(data.message, false);
+                if (!isSilent) {
+                    showToast(data.message, false);
+                }
+                return false;
             }
         } catch (e) {
-            showToast('خطا در ذخیره‌سازی پیشرفت تحصیلی', false);
+            if (!isSilent) {
+                showToast('خطا در ذخیره‌سازی پیشرفت تحصیلی', false);
+            }
+            return false;
         }
     };
 

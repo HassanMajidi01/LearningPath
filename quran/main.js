@@ -102,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // اگر روی عنوان اصلی مبحث کلیک شد
         const topicTitle = e.target.closest('.topic-title');
         if (topicTitle) {
+            document.querySelectorAll('.topic-title').forEach(el => el.classList.remove('active'));
+            topicTitle.classList.add('active');
             const topicId = topicTitle.dataset.topicId;
             displayTiles(topicId); // نمایش کاشی‌ها
             closeMobileSidebar();

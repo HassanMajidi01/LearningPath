@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sidebar.addEventListener('click', (e) => {
         if (e.target.tagName === 'LI' && e.target.dataset.lesson) {
+            document.querySelectorAll('.submenu li').forEach(el => el.classList.remove('active'));
+            e.target.classList.add('active');
             const lessonId = e.target.dataset.lesson;
             const activity = e.target.dataset.activity;
             const lessonData = lessonsData[lessonId];
