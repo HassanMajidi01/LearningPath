@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "echo 'No build needed'"
+    "build": "esbuild math/src/MathApp.jsx --bundle --outfile=math/app.compiled.js --minify"
   },
   "dependencies": {
     "express": "^4.19.2",
     "firebase": "^12.16.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
   }
 }

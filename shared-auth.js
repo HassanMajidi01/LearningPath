@@ -367,6 +367,30 @@
         .edu-badge-quran { background: #ecfdf5 !important; color: #059669 !important; }
 
         /* --- Teacher's Panel Workspace --- */
+        .edu-student-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: #ffffff !important;
+            border: 1px solid var(--edu-border) !important;
+            padding: 8px 14px !important;
+            border-radius: 50px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+            margin: 4px !important;
+            user-select: none !important;
+        }
+        .edu-student-pill:hover {
+            border-color: var(--edu-primary) !important;
+            background: #f0fdf4 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05) !important;
+        }
+        .edu-student-pill:active {
+            transform: translateY(0) !important;
+        }
+
         .edu-teacher-search-box {
             display: flex !important;
             gap: 10px !important;
@@ -411,12 +435,13 @@
             font-size: 0.85rem !important;
             display: flex !important;
             align-items: center !important;
-            gap: 8px !important;
+            gap: 12px !important;
             cursor: pointer !important;
             box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.4) !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
             direction: rtl !important;
             animation: bounceTracker 2s infinite alternate !important;
+            pointer-events: auto !important;
         }
         .edu-tracker-widget:hover {
             transform: translateY(-3px) scale(1.04) !important;
@@ -438,35 +463,35 @@
         }
 
         /* --- Custom Interactive SVG Progress Chart --- */
-        .edu-chart-container {
-            background: #fafafb !important;
-            border: 1px solid var(--edu-border) !important;
-            border-radius: 18px !important;
-            padding: 15px !important;
+        .edu-streak-container {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+            border: 2px solid #fcd34d !important;
+            border-radius: 20px !important;
+            padding: 20px !important;
             margin-bottom: 24px !important;
             text-align: center !important;
+            position: relative !important;
+            overflow: hidden !important;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1) !important;
         }
-        .edu-chart-title {
-            font-size: 0.85rem !important;
-            font-weight: 700 !important;
-            color: var(--edu-text-muted) !important;
-            margin-bottom: 10px !important;
+        .edu-streak-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+            color: #ffffff !important;
+            width: 70px;
+            height: 70px;
+            border-radius: 50% !important;
             display: flex !important;
-            justify-content: space-between !important;
             align-items: center !important;
+            justify-content: center !important;
+            font-size: 2.2rem !important;
+            font-weight: 800 !important;
+            box-shadow: 0 10px 20px -5px rgba(234, 88, 12, 0.4) !important;
+            animation: pulseStreak 2s infinite alternate !important;
+            margin-bottom: 5px;
         }
-        .edu-chart-svg {
-            width: 100% !important;
-            height: 160px !important;
-            overflow: visible !important;
-        }
-        .edu-chart-point {
-            cursor: pointer !important;
-            transition: r 0.2s ease, fill 0.2s ease !important;
-        }
-        .edu-chart-point:hover {
-            r: 7 !important;
-            fill: var(--edu-accent) !important;
+        @keyframes pulseStreak {
+            0% { transform: scale(1); box-shadow: 0 10px 20px -5px rgba(234, 88, 12, 0.4); }
+            100% { transform: scale(1.08); box-shadow: 0 12px 24px -3px rgba(234, 88, 12, 0.6); }
         }
 
         /* Star Rating Selection */
@@ -623,7 +648,7 @@
     let firebaseConfig = null;
     // --- Google Sheets Apps Script Web App URL ---
     // آدرس وب‌اپ گوگل اپس اسکریپت خود را (که با /exec خاتمه می‌یابد) در خط زیر قرار دهید:
-    let appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxKAVxfcLWWU9ZwcOO6G3bJ2kdA6vVhBWf1DmXtF7VSKRMbT7UYhUU-lk2fZ78whPdc/exec'; // لینک وب‌اپ خود را در این قسمت قرار دهید
+    let appsScriptUrl = localStorage.getItem('edu_apps_script_url') || 'https://script.google.com/macros/s/AKfycbxKAVxfcLWWU9ZwcOO6G3bJ2kdA6vVhBWf1DmXtF7VSKRMbT7UYhUU-lk2fZ78whPdc/exec'; // لینک وب‌اپ پیش‌فرض گوگل شیت یا لینک سفارشی ذخیره شده
 
 
     function sha256Simple(ascii) {
@@ -736,238 +761,44 @@
         });
     }
 
-    async function initClientFirebase() {
-        if (firebaseDb) return firebaseDb;
-        try {
-            const configRes = await fetch('/firebase-applet-config.json');
-            firebaseConfig = await configRes.json();
-            
-            if (typeof firebase === 'undefined') {
-                await loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
-                await loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js');
-            }
-            
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            firebaseDb = firebase.firestore();
-            return firebaseDb;
-        } catch (e) {
-            console.error("Client Firebase initialization failed:", e);
-            return null;
-        }
-    }
-
-    async function callApiOffline(url, options = {}) {
-        const getLocalItem = (key, defaultVal = []) => {
-            try {
-                const item = localStorage.getItem(key);
-                return item ? JSON.parse(item) : defaultVal;
-            } catch (e) {
-                return defaultVal;
-            }
-        };
-
-        const setLocalItem = (key, val) => {
-            try {
-                localStorage.setItem(key, JSON.stringify(val));
-            } catch (e) {
-                console.error("Offline storage write error:", e);
-            }
-        };
-
-        if (url === '/api/auth/login') {
-            const body = JSON.parse(options.body);
-            const email = body.email.toLowerCase().trim();
-            const password = body.password;
-            const passwordHash = await hashPassword(password);
-
-            const users = getLocalItem('edu_fallback_users');
-            const user = users.find(u => u.email.toLowerCase().trim() === email);
-            if (!user) {
-                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
-            }
-            if (user.passwordHash !== passwordHash) {
-                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
-            }
-            const { passwordHash: _, ...userResponse } = user;
-            return { success: true, user: userResponse, message: 'ورود آفلاین با موفقیت انجام شد.' };
-        }
-
-        if (url === '/api/auth/register') {
-            const body = JSON.parse(options.body);
-            const { username, email, password, role } = body;
-            
-            const users = getLocalItem('edu_fallback_users');
-            const exists = users.some(u => u.email.toLowerCase().trim() === email.toLowerCase().trim());
-            if (exists) {
-                return { success: false, message: 'کاربری با این ایمیل قبلاً ثبت‌نام کرده است.' };
-            }
-
-            const prefix = role === 'teacher' ? 'TCH' : 'STD';
-            let isUnique = false;
-            let newId = '';
-            while (!isUnique) {
-                const randomNum = Math.floor(1000 + Math.random() * 9000);
-                newId = `${prefix}-${randomNum}`;
-                if (!users.some(u => u.id === newId)) {
-                    isUnique = true;
-                }
-            }
-
-            const newUser = {
-                id: newId,
-                username,
-                email: email.toLowerCase().trim(),
-                passwordHash: await hashPassword(password),
-                role,
-                createdAt: new Date().toISOString()
-            };
-
-            users.push(newUser);
-            setLocalItem('edu_fallback_users', users);
-            
-            const { passwordHash: _, ...userResponse } = newUser;
-            return { success: true, user: userResponse, message: 'ثبت‌نام آفلاین با موفقیت انجام شد. از این پس می‌توانید وارد حساب خود شوید.' };
-        }
-
-        if (url.startsWith('/api/student/self/')) {
-            const studentId = url.split('/').pop();
-            const users = getLocalItem('edu_fallback_users');
-            const student = users.find(u => u.id === studentId);
-            if (!student) {
-                return { success: false, message: 'دانش‌آموز یافت نشد.' };
-            }
-
-            const progress = getLocalItem('edu_fallback_progress').filter(p => p.userId === studentId);
-            const feedback = getLocalItem('edu_fallback_feedback').filter(f => f.studentId === studentId);
-
-            return { success: true, progress, feedback };
-        }
-
-        if (url.startsWith('/api/student/progress/')) {
-            const studentId = url.split('/').pop();
-            const users = getLocalItem('edu_fallback_users');
-            const student = users.find(u => u.id === studentId);
-            if (!student || student.role !== 'student') {
-                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
-            }
-
-            const progress = getLocalItem('edu_fallback_progress').filter(p => p.userId === studentId);
-            const feedback = getLocalItem('edu_fallback_feedback').filter(f => f.studentId === studentId);
-
-            return {
-                success: true,
-                student: {
-                    id: student.id,
-                    username: student.username,
-                    email: student.email,
-                    createdAt: student.createdAt
-                },
-                progress,
-                feedback
-            };
-        }
-
-        if (url === '/api/teacher/feedback') {
-            const body = JSON.parse(options.body);
-            const { studentId, teacherName, comment } = body;
-
-            const users = getLocalItem('edu_fallback_users');
-            const student = users.find(u => u.id === studentId);
-            if (!student) {
-                return { success: false, message: 'دانش‌آموز یافت نشد.' };
-            }
-
-            const feedbackId = 'FBB-' + Math.floor(100000 + Math.random() * 900000);
-            const newFeedback = {
-                id: feedbackId,
-                studentId,
-                teacherName,
-                comment,
-                timestamp: new Date().toISOString()
-            };
-
-            const feedbacks = getLocalItem('edu_fallback_feedback');
-            feedbacks.push(newFeedback);
-            setLocalItem('edu_fallback_feedback', feedbacks);
-
-            return { success: true, feedback: newFeedback, message: 'بازخورد شما با موفقیت ثبت شد.' };
-        }
-
-        if (url === '/api/student/progress') {
-            const body = JSON.parse(options.body);
-            const { userId, type, subject, title, score, stars, details } = body;
-
-            const users = getLocalItem('edu_fallback_users');
-            const user = users.find(u => u.id === userId);
-            if (!user) {
-                return { success: false, message: 'کاربر یافت نشد.' };
-            }
-
-            const progressId = 'PRG-' + Math.floor(100000 + Math.random() * 900000);
-            const newProgress = {
-                id: progressId,
-                userId,
-                studentName: user.username,
-                studentEmail: user.email,
-                type,
-                subject,
-                title,
-                score: Number(score) || 0,
-                stars: Number(stars) || 0,
-                details: details || '',
-                timestamp: new Date().toISOString()
-            };
-
-            const progressList = getLocalItem('edu_fallback_progress');
-            progressList.push(newProgress);
-            setLocalItem('edu_fallback_progress', progressList);
-
-            return { success: true, progress: newProgress, message: 'پیشرفت شما با موفقیت ذخیره شد!' };
-        }
-
-        throw new Error('مسیر درخواست تعریف نشده است.');
-    }
-
     async function callApi(url, options = {}) {
-        // 0. Intercept and route to Google Sheets Apps Script if configured
+        // If a custom Google Sheets URL is explicitly configured in settings, try it first
         if (appsScriptUrl) {
             let action = '';
             let payload = {};
             
-            if (url === '/api/auth/login') {
-                action = 'login';
-                const body = JSON.parse(options.body || '{}');
-                payload = {
-                    email: body.email,
-                    passwordHash: await hashPassword(body.password)
-                };
-            } else if (url === '/api/auth/register') {
-                action = 'register';
-                const body = JSON.parse(options.body || '{}');
-                payload = {
-                    username: body.username,
-                    email: body.email,
-                    passwordHash: await hashPassword(body.password),
-                    role: body.role
-                };
-            } else if (url === '/api/student/progress') {
-                action = 'saveProgress';
-                payload = JSON.parse(options.body || '{}');
-            } else if (url.startsWith('/api/student/self/')) {
-                action = 'getSelfData';
-                payload = { studentId: url.split('/').pop() };
-            } else if (url.startsWith('/api/student/progress/')) {
-                action = 'getProgress';
-                payload = { studentId: url.split('/').pop() };
-            } else if (url === '/api/teacher/feedback') {
-                action = 'saveFeedback';
-                payload = JSON.parse(options.body || '{}');
-            }
+            try {
+                if (url === '/api/auth/login') {
+                    action = 'login';
+                    const body = JSON.parse(options.body || '{}');
+                    payload = {
+                        email: body.email,
+                        passwordHash: await hashPassword(body.password)
+                    };
+                } else if (url === '/api/auth/register') {
+                    action = 'register';
+                    const body = JSON.parse(options.body || '{}');
+                    payload = {
+                        username: body.username,
+                        email: body.email,
+                        passwordHash: await hashPassword(body.password),
+                        role: body.role
+                    };
+                } else if (url === '/api/student/progress') {
+                    action = 'saveProgress';
+                    payload = JSON.parse(options.body || '{}');
+                } else if (url.startsWith('/api/student/self/')) {
+                    action = 'getSelfData';
+                    payload = { studentId: url.split('/').pop() };
+                } else if (url.startsWith('/api/student/progress/')) {
+                    action = 'getProgress';
+                    payload = { studentId: url.split('/').pop() };
+                } else if (url === '/api/teacher/feedback') {
+                    action = 'saveFeedback';
+                    payload = JSON.parse(options.body || '{}');
+                }
 
-            if (action) {
-                try {
+                if (action) {
                     const gasRes = await fetch(appsScriptUrl, {
                         method: 'POST',
                         mode: 'cors',
@@ -980,212 +811,38 @@
                         const data = await gasRes.json();
                         return data;
                     } else {
-                        console.error('Apps Script Web App returned status:', gasRes.status);
-                        throw new Error('خطا در پاسخ وب‌اپ گوگل شیت');
+                        console.warn('Apps Script Web App returned status:', gasRes.status, '- Falling back to local server.');
                     }
-                } catch (gasError) {
-                    console.error('Google Sheets Apps Script call failed:', gasError);
-                    showToast('خطا در ارتباط با وب‌اپ گوگل شیت. لطفا آدرس را در تنظیمات بررسی کنید.', false);
-                    throw gasError;
                 }
+            } catch (gasError) {
+                console.warn('Google Sheets Apps Script call failed:', gasError, '- Falling back to local server.');
             }
         }
 
-        // 1. Try calling the normal /api/ first
+        // Default: Call our secure Node.js backend server API (which syncs directly to Firebase Firestore)
         try {
-            const res = await fetch(url, options);
-            if (res.ok) {
-                const data = await res.json();
+            const localRes = await fetch(url, {
+                method: options.method || 'GET',
+                headers: options.headers || { 'Content-Type': 'application/json' },
+                body: options.body
+            });
+            if (localRes.ok) {
+                const data = await localRes.json();
                 return data;
-            } else if (res.status === 404) {
-                console.warn(`API route ${url} not found (404), falling back to client-side Firebase.`);
             } else {
-                const text = await res.text();
-                console.warn(`API returned status ${res.status}: ${text}. Falling back.`);
+                let errMsg = `خطای سرور: ${localRes.status}`;
+                try {
+                    const errorData = await localRes.json();
+                    if (errorData && errorData.message) {
+                        errMsg = errorData.message;
+                    }
+                } catch (_) {}
+                return { success: false, message: errMsg };
             }
-        } catch (e) {
-            console.warn(`API call to ${url} failed, attempting client-side Firebase fallback. Error:`, e);
+        } catch (localError) {
+            console.error('Local server API call failed:', localError);
+            return { success: false, message: 'خطا در ارتباط با سرور محلی. لطفا اتصال شبکه خود را بررسی کنید.' };
         }
-
-        // 2. Fallback to direct client-side Firebase
-        let db = null;
-        try {
-            db = await initClientFirebase();
-        } catch (fbError) {
-            console.warn("Direct Firebase initialization threw an error:", fbError);
-        }
-
-        if (!db) {
-            console.warn("Client-side Firebase not available. Falling back to local/offline storage database...");
-            return await callApiOffline(url, options);
-        }
-
-        if (url === '/api/auth/login') {
-            const body = JSON.parse(options.body);
-            const email = body.email.toLowerCase();
-            const password = body.password;
-            const passwordHash = await hashPassword(password);
-
-            const usersRef = db.collection('users');
-            const querySnapshot = await usersRef.where('email', '==', email).get();
-            if (querySnapshot.empty) {
-                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
-            }
-            const user = querySnapshot.docs[0].data();
-            if (user.passwordHash !== passwordHash) {
-                return { success: false, message: 'ایمیل یا رمز عبور اشتباه است.' };
-            }
-            const { passwordHash: _, ...userResponse } = user;
-            return { success: true, user: userResponse, message: 'ورود با موفقیت انجام شد.' };
-        }
-
-        if (url === '/api/auth/register') {
-            const body = JSON.parse(options.body);
-            const { username, email, password, role } = body;
-            
-            const usersRef = db.collection('users');
-            const querySnapshot = await usersRef.where('email', '==', email.toLowerCase()).get();
-            if (!querySnapshot.empty) {
-                return { success: false, message: 'کاربری با این ایمیل قبلاً ثبت‌نام کرده است.' };
-            }
-
-            const prefix = role === 'teacher' ? 'TCH' : 'STD';
-            let isUnique = false;
-            let newId = '';
-            while (!isUnique) {
-                const randomNum = Math.floor(1000 + Math.random() * 9000);
-                newId = `${prefix}-${randomNum}`;
-                const docSnap = await usersRef.doc(newId).get();
-                if (!docSnap.exists) {
-                    isUnique = true;
-                }
-            }
-
-            const newUser = {
-                id: newId,
-                username,
-                email: email.toLowerCase(),
-                passwordHash: await hashPassword(password),
-                role,
-                createdAt: new Date().toISOString()
-            };
-
-            await usersRef.doc(newId).set(newUser);
-            const { passwordHash: _, ...userResponse } = newUser;
-            return { success: true, user: userResponse, message: 'ثبت‌نام با موفقیت انجام شد.' };
-        }
-
-        if (url.startsWith('/api/student/self/')) {
-            const studentId = url.split('/').pop();
-            const usersRef = db.collection('users');
-            const studentSnap = await usersRef.doc(studentId).get();
-            if (!studentSnap.exists) {
-                return { success: false, message: 'دانش‌آموز یافت نشد.' };
-            }
-
-            const progressRef = db.collection('progress');
-            const progressSnap = await progressRef.where('userId', '==', studentId).get();
-            const progress = [];
-            progressSnap.forEach(doc => progress.push(doc.data()));
-
-            const feedbackRef = db.collection('feedback');
-            const feedbackSnap = await feedbackRef.where('studentId', '==', studentId).get();
-            const feedback = [];
-            feedbackSnap.forEach(doc => feedback.push(doc.data()));
-
-            return { success: true, progress, feedback };
-        }
-
-        if (url.startsWith('/api/student/progress/')) {
-            const studentId = url.split('/').pop();
-            const usersRef = db.collection('users');
-            const studentSnap = await usersRef.doc(studentId).get();
-            if (!studentSnap.exists) {
-                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
-            }
-
-            const student = studentSnap.data();
-            if (student.role !== 'student') {
-                return { success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' };
-            }
-
-            const progressRef = db.collection('progress');
-            const progressSnap = await progressRef.where('userId', '==', studentId).get();
-            const progress = [];
-            progressSnap.forEach(doc => progress.push(doc.data()));
-
-            const feedbackRef = db.collection('feedback');
-            const feedbackSnap = await feedbackRef.where('studentId', '==', studentId).get();
-            const feedback = [];
-            feedbackSnap.forEach(doc => feedback.push(doc.data()));
-
-            return {
-                success: true,
-                student: {
-                    id: student.id,
-                    username: student.username,
-                    email: student.email,
-                    createdAt: student.createdAt
-                },
-                progress,
-                feedback
-            };
-        }
-
-        if (url === '/api/teacher/feedback') {
-            const body = JSON.parse(options.body);
-            const { studentId, teacherName, comment } = body;
-
-            const usersRef = db.collection('users');
-            const studentSnap = await usersRef.doc(studentId).get();
-            if (!studentSnap.exists) {
-                return { success: false, message: 'دانش‌آموز یافت نشد.' };
-            }
-
-            const feedbackId = 'FBB-' + Math.floor(100000 + Math.random() * 900000);
-            const newFeedback = {
-                id: feedbackId,
-                studentId,
-                teacherName,
-                comment,
-                timestamp: new Date().toISOString()
-            };
-
-            await db.collection('feedback').doc(feedbackId).set(newFeedback);
-            return { success: true, feedback: newFeedback, message: 'بازخورد شما با موفقیت ثبت شد و برای دانش‌آموز قابل مشاهده است.' };
-        }
-
-        if (url === '/api/student/progress') {
-            const body = JSON.parse(options.body);
-            const { userId, type, subject, title, score, stars, details } = body;
-
-            const usersRef = db.collection('users');
-            const userSnap = await usersRef.doc(userId).get();
-            if (!userSnap.exists) {
-                return { success: false, message: 'کاربر یافت نشد.' };
-            }
-
-            const user = userSnap.data();
-            const progressId = 'PRG-' + Math.floor(100000 + Math.random() * 900000);
-            const newProgress = {
-                id: progressId,
-                userId,
-                studentName: user.username,
-                studentEmail: user.email,
-                type,
-                subject,
-                title,
-                score: Number(score) || 0,
-                stars: Number(stars) || 0,
-                details: details || '',
-                timestamp: new Date().toISOString()
-            };
-
-            await db.collection('progress').doc(progressId).set(newProgress);
-            return { success: true, progress: newProgress, message: 'پیشرفت شما با موفقیت ذخیره شد!' };
-        }
-
-        throw new Error('مسیر درخواست تعریف نشده است.');
     }
 
     // Load active session on init
@@ -2018,6 +1675,43 @@ function handleSaveFeedback(data) {
                 });
             }
 
+            const streakInfo = getStreakInfo(progress);
+            const currentStreak = streakInfo.currentStreak;
+            
+            let streakHtml = `
+                <div class="edu-streak-container" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important; border: 2px solid #fcd34d !important; border-radius: 20px !important; padding: 20px !important; margin-bottom: 24px !important; text-align: center !important; position: relative !important; overflow: hidden !important; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1) !important; margin-top: 20px !important;">
+                    <div style="position: absolute; top: -10px; right: -10px; font-size: 5rem; opacity: 0.1; transform: rotate(15deg); pointer-events: none;">🔥</div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <div class="edu-streak-badge">
+                            🔥
+                        </div>
+                        <h4 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #9a3412;">استریک روزانه شما</h4>
+                        <p style="margin: 0; font-size: 1rem; color: #c2410c; font-weight: 700;">
+                            ${currentStreak > 0 ? `آفرین قهرمان! <b>${currentStreak} روز متوالی</b> تلاش و حل تمرین فعال داری.` : 'هنوز استریک جدیدی شروع نکردی! همین امروز یک تمرین حل کن تا استریکت فعال بشه! 🔥'}
+                        </p>
+                    </div>
+                    
+                    <!-- Week calendar tracking -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 20px; border-top: 1px dashed rgba(234, 88, 12, 0.2); padding-top: 15px;">
+                        ${streakInfo.last7Days.map(day => {
+                            const activeBg = day.hasSolved ? 'linear-gradient(135deg, #f59e0b 0%, #ea580c 100%)' : '#e2e8f0';
+                            const activeText = day.hasSolved ? '#ffffff' : '#64748b';
+                            const borderStyle = day.isToday ? 'border: 2px solid #ea580c' : 'border: 1px solid transparent';
+                            const statusIcon = day.hasSolved ? '🔥' : '⚪';
+                            return `
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; ${borderStyle}; border-radius: 12px; padding: 6px 4px; background: ${day.isToday ? '#ffffff' : 'transparent'};">
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: #7c2d12;">${day.dayName}</span>
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: ${activeBg}; color: ${activeText}; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 800; box-shadow: ${day.hasSolved ? '0 4px 8px rgba(234, 88, 12, 0.25)' : 'none'};">
+                                        ${statusIcon}
+                                    </div>
+                                    ${day.isToday ? '<span style="font-size: 0.65rem; color: #ea580c; font-weight: 800;">امروز</span>' : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
             const profileHtml = `
                 <div class="edu-profile-card">
                     <div>
@@ -2048,6 +1742,8 @@ function handleSaveFeedback(data) {
                         <div class="edu-stat-label" style="color: #b45309 !important; font-weight: 800 !important;">🏅 نشان‌های فعال</div>
                     </div>
                 </div>
+
+                ${streakHtml}
 
                 <div class="edu-profile-tabs">
                     <div class="edu-profile-tab-btn active" id="profileTabHistoryBtn" onclick="switchProfileSubTab('history')">📊 سوابق و کارنامه</div>
@@ -2105,8 +1801,46 @@ function handleSaveFeedback(data) {
         }
     };
 
+    // --- Local Persistence Helpers for Teacher's Student List ---
+    const getSavedTeacherStudents = () => {
+        if (!currentUser) return [];
+        const stored = localStorage.getItem('edu_teacher_students_' + currentUser.id);
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch (e) {}
+        }
+        return currentUser.students || [];
+    };
+
+    const saveTeacherStudents = (students) => {
+        if (!currentUser) return;
+        localStorage.setItem('edu_teacher_students_' + currentUser.id, JSON.stringify(students));
+        currentUser.students = students;
+        localStorage.setItem('edu_kiashahr_user', JSON.stringify(currentUser));
+    };
+
     // --- Teacher Dashboard Modal Workspace ---
     const openTeacherPanelModal = () => {
+        const students = getSavedTeacherStudents();
+        let studentsListHtml = '';
+        if (students.length === 0) {
+            studentsListHtml = `
+                <div style="font-size: 0.85rem; color: var(--edu-text-muted); margin: 0; padding: 12px; background: #fafafa; border: 1px dashed var(--edu-border); border-radius: 12px; width: 100%; text-align: center;">
+                    📌 هنوز دانش‌آموزی به لیست خود اضافه نکرده‌اید. با جستجو و ثبت شناسه در بخش زیر، او را به لیست دائم خود اضافه کنید.
+                </div>
+            `;
+        } else {
+            studentsListHtml = students.map(student => `
+                <div class="edu-student-pill" style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--edu-border); padding: 8px 14px; border-radius: 50px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 4px;" onclick="window.selectTeacherStudent('${student.id}')">
+                    <span style="font-size: 1.1rem;">👤</span>
+                    <span style="font-weight: 700; font-size: 0.85rem; color: var(--edu-text-dark);">${student.username}</span>
+                    <span style="font-size: 0.75rem; color: var(--edu-text-muted); background: #f1f5f9; padding: 2px 6px; border-radius: 10px;">${student.id}</span>
+                    <button type="button" style="background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0 4px; display: inline-flex; align-items: center; line-height: 1;" onclick="event.stopPropagation(); window.removeTeacherStudent('${student.id}')" title="حذف از لیست">×</button>
+                </div>
+            `).join('');
+        }
+
         const teacherHtml = `
             <div class="edu-profile-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important; border-color: rgba(59, 130, 246, 0.2) !important;">
                 <div>
@@ -2116,19 +1850,30 @@ function handleSaveFeedback(data) {
                 <span class="edu-id-badge" style="background: #2563eb !important;">🆔 کد پرسنلی: ${currentUser.id}</span>
             </div>
 
-            <h4 style="margin-top: 20px; font-weight: 800; font-size: 1.1rem;">🔍 ردیابی عملکرد دانش‌آموزان</h4>
+            <!-- Saved Students Section -->
+            <div style="margin-top: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--edu-border); padding-bottom: 20px;">
+                <h4 style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.1rem; color: var(--edu-text-dark); display: flex; align-items: center; gap: 8px;">
+                    <span>👥 دانش‌آموزان من</span>
+                </h4>
+                <p style="color: var(--edu-text-muted); font-size: 0.85rem; margin-top: 2px; margin-bottom: 12px;">روی نام هر دانش‌آموز کلیک کنید تا کارنامه کامل و نمودار پیشرفت او لود شود.</p>
+                <div id="teacherStudentsList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                    ${studentsListHtml}
+                </div>
+            </div>
+
+            <h4 style="margin-top: 20px; font-weight: 800; font-size: 1.1rem;">🔍 افزودن یا ردیابی دانش‌آموز جدید</h4>
             <p style="color: var(--edu-text-muted); font-size: 0.85rem; margin-top: 2px; margin-bottom: 12px;">شناسه مخصوص دانش‌آموز خود را وارد کنید تا کارنامه، روند پیشرفت و فعالیت‌های او را مشاهده نمایید.</p>
             
             <div class="edu-teacher-search-box">
                 <input type="text" id="teacherSearchId" class="edu-form-input" placeholder="مثال: STD-1385" style="text-transform: uppercase;">
-                <button type="button" class="edu-search-btn" id="teacherSearchBtn" onclick="searchStudentById()">بررسی پیشرفت</button>
+                <button type="button" class="edu-search-btn" id="teacherSearchBtn" onclick="searchStudentById()">بررسی و ثبت</button>
             </div>
 
             <!-- Student Dashboard display dynamically loaded inside here -->
             <div id="teacherStudentResult">
                 <div style="text-align: center; color: var(--edu-text-muted); border: 2px dashed var(--edu-border); border-radius: 18px; padding: 40px 20px;">
                     <span style="font-size: 3rem;">🕵️‍♂️</span>
-                    <p style="margin-top: 15px; font-weight: 700; font-size: 1.1rem;">در انتظار ورود شناسه دانش‌آموز...</p>
+                    <p style="margin-top: 15px; font-weight: 700; font-size: 1.1rem;">در انتظار ورود شناسه یا انتخاب دانش‌آموز...</p>
                     <p style="font-size: 0.85rem; margin-top: 5px;">می‌توانید شناسه نمونه <b>STD-1385</b> را برای مشاهده کارنامه دمو حسین رضایی تست کنید.</p>
                 </div>
             </div>
@@ -2136,6 +1881,112 @@ function handleSaveFeedback(data) {
             <button class="edu-submit-btn" style="background: #ef4444 !important; margin-top: 30px;" onclick="logOut()">❌ خروج از پنل معلم</button>
         `;
         showModal('میز کار دبیران و معلمان', teacherHtml);
+    };
+
+    window.selectTeacherStudent = (studentId) => {
+        document.getElementById('teacherSearchId').value = studentId;
+        searchStudentById();
+    };
+
+    const showCustomConfirm = (message) => {
+        return new Promise((resolve) => {
+            const overlay = document.createElement('div');
+            overlay.className = 'edu-modal-overlay active';
+            overlay.style.zIndex = '200000';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.direction = 'rtl';
+            
+            overlay.innerHTML = `
+                <div class="edu-modal-container" style="max-width: 380px !important; text-align: center !important; padding: 25px !important; transform: scale(1) translateY(0) !important; opacity: 1 !important;">
+                    <div style="font-size: 2.5rem; margin-bottom: 12px;">🗑️</div>
+                    <h4 style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 800; color: var(--edu-text-dark);">${message}</h4>
+                    <p style="margin: 0 0 20px 0; font-size: 0.85rem; color: var(--edu-text-muted);">این عمل قابل بازگشت نیست.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button id="customConfirmYes" style="background: #ef4444; color: white; border: none; padding: 10px 16px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem; flex: 1;">بله، حذف شود</button>
+                        <button id="customConfirmNo" style="background: #f1f5f9; color: #334155; border: none; padding: 10px 16px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9rem; flex: 1;">انصراف</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            const handleYes = () => {
+                overlay.remove();
+                resolve(true);
+            };
+            const handleNo = () => {
+                overlay.remove();
+                resolve(false);
+            };
+            
+            overlay.querySelector('#customConfirmYes').addEventListener('click', handleYes);
+            overlay.querySelector('#customConfirmNo').addEventListener('click', handleNo);
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) handleNo();
+            });
+        });
+    };
+
+    window.removeTeacherStudent = async (studentId) => {
+        const confirmed = await showCustomConfirm('آیا مطمئن هستید که می‌خواهید این دانش‌آموز را از لیست خود حذف کنید؟');
+        if (!confirmed) {
+            return;
+        }
+
+        let students = getSavedTeacherStudents();
+        students = students.filter(s => s.id !== studentId);
+        saveTeacherStudents(students);
+
+        showToast('دانش‌آموز با موفقیت از لیست شما حذف شد.', true);
+
+        // Refresh students list UI
+        const listContainer = document.getElementById('teacherStudentsList');
+        if (listContainer) {
+            if (students.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="font-size: 0.85rem; color: var(--edu-text-muted); margin: 0; padding: 12px; background: #fafafa; border: 1px dashed var(--edu-border); border-radius: 12px; width: 100%; text-align: center;">
+                        📌 هنوز دانش‌آموزی به لیست خود اضافه نکرده‌اید. با جستجو و ثبت شناسه در بخش زیر، او را به لیست دائم خود اضافه کنید.
+                    </div>
+                `;
+            } else {
+                listContainer.innerHTML = students.map(s => `
+                    <div class="edu-student-pill" style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--edu-border); padding: 8px 14px; border-radius: 50px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 4px;" onclick="window.selectTeacherStudent('${s.id}')">
+                        <span style="font-size: 1.1rem;">👤</span>
+                        <span style="font-weight: 700; font-size: 0.85rem; color: var(--edu-text-dark);">${s.username}</span>
+                        <span style="font-size: 0.75rem; color: var(--edu-text-muted); background: #f1f5f9; padding: 2px 6px; border-radius: 10px;">${s.id}</span>
+                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0 4px; display: inline-flex; align-items: center; line-height: 1;" onclick="event.stopPropagation(); window.removeTeacherStudent('${s.id}')" title="حذف از لیست">×</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // If the removed student is currently viewed, clear results
+        const currentSearchVal = document.getElementById('teacherSearchId').value.trim().toUpperCase();
+        if (currentSearchVal === studentId) {
+            document.getElementById('teacherSearchId').value = '';
+            document.getElementById('teacherStudentResult').innerHTML = `
+                <div style="text-align: center; color: var(--edu-text-muted); border: 2px dashed var(--edu-border); border-radius: 18px; padding: 40px 20px;">
+                    <span style="font-size: 3rem;">🕵️‍♂️</span>
+                    <p style="margin-top: 15px; font-weight: 700; font-size: 1.1rem;">در انتظار ورود شناسه یا انتخاب دانش‌آموز...</p>
+                </div>
+            `;
+        }
+
+        // Background server sync
+        try {
+            await callApi('/api/teacher/students/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    teacherId: currentUser.id,
+                    studentId
+                })
+            });
+        } catch (e) {
+            console.warn("Background remove student sync failed:", e);
+        }
     };
 
     window.searchStudentById = async () => {
@@ -2161,7 +2012,7 @@ function handleSaveFeedback(data) {
         try {
             const data = await callApi(`/api/student/progress/${studentId}`);
 
-            searchBtn.innerText = 'بررسی پیشرفت';
+            searchBtn.innerText = 'بررسی و ثبت';
             searchBtn.disabled = false;
 
             if (!data.success) {
@@ -2181,113 +2032,87 @@ function handleSaveFeedback(data) {
             const progress = data.progress || [];
             const feedbacks = data.feedback || [];
 
+            // Automatically add student to teacher's list if not already present
+            let savedStudents = getSavedTeacherStudents();
+            let isAlreadySaved = savedStudents.some(s => s.id === student.id);
+            if (!isAlreadySaved) {
+                savedStudents.push({
+                    id: student.id,
+                    username: student.username
+                });
+                saveTeacherStudents(savedStudents);
+                showToast(`دانش‌آموز «${student.username}» به لیست شما اضافه شد.`, true);
+
+                // Update students list UI dynamically
+                const listContainer = document.getElementById('teacherStudentsList');
+                if (listContainer) {
+                    listContainer.innerHTML = savedStudents.map(s => `
+                        <div class="edu-student-pill" style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--edu-border); padding: 8px 14px; border-radius: 50px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin: 4px;" onclick="window.selectTeacherStudent('${s.id}')">
+                            <span style="font-size: 1.1rem;">👤</span>
+                            <span style="font-weight: 700; font-size: 0.85rem; color: var(--edu-text-dark);">${s.username}</span>
+                            <span style="font-size: 0.75rem; color: var(--edu-text-muted); background: #f1f5f9; padding: 2px 6px; border-radius: 10px;">${s.id}</span>
+                            <button type="button" style="background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0 4px; display: inline-flex; align-items: center; line-height: 1;" onclick="event.stopPropagation(); window.removeTeacherStudent('${s.id}')" title="حذف از لیست">×</button>
+                        </div>
+                    `).join('');
+                }
+
+                // Try to sync with server in background
+                try {
+                    await callApi('/api/teacher/students/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            teacherId: currentUser.id,
+                            studentId: student.id
+                        })
+                    });
+                } catch (addErr) {
+                    console.warn("Background add student sync failed:", addErr);
+                }
+            }
+
             // Compute statistics
             const totalTasks = progress.length;
             const averageScore = totalTasks === 0 ? 0 : Math.round(progress.reduce((sum, item) => sum + (item.score || 0), 0) / totalTasks);
             const totalStars = progress.reduce((sum, item) => sum + (item.stars || 0), 0);
 
-            // --- GENERATE CUSTOM SVG INTERACTIVE CHART ---
-            // Let's draw a beautiful line chart tracking the score of student over time
-            let chartHtml = '';
-            if (progress.length > 0) {
-                // Sort progress ascending by time for logical chart timeline
-                const chartData = [...progress].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                const pointsCount = chartData.length;
-
-                // Design a responsive chart inside 500x120 viewbox
-                const width = 500;
-                const height = 120;
-                const paddingLeft = 40;
-                const paddingRight = 20;
-                const paddingTop = 15;
-                const paddingBottom = 20;
-
-                const chartWidth = width - paddingLeft - paddingRight;
-                const chartHeight = height - paddingTop - paddingBottom;
-
-                // Map points
-                let pointsStr = '';
-                let pointsCircles = '';
-                let pointTooltips = '';
-
-                chartData.forEach((item, index) => {
-                    const x = paddingLeft + (pointsCount === 1 ? chartWidth / 2 : (index / (pointsCount - 1)) * chartWidth);
-                    // Map score 0-100 to y coordinate (height is 0-chartHeight)
-                    const y = paddingTop + chartHeight - (item.score / 100) * chartHeight;
-
-                    pointsStr += `${x},${y} `;
-
-                    // Circle with interactive mouseover
-                    pointsCircles += `
-                        <circle cx="${x}" cy="${y}" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" class="edu-chart-point" 
-                                onmouseover="showChartTooltip(event, '${item.title}', ${item.score}, '${new Date(item.timestamp).toLocaleDateString('fa-IR')}')"
-                                onmouseout="hideChartTooltip()">
-                        </circle>
-                    `;
-                });
-
-                chartHtml = `
-                    <div class="edu-chart-container">
-                        <div class="edu-chart-title">
-                            <span>📈 نمودار تغییرات نمرات دانش‌آموز (روند پیشرفت)</span>
-                            <span style="font-size: 0.75rem; color: var(--edu-primary-dark);">برای مشاهده عنوان روی نقاط بروید 💡</span>
+            // --- GENERATE CUSTOM DAILY STREAK ---
+            const streakInfo = getStreakInfo(progress);
+            const currentStreak = streakInfo.currentStreak;
+            
+            let streakHtml = `
+                <div class="edu-streak-container" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important; border: 2px solid #fcd34d !important; border-radius: 20px !important; padding: 20px !important; margin-bottom: 24px !important; text-align: center !important; position: relative !important; overflow: hidden !important; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1) !important;">
+                    <div style="position: absolute; top: -10px; right: -10px; font-size: 5rem; opacity: 0.1; transform: rotate(15deg); pointer-events: none;">🔥</div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <div class="edu-streak-badge">
+                            🔥
                         </div>
-                        <div style="position: relative;">
-                            <svg viewBox="0 0 ${width} ${height}" class="edu-chart-svg" preserveAspectRatio="xMidYMid meet">
-                                <!-- Gridlines -->
-                                <line x1="${paddingLeft}" y1="${paddingTop}" x2="${width - paddingRight}" y2="${paddingTop}" stroke="#f1f5f9" stroke-width="1.5"></line>
-                                <line x1="${paddingLeft}" y1="${paddingTop + chartHeight / 2}" x2="${width - paddingRight}" y2="${paddingTop + chartHeight / 2}" stroke="#f1f5f9" stroke-width="1.5"></line>
-                                <line x1="${paddingLeft}" y1="${paddingTop + chartHeight}" x2="${width - paddingRight}" y2="${paddingTop + chartHeight}" stroke="#e2e8f0" stroke-width="1.5"></line>
-                                
-                                <!-- Axes Labels -->
-                                <text x="${paddingLeft - 8}" y="${paddingTop + 4}" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="end">۱۰۰</text>
-                                <text x="${paddingLeft - 8}" y="${paddingTop + chartHeight / 2 + 3}" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="end">۵۰</text>
-                                <text x="${paddingLeft - 8}" y="${paddingTop + chartHeight + 3}" fill="#94a3b8" font-size="7" font-weight="bold" text-anchor="end">۰</text>
-
-                                <!-- Connection Line -->
-                                ${pointsCount > 1 ? `<polyline fill="none" stroke="url(#chartGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" points="${pointsStr.trim()}"></polyline>` : ''}
-                                
-                                <!-- Gradients definition -->
-                                <defs>
-                                    <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stop-color="#10b981"></stop>
-                                        <stop offset="100%" stop-color="#059669"></stop>
-                                    </linearGradient>
-                                </defs>
-
-                                <!-- Points -->
-                                ${pointsCircles}
-                            </svg>
-                            <!-- Tooltip layer -->
-                            <div id="eduChartTooltip" style="position: absolute; display: none; background: #0f172a; color: white; padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; pointer-events: none; z-index: 1000; font-family: 'Vazirmatn', sans-serif; text-align: right; box-shadow: 0 4px 6px rgba(0,0,0,0.15);"></div>
-                        </div>
+                        <h4 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #9a3412;">استریک روزانه دانش‌آموز</h4>
+                        <p style="margin: 0; font-size: 1rem; color: #c2410c; font-weight: 700;">
+                            ${currentStreak > 0 ? `آفرین! <b>${currentStreak} روز متوالی</b> تلاش و حل تمرین فعال داشته است.` : 'هنوز استریک جدیدی شروع نشده است. با حل تمرین امروز استریک را فعال کنید!'}
+                        </p>
                     </div>
-                `;
-            } else {
-                chartHtml = `
-                    <div class="edu-chart-container" style="border-style: dashed; padding: 30px;">
-                        <p style="margin: 0; color: var(--edu-text-muted); font-size: 0.85rem; font-weight: 700;">داده‌ای برای ترسیم نمودار روند تحصیلی وجود ندارد.</p>
+                    
+                    <!-- Week calendar tracking -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 20px; border-top: 1px dashed rgba(234, 88, 12, 0.2); padding-top: 15px;">
+                        ${streakInfo.last7Days.map(day => {
+                            const activeBg = day.hasSolved ? 'linear-gradient(135deg, #f59e0b 0%, #ea580c 100%)' : '#e2e8f0';
+                            const activeText = day.hasSolved ? '#ffffff' : '#64748b';
+                            const borderStyle = day.isToday ? 'border: 2px solid #ea580c' : 'border: 1px solid transparent';
+                            const statusIcon = day.hasSolved ? '🔥' : '⚪';
+                            return `
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; ${borderStyle}; border-radius: 12px; padding: 6px 4px; background: ${day.isToday ? '#ffffff' : 'transparent'};">
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: #7c2d12;">${day.dayName}</span>
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: ${activeBg}; color: ${activeText}; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; font-weight: 800; box-shadow: ${day.hasSolved ? '0 4px 8px rgba(234, 88, 12, 0.25)' : 'none'};">
+                                        ${statusIcon}
+                                    </div>
+                                    ${day.isToday ? '<span style="font-size: 0.65rem; color: #ea580c; font-weight: 800;">امروز</span>' : ''}
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
-                `;
-            }
-
-            // Set up chart tooltip functions globally so they can be triggered from inside the SVG attribute string
-            window.showChartTooltip = (e, title, score, date) => {
-                const tooltip = document.getElementById('eduChartTooltip');
-                if (tooltip) {
-                    tooltip.innerHTML = `<b>${title}</b><br/>نمره: ${score} از ۱۰۰ | تاریخ: ${date}`;
-                    tooltip.style.display = 'block';
-                    // Calculate tooltip placement relative to parent container
-                    const rect = e.target.parentNode.getBoundingClientRect();
-                    const pointRect = e.target.getBoundingClientRect();
-                    tooltip.style.left = (pointRect.left - rect.left - 40) + 'px';
-                    tooltip.style.top = (pointRect.top - rect.top - 55) + 'px';
-                }
-            };
-            window.hideChartTooltip = () => {
-                const tooltip = document.getElementById('eduChartTooltip');
-                if (tooltip) tooltip.style.display = 'none';
-            };
+                </div>
+            `;
 
             // Build Timeline for teacher
             let progressTimeline = '';
@@ -2346,8 +2171,8 @@ function handleSaveFeedback(data) {
                     </div>
                 </div>
 
-                <!-- Custom visual Progress Chart rendered here -->
-                ${chartHtml}
+                <!-- Custom visual Daily Streak rendered here -->
+                ${streakHtml}
 
                 <h5 style="font-weight: 800; font-size: 1rem; margin-bottom: 12px; color: var(--edu-text-dark); display: flex; align-items: center; gap: 6px;">
                     <span>🏆 مدال‌ها و نشان‌های افتخار دانش‌آموز</span>
@@ -2409,6 +2234,74 @@ function handleSaveFeedback(data) {
         } catch (e) {
             showToast('خطا در ثبت بازخورد', false);
         }
+    };
+
+    // Calculate streak from exercise progress items
+    const getStreakInfo = (progressItems) => {
+        // Filter only progress items of type "exercise"
+        const exerciseProgress = (progressItems || []).filter(p => p.type === 'exercise');
+        
+        // Extract unique dates of exercise completion (YYYY-MM-DD in local time)
+        const dates = exerciseProgress.map(p => {
+            const d = new Date(p.timestamp);
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        });
+        const uniqueDates = Array.from(new Set(dates));
+        
+        const now = new Date();
+        const formatDate = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        
+        const todayStr = formatDate(now);
+        const yesterday = new Date();
+        yesterday.setDate(now.getDate() - 1);
+        const yesterdayStr = formatDate(yesterday);
+        
+        // Sort unique dates descending
+        uniqueDates.sort((a, b) => new Date(b) - new Date(a));
+        
+        let currentStreak = 0;
+        
+        // Streak is active if student has done an exercise today or yesterday
+        if (uniqueDates.includes(todayStr) || uniqueDates.includes(yesterdayStr)) {
+            // Start from the most recent exercise date (either today or yesterday)
+            let checkDate = uniqueDates.includes(todayStr) ? new Date(todayStr) : new Date(yesterdayStr);
+            while (true) {
+                const checkStr = formatDate(checkDate);
+                if (uniqueDates.includes(checkStr)) {
+                    currentStreak++;
+                    checkDate.setDate(checkDate.getDate() - 1); // Go to previous day
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        // Calculate current week status (Saturday to Friday)
+        const last7Days = [];
+        const dayNames = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+        
+        // Find how many days to subtract from today to get to Saturday of the current week
+        // JS day of week: 0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday
+        const jsDay = now.getDay();
+        const daysSinceSaturday = (jsDay + 1) % 7;
+        
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(now);
+            d.setDate(now.getDate() - daysSinceSaturday + i);
+            const dStr = formatDate(d);
+            const hasSolved = uniqueDates.includes(dStr);
+            last7Days.push({
+                dateStr: dStr,
+                dayName: dayNames[d.getDay()],
+                hasSolved: hasSolved,
+                isToday: dStr === todayStr
+            });
+        }
+        
+        return {
+            currentStreak,
+            last7Days
+        };
     };
 
     // Helper translation map
@@ -2573,6 +2466,35 @@ function handleSaveFeedback(data) {
         }
     };
 
+    // Helper to safely set floating tracker HTML with close/dismiss functionality and auto-fade support
+    const setTrackerWidgetHTML = (widget, htmlContent, shouldAutoFade = false) => {
+        if (!widget) return;
+        // Reset any transition, opacity and make sure display is flex
+        widget.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        widget.style.opacity = '1';
+        widget.style.transform = 'none';
+        widget.style.display = 'flex';
+        
+        // Render content with an elegant close button (X) on the left (RTL style)
+        widget.innerHTML = `
+            <div class="edu-tracker-inner" style="display: flex; align-items: center; gap: 8px;">
+                ${htmlContent}
+            </div>
+            <button class="edu-tracker-close-btn" style="background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; font-size: 1.1rem; font-weight: bold; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px; transition: background 0.2s; outline: none; flex-shrink: 0;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'" onclick="event.stopPropagation(); document.getElementById('eduFloatingTracker').style.display='none'; window._eduTrackerHidden=true;">×</button>
+        `;
+        
+        if (shouldAutoFade) {
+            if (widget._fadeTimeout) clearTimeout(widget._fadeTimeout);
+            widget._fadeTimeout = setTimeout(() => {
+                widget.style.opacity = '0';
+                widget.style.transform = 'translateY(15px) scale(0.95)';
+                setTimeout(() => {
+                    widget.style.display = 'none';
+                }, 300);
+            }, 6000); // Wait 6 seconds, then fade out automatically
+        }
+    };
+
     // Tracker Widget inside Interactive Exercises
     const renderExerciseTrackerWidget = () => {
         if (!currentUser || currentUser.role !== 'student') return; // Only students record progress
@@ -2585,12 +2507,17 @@ function handleSaveFeedback(data) {
         widget.id = 'eduFloatingTracker';
         widget.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)';
         widget.style.boxShadow = '0 10px 25px -5px rgba(59, 130, 246, 0.4)';
-        widget.style.pointerEvents = 'none'; // Purely informational
-        widget.innerHTML = `
-            <span>🎮</span>
-            <span>ثبت خودکار فعال است</span>
-        `;
+        widget.style.pointerEvents = 'auto'; // Allowed pointer events to support close button
+        widget.style.display = 'none'; // Initially hidden
         document.body.appendChild(widget);
+
+        // We don't display it initially, so set tracker HTML without changing display to flex
+        widget.innerHTML = `
+            <div class="edu-tracker-inner" style="display: flex; align-items: center; gap: 8px;">
+                <span>🎮</span>
+                <span>ثبت خودکار فعال است</span>
+            </div>
+        `;
 
         let exerciseSaved = false;
         let interactionsCount = 0;
@@ -2630,25 +2557,27 @@ function handleSaveFeedback(data) {
 
             widget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
             widget.style.boxShadow = '0 10px 25px -5px rgba(16, 185, 129, 0.4)';
-            widget.innerHTML = `
+            setTrackerWidgetHTML(widget, `
                 <span>⚡</span>
                 <span>در حال ثبت امتیاز...</span>
-            `;
+            `);
 
             // Give 1 point and 1 star for this activity as requested
             const success = await submitProgressReport(subject, exerciseName, 'exercise', 1, 1, true);
             if (success) {
                 widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
-                widget.innerHTML = `
+                window._eduTrackerHidden = false; // Reset hidden state so notification is shown
+                setTrackerWidgetHTML(widget, `
                     <span>✅</span>
                     <span>امتیاز ۱ ثبت شد!</span>
-                `;
+                `, true); // Auto fade-out after 6 seconds
             } else {
                 widget.style.background = 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)';
-                widget.innerHTML = `
+                window._eduTrackerHidden = false; // Reset hidden state so notification is shown
+                setTrackerWidgetHTML(widget, `
                     <span>❌</span>
                     <span>خطا در ثبت خودکار!</span>
-                `;
+                `, true); // Auto fade-out after 6 seconds
                 // Reset flag on failure to allow retry if they trigger it again
                 exerciseSaved = false;
             }
@@ -3008,10 +2937,11 @@ function handleSaveFeedback(data) {
             if (widget) {
                 widget.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                 widget.style.boxShadow = '0 10px 25px -5px rgba(16, 185, 129, 0.4)';
-                widget.innerHTML = `
+                window._eduTrackerHidden = false; // Reset hidden state so saving state shows
+                setTrackerWidgetHTML(widget, `
                     <span>⚡</span>
                     <span>در حال ثبت پیشرفت...</span>
-                `;
+                `);
             }
 
             const subject = getSubjectFromPath(window.location.pathname);
@@ -3022,16 +2952,18 @@ function handleSaveFeedback(data) {
             if (widget) {
                 if (success) {
                     widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
-                    widget.innerHTML = `
+                    window._eduTrackerHidden = false; // Show success popup even if hidden previously
+                    setTrackerWidgetHTML(widget, `
                         <span>✅</span>
                         <span>بخش ${displayName} با موفقیت ثبت شد!</span>
-                    `;
+                    `, true); // Fade out after 6 seconds
                 } else {
                     widget.style.background = 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)';
-                    widget.innerHTML = `
+                    window._eduTrackerHidden = false; // Show failure popup even if hidden previously
+                    setTrackerWidgetHTML(widget, `
                         <span>❌</span>
                         <span>خطا در ثبت خودکار!</span>
-                    `;
+                    `, true); // Fade out after 6 seconds
                     lessonSavedSet.delete(saveKey); // allow retry
                 }
             }
@@ -3046,18 +2978,6 @@ function handleSaveFeedback(data) {
                 return;
             }
 
-            if (!widget) {
-                widget = document.createElement('div');
-                widget.className = 'edu-tracker-widget';
-                widget.id = 'eduFloatingTracker';
-                widget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)';
-                widget.style.boxShadow = '0 10px 25px -5px rgba(79, 70, 229, 0.4)';
-                widget.style.pointerEvents = 'none'; // Purely informational
-                document.body.appendChild(widget);
-            }
-
-            widget.style.display = 'flex';
-
             const currentActivity = detectActiveActivity();
             const activityType = currentActivity ? currentActivity.type : 'fallback';
             const activityDisplayName = getActivityFarsiName(activityType);
@@ -3066,6 +2986,9 @@ function handleSaveFeedback(data) {
             if (lessonName !== lastActiveLesson || activityType !== lastActiveActivityType) {
                 lastActiveLesson = lessonName;
                 lastActiveActivityType = activityType;
+
+                // Reset hidden state when changing lesson/activity so user gets progress tracked again
+                window._eduTrackerHidden = false;
 
                 // Reset specific states
                 activeFlippedCardsSet = new Set();
@@ -3085,6 +3008,23 @@ function handleSaveFeedback(data) {
                 }
             }
 
+            // If the user manually closed the widget, keep it hidden on this activity
+            if (window._eduTrackerHidden) {
+                if (widget) widget.style.display = 'none';
+                return;
+            }
+
+            if (!widget) {
+                widget = document.createElement('div');
+                widget.className = 'edu-tracker-widget';
+                widget.id = 'eduFloatingTracker';
+                widget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)';
+                widget.style.boxShadow = '0 10px 25px -5px rgba(79, 70, 229, 0.4)';
+                widget.style.pointerEvents = 'auto'; // Allowed pointer events to support close button
+                widget.style.display = 'none'; // Initially hidden during reading/active state
+                document.body.appendChild(widget);
+            }
+
             // Setup listeners if needed
             if (currentActivity && currentActivity.setup) {
                 currentActivity.setup();
@@ -3092,11 +3032,12 @@ function handleSaveFeedback(data) {
 
             const saveKey = `${lessonName} - ${activityType}`;
             if (lessonSavedSet.has(saveKey)) {
+                widget.style.display = 'flex';
                 widget.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
-                widget.innerHTML = `
+                setTrackerWidgetHTML(widget, `
                     <span>✅</span>
                     <span>${activityDisplayName} ثبت شد</span>
-                `;
+                `, true); // Fade out after 6 seconds
                 return;
             }
 
@@ -3104,12 +3045,8 @@ function handleSaveFeedback(data) {
             if (currentActivity && currentActivity.check()) {
                 autoSaveLessonProgress(lessonName, activityType, activityDisplayName);
             } else {
-                widget.style.background = 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)';
-                widget.style.boxShadow = '0 10px 25px -5px rgba(79, 70, 229, 0.4)';
-                widget.innerHTML = `
-                    <span>🎯</span>
-                    <span>${currentActivity ? currentActivity.label : 'در حال انجام فعالیت...'} - ${lessonName}</span>
-                `;
+                // Keep the active/idle/reading state widget completely hidden as requested
+                widget.style.display = 'none';
             }
         };
 

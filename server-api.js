@@ -386,6 +386,126 @@ router.post('/teacher/feedback', async (req, res) => {
     }
 });
 
+// Add Student to Teacher's List
+router.post('/teacher/students/add', async (req, res) => {
+    try {
+        const { teacherId, studentId } = req.body;
+        if (!teacherId || !studentId) {
+            return res.status(400).json({ success: false, message: 'اطلاعات ناقص است.' });
+        }
+
+        // Get Teacher document
+        let teacherSnap;
+        try {
+            teacherSnap = await getDoc(doc(db, 'users', teacherId));
+        } catch (error) {
+            handleFirestoreError(error, OperationType.GET, `users/${teacherId}`);
+        }
+
+        if (!teacherSnap.exists()) {
+            return res.status(404).json({ success: false, message: 'معلم یافت نشد.' });
+        }
+
+        const teacherData = teacherSnap.data();
+        if (teacherData.role !== 'teacher') {
+            return res.status(403).json({ success: false, message: 'کاربر مورد نظر معلم نیست.' });
+        }
+
+        // Get Student document
+        let studentSnap;
+        try {
+            studentSnap = await getDoc(doc(db, 'users', studentId));
+        } catch (error) {
+            handleFirestoreError(error, OperationType.GET, `users/${studentId}`);
+        }
+
+        if (!studentSnap.exists()) {
+            return res.status(404).json({ success: false, message: 'دانش‌آموزی با این شناسه یافت نشد.' });
+        }
+
+        const studentData = studentSnap.data();
+        if (studentData.role !== 'student') {
+            return res.status(400).json({ success: false, message: 'کاربر پیدا شده دانش‌آموز نیست.' });
+        }
+
+        // Initialize students list if not present
+        let studentsList = teacherData.students || [];
+
+        // Check if student already in list
+        const alreadyExists = studentsList.some(s => s.id === studentId);
+        if (!alreadyExists) {
+            studentsList.push({
+                id: studentData.id,
+                username: studentData.username
+            });
+
+            // Update Teacher Document
+            try {
+                await setDoc(doc(db, 'users', teacherId), {
+                    ...teacherData,
+                    students: studentsList
+                });
+            } catch (error) {
+                handleFirestoreError(error, OperationType.WRITE, `users/${teacherId}`);
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `دانش‌آموز «${studentData.username}» با موفقیت به لیست شما اضافه شد.`,
+            students: studentsList
+        });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'خطای سرور: ' + e.message });
+    }
+});
+
+// Remove Student from Teacher's List
+router.post('/teacher/students/remove', async (req, res) => {
+    try {
+        const { teacherId, studentId } = req.body;
+        if (!teacherId || !studentId) {
+            return res.status(400).json({ success: false, message: 'اطلاعات ناقص است.' });
+        }
+
+        // Get Teacher document
+        let teacherSnap;
+        try {
+            teacherSnap = await getDoc(doc(db, 'users', teacherId));
+        } catch (error) {
+            handleFirestoreError(error, OperationType.GET, `users/${teacherId}`);
+        }
+
+        if (!teacherSnap.exists()) {
+            return res.status(404).json({ success: false, message: 'معلم یافت نشد.' });
+        }
+
+        const teacherData = teacherSnap.data();
+        let studentsList = teacherData.students || [];
+
+        // Filter out the student
+        studentsList = studentsList.filter(s => s.id !== studentId);
+
+        // Update Teacher Document
+        try {
+            await setDoc(doc(db, 'users', teacherId), {
+                ...teacherData,
+                students: studentsList
+            });
+        } catch (error) {
+            handleFirestoreError(error, OperationType.WRITE, `users/${teacherId}`);
+        }
+
+        res.json({
+            success: true,
+            message: 'دانش‌آموز با موفقیت از لیست شما حذف شد.',
+            students: studentsList
+        });
+    } catch (e) {
+        res.status(500).json({ success: false, message: 'خطای سرور: ' + e.message });
+    }
+});
+
 // Get self student profile data (for students)
 router.get('/student/self/:studentId', async (req, res) => {
     try {

@@ -510,6 +510,10 @@ body.app-page .home-button {
 }
 
 @media (max-width: 767px) {
+    body.app-page {
+        overflow-y: visible !important;
+        height: auto !important;
+    }
     body.app-page .container,
     body.app-page .app-wrapper {
         flex-direction: column !important;

@@ -10,7 +10,18 @@
         "email": { "type": "string" },
         "passwordHash": { "type": "string" },
         "role": { "type": "string", "enum": ["student", "teacher"] },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "createdAt": { "type": "string", "format": "date-time" },
+        "students": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "username": { "type": "string" }
+            },
+            "required": ["id", "username"]
+          }
+        }
       },
       "required": ["id", "username", "email", "passwordHash", "role", "createdAt"]
     },
