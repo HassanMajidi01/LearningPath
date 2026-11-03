@@ -1,0 +1,6 @@
+{
+  "name": "Leitner Learning System",
+  "description": "سامانه یادگیری لایتنر ۵ مرحله‌ای متصل به گوگل شیت و شبیه‌ساز پایگاه داده برای مقاطع ۱ تا ۱۲",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

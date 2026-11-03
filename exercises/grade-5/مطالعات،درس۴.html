@@ -1,0 +1,488 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8e7ff">
+<title>باغ جادویی دانایی | پرسش‌های درس چهارم مطالعات اجتماعی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff78ad;--purple:#8a65d6;--ink:#493a62;--gold:#ffd66e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:'Vazirmatn',Tahoma,sans-serif;color:var(--ink);
+background:radial-gradient(circle at 8% 12%,#ffe3ef 0,transparent 24%),
+radial-gradient(circle at 90% 25%,#e7deff 0,transparent 26%),
+linear-gradient(135deg,#fff4fa,#f1edff 55%,#fff8eb);overflow-x:hidden}
+button,input{font:inherit}button{cursor:pointer}
+.decor{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.float{position:absolute;opacity:.55;animation:float 6s ease-in-out infinite;font-size:clamp(20px,3vw,36px)}
+.float:nth-child(1){top:10%;left:7%}.float:nth-child(2){top:30%;right:4%;animation-delay:1s}
+.float:nth-child(3){bottom:15%;left:12%;animation-delay:2s}.float:nth-child(4){bottom:34%;right:8%;animation-delay:3s}
+.float:nth-child(5){top:65%;left:4%;animation-delay:1.5s}
+@keyframes float{50%{transform:translateY(-16px) rotate(8deg)}}
+main{position:relative;z-index:1;width:min(920px,calc(100% - 28px));margin:30px auto 50px}
+.screen{display:none;animation:appear .5s ease both}.screen.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:rgba(255,255,255,.9);border:2px solid rgba(255,255,255,.9);border-radius:30px;
+box-shadow:0 18px 55px #8c69b426,0 3px 12px #765bb112;backdrop-filter:blur(10px)}
+.hero{text-align:center;padding:28px 22px 34px;position:relative;overflow:hidden}
+.hero:before,.hero:after{content:'✧';position:absolute;color:#ed9ac1;font-size:55px;opacity:.45}
+.hero:before{top:8px;right:20px}.hero:after{bottom:4px;left:24px}
+.school-ribbon{display:inline-flex;flex-direction:column;gap:5px;background:linear-gradient(110deg,#fff0f7,#f0eaff);
+border:1px dashed #db9fc9;border-radius:22px;padding:13px 28px;margin-bottom:18px;
+font-size:clamp(14px,2vw,17px);font-weight:700;color:#725493}
+.school-ribbon span:first-child{color:#b64f88}
+.hero h1{font-size:clamp(23px,4.6vw,40px);line-height:1.5;margin:6px 0;color:#6a49ad}
+.subtitle{font-size:clamp(15px,2.5vw,20px);font-weight:700;color:#a24c84;margin:0}
+.game-name{display:inline-block;margin:16px 0 25px;padding:9px 22px;border-radius:999px;background:#fff0c9;
+color:#9a6a23;font-weight:800;font-size:clamp(20px,4vw,30px);box-shadow:0 5px 0 #f8df9c}
+.button{border:0;border-radius:18px;padding:13px 34px;font-weight:800;font-size:18px;color:#fff;
+background:linear-gradient(135deg,#ff79b0,#dc60a7);box-shadow:0 7px 0 #c85191,0 10px 20px #d5539033;
+transition:.2s transform,.2s box-shadow}
+.button:hover{transform:translateY(-3px);box-shadow:0 10px 0 #c85191,0 14px 22px #d5539033}
+.button:active{transform:translateY(3px);box-shadow:0 3px 0 #c85191}
+.button.secondary{background:linear-gradient(135deg,#9c80ed,#715ac4);box-shadow:0 7px 0 #5e48a9,0 10px 20px #7259b333}
+.welcome{padding:clamp(20px,5vw,40px);max-width:760px;margin:0 auto}
+.section-title{text-align:center;color:#704eb2;margin:0 0 18px;font-size:clamp(22px,4vw,31px)}
+.intro{background:linear-gradient(120deg,#fff3f8,#f5f0ff);padding:18px 20px;border-radius:20px;
+line-height:2;font-weight:600;color:#725d87;margin:0 0 23px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.field label{display:block;font-weight:700;margin:0 0 7px;color:#73558e}
+.field input{width:100%;border:2px solid #eadcf3;background:#fff;border-radius:14px;padding:12px 14px;
+outline:none;color:var(--ink);transition:.2s}
+.field input:focus{border-color:#bd8ee1;box-shadow:0 0 0 4px #eadbfd}
+.field input::placeholder{color:#c0b4ca}
+.form-actions{text-align:center;margin-top:24px}
+.message{min-height:27px;margin:13px 0 0;color:#c14f7d;font-weight:700;text-align:center}
+
+/* ==== صفحه آزمون ==== */
+.game-card{padding:clamp(16px,3.5vw,30px);max-width:840px;margin:auto}
+.quiz-top{position:sticky;top:8px;z-index:5;background:linear-gradient(135deg,#fff8fc,#f6f1ff);
+border:1px solid #f0e4f8;border-radius:22px;padding:12px 14px 10px;margin-bottom:16px;
+box-shadow:0 8px 22px #8c69b41f}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}
+.progress-label{font-size:clamp(16px,3vw,21px);font-weight:900;color:#714fb2}
+.score-pill{white-space:nowrap;background:#fff3c9;border-radius:99px;padding:8px 14px;font-weight:900;
+color:#956b23;box-shadow:inset 0 0 0 1px #f7dfa1}
+.bar{height:13px;background:#eee6f6;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#ff8bb9,#a17dea,#7edec4);
+border-radius:99px;transition:width .5s ease}
+/* کادر بازخورد — بالای صفحه و همیشه دیده می‌شود */
+.feedback{margin-top:10px;min-height:52px;display:flex;align-items:center;gap:9px;justify-content:center;
+text-align:center;padding:9px 12px;border-radius:16px;font-weight:800;font-size:clamp(14px,2.6vw,17px);
+line-height:1.7;color:#8a55a7;background:#fbf4ff;border:2px dashed #e3cff5;transition:.25s}
+.feedback.good{background:#e8fbf1;border-color:#8fd9b6;color:#1f7a58}
+.feedback.bad{background:#fff2f4;border-color:#f6bcc6;color:#a54557}
+.feedback .sticker{font-size:26px;line-height:1;animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg)}70%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1)}}
+.question{font-size:clamp(18px,3.2vw,24px);line-height:1.9;color:#58456f;text-align:center;
+font-weight:800;margin:6px 0 20px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.option{min-height:66px;padding:13px 15px;border:2px solid #eadcf3;border-radius:18px;
+background:linear-gradient(135deg,#fff,#fdf8ff);color:#59476e;font-weight:700;line-height:1.7;
+text-align:right;transition:.2s;box-shadow:0 4px 0 #eee5f4}
+.option:hover:not(:disabled){transform:translateY(-3px);border-color:#d49bc2;background:#fff6fb}
+.option.correct{background:#e3fbef;border-color:#65c89b;color:#277a59}
+.option.wrong{background:#fff0f1;border-color:#f08b9c;color:#a54557;animation:shake .3s}
+.option:disabled{cursor:default;opacity:.85}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ==== صفحه نتیجه ==== */
+.end-card{padding:clamp(20px,4.5vw,38px);text-align:center;max-width:860px;margin:auto}
+.result-score{font-size:clamp(24px,5vw,36px);font-weight:900;color:#714db3;margin:10px 0}
+.result-info{font-size:17px;line-height:1.9;color:#78638b}
+.table-title{margin:26px 0 12px;color:#704eb2;font-size:clamp(19px,3.4vw,24px)}
+.table-wrap{overflow-x:auto;border-radius:18px;border:2px solid #f0e4f8;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:640px;font-size:14px}
+thead th{background:linear-gradient(135deg,#f7ecff,#fff1f8);color:#6b4aa8;font-weight:800;padding:11px 8px;
+border-bottom:2px solid #f0e4f8;white-space:nowrap}
+tbody td{padding:10px 8px;border-bottom:1px solid #f6eefb;color:#5d4b72;line-height:1.7;vertical-align:top}
+tbody tr:nth-child(even){background:#fdfaff}
+tbody tr:last-child td{border-bottom:0}
+td.ok{color:#1f7a58;font-weight:800;background:#f0fdf6}
+td.no{color:#a54557;font-weight:800;background:#fff5f6}
+td.num{text-align:center;font-weight:800;color:#8a65d6}
+.summary-chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.chip{border-radius:99px;padding:7px 16px;font-weight:800;font-size:15px}
+.chip.ok{background:#e8fbf1;color:#1f7a58}
+.chip.no{background:#fff0f1;color:#a54557}
+.certificate{position:relative;margin:25px auto;padding:26px 20px;max-width:690px;
+background:linear-gradient(135deg,#fffaf0,#fff0f7 55%,#f4efff);border:7px double #d9ad57;
+border-radius:22px;box-shadow:0 8px 30px #9d7c4324;color:#67502f}
+.certificate:before,.certificate:after{content:'✦';position:absolute;color:#d3a644;font-size:30px}
+.certificate:before{top:8px;right:13px}.certificate:after{bottom:8px;left:13px}
+.certificate h2{font-size:clamp(24px,5vw,35px);color:#9a6b28;margin:10px}
+.certificate .cert-name{font-size:clamp(21px,4vw,29px);font-weight:900;color:#a94c82;margin:14px}
+.certificate p{line-height:1.9;margin:7px}
+.cert-details{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 24px;margin:16px 0}
+.end-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+.hidden{display:none!important}
+.tiny{color:#a38bab;font-size:13px;margin-top:17px}
+#effects{position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden}
+.particle{position:absolute;top:-30px;font-size:23px;animation:fall 1.5s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(640deg);opacity:0}}
+
+@media(max-width:600px){
+ main{margin:14px auto 30px}
+ .hero{padding:22px 14px 29px}
+ .school-ribbon{padding:11px 16px}
+ .form-grid,.options{grid-template-columns:1fr}
+ .welcome,.game-card{padding:18px 15px}
+ .button{width:min(100%,300px)}
+ .topline .score-pill{font-size:14px;padding:7px 11px}
+ .quiz-top{top:4px}
+}
+@media print{
+ body{background:#fff;color:#222}
+ .decor,main>.screen:not(#resultScreen),.end-actions,.result-score,.result-info,.table-title,
+ .table-wrap,.summary-chips,.tiny,#effects{display:none!important}
+ main{width:100%;margin:0}
+ .screen#resultScreen{display:block!important}
+ .end-card{box-shadow:none;border:0;background:#fff;padding:0;max-width:none}
+ #resultTitle{display:none}
+ .certificate{display:flex!important;flex-direction:column;justify-content:center;
+ max-width:100%;margin:20px auto;box-shadow:none;min-height:75vh;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="decor" aria-hidden="true">
+ <span class="float">🦋</span><span class="float">🌟</span><span class="float">💖</span>
+ <span class="float">🦄</span><span class="float">🌈</span>
+</div>
+<div id="effects"></div>
+
+<main>
+<!-- ============ صفحه ۱: شروع ============ -->
+<section class="screen active" id="startScreen">
+ <div class="card hero">
+  <div class="school-ribbon">
+   <span>طراح بازی: کبری قربانی</span>
+   <span>دبستان دخترانه‌ی سما واحد بندر انزلی</span>
+  </div>
+  <h1>پرسش‌های درس چهارم مطالعات اجتماعی</h1>
+  <p class="subtitle">آماده‌ای به یک ماجراجویی جادویی بروی؟</p>
+  <div class="game-name">🌷 باغ جادویی دانایی 🌷</div><br>
+  <button class="button" onclick="showScreen('formScreen')">شروع ✨</button>
+ </div>
+</section>
+
+<!-- ============ صفحه ۲: معرفی و فرم ============ -->
+<section class="screen" id="formScreen">
+ <div class="card welcome">
+  <h2 class="section-title">🌸 خوش آمدی، ستاره‌ی دانایی! 🌸</h2>
+  <p class="intro">دختر خوبم، اگر امتیاز شما بالای ۷ شود شما لوح تقدیر دریافت خواهی کرد، ولی قبل از آن باید به سوالات زیر پاسخ دهی.</p>
+  <form id="studentForm" novalidate>
+   <div class="form-grid">
+    <div class="field"><label for="firstName">نام زیبای من</label>
+     <input id="firstName" autocomplete="given-name" placeholder="نامت را بنویس"></div>
+    <div class="field"><label for="lastName">نام خانوادگی</label>
+     <input id="lastName" autocomplete="family-name" placeholder="نام خانوادگی‌ات را بنویس"></div>
+    <div class="field"><label for="className">نام کلاس</label>
+     <input id="className" placeholder="مثلاً پنجم الف"></div>
+    <div class="field"><label for="teacherName">نام معلم</label>
+     <input id="teacherName" placeholder="نام معلم مهربانت"></div>
+   </div>
+   <p class="message" id="formMessage" role="alert"></p>
+   <div class="form-actions">
+    <button class="button secondary" type="submit">شروع ماجراجویی 🚀</button>
+   </div>
+  </form>
+ </div>
+</section>
+
+<!-- ============ صفحه ۳: سوالات ============ -->
+<section class="screen" id="quizScreen">
+ <div class="card game-card">
+  <!-- ناحیه‌ی بالایی: پیشرفت + امتیاز + کادر بازخورد (بالا و همیشه دیده می‌شود) -->
+  <div class="quiz-top">
+   <div class="topline">
+    <div class="progress-label" id="progressLabel">سوال ۱ از ۱۱</div>
+    <div class="score-pill" id="scoreLabel">⭐ امتیاز: ۰</div>
+   </div>
+   <div class="bar" aria-label="میزان پیشرفت"><div class="bar-fill" id="progressFill"></div></div>
+   <div class="feedback" id="feedback" aria-live="polite">
+    <span class="sticker">🌷</span><span id="feedbackText">هر سوال را با دقت بخوان و گزینه‌ی درست را انتخاب کن.</span>
+   </div>
+  </div>
+  <div class="question" id="questionText"></div>
+  <div class="options" id="options"></div>
+ </div>
+</section>
+
+<!-- ============ صفحه ۴: نتیجه + جدول + لوح تقدیر ============ -->
+<section class="screen" id="resultScreen">
+ <div class="card end-card">
+  <h2 id="resultTitle" class="section-title">پایان ماجراجویی! 🌟</h2>
+  <div class="result-score" id="resultScore"></div>
+  <p class="result-info" id="resultMessage"></p>
+
+  <div class="summary-chips" id="summaryChips"></div>
+
+  <h3 class="table-title">📋 جدول پاسخ‌های من</h3>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>شماره</th><th>پرسش</th><th>پاسخ درست</th><th>پاسخ من</th><th>نتیجه</th>
+     </tr>
+    </thead>
+    <tbody id="summaryBody"></tbody>
+   </table>
+  </div>
+
+  <div class="certificate hidden" id="certificate">
+   <div style="font-size:32px">🌷 ✨ 🦋 ✨ 🌷</div>
+   <h2>لوح تقدیر</h2>
+   <p>تقدیم به ستاره‌ی کوشا و دانای ما</p>
+   <div class="cert-name" id="certStudent"></div>
+   <p>به پاس تلاش در پاسخ‌گویی به پرسش‌های درس چهارم مطالعات اجتماعی</p>
+   <div class="cert-details">
+    <span>کلاس: <b id="certClass"></b></span>
+    <span>نام معلم: <b id="certTeacher"></b></span>
+    <span>امتیاز: <b id="certScore"></b> از ۱۱</span>
+   </div>
+   <p>دبستان دخترانه‌ی سما واحد بندر انزلی</p>
+   <p>تاریخ: <span id="certDate"></span></p>
+   <div style="font-size:28px;margin-top:8px">💖 🌈 🦄</div>
+  </div>
+
+  <div class="end-actions">
+   <button class="button secondary hidden" id="printButton" onclick="window.print()">چاپ لوح تقدیر 🖨️</button>
+   <button class="button" onclick="restartGame()">دوباره بازی کنیم؟ 🔁</button>
+  </div>
+  <p class="tiny">🌱 باغ جادویی دانایی — درس چهارم مطالعات اجتماعی، پایه پنجم</p>
+ </div>
+</section>
+</main>
+
+<script>
+/* ---------- سوالات ---------- */
+const questions=[
+ {q:'برای اینکه در گروه عضو موثری باشیم چه کارهایی باید انجام دهیم؟',
+  o:['اعضای گروه باید با هم روابط خوبی داشته باشند','اعضای گروه وظایف خود را بشناسند','در هر گروه باید نظم و مقررات رعایت شود','همه موارد'],a:3},
+ {q:'شوراهای دانش‌آموزی چگونه و در چه زمانی از سال تحصیلی برگزار و تشکیل می‌شود؟',
+  o:['با انتخاب مدیر در نیمه دوم مهرماه','با انتخاب دانش‌آموزان در نیمه اول آبان‌ماه','با انتخاب معلم در نیمه دوم آبان‌ماه','با انتخاب ناظم در نیمه اول آذرماه'],a:1},
+ {q:'اولین نکته‌ای که اعضای هر گروه باید به آن توجه کنند کدام است؟',
+  o:['روابط خوب','نظم و مقررات','شناخت وظایف','مشورت و همفکری'],a:2},
+ {q:'در کدام سوره از قرآن به هم‌فکری در کارها سفارش شده است؟',
+  o:['شوری','قدر','حمد','انبیا'],a:0},
+ {q:'آیه «وَ اَمْرُهُمْ شُوری بَیْنَهُمْ» به چه چیزی اشاره دارد؟',
+  o:['رعایت احترام در گروه','رعایت نظم و مقررات','انجام وظایف','مشورت کردن'],a:3},
+ {q:'شورای دانش‌آموزی نمایندهٔ چه کسانی است؟',
+  o:['دانش‌آموزان','مدیر و معلمان','اولیای دانش‌آموزان','دانش‌آموزان و معلمان'],a:0},
+ {q:'کدام مورد یک گروه به حساب می‌آید؟',
+  o:['افراد منتظر در بانک','افراد در صف نانوایی','دانش‌آموزان شرکت‌کننده در سرود مدرسه','خریداران در فروشگاه'],a:2},
+ {q:'کدام مورد نمی‌تواند یک گروه باشد؟',
+  o:['دانش‌آموزانی که روزنامه دیواری تهیه می‌کنند','افرادی که در قطار شهری هستند','پزشکانی که در اتاق جراحی عمل جراحی انجام می‌دهند','افرادی که در تیم فوتبال بازی می‌کنند'],a:1},
+ {q:'وظایف هر فرد در یک گروه باید بر چه اساسی تعیین شود؟',
+  o:['علاقه افراد','توانایی و استعداد افراد','همدلی بین افراد','مشورت با بزرگ‌ترها'],a:1},
+ {q:'کدام مورد باعث می‌شود که از افکار و نظرات دیگران استفاده کنیم؟',
+  o:['روابط خوب','رعایت نظم و مقررات','مشورت و هم‌فکری','عمل به وظایف'],a:2},
+ {q:'این تعریف مربوط به کدام مورد است؟ «گروهی از افراد هستند که در انجام دادن کارها با یکدیگر مشورت می‌کنند.»',
+  o:['گروه','شورا'],a:1}
+];
+
+/* ---------- جملات تشویقی و برچسب‌ها ---------- */
+const praises=[
+ 'آفرین! چه پاسخ درخشانی!','فوق‌العاده بود، ستاره‌ی دانایی!','درست گفتی! باغ دانایی شکوفا شد!',
+ 'آفرین دختر زرنگ! به همین درخشانی ادامه بده!','چه عالی! یک قدم دیگر به لوح تقدیر نزدیک شدی!',
+ 'جوابت مثل رنگین‌کمان زیبا بود!','تو واقعاً یک قهرمان دانایی هستی!','درست و دقیق! به خودت افتخار کن!',
+ 'آفرین! پروانه‌های دانایی برایت دست می‌زنند!','چه پاسخ قشنگی! همین‌طور بدرخش!',
+ 'یافتی! جادوی دانایی همراه توست!','آفرین عزیزم، ستاره‌ی دیگری در آسمانت درخشید!'
+];
+const stickers=['🌟','🦄','🦋','🌈','💖','🌷','🎀','✨','🧚‍♀️','🏆','🌸','💎'];
+const retryMsgs=[
+ 'اشکالی ندارد عزیزم! یک گزینه‌ی دیگر را امتحان کن؛ تو می‌توانی!',
+ 'نزدیک بودی! دوباره فکر کن، جواب درست همین‌جاست 🌱',
+ 'گل من، نگران نباش! با کمی دقت گزینه‌ی درست را پیدا می‌کنی 💕',
+ 'هر اشتباه یک قدم به یادگیری نزدیک‌تر است؛ دوباره تلاش کن 🌼'
+];
+
+/* ---------- وضعیت بازی ---------- */
+let index=0,score=0,student={},records=[],locked=false;
+const faDigits=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const $=id=>document.getElementById(id);
+
+function showScreen(id){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---------- فرم ---------- */
+$('studentForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const ids=['firstName','lastName','className','teacherName'];
+ const vals=ids.map(id=>$(id).value.trim());
+ if(vals.some(v=>!v)){
+  $('formMessage').textContent='قشنگم، لطفاً همه‌ی خانه‌ها را پر کن تا بازی را شروع کنیم 💕';
+  $(ids.find(id=>!$(id).value.trim())).focus();
+  return;
+ }
+ student={first:vals[0],last:vals[1],className:vals[2],teacher:vals[3]};
+ index=0;score=0;records=[];locked=false;
+ showScreen('quizScreen');
+ renderQuestion();
+});
+
+/* ---------- نمایش سوال ---------- */
+function renderQuestion(){
+ const q=questions[index];
+ locked=false;
+ $('progressLabel').textContent=`سوال ${faDigits(index+1)} از ${faDigits(questions.length)}`;
+ $('scoreLabel').textContent=`⭐ امتیاز: ${faDigits(score)}`;
+ $('progressFill').style.width=`${(index/questions.length)*100}%`;
+ $('questionText').textContent=q.q;
+
+ const fb=$('feedback');
+ fb.className='feedback';
+ fb.innerHTML='<span class="sticker">🌷</span><span id="feedbackText">هر سوال را با دقت بخوان و گزینه‌ی درست را انتخاب کن.</span>';
+
+ const box=$('options');
+ box.innerHTML='';
+ q.o.forEach((text,i)=>{
+  const b=document.createElement('button');
+  b.type='button';
+  b.className='option';
+  b.textContent=`${faDigits(i+1)}. ${text}`;
+  b.onclick=()=>answer(i,b);
+  box.appendChild(b);
+ });
+}
+
+/* ---------- پاسخ دادن ---------- */
+function answer(choice,button){
+ if(locked) return;
+ const q=questions[index];
+ const fb=$('feedback');
+ const rec=records[index]||(records[index]={firstChoice:null,correct:false,tries:0});
+ rec.tries++;
+
+ if(choice===q.a){
+  locked=true;
+  if(rec.firstChoice===null) rec.firstChoice=choice;
+  rec.correct=true;
+
+  document.querySelectorAll('.option').forEach(b=>b.disabled=true);
+  button.classList.add('correct');
+  score++;
+  $('scoreLabel').textContent=`⭐ امتیاز: ${faDigits(score)}`;
+
+  const praise=praises[Math.floor(Math.random()*praises.length)];
+  const sticker=stickers[Math.floor(Math.random()*stickers.length)];
+  fb.className='feedback good';
+  fb.innerHTML=`<span class="sticker">${sticker}</span><span>${praise} +۱ امتیاز</span>`;
+
+  beep(true); confetti();
+
+  setTimeout(()=>{
+   index++;
+   if(index<questions.length) renderQuestion();
+   else showResult();
+  },1300);
+ }else{
+  if(rec.firstChoice===null) rec.firstChoice=choice;
+  button.classList.add('wrong');
+  button.disabled=true;
+  fb.className='feedback bad';
+  fb.innerHTML=`<span class="sticker">🌱</span><span>${retryMsgs[Math.floor(Math.random()*retryMsgs.length)]}</span>`;
+  beep(false);
+ }
+}
+
+/* ---------- صدا ---------- */
+function beep(ok){
+ try{
+  const C=window.AudioContext||window.webkitAudioContext;
+  if(!C) return;
+  const c=new C(),o=c.createOscillator(),g=c.createGain();
+  o.connect(g);g.connect(c.destination);
+  o.type='sine';
+  o.frequency.value=ok?740:230;
+  g.gain.setValueAtTime(.08,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.22);
+  o.start();o.stop(c.currentTime+.23);
+  o.onended=()=>c.close();
+ }catch(e){}
+}
+
+/* ---------- افکت‌ها ---------- */
+function confetti(){
+ const root=$('effects');
+ const icons=['✨','🌸','💖','⭐','🎉','🦋'];
+ for(let i=0;i<26;i++){
+  const el=document.createElement('span');
+  el.className='particle';
+  el.textContent=icons[Math.floor(Math.random()*icons.length)];
+  el.style.left=Math.random()*100+'%';
+  el.style.animationDelay=(Math.random()*.45)+'s';
+  el.style.fontSize=(16+Math.random()*18)+'px';
+  root.appendChild(el);
+  setTimeout(()=>el.remove(),2100);
+ }
+}
+
+/* ---------- پایان بازی: امتیاز + جدول + لوح ---------- */
+function showResult(){
+ $('progressFill').style.width='100%';
+ showScreen('resultScreen');
+ $('resultScore').textContent=`امتیاز تو: ${faDigits(score)} از ${faDigits(questions.length)} ⭐`;
+
+ const correctCount=records.filter(r=>r&&r.correct).length;
+ const wrongCount=questions.length-correctCount;
+
+ /* جدول پاسخ‌ها */
+ const body=$('summaryBody');
+ body.innerHTML='';
+ questions.forEach((q,i)=>{
+  const rec=records[i]||{firstChoice:null,correct:false};
+  const myChoice=rec.firstChoice!==null?q.o[rec.firstChoice]:'—';
+  const tr=document.createElement('tr');
+  const shortQ=q.q.length>62?q.q.slice(0,62)+'…':q.q;
+  tr.innerHTML=`
+   <td class="num">${faDigits(i+1)}</td>
+   <td>${shortQ}</td>
+   <td>${q.o[q.a]}</td>
+   <td>${myChoice}</td>
+   <td class="${rec.correct?'ok':'no'}">${rec.correct?'✅ درست':'❌ نادرست'}</td>`;
+  body.appendChild(tr);
+ });
+
+ $('summaryChips').innerHTML=
+  `<span class="chip ok">✅ درست: ${faDigits(correctCount)}</span>
+   <span class="chip no">❌ نادرست: ${faDigits(wrongCount)}</span>`;
+
+ /* لوح تقدیر */
+ const certificate=$('certificate'),print=$('printButton');
+ if(score>=8){
+  $('resultTitle').textContent='تبریک، ستاره‌ی دانایی! 🎉';
+  $('resultMessage').textContent=`آفرین ${student.first} جان! تو با تلاش و دانایی‌ات شایسته‌ی لوح تقدیر شدی.`;
+  certificate.classList.remove('hidden');
+  print.classList.remove('hidden');
+  $('certStudent').textContent=`${student.first} ${student.last}`;
+  $('certClass').textContent=student.className;
+  $('certTeacher').textContent=student.teacher;
+  $('certScore').textContent=faDigits(score);
+  $('certDate').textContent=new Intl.DateTimeFormat('fa-IR-u-ca-persian',
+    {year:'numeric',month:'long',day:'numeric'}).format(new Date());
+  confetti();
+ }else{
+  $('resultTitle').textContent='آفرین که تا پایان آمدی! 🌷';
+  $('resultMessage').textContent=`${student.first} عزیزم، با کمی تمرین می‌توانی امتیازت را بالاتر ببری. جدول بالا را نگاه کن و دوباره بازی کن؛ من به تو ایمان دارم! 💪`;
+  certificate.classList.add('hidden');
+  print.classList.add('hidden');
+ }
+}
+
+/* ---------- شروع دوباره ---------- */
+function restartGame(){
+ index=0;score=0;records=[];locked=false;
+ $('formMessage').textContent='';
+ $('studentForm').reset();
+ showScreen('formScreen');
+}
+</script>
+</body>
+</html>

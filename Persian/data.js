@@ -294,6 +294,10 @@ const lessonsData = {
             {
                 title: "لوحه خوانی نشانه ن",
                 embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/e074y2c/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
+            },
+            {
+                title: " داستان نشانه ن",
+                embedCode: '<iframe src="https://www.aparat.com/video/video/embed/videohash/wke1336/vt/frame"  allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>'
             }
         ]
     },

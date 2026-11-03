@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>سامانه یادگیری جعبه لایتنر هوشمند</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Vazirmatn -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md">
+          <i data-lucide="brain-circuit"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-slate-900 tracking-tight">سامانه لایتنر هوشمند</h1>
+          <p class="text-xs text-slate-500">متصل به پایگاه داده گوگل شیت</p>
+        </div>
+      </div>
+      <div id="userInfo" class="hidden flex items-center gap-3">
+        <span class="text-sm font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg" id="userBadge"></span>
+        <button onclick="logout()" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition" title="خروج">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6">
+    <!-- Loader -->
+    <div id="loader" class="hidden fixed inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-[100]">
+      <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      <p class="mt-4 font-medium text-slate-700">در حال برقراری ارتباط با گوگل شیت...</p>
+    </div>
+
+    <!-- 1. Auth Panel (Login / Sign Up) -->
+    <section id="authPanel" class="max-w-md mx-auto mt-12 bg-white rounded-2xl border border-slate-200 p-8 shadow-xl">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="key-round" class="w-8 h-8"></i>
+        </div>
+        <h2 id="authTitle" class="text-xl font-extrabold text-slate-900">ورود به حساب کاربری</h2>
+        <p id="authSubtitle" class="text-sm text-slate-500 mt-1">پایه تحصیلی و کارت‌های لایتنر خود را مدیریت کنید</p>
+      </div>
+
+      <div id="authError" class="hidden mb-4 bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium flex items-center gap-2">
+        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="authErrorMsg">نام کاربری یا کلمه عبور نادرست است.</span>
+      </div>
+
+      <div id="authSuccess" class="hidden mb-4 bg-emerald-50 text-emerald-700 p-3 rounded-lg text-sm font-medium flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 shrink-0"></i>
+        <span id="authSuccessMsg">حساب کاربری با موفقیت ساخته شد.</span>
+      </div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <!-- Full Name (Only for Sign Up) -->
+        <div id="fullNameGroup" class="hidden">
+          <label class="block text-sm font-semibold text-slate-700 mb-1">نام و نام خانوادگی</label>
+          <input type="text" id="fullName" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition" placeholder="مثلا: علی علوی">
+        </div>
+
+        <!-- Username -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">نام کاربری</label>
+          <input type="text" id="username" required class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition font-mono ltr text-left" placeholder="مثلا: ali">
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">کلمه عبور</label>
+          <input type="password" id="password" required class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition font-mono ltr text-left" placeholder="••••••••">
+        </div>
+
+        <!-- Grade Selector (Only for Sign Up Student) -->
+        <div id="gradeGroup" class="hidden">
+          <label class="block text-sm font-semibold text-slate-700 mb-1">پایه تحصیلی</label>
+          <select id="grade" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition bg-white text-sm font-medium">
+            <option value="پایه اول">پایه اول</option>
+            <option value="پایه دوم">پایه دوم</option>
+            <option value="پایه سوم">پایه سوم</option>
+            <option value="پایه چهارم">پایه چهارم</option>
+            <option value="پایه پنجم">پایه پنجم</option>
+            <option value="پایه ششم">پایه ششم</option>
+            <option value="پایه هفتم">پایه هفتم</option>
+            <option value="پایه هشتم">پایه هشتم</option>
+            <option value="پایه نهم" selected>پایه نهم</option>
+            <option value="پایه دهم">پایه دهم</option>
+            <option value="پایه یازدهم">پایه یازدهم</option>
+            <option value="پایه دوازدهم">پایه دوازدهم</option>
+          </select>
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-600/10 flex items-center justify-center gap-2 cursor-pointer">
+          ورود به سیستم
+        </button>
+      </form>
+      
+      <!-- Switch Auth Mode Toggle -->
+      <div class="mt-6 pt-4 border-t border-slate-100 text-center text-sm">
+        <span id="authToggleQuestion" class="text-slate-500">هنوز ثبت نام نکرده‌اید؟</span>
+        <button type="button" onclick="toggleAuthMode()" id="authToggleBtn" class="text-indigo-600 font-bold hover:underline mr-1 cursor-pointer">
+          ثبت نام دانش‌آموز
+        </button>
+      </div>
+
+      
+    </section>
+
+    <!-- 2. Student Panel -->
+    <section id="studentPanel" class="hidden space-y-6">
+      <!-- 1. Dashboard Subheader (Matches AI Studio layout) -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200 gap-3">
+        <div class="flex items-center gap-3">
+          <div id="studentAvatarLetter" class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-lg">
+            ع
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-800">خلاصه وضعیت تحصیلی</h2>
+            <div class="flex flex-wrap items-center gap-2 mt-1">
+              <span id="studentSubheaderMeta" class="text-xs text-slate-500">علی علوی | پایه نهم</span>
+
+              <!-- Student ID Tag with Copy Functionality -->
+              <button
+                type="button"
+                onclick="copyStudentId()"
+                class="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 px-2.5 py-1 rounded-lg transition cursor-pointer active:scale-95"
+                title="برای کپی شناسه دانش‌آموز کلیک کنید"
+              >
+                <span>شناسه: <span id="studentIdTag" class="font-mono text-indigo-700">S101</span></span>
+                <i data-lucide="copy" id="studentCopyIcon" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span id="studentCopyToast" class="hidden text-emerald-600 font-bold text-[10px]">کپی شد</span>
+              </button>
+
+              <!-- Change Grade Button -->
+              <button
+                type="button"
+                onclick="openGradeModal()"
+                class="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 px-2.5 py-1 rounded-lg transition cursor-pointer"
+                title="تغییر پایه تحصیلی"
+              >
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+                <span>تغییر پایه تحصیلی</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <div id="studentTodayDateBadge" class="flex-1 sm:flex-none px-3.5 py-2 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-700 text-xs font-bold flex items-center gap-1.5 justify-center">
+            <i data-lucide="calendar" class="w-4 h-4 shrink-0"></i>
+            امروز: <span id="todayDateStr">۲ مرداد</span>
+          </div>
+          <div class="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-700 text-xs font-bold flex items-center gap-1.5 justify-center">
+            <i data-lucide="flame" class="w-4 h-4 shrink-0 text-amber-500 animate-pulse"></i>
+            توالی فعال: <span id="studentStreakCount">۱</span> روز
+          </div>
+        </div>
+      </div>
+
+      <!-- Top banner & Welcome -->
+      <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-6 md:p-8 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <span class="bg-white/20 text-xs font-bold px-3 py-1 rounded-full text-indigo-50" id="studentGradeBadge"></span>
+          <h2 class="text-2xl font-black mt-2" id="welcomeStudent">علی علوی عزیز، خوش آمدی!</h2>
+          <p class="text-sm text-indigo-100/90 mt-1">امروز چند کارت برای مرور داری؟ بیا یادگیری را شروع کنیم.</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-xl">🏆</div>
+          <div>
+            <div class="text-xs text-indigo-200">کارت‌های فارغ‌التحصیل شده</div>
+            <div class="text-lg font-bold" id="masteredCountBadge">۰ کارت</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Selector and Progress Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Progress Bar & Box Stats -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="text-indigo-600"></i>
+            وضعیت جعبه‌های لایتنر شما
+          </h3>
+          
+          <!-- Box Distribution list -->
+          <div class="space-y-3" id="boxesDistributionContainer">
+            <!-- Dynamic Boxes will go here -->
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+            <span>مجموع سوالات فعال در لایتنر:</span>
+            <span class="font-bold text-slate-800" id="totalActiveCards">۰ سوال</span>
+          </div>
+        </div>
+
+        <!-- Leitner Interactive Study Card -->
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col min-h-[400px]">
+          <!-- Card Header & Study Config -->
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+              <label class="text-sm font-semibold text-slate-600">انتخاب درس:</label>
+              <select id="subjectFilter" onchange="loadStudyCards()" class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-medium outline-none">
+                <option value="همه">همه درس‌ها</option>
+                <option value="ریاضی">ریاضی</option>
+                <option value="علوم">علوم</option>
+                <option value="فارسی">فارسی</option>
+                <option value="انگلیسی">انگلیسی</option>
+              </select>
+            </div>
+            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full" id="cardCounter">کارت ۰ از ۰</span>
+          </div>
+
+          <!-- Active Study Container -->
+          <div id="studyCardContainer" class="flex-grow flex flex-col justify-center">
+            <!-- Dynamic Interactive Flashcard will go here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4">
+      <p>© ۱۴۰۵ - تمام حقوق مادی و معنوی این پورتال آموزشی متعلق به طراح پلتفرم <a href="https://www.linkedin.com/in/hassan-majidi-45b186195" target="_blank" rel="noopener noreferrer">سید محمد حسن مجیدی کیوی</a> است.</p>
+    </div>
+  </footer>
+
+  <!-- App Custom Logic for Google Apps Script HtmlService -->
+  <script>
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyaN0gVdjoeUkDJzSyv1SXwacJbLVdJ5Y-NXhISZeT8Z6WQI5o8Ns73yWhYVWPMFpyi6g/exec";
+
+    // State variables
+    let currentUser = null;
+    let isLoginMode = true;
+    let selectedRole = 'Student';
+    let students = [];
+    let selectedStudentId = null;
+    let questions = [];
+    let studyCards = [];
+    let currentCardIndex = 0;
+    let selectedOption = null;
+    let answered = false;
+
+    // Show/Hide loader helper
+    function setLoader(show) {
+      const loader = document.getElementById('loader');
+      if (loader) {
+        if (show) loader.classList.remove('hidden');
+        else loader.classList.add('hidden');
+      }
+    }
+
+    // Initialize Lucide icons safely on demand
+    function updateIcons() {
+      try {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      } catch (e) {
+        console.warn("Notice: Lucide icons call deferred.", e);
+      }
+    }
+
+    // Local Storage persistence helper
+    function getStoredLocalData() {
+      try {
+        const d = localStorage.getItem("leitner_local_db_v2");
+        if (d) return JSON.parse(d);
+      } catch (e) {}
+      return null;
+    }
+
+    function saveStoredLocalData(data) {
+      try {
+        const current = getStoredLocalData() || {};
+        const updated = Object.assign({}, current, data);
+        localStorage.setItem("leitner_local_db_v2", JSON.stringify(updated));
+      } catch (e) {}
+    }
+
+    // Simulation DB inside Client for browser-based demo & shared hosting
+    const SIM_DB = {
+      users: [
+        { UserID: "S101", Username: "ali", Password: "123", FullName: "علی علوی", Role: "Student", Grade: "پایه نهم", CreatedDate: "2026-07-01" },
+        { UserID: "S102", Username: "sara", Password: "123", FullName: "سارا حسینی", Role: "Student", Grade: "پایه دوازدهم", CreatedDate: "2026-07-05" },
+        { UserID: "T101", Username: "karimi", Password: "123", FullName: "استاد مریم کریمی", Role: "Teacher", Grade: "", CreatedDate: "2026-06-15" }
+      ],
+      questions: [
+        { QuestionID: "Q001", QuestionText: "نتیجه جمع ریاضی مقابل چیست؟ ۵ + ۳", OptionA: "۷", OptionB: "۸", OptionC: "۹", OptionD: "۶", CorrectOption: "B", Subject: "ریاضی", Grade: "پایه اول", VideoURL: "https://www.aparat.com/v/v80e663", ImageURL: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=600" },
+        { QuestionID: "Q002", QuestionText: "کدام کلمه با نشانه «بـ» آغاز می‌شود؟", OptionA: "انار", OptionB: "درخت", OptionC: "باران", OptionD: "سیب", CorrectOption: "C", Subject: "فارسی", Grade: "پایه اول", VideoURL: "https://www.aparat.com/v/a89b703" },
+        { QuestionID: "Q003", QuestionText: "هر ساعت چند دقیقه است؟", OptionA: "۳۰ دقیقه", OptionB: "۴۵ دقیقه", OptionC: "۶۰ دقیقه", OptionD: "۱۰۰ دقیقه", CorrectOption: "C", Subject: "ریاضی", Grade: "پایه دوم" },
+        { QuestionID: "Q004", QuestionText: "کدام یک از موارد زیر جزو حالت‌های اصلی ماده نیست؟", OptionA: "جامد", OptionB: "مایع", OptionC: "گاز", OptionD: "نور", CorrectOption: "D", Subject: "علوم", Grade: "پایه سوم" },
+        { QuestionID: "Q005", QuestionText: "پایتخت کشور عزیز ما ایران کدام شهر است؟", OptionA: "اصفهان", OptionB: "شیراز", OptionC: "مشهد", OptionD: "تهران", CorrectOption: "D", Subject: "مطالعات اجتماعی", Grade: "پایه چهارم" },
+        { QuestionID: "Q006", QuestionText: "کدام عضو بدن اکسیژن را از هوا می‌گیرد و به خون انتقال می‌دهد؟", OptionA: "معده", OptionB: "قلب", OptionC: "شُش‌ها (ریه‌ها)", OptionD: "کلیه‌ها", CorrectOption: "C", Subject: "علوم تجربی", Grade: "پایه پنجم" },
+        { QuestionID: "Q007", QuestionText: "مترادف کلمه «رافت» کدام گزینه است؟", OptionA: "عدالت", OptionB: "خشم", OptionC: "مهربانی", OptionD: "بخشندگی", CorrectOption: "C", Subject: "فارسی", Grade: "پایه ششم" },
+        { QuestionID: "Q008", QuestionText: "ساده‌ترین شکل کسر ۴۲/۷۰ کدام است؟", OptionA: "۳/۵", OptionB: "۶/۱۰", OptionC: "۷/۱۰", OptionD: "۲/۵", CorrectOption: "A", Subject: "ریاضی", Grade: "پایه هفتم" },
+        { QuestionID: "Q009", QuestionText: "کدام ساختار درون سلولی مسئول تولید انرژی (نیروگاه سلول) است؟", OptionA: "هسته", OptionB: "میتوکندری", OptionC: "ریبوزوم", OptionD: "دیواره سلولی", CorrectOption: "B", Subject: "علوم", Grade: "پایه هشتم", VideoURL: "https://www.aparat.com/v/v80e663" },
+        { QuestionID: "Q010", QuestionText: "ریشه‌های دوم عدد ۸۱ چه اعدادی هستند؟", OptionA: "فقط ۹", OptionB: "۹ و ۹-", OptionC: "۲۷ و ۲۷-", OptionD: "۳ و ۳-", CorrectOption: "B", Subject: "ریاضی", Grade: "پایه نهم", VideoURL: "https://www.aparat.com/v/v80e663" },
+        { QuestionID: "Q011", QuestionText: "کدام گزینه معادل فارسی اصطلاح انگلیسی 'Information Technology' است؟", OptionA: "فناوری اطلاعات", OptionB: "مهندسی نرم‌افزار", OptionC: "شبکه ارتباطات", OptionD: "سخت‌افزار کامپیوتر", CorrectOption: "A", Subject: "کار و فناوری", Grade: "پایه نهم", VideoURL: "https://www.aparat.com/v/a89b703" },
+        { QuestionID: "Q012", QuestionText: "کدام لایه از اتمسفر زمین نزدیک‌ترین لایه به سطح زمین است؟", OptionA: "استراتوسفر", OptionB: "تروپوسفر", OptionC: "مزوسفر", OptionD: "ترکوسفر", CorrectOption: "B", Subject: "جغرافیا", Grade: "پایه دهم" },
+        { QuestionID: "Q013", QuestionText: "زمان گذشته فعل انگلیسی 'go' کدام است؟", OptionA: "goes", OptionB: "went", OptionC: "gone", OptionD: "going", CorrectOption: "B", Subject: "انگلیسی", Grade: "پایه دهم" },
+        { QuestionID: "Q014", QuestionText: "گازهای نجیب در کدام گروه جدول تناوبی عناصر (مندلیف) قرار دارند؟", OptionA: "گروه ۱ (قلیایی)", OptionB: "گروه ۲ (قلیایی خاکی)", OptionC: "گروه ۱۷ (هالوژن‌ها)", OptionD: "گروه ۱۸", CorrectOption: "D", Subject: "شیمی", Grade: "پایه یازدهم" },
+        { QuestionID: "Q015", QuestionText: "محل اصلی فرایند «رونویسی» (Transcription) در سلول‌های یوکاریوتی کجاست؟", OptionA: "سیتوپلاسم", OptionB: "هسته", OptionC: "ریبوزوم", OptionD: "شبکه آندوپلاسمی", CorrectOption: "B", Subject: "زیست‌شناسی", Grade: "پایه دوازدهم" },
+        { QuestionID: "Q016", QuestionText: "کدام فیلسوف به عنوان موسس حکمت متعالیه شناخته می‌شود؟", OptionA: "ابن سینا", OptionB: "سهروردی", OptionC: "ملاصدرا", OptionD: "فارابی", CorrectOption: "C", Subject: "فلسفه", Grade: "پایه دوازدهم" }
+      ],
+      progress: [
+        { UserID: "S101", QuestionID: "Q001", Subject: "ریاضی", CurrentBox: 2, NextReviewDate: "2026-07-20", LastAnsweredDate: "2026-07-18", Status: "Learning" },
+        { UserID: "S101", QuestionID: "Q002", Subject: "فارسی", CurrentBox: 1, NextReviewDate: "2026-07-20", LastAnsweredDate: "2026-07-19", Status: "Learning" }
+      ],
+      feedbacks: [
+        { FeedbackID: "F001", StudentID: "S101", TeacherID: "T101", TeacherName: "استاد مریم کریمی", Message: "آفرین علی جان! تلاش‌های مستمرت عالیه.", Date: "2026-07-19" }
+      ],
+      logs: []
+    };
+
+    function initSimDbWithLocalStorage() {
+      const stored = getStoredLocalData();
+      if (stored && Array.isArray(stored.users)) {
+        stored.users.forEach(su => {
+          if (!SIM_DB.users.some(u => u.Username.toString().toLowerCase() === su.Username.toString().toLowerCase())) {
+            SIM_DB.users.push(su);
+          }
+        });
+      }
+      if (stored && Array.isArray(stored.progress)) {
+        SIM_DB.progress = stored.progress;
+      }
+      if (stored && Array.isArray(stored.feedbacks)) {
+        SIM_DB.feedbacks = stored.feedbacks;
+      }
+    }
+
+    // Toggle between Login & Sign Up
+    function toggleAuthMode() {
+      isLoginMode = !isLoginMode;
+      
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+      const fullNameGrp = document.getElementById('fullNameGroup');
+      const gradeGrp = document.getElementById('gradeGroup');
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const toggleQuestion = document.getElementById('authToggleQuestion');
+      const toggleBtn = document.getElementById('authToggleBtn');
+      const helpDiv = document.getElementById('defaultAccountHelp');
+      const errDiv = document.getElementById('authError');
+      const succDiv = document.getElementById('authSuccess');
+
+      errDiv.classList.add('hidden');
+      succDiv.classList.add('hidden');
+
+      if (isLoginMode) {
+        title.innerText = 'ورود به حساب کاربری';
+        subtitle.innerText = 'پایه تحصیلی و کارت‌های لایتنر خود را مدیریت کنید';
+        fullNameGrp.classList.add('hidden');
+        gradeGrp.classList.add('hidden');
+        submitBtn.innerHTML = 'ورود به سیستم';
+        toggleQuestion.innerText = 'هنوز ثبت نام نکرده‌اید؟';
+        toggleBtn.innerText = 'ثبت نام دانش‌آموز';
+        if (helpDiv) helpDiv.classList.remove('hidden');
+      } else {
+        title.innerText = 'ثبت نام حساب کاربری جدید';
+        subtitle.innerText = 'اطلاعات خود را وارد کنید تا حساب لایتنر شما ساخته شود';
+        fullNameGrp.classList.remove('hidden');
+        gradeGrp.classList.remove('hidden');
+        submitBtn.innerHTML = 'ثبت نام حساب کاربری';
+        toggleQuestion.innerText = 'قبلاً ثبت نام کرده‌اید؟';
+        toggleBtn.innerText = 'ورود به حساب کاربری';
+        if (helpDiv) helpDiv.classList.add('hidden');
+      }
+      updateIcons();
+    }
+
+    // Role selector for Signup
+    function selectRole(role) {
+      selectedRole = role;
+      const btnStudent = document.getElementById('roleBtnStudent');
+      const btnTeacher = document.getElementById('roleBtnTeacher');
+      const gradeGrp = document.getElementById('gradeGroup');
+
+      if (role === 'Student') {
+        btnStudent.className = "py-2 px-3 rounded-xl text-xs font-bold border border-indigo-600 bg-indigo-50 text-indigo-700 transition cursor-pointer";
+        btnTeacher.className = "py-2 px-3 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600 transition cursor-pointer";
+        gradeGrp.classList.remove('hidden');
+      } else {
+        btnStudent.className = "py-2 px-3 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-600 transition cursor-pointer";
+        btnTeacher.className = "py-2 px-3 rounded-xl text-xs font-bold border border-indigo-600 bg-indigo-50 text-indigo-700 transition cursor-pointer";
+        gradeGrp.classList.add('hidden');
+      }
+    }
+
+    // Non-blocking background Server caller
+    function callServerBg(action, payload) {
+      initSimDbWithLocalStorage();
+      // Instantly update local SIM_DB first
+      try {
+        simulateServerCall(action, payload);
+      } catch(e) {}
+
+      // Fire network request asynchronously in background
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        const args = Object.assign({ action: action }, payload);
+        google.script.run.processApiAction(action, args);
+        return;
+      }
+
+      if (GAS_WEB_APP_URL) {
+        const requestData = Object.assign({ action: action }, payload);
+        fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(requestData)
+        }).catch(err => console.warn("[Background Sync]", err));
+      }
+    }
+
+    // Server caller with Web App fetch fallback & LocalStorage backup
+    function callServer(action, payload, callback, errorCallback) {
+      // For fast read/write, execute local simulation immediately first
+      initSimDbWithLocalStorage();
+
+      if (action === "submitAnswer") {
+        try {
+          const res = simulateServerCall(action, payload);
+          callServerBg(action, payload);
+          if (callback) callback(res);
+          return;
+        } catch(e) {}
+      }
+
+      setLoader(true);
+
+      // Check if running inside Google Apps Script iframe environment
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        const args = Object.assign({ action: action }, payload);
+        google.script.run
+          .withSuccessHandler(function(response) {
+            setLoader(false);
+            if (response && response.success) {
+              if (callback) callback(response.data);
+            } else {
+              if (errorCallback) errorCallback(response ? response.error : 'خطای نامشخص');
+              else alert('خطا: ' + (response ? response.error : 'نامشخص'));
+            }
+          })
+          .withFailureHandler(function(err) {
+            setLoader(false);
+            if (errorCallback) errorCallback(err.message);
+            else alert('خطای سیستمی در سرور گوگل: ' + err.message);
+          })
+          .processApiAction(action, args);
+        return;
+      }
+
+      // Shared Hosting / Standalone browser mode: send POST to Web App URL
+      const requestData = Object.assign({ action: action }, payload);
+      
+      fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(requestData)
+      })
+      .then(res => res.json())
+      .then(resJson => {
+        if (resJson && resJson.success) {
+          setLoader(false);
+          if (action === "signup" && resJson.data) {
+            SIM_DB.users.push(resJson.data);
+            saveStoredLocalData({ users: SIM_DB.users });
+          }
+          if (callback) callback(resJson.data);
+        } else {
+          executeLocalSim(action, payload, callback, errorCallback, resJson ? resJson.error : null);
+        }
+      })
+      .catch(err => {
+        console.warn("[GAS API Fetch] Notice: direct GAS Web App call fell back to local storage:", err);
+        executeLocalSim(action, payload, callback, errorCallback, null);
+      });
+    }
+
+    function executeLocalSim(action, payload, callback, errorCallback, apiErrorMsg) {
+      setTimeout(() => {
+        setLoader(false);
+        try {
+          const result = simulateServerCall(action, payload);
+          if (callback) callback(result);
+        } catch(err) {
+          const finalErr = apiErrorMsg || err.message;
+          if (errorCallback) errorCallback(finalErr);
+          else alert('خطا: ' + finalErr);
+        }
+      }, 250);
+    }
+
+    function simulateServerCall(action, payload) {
+      initSimDbWithLocalStorage();
+
+      if (action === "login") {
+        const reqUser = (payload.username || "").toString().trim().toLowerCase();
+        const reqPass = (payload.password || "").toString().trim();
+
+        const u = SIM_DB.users.find(x => 
+          x.Username.toString().trim().toLowerCase() === reqUser && 
+          x.Password.toString().trim() === reqPass
+        );
+        if (!u) throw new Error("نام کاربری یا کلمه عبور نادرست است.");
+        return u;
+      }
+
+      if (action === "signup") {
+        const reqUser = (payload.username || "").toString().trim().toLowerCase();
+        const reqPass = (payload.password || "").toString().trim();
+        const reqName = (payload.fullName || "").toString().trim();
+
+        if (!reqUser || !reqPass || !reqName) {
+          throw new Error("لطفاً تمامی فیلدهای الزامی را پر کنید.");
+        }
+
+        const existing = SIM_DB.users.find(x => x.Username.toString().trim().toLowerCase() === reqUser);
+        if (existing) {
+          throw new Error("این نام کاربری قبلاً ثبت شده است. نام دیگری انتخاب کنید.");
+        }
+
+        const newId = (payload.role === 'Teacher' ? 'T' : 'S') + Math.floor(100 + Math.random() * 900);
+        const newUser = {
+          UserID: newId,
+          Username: reqUser,
+          Password: reqPass,
+          FullName: reqName,
+          Role: payload.role || 'Student',
+          Grade: payload.grade || (payload.role === 'Student' ? 'پایه نهم' : ''),
+          CreatedDate: new Date().toISOString().split('T')[0]
+        };
+
+        SIM_DB.users.push(newUser);
+        saveStoredLocalData({ users: SIM_DB.users });
+
+        return newUser;
+      }
+
+      if (action === "getQuestions") {
+        let qs = SIM_DB.questions;
+        if (payload && payload.grade) {
+          const reqGrade = payload.grade.toString().trim();
+          qs = qs.filter(q => {
+            const qG = (q.Grade || "").toString().trim();
+            return qG === reqGrade || qG.replace("پایه ", "").trim() === reqGrade.replace("پایه ", "").trim();
+          });
+        }
+        return qs;
+      }
+      if (action === "getProgress") {
+        return SIM_DB.progress.filter(x => x.UserID === payload.userId);
+      }
+      if (action === "getFeedback") {
+        return SIM_DB.feedbacks.filter(x => x.StudentID === payload.studentId);
+      }
+      if (action === "getStudents") {
+        return SIM_DB.users.filter(x => x.Role === "Student");
+      }
+      if (action === "getStudentProgressDetails") {
+        const student = SIM_DB.users.find(x => x.UserID === payload.studentId);
+        const studentGrade = student ? student.Grade : 'پایه نهم';
+        const gradeQs = SIM_DB.questions.filter(q => isGradeMatch(q.Grade, studentGrade));
+        const prog = SIM_DB.progress.filter(x => x.UserID === payload.studentId);
+
+        const dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let mastered = 0;
+        const subjectMap = {};
+
+        gradeQs.forEach(q => {
+          const subj = q.Subject || "عمومی";
+          if (!subjectMap[subj]) {
+            subjectMap[subj] = { totalCards: 0, mastered: 0 };
+          }
+          subjectMap[subj].totalCards++;
+
+          const p = prog.find(x => x.QuestionID === q.QuestionID);
+          if (p) {
+            const b = Math.min(5, Math.max(1, p.CurrentBox || 1));
+            dist[b] = (dist[b] || 0) + 1;
+            if (p.Status === "Mastered" || b === 5) {
+              mastered++;
+              subjectMap[subj].mastered++;
+            }
+          } else {
+            dist[1] = (dist[1] || 0) + 1;
+          }
+        });
+
+        const subjectStats = Object.keys(subjectMap).map(sKey => {
+          const tot = subjectMap[sKey].totalCards;
+          const mast = subjectMap[sKey].mastered;
+          return {
+            subject: sKey,
+            totalCards: tot,
+            mastered: mast,
+            learning: tot - mast,
+            progressPercent: tot > 0 ? Math.round((mast / tot) * 100) : 0
+          };
+        });
+
+        const totalCount = gradeQs.length > 0 ? gradeQs.length : prog.length;
+
+        return {
+          studentId: payload.studentId,
+          totalCards: totalCount,
+          masteredCount: mastered,
+          learningCount: Math.max(0, totalCount - mastered),
+          boxesDistribution: dist,
+          activeDaysCount: 1,
+          totalAnswers: prog.length,
+          subjectStats: subjectStats
+        };
+      }
+      if (action === "submitAnswer") {
+        let entry = SIM_DB.progress.find(x => x.UserID === payload.userId && x.QuestionID === payload.questionId);
+        let curBox = entry ? parseInt(entry.CurrentBox) : 1;
+        if (isNaN(curBox) || curBox < 1 || curBox > 5) curBox = 1;
+
+        let nextBox = 1;
+        let status = "Learning";
+        if (payload.isCorrect) {
+          if (curBox < 5) {
+            nextBox = curBox + 1;
+            status = "Learning";
+          } else {
+            nextBox = 5;
+            status = "Mastered";
+          }
+        } else {
+          nextBox = 1;
+          status = "Learning";
+        }
+
+        const intervals = { 1: 1, 2: 2, 3: 5, 4: 9, 5: 15 };
+        const intervalDays = intervals[nextBox] || 1;
+        const today = new Date();
+        const nextReview = new Date(today.getTime());
+        nextReview.setDate(today.getDate() + intervalDays);
+        const nextReviewStr = nextReview.toISOString().split('T')[0];
+        const todayStr = today.toISOString().split('T')[0];
+
+        if (entry) {
+          entry.StudentName = payload.studentName || payload.fullName || (SIM_DB.users.find(u => u.UserID === payload.userId)?.FullName || '');
+          entry.CurrentBox = nextBox;
+          entry.NextReviewDate = nextReviewStr;
+          entry.LastAnsweredDate = todayStr;
+          entry.Status = status;
+        } else {
+          entry = {
+            UserID: payload.userId,
+            StudentName: payload.studentName || payload.fullName || (SIM_DB.users.find(u => u.UserID === payload.userId)?.FullName || ''),
+            QuestionID: payload.questionId,
+            Subject: payload.subject,
+            CurrentBox: nextBox,
+            NextReviewDate: nextReviewStr,
+            LastAnsweredDate: todayStr,
+            Status: status
+          };
+          SIM_DB.progress.push(entry);
+        }
+        saveStoredLocalData({ progress: SIM_DB.progress });
+        return { success: true, nextBox: nextBox, status: status, nextReviewDate: nextReviewStr };
+      }
+      if (action === "sendFeedback") {
+        const fb = {
+          FeedbackID: "F" + (100 + SIM_DB.feedbacks.length),
+          StudentID: payload.studentId,
+          TeacherID: payload.teacherId,
+          TeacherName: payload.teacherName,
+          Message: payload.message,
+          Date: new Date().toISOString().split('T')[0]
+        };
+        SIM_DB.feedbacks.push(fb);
+        saveStoredLocalData({ feedbacks: SIM_DB.feedbacks });
+        return { success: true };
+      }
+      return null;
+    }
+
+    // Run on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      initSimDbWithLocalStorage();
+      updateIcons();
+    });
+
+    // Unified Auth Form Submission Handler
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const fullNameInput = document.getElementById('fullName');
+      const gradeInput = document.getElementById('grade');
+
+      const u = usernameInput ? usernameInput.value.trim() : '';
+      const p = passwordInput ? passwordInput.value.trim() : '';
+      const errDiv = document.getElementById('authError');
+      const succDiv = document.getElementById('authSuccess');
+
+      errDiv.classList.add('hidden');
+      succDiv.classList.add('hidden');
+
+      if (!u || !p) {
+        document.getElementById('authErrorMsg').innerText = 'لطفاً نام کاربری و کلمه عبور را وارد کنید.';
+        errDiv.classList.remove('hidden');
+        return;
+      }
+
+      if (isLoginMode) {
+        // Handle Login
+        callServer("login", { username: u, password: p }, function(user) {
+          currentUser = user;
+          document.getElementById('authPanel').classList.add('hidden');
+          document.getElementById('userInfo').classList.remove('hidden');
+          document.getElementById('userBadge').innerText = user.FullName + ' (دانش‌آموز)';
+          showStudentDashboard();
+          updateIcons();
+        }, function(err) {
+          document.getElementById('authErrorMsg').innerText = err || 'نام کاربری یا کلمه عبور نادرست است.';
+          errDiv.classList.remove('hidden');
+          updateIcons();
+        });
+      } else {
+        // Handle Sign Up
+        const fullName = fullNameInput ? fullNameInput.value.trim() : '';
+        const grade = gradeInput ? gradeInput.value : 'پایه نهم';
+
+        if (!fullName) {
+          document.getElementById('authErrorMsg').innerText = 'لطفاً نام و نام خانوادگی خود را وارد کنید.';
+          errDiv.classList.remove('hidden');
+          return;
+        }
+
+        callServer("signup", {
+          username: u,
+          password: p,
+          fullName: fullName,
+          role: 'Student',
+          grade: grade
+        }, function(newUser) {
+          // Sign Up success -> automatically log in
+          currentUser = newUser;
+          document.getElementById('authPanel').classList.add('hidden');
+          document.getElementById('userInfo').classList.remove('hidden');
+          document.getElementById('userBadge').innerText = newUser.FullName + ' (دانش‌آموز)';
+          showStudentDashboard();
+          updateIcons();
+        }, function(err) {
+          document.getElementById('authErrorMsg').innerText = err || 'خطا در ثبت نام. لطفا نام کاربری دیگری انتخاب کنید.';
+          errDiv.classList.remove('hidden');
+          updateIcons();
+        });
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('studentPanel').classList.add('hidden');
+      document.getElementById('userInfo').classList.add('hidden');
+      document.getElementById('authPanel').classList.remove('hidden');
+      
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      if (usernameInput) usernameInput.value = '';
+      if (passwordInput) passwordInput.value = '';
+
+      if (!isLoginMode) {
+        toggleAuthMode();
+      }
+      updateIcons();
+    }
+
+    // Copy Student ID Helper
+    function copyStudentId() {
+      if (!currentUser || !currentUser.UserID) return;
+      const copyIcon = document.getElementById('studentCopyIcon');
+      const copyToast = document.getElementById('studentCopyToast');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentUser.UserID);
+      } else {
+        const temp = document.createElement('textarea');
+        temp.value = currentUser.UserID;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+      }
+
+      if (copyIcon) copyIcon.classList.add('hidden');
+      if (copyToast) copyToast.classList.remove('hidden');
+
+      setTimeout(() => {
+        if (copyIcon) copyIcon.classList.remove('hidden');
+        if (copyToast) copyToast.classList.add('hidden');
+      }, 2000);
+    }
+
+    // Modal Grade Change Handlers
+    function openGradeModal() {
+      const modal = document.getElementById('gradeModal');
+      const select = document.getElementById('modalGradeSelect');
+      if (select && currentUser) {
+        select.value = currentUser.Grade || 'پایه نهم';
+      }
+      if (modal) modal.classList.remove('hidden');
+      updateIcons();
+    }
+
+    function closeGradeModal() {
+      const modal = document.getElementById('gradeModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function saveGradeChange() {
+      const select = document.getElementById('modalGradeSelect');
+      if (!select || !currentUser) return;
+      const newGrade = select.value;
+      
+      currentUser.Grade = newGrade;
+      
+      // Reset subject filter element to "همه"
+      const subjFilter = document.getElementById('subjectFilter');
+      if (subjFilter) subjFilter.value = "همه";
+
+      // Update in SIM_DB
+      const u = SIM_DB.users.find(x => x.UserID === currentUser.UserID);
+      if (u) {
+        u.Grade = newGrade;
+        saveStoredLocalData({ users: SIM_DB.users });
+      }
+
+      callServer("updateGrade", { userId: currentUser.UserID, grade: newGrade }, function() {
+        console.log("Grade updated on server.");
+      });
+
+      closeGradeModal();
+      showStudentDashboard();
+    }
+
+    // Helper for Persian Date formatting
+    function getPersianFormattedDate() {
+      try {
+        return new Date().toLocaleDateString('fa-IR', { month: 'long', day: 'numeric' });
+      } catch (e) {
+        return 'امروز';
+      }
+    }
+
+    function isGradeMatch(qGrade, sGrade) {
+      if (!qGrade || !sGrade) return false;
+      const qNorm = qGrade.toString().trim();
+      const sNorm = sGrade.toString().trim();
+      if (qNorm === sNorm) return true;
+      return qNorm.replace("پایه ", "").trim() === sNorm.replace("پایه ", "").trim();
+    }
+
+    // 2. Student Dashboard Logic
+    function showStudentDashboard() {
+      const sPanel = document.getElementById('studentPanel');
+      if (sPanel) sPanel.classList.remove('hidden');
+
+      const wStudent = document.getElementById('welcomeStudent');
+      if (wStudent) wStudent.innerText = currentUser.FullName + ' عزیز، خوش آمدی!';
+
+      const sGradeBadge = document.getElementById('studentGradeBadge');
+      if (sGradeBadge) sGradeBadge.innerText = currentUser.Grade || 'پایه تحصیلی ثبت نشده';
+      
+      // Subheader items
+      const avatarElem = document.getElementById('studentAvatarLetter');
+      const subheaderMeta = document.getElementById('studentSubheaderMeta');
+      const idTag = document.getElementById('studentIdTag');
+      const todayDateStr = document.getElementById('todayDateStr');
+      const streakCount = document.getElementById('studentStreakCount');
+
+      if (avatarElem) avatarElem.innerText = (currentUser.FullName || 'ع').charAt(0);
+      if (subheaderMeta) subheaderMeta.innerText = `${currentUser.FullName} | ${currentUser.Grade || 'پایه تحصیلی نامشخص'}`;
+      if (idTag) idTag.innerText = currentUser.UserID || 'S101';
+      if (todayDateStr) todayDateStr.innerText = getPersianFormattedDate();
+      if (streakCount) streakCount.innerText = '۱';
+
+      // Load questions and progress
+      loadStudentStats();
+      updateIcons();
+    }
+
+    function loadStudentStats() {
+      callServer("getQuestions", { grade: currentUser.Grade }, function(allQs) {
+        const gradeQuestions = (allQs || []).filter(q => isGradeMatch(q.Grade, currentUser.Grade));
+        const questionIdsInGrade = new Set(gradeQuestions.map(q => q.QuestionID));
+
+        callServer("getProgress", { userId: currentUser.UserID }, function(progressList) {
+          const gradeProgress = (progressList || []).filter(p => questionIdsInGrade.has(p.QuestionID));
+
+          // Display mastered count
+          const mastered = gradeProgress.filter(x => x.Status === "Mastered").length;
+          const mBadge = document.getElementById('masteredCountBadge');
+          if (mBadge) mBadge.innerText = mastered + ' کارت';
+          
+          const tCards = document.getElementById('totalActiveCards');
+          if (tCards) tCards.innerText = gradeQuestions.length + ' سوال';
+          
+          // Calculate box distributions
+          const boxCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+          gradeProgress.forEach(p => {
+            if (boxCounts[p.CurrentBox] !== undefined && p.Status !== "Mastered") {
+              boxCounts[p.CurrentBox]++;
+            }
+          });
+
+          // Display boxes list
+          const boxesContainer = document.getElementById('boxesDistributionContainer');
+          if (boxesContainer) {
+            boxesContainer.innerHTML = '';
+            
+            const intervals = { 1: '۱ روز', 2: '۲ روز', 3: '۵ روز', 4: '۹ روز', 5: '۱۴ روز' };
+            
+            for (let b = 1; b <= 5; b++) {
+              const count = boxCounts[b];
+              const total = gradeQuestions.length || 1;
+              const percentage = Math.round((count / total) * 100);
+              
+              boxesContainer.innerHTML += `
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-semibold text-slate-600">
+                    <span>جعبه ${b} <span class="text-[10px] text-slate-400">(مرور هر ${intervals[b]})</span></span>
+                    <span>${count} کارت (${percentage}%)</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-indigo-600 h-full rounded-full transition-all" style="width: ${percentage}%"></div>
+                  </div>
+                </div>
+              `;
+            }
+          }
+          
+          // Load feedback messages (if element exists)
+          loadStudentFeedback();
+          // Load study flashcards
+          loadStudyCards();
+        });
+      });
+    }
+
+    function loadStudentFeedback() {
+      const container = document.getElementById('feedbackListContainer');
+      if (!container) return;
+      callServer("getFeedback", { studentId: currentUser.UserID }, function(feedbacks) {
+        if (!container) return;
+        if (feedbacks && feedbacks.length > 0) {
+          container.innerHTML = feedbacks.map(f => `
+            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex gap-3 items-start">
+              <div class="text-emerald-600 text-lg">💡</div>
+              <div>
+                <div class="text-xs font-bold text-emerald-800">${f.TeacherName} • ${f.Date}</div>
+                <p class="text-sm text-slate-700 mt-1">${f.Message}</p>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          container.innerHTML = '<p class="text-sm text-slate-500 text-center py-4">پیامی از طرف معلم ثبت نشده است.</p>';
+        }
+      });
+    }
+
+    function updateSubjectFilterOptions(gradeQuestions) {
+      const select = document.getElementById('subjectFilter');
+      if (!select) return;
+      const currentVal = select.value || "همه";
+      const subjects = Array.from(new Set(gradeQuestions.map(q => q.Subject).filter(Boolean)));
+      
+      select.innerHTML = '<option value="همه">همه درس‌ها</option>' + 
+        subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+      
+      if (subjects.includes(currentVal)) {
+        select.value = currentVal;
+      } else {
+        select.value = "همه";
+      }
+    }
+
+    function loadStudyCards() {
+      callServer("getQuestions", { grade: currentUser.Grade }, function(allQs) {
+        const gradeQuestions = (allQs || []).filter(q => isGradeMatch(q.Grade, currentUser.Grade));
+        questions = gradeQuestions;
+
+        updateSubjectFilterOptions(questions);
+        const subject = document.getElementById('subjectFilter').value;
+        
+        callServer("getProgress", { userId: currentUser.UserID }, function(progressList) {
+          const todayStr = new Date().toISOString().split('T')[0];
+          
+          studyCards = questions.filter(q => {
+            if (subject !== "همه" && q.Subject !== subject) return false;
+            
+            const prog = (progressList || []).find(p => p.QuestionID === q.QuestionID);
+            if (!prog) return true; // Not studied yet -> Needs review in Box 1
+            if (prog.Status === "Mastered") return false; // Mastered -> Done
+            
+            return prog.NextReviewDate <= todayStr;
+          });
+
+          currentCardIndex = 0;
+          renderFlashcard();
+        });
+      });
+    }
+
+    function renderFlashcard() {
+      const container = document.getElementById('studyCardContainer');
+      const counter = document.getElementById('cardCounter');
+      
+      if (studyCards.length === 0) {
+        counter.innerText = 'کارت ۰ از ۰';
+        container.innerHTML = `
+          <div class="text-center py-12">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">🎉</div>
+            <h4 class="font-bold text-slate-900 text-lg">آفرین! تمامی کارت‌ها مرور شدند.</h4>
+            <p class="text-sm text-slate-500 mt-1">هیچ کارتی برای مرور امروز در این درس باقی نمانده است.</p>
+            <button onclick="loadStudyCards()" class="mt-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-4 py-2 rounded-lg text-xs transition">
+              بررسی مجدد
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      counter.innerText = `کارت ${currentCardIndex + 1} از ${studyCards.length}`;
+      const card = studyCards[currentCardIndex];
+      selectedOption = null;
+      answered = false;
+
+      const rawOptions = [
+        { key: 'A', text: card.OptionA },
+        { key: 'B', text: card.OptionB },
+        { key: 'C', text: card.OptionC },
+        { key: 'D', text: card.OptionD }
+      ];
+      for (let i = rawOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rawOptions[i], rawOptions[j]] = [rawOptions[j], rawOptions[i]];
+      }
+
+      const slotLabels = ['الف', 'ب', 'ج', 'د'];
+      const optionsHtml = rawOptions.map((opt, idx) => `
+        <button onclick="selectStudyOption('${opt.key}')" id="btnOpt${opt.key}" class="border border-slate-200 hover:border-indigo-600 rounded-xl p-4 text-right font-medium text-sm transition flex items-center gap-3 bg-white group">
+          <span id="badgeOpt${opt.key}" class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center text-xs font-bold text-slate-600 transition-all shrink-0">${slotLabels[idx]}</span>
+          <span class="text-slate-800">${opt.text}</span>
+        </button>
+      `).join('');
+
+      const videoBtnHtml = card.VideoURL ? `
+        <a href="${card.VideoURL}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-100 border border-rose-200/80 text-rose-700 rounded-xl text-xs font-bold transition inline-flex items-center gap-1.5 shadow-sm shrink-0 cursor-pointer" title="مشاهده فیلم آموزشی این سوال">
+          <i data-lucide="video" class="w-4 h-4 text-rose-600"></i>
+          <span>فیلم آموزشی</span>
+        </a>
+      ` : '';
+
+      const imageHtml = card.ImageURL ? `
+        <div class="my-4 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 p-2 flex justify-center shadow-sm">
+          <img src="${card.ImageURL}" alt="تصویر سوال" class="max-h-64 sm:max-h-80 w-auto object-contain rounded-xl" referrerpolicy="no-referrer" />
+        </div>
+      ` : '';
+
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center gap-2">
+            <span class="bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-md text-xs">${card.Subject}</span>
+            <span class="text-xs text-slate-400">شناسه سوال: ${card.QuestionID}</span>
+          </div>
+          
+          <h4 class="text-lg font-bold text-slate-900 leading-relaxed">${card.QuestionText}</h4>
+          
+          ${imageHtml}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="optionsGrid">
+            ${optionsHtml}
+          </div>
+
+          <div class="flex justify-between items-center pt-4 border-t border-slate-100 flex-wrap gap-3">
+            <div id="studyFeedbackText" class="text-sm font-semibold"></div>
+            <div class="flex items-center gap-2.5">
+              ${videoBtnHtml}
+              <button onclick="submitStudyAnswer()" id="studySubmitBtn" disabled class="bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-md shadow-indigo-600/10 cursor-pointer">
+                ثبت پاسخ نهایی
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      updateIcons();
+    }
+
+    function selectStudyOption(opt) {
+      if (answered) return;
+      selectedOption = opt;
+      
+      const options = ['A', 'B', 'C', 'D'];
+      options.forEach(o => {
+        const btn = document.getElementById('btnOpt' + o);
+        const badge = document.getElementById('badgeOpt' + o);
+        if (o === opt) {
+          btn.className = "border-2 border-indigo-600 bg-indigo-50/50 rounded-xl p-4 text-right font-semibold text-sm transition flex items-center gap-3 text-indigo-900 group";
+          if (badge) badge.className = "w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold transition-all shrink-0";
+        } else {
+          btn.className = "border border-slate-200 bg-white rounded-xl p-4 text-right font-medium text-sm transition flex items-center gap-3 text-slate-700 hover:border-indigo-600 group";
+          if (badge) badge.className = "w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center text-xs font-bold text-slate-600 transition-all shrink-0";
+        }
+      });
+
+      document.getElementById('studySubmitBtn').removeAttribute('disabled');
+    }
+
+    function submitStudyAnswer() {
+      if (answered || !selectedOption) return;
+      answered = true;
+      
+      const card = studyCards[currentCardIndex];
+      const isCorrect = selectedOption === card.CorrectOption;
+      
+      const options = ['A', 'B', 'C', 'D'];
+      options.forEach(o => {
+        const btn = document.getElementById('btnOpt' + o);
+        const badge = document.getElementById('badgeOpt' + o);
+        if (o === card.CorrectOption) {
+          btn.className = "border-2 border-emerald-500 bg-emerald-50 text-emerald-900 rounded-xl p-4 text-right font-semibold text-sm transition flex items-center gap-3 cursor-not-allowed";
+          if (badge) badge.className = "w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-bold transition-all shrink-0";
+        } else if (o === selectedOption) {
+          btn.className = "border-2 border-red-500 bg-red-50 text-red-900 rounded-xl p-4 text-right font-semibold text-sm transition flex items-center gap-3 cursor-not-allowed";
+          if (badge) badge.className = "w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center text-xs font-bold transition-all shrink-0";
+        } else {
+          btn.className = "border border-slate-100 bg-slate-50 text-slate-400 rounded-xl p-4 text-right font-medium text-sm flex items-center gap-3 cursor-not-allowed";
+          if (badge) badge.className = "w-8 h-8 rounded-lg bg-slate-200 text-slate-400 flex items-center justify-center text-xs font-bold transition-all shrink-0";
+        }
+      });
+
+      // Show outcome message
+      const fText = document.getElementById('studyFeedbackText');
+      if (isCorrect) {
+        fText.innerHTML = '<span class="text-emerald-600 flex items-center gap-1">✨ پاسخ صحیح! کارت به خانه بعدی لایتنر منتقل شد.</span>';
+      } else {
+        fText.innerHTML = '<span class="text-red-600 flex items-center gap-1">❌ پاسخ اشتباه. کارت به جعبه ۱ بازگردانده شد.</span>';
+      }
+
+      // Immediately transform button to "سوال بعدی" for 0ms delay
+      const nextBtn = document.getElementById('studySubmitBtn');
+      nextBtn.innerText = currentCardIndex < studyCards.length - 1 ? "سوال بعدی" : "پایان مرور کارت‌ها";
+      nextBtn.onclick = function() {
+        if (currentCardIndex < studyCards.length - 1) {
+          currentCardIndex++;
+          renderFlashcard();
+        } else {
+          loadStudentStats();
+        }
+      };
+
+      // Call API asynchronously
+      callServer("submitAnswer", {
+        userId: currentUser.UserID,
+        studentName: currentUser.FullName,
+        questionId: card.QuestionID,
+        isCorrect: isCorrect,
+        subject: card.Subject
+      });
+    }
+
+    // Teacher dashboard functions removed (app is in student mode)
+  </script>
+
+  <!-- Change Grade Modal -->
+  <div id="gradeModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+          <i data-lucide="graduation-cap" class="text-indigo-600"></i>
+          تغییر پایه تحصیلی
+        </h3>
+        <button onclick="closeGradeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500">پایه تحصیلی جدید خود را انتخاب کنید تا سوالات لایتنر بر اساس پایه شما به روزرسانی شوند.</p>
+      <div>
+        <select id="modalGradeSelect" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 outline-none text-sm font-semibold text-slate-800 bg-white">
+          <option value="پایه اول">پایه اول</option>
+          <option value="پایه دوم">پایه دوم</option>
+          <option value="پایه سوم">پایه سوم</option>
+          <option value="پایه چهارم">پایه چهارم</option>
+          <option value="پایه پنجم">پایه پنجم</option>
+          <option value="پایه ششم">پایه ششم</option>
+          <option value="پایه هفتم">پایه هفتم</option>
+          <option value="پایه هشتم">پایه هشتم</option>
+          <option value="پایه نهم">پایه نهم</option>
+          <option value="پایه دهم">پایه دهم</option>
+          <option value="پایه یازدهم">پایه یازدهم</option>
+          <option value="پایه دوازدهم">پایه دوازدهم</option>
+        </select>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="saveGradeChange()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer">
+          تأیید و به‌روزرسانی
+        </button>
+        <button onclick="closeGradeModal()" class="px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition cursor-pointer">
+          انصراف
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
