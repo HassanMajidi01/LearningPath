@@ -1,0 +1,367 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی باغبان کوچک - طراحی کبری قربانی</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@700;900&display=swap');
+
+        :root {
+            --primary-pink: #ffafcc;
+            --dark-pink: #ff8fab;
+            --soft-green: #d8f3dc;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #fdf0d5;
+            background-image: radial-gradient(#ffccd5 1px, transparent 1px);
+            background-size: 25px 25px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .corner-flower {
+            position: fixed;
+            font-size: 3.5rem;
+            z-index: 1;
+            user-select: none;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
+        }
+
+        #game-container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 8px solid var(--primary-pink);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1, h2, h3, p, label, span, button, input {
+            color: #000000 !important;
+            font-weight: 900 !important;
+        }
+
+        .header-box {
+            border: 4px dashed var(--dark-pink);
+            padding: 15px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            background: #fff5f8;
+        }
+
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            border-radius: 15px;
+            border: 3px solid var(--primary-pink);
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            background-color: #74c69d;
+            color: #ffffff !important;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 15px;
+            background: white;
+            border: 3px solid #ffafcc;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.3rem;
+        }
+
+        #feedback-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 3.5rem;
+            z-index: 100;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        }
+        #feedback-overlay.show { transform: translate(-50%, -50%) scale(1); }
+
+        .drag-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+        .flower-item { font-size: 3.5rem; cursor: grab; transition: transform 0.2s; }
+        .drop-zone {
+            width: 100px; height: 100px;
+            border: 4px dashed #555;
+            border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #eee;
+            font-size: 0.9rem;
+        }
+
+        .score-display { font-size: 1.6rem; color: #ff4d6d !important; margin-bottom: 10px; }
+        .result-list { text-align: right; margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 15px; }
+        .correct-log { color: #2d6a4f !important; }
+        .wrong-log { color: #c9184a !important; }
+
+        .falling-emoji {
+            position: fixed;
+            top: -60px;
+            font-size: 2.5rem;
+            z-index: 5;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="corner-flower" style="top: 2%; left: 2%;">🌸</div>
+    <div class="corner-flower" style="top: 2%; right: 2%;">🌺</div>
+    <div class="corner-flower" style="bottom: 2%; left: 2%;">🌻</div>
+    <div class="corner-flower" style="bottom: 2%; right: 2%;">🌷</div>
+
+    <div id="feedback-overlay"></div>
+
+    <div id="game-container">
+        <div id="start-screen" class="screen active">
+            <div class="header-box">
+                <h2 style="margin:0;">طراح: کبری قربانی</h2>
+                <p style="margin:5px 0 0 0; font-size: 0.9rem;">دبستان دخترانه ی سما، واحد انزلی</p>
+            </div>
+            <h1 style="font-size: 3rem; margin: 20px 0;">🌸 باغبان کوچک 🌸</h1>
+            <div style="margin: 20px 0;">
+                <label>نام زیبای من:</label><br>
+                <input type="text" id="user-name" placeholder="نام خود را اینجا بنویس">
+            </div>
+            <button class="btn" onclick="startGame()">شروع بازی 🚀</button>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="score-display">امتیاز: <span id="current-score">0</span></div>
+            <h3 id="question-text" style="font-size: 1.5rem; min-height: 60px;">سوال</h3>
+            <div id="options-container"></div>
+            <div id="drag-drop-container" style="display:none;">
+                <p id="drag-instruction">گل را به خاک مناسب وصل کن!</p>
+                <div class="drag-container" id="flowers-to-drag"></div>
+                <div class="drag-container" id="target-zones"></div>
+            </div>
+        </div>
+
+        <div id="end-screen" class="screen">
+            <h1 id="end-title" style="font-size: 2.5rem;"></h1>
+            <h2 id="congrats-msg"></h2>
+            <div id="result-summary" class="result-list"></div>
+            <br>
+            <button class="btn" onclick="location.reload()">دوباره بازی کن 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "کدام خاک نفوذ پذیری زیادی دارد؟", options: ["خاک رس", "خاک ماسه", "خاک باغچه", "هیچ کدام"], correct: 1 },
+            { q: "کدام خاک نفوذ پذیری کمی دارد؟", options: ["خاک باغچه", "خاک ماسه", "خاک رس", "هیچ کدام"], correct: 2 },
+            { q: "گیاهان برای زنده ماندن به کدام مورد نیاز دارند؟", options: ["آب مناسب", "خاک مناسب", "نور مناسب", "همه موارد"], correct: 3 },
+            { q: "باغبان کوچک، تصور کن می‌خواهی یک گل کاکتوس را در خاک بکاری. کدام خاک مناسب‌تر است؟", options: ["ماسه", "رس", "باغچه", "هیچ کدام"], correct: 0 },
+            { q: "اگر خاک گلدانی خاک رس باشد، کدام مورد درست است؟", options: ["به آن زیاد آب می‌دهیم", "به آن کم آب می‌دهیم", "مقدار آبیاری بی اهمیت است"], correct: 1 },
+            { 
+                type: "dragdrop", 
+                q: "گل‌ها را به خاک مناسبشان وصل کن!", 
+                items: [ 
+                    {id: 'rose', emoji: '🌹', target: 'clay'}, 
+                    {id: 'cactus', emoji: '🌵', target: 'sand'}, 
+                    {id: 'pothos', emoji: '🌿', target: 'garden'} 
+                ],
+                targets: [ 
+                    {id: 'clay', label: 'رس'}, 
+                    {id: 'sand', label: 'ماسه'}, 
+                    {id: 'garden', label: 'باغچه'} 
+                ] 
+            },
+            { q: "اگر گلی را قلمه بزنیم یا گلدانش را عوض کنیم، بهتر است در اولین آبیاری چه کنیم؟", options: ["اصلاً آب نیاز ندارد", "آب خالی بدهیم", "ترکیب آب و هیومیک اسید بدهیم"], correct: 2 },
+            { q: "خاصیت هیومیک اسید چیست؟", options: ["ضد شوک است", "ریشه زا است", "هر دو مورد", "هیچ کدام"], correct: 2 },
+            { q: "چرا زیر گلدان باید سوراخ باشد؟", options: ["برای زیبایی", "برای بیرون رفتن آب اضافه"], correct: 1 }
+        ];
+
+        const correctFeedbacks = ["آفرین! 😍", "عالی بود! ✨", "هورا! 🎉", "خیلی باهوشی! 💖"];
+        const wrongFeedbacks = ["دقت کن! 🤔", "اوپس! دوباره تلاش کن 🌸", "دوباره سعی کن! ✨", "نزدیک بود! 🌈"];
+
+        let currentIdx = 0;
+        let score = 0;
+        let userName = "";
+        let userLogs = [];
+
+        function startGame() {
+            userName = document.getElementById('user-name').value.trim();
+            if (!userName) { alert("لطفاً نام خود را وارد کنید!"); return; }
+            document.getElementById('start-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentIdx];
+            const container = document.getElementById('options-container');
+            const dragContainer = document.getElementById('drag-drop-container');
+            const qText = document.getElementById('question-text');
+            
+            container.innerHTML = "";
+            dragContainer.style.display = "none";
+            qText.innerText = q.q;
+
+            if (q.type === "dragdrop") {
+                dragContainer.style.display = "block";
+                setupDragDrop(q);
+            } else {
+                q.options.forEach((opt, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkAnswer(index);
+                    container.appendChild(btn);
+                });
+            }
+        }
+
+        function setupDragDrop(q) {
+            const flowersDiv = document.getElementById('flowers-to-drag');
+            const targetsDiv = document.getElementById('target-zones');
+            flowersDiv.innerHTML = "";
+            targetsDiv.innerHTML = "";
+            window.dragSuccessCount = 0;
+
+            const shuffledItems = [...q.items].sort(() => Math.random() - 0.5);
+            shuffledItems.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'flower-item';
+                el.innerText = item.emoji;
+                el.draggable = true;
+                el.id = item.id;
+                el.ondragstart = (e) => e.dataTransfer.setData("text", e.target.id);
+                flowersDiv.appendChild(el);
+            });
+
+            const shuffledTargets = [...q.targets].sort(() => Math.random() - 0.5);
+            shuffledTargets.forEach(t => {
+                const el = document.createElement('div');
+                el.className = 'drop-zone';
+                el.innerHTML = `<span style="color:black">${t.label}</span>`;
+                el.ondragover = (e) => e.preventDefault();
+                el.ondrop = (e) => {
+                    e.preventDefault();
+                    const data = e.dataTransfer.getData("text");
+                    const draggedItem = q.items.find(i => i.id === data);
+                    if(draggedItem.target === t.id) {
+                        el.style.background = "#c7f9cc";
+                        el.innerHTML = draggedItem.emoji;
+                        window.dragSuccessCount++;
+                        if(window.dragSuccessCount === 3) handleAnswer(true);
+                    } else {
+                        showFeedback(wrongFeedbacks[Math.floor(Math.random()*wrongFeedbacks.length)], false);
+                    }
+                };
+                targetsDiv.appendChild(el);
+            });
+        }
+
+        function checkAnswer(idx) {
+            const q = questions[currentIdx];
+            const isCorrect = (idx === q.correct);
+            showFeedback(isCorrect ? correctFeedbacks[Math.floor(Math.random()*correctFeedbacks.length)] : wrongFeedbacks[Math.floor(Math.random()*wrongFeedbacks.length)], isCorrect);
+            setTimeout(() => handleAnswer(isCorrect), 1000);
+        }
+
+        function handleAnswer(isCorrect) {
+            const q = questions[currentIdx];
+            if (isCorrect) {
+                score++;
+                userLogs.push({ q: q.q, status: "✅ درست" });
+                createFallingEmoji(isCorrect ? "🌸" : "✨");
+            } else {
+                userLogs.push({ q: q.q, status: "❌ غلط" });
+            }
+            
+            document.getElementById('current-score').innerText = score;
+            currentIdx++;
+            
+            if (currentIdx < questions.length) {
+                showQuestion();
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function showFeedback(text, isCorrect) {
+            const overlay = document.getElementById('feedback-overlay');
+            overlay.innerText = text;
+            overlay.style.color = isCorrect ? "#2d6a4f" : "#c9184a";
+            overlay.classList.add('show');
+            setTimeout(() => overlay.classList.remove('show'), 1000);
+        }
+
+        function createFallingEmoji(emoji) {
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'falling-emoji';
+                    el.innerText = emoji;
+                    el.style.left = Math.random() * 100 + "vw";
+                    el.style.animationDuration = (Math.random() * 2 + 2) + "s";
+                    document.body.appendChild(el);
+                    setTimeout(() => el.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        function showEndScreen() {
+            document.getElementById('quiz-screen').classList.remove('active');
+            document.getElementById('end-screen').classList.add('active');
+            
+            const endTitle = document.getElementById('end-title');
+            const congratsMsg = document.getElementById('congrats-msg');
+            const summaryDiv = document.getElementById('result-summary');
+
+            if (score >= 7) {
+                endTitle.innerText = "🎉 مبارک است! 🎉";
+                congratsMsg.innerText = `مرحبا باغبان کوچک ${userName}!`;
+            } else {
+                endTitle.innerText = "🌸 تلاش کن! 🌸";
+                congratsMsg.innerText = `دوست من ${userName}، دوباره امتحان کن!`;
+            }
+
+            summaryDiv.innerHTML = `<h3>امتیاز نهایی: ${score} از ${questions.length}</h3>`;
+            userLogs.forEach(log => {
+                const item = document.createElement('div');
+                item.className = log.status.includes("✅") ? "correct-log" : "wrong-log";
+                item.innerText = `${log.status}: ${log.q}`;
+                summaryDiv.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>

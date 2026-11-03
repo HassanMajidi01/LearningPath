@@ -1,0 +1,272 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقه رنگین‌کمان جادویی</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Nature Background Elements */
+        .nature-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .sun { position: absolute; top: 30px; right: 30px; width: 80px; height: 80px; background: radial-gradient(circle, #FFF700, #FF8C00); border-radius: 50%; box-shadow: 0 0 50px #FFD700; }
+        .cloud { position: absolute; background: white; width: 120px; height: 45px; border-radius: 50px; opacity: 0.8; animation: floatCloud linear infinite; }
+        .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
+        .cloud::after { width: 60px; height: 60px; top: -25px; left: 15px; }
+        .cloud::before { width: 50px; height: 50px; top: -15px; left: 55px; }
+        @keyframes floatCloud { from { transform: translateX(-150px); } to { transform: translateX(110vw); } }
+        .bird { position: absolute; width: 20px; height: 10px; border-top: 3px solid #444; border-radius: 50% 50% 0 0; animation: flyBird 15s linear infinite; }
+        @keyframes flyBird { from { left: -50px; top: 100px; } to { left: 110vw; top: 150px; } }
+
+        /* Rainbow Arc at Top */
+        .rainbow-container { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 85vw; max-width: 550px; height: 260px; z-index: 1; }
+        .rainbow-arc { width: 100%; height: 100%; border-radius: 50% 50% 0 0; display: flex; flex-direction: column; overflow: hidden; border: 2px solid rgba(255,255,255,0.4); }
+        .rainbow-layer { width: 100%; height: 14.28%; opacity: 0.1; transition: opacity 1.5s ease; }
+
+        /* General Card Style */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px; padding: 30px; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 85%; max-width: 500px; z-index: 10;
+            border: 4px solid #FFB6C1; margin-top: 330px; margin-bottom: 40px;
+        }
+
+        .teacher-info { color: #D81B60; font-weight: bold; font-size: 0.85rem; margin-bottom: 10px; }
+        .title-main { color: #FF1493; margin: 10px 0; font-size: 1.6rem; }
+        .instruction-text { color: #C2185B; font-size: 0.95rem; font-weight: bold; margin-bottom: 15px; background: #FCE4EC; padding: 8px; border-radius: 12px; }
+        
+        .input-group input { padding: 12px; border-radius: 15px; border: 2px solid #FFB6C1; text-align: center; width: 85%; font-family: 'Vazirmatn'; font-size: 1.1rem; margin-top: 10px; }
+        .start-btn { background: #4CAF50; color: white; border: none; padding: 15px 45px; border-radius: 35px; font-size: 1.3rem; cursor: pointer; font-family: 'Vazirmatn'; margin-top: 20px; box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4); }
+
+        .quiz-card { display: none; }
+        .question-num { color: #FF69B4; font-weight: bold; font-size: 1rem; }
+        .score-display { font-size: 1.2rem; color: #FF1493; font-weight: bold; margin-bottom: 10px; }
+        .option-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #FCE4EC; border-radius: 18px; background: #FFF; cursor: pointer; font-size: 1.05rem; font-family: 'Vazirmatn'; transition: all 0.2s; }
+        .option-btn:hover { background: #FFEBEE; border-color: #FF69B4; }
+
+        /* Celebration Page */
+        #celebration-screen { display: none; text-align: center; }
+        .celebration-img { width: 100%; border-radius: 20px; margin: 20px 0; border: 5px solid #FFB6C1; }
+        .praise-text { font-size: 1.4rem; color: #D81B60; font-weight: bold; line-height: 1.6; }
+
+        /* Answer Sheet Table */
+        .answer-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
+        .answer-table th, .answer-table td { border: 1px solid #FFB6C1; padding: 10px; text-align: center; }
+        .answer-table th { background-color: #FFB6C1; color: white; }
+        .status-correct { color: green; font-weight: bold; }
+        .status-wrong { color: red; font-weight: bold; }
+
+        .next-page-btn { background: #FF69B4; color: white; border: none; padding: 12px 25px; border-radius: 20px; margin-top: 20px; cursor: pointer; font-family: 'Vazirmatn'; }
+
+        /* Animations */
+        .petal { position: fixed; width: 15px; height: 15px; border-radius: 150% 0 150% 0; z-index: 100; pointer-events: none; animation: fall 3s linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+        .sticker-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 5rem; z-index: 1000; animation: popScale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popScale { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="nature-bg">
+    <div class="sun"></div>
+    <div class="cloud" style="top: 50px; animation-duration: 25s;"></div>
+    <div class="cloud" style="top: 120px; animation-duration: 35s; opacity: 0.6;"></div>
+    <div class="bird" style="top: 80px; animation-delay: 2s;"></div>
+</div>
+
+<div class="rainbow-container">
+    <div class="rainbow-arc" id="rainbowArc">
+        <div class="rainbow-layer" style="background: #FF0000;"></div>
+        <div class="rainbow-layer" style="background: #FF7F00;"></div>
+        <div class="rainbow-layer" style="background: #FFFF00;"></div>
+        <div class="rainbow-layer" style="background: #00FF00;"></div>
+        <div class="rainbow-layer" style="background: #0000FF;"></div>
+        <div class="rainbow-layer" style="background: #4B0082;"></div>
+        <div class="rainbow-layer" style="background: #9400D3;"></div>
+    </div>
+</div>
+
+<!-- Start Screen -->
+<div id="start-screen" class="card">
+    <div class="teacher-info">طراح سوال: کبری قربانی<br>دبستان دخترانه ی سما، واحد انزلی</div>
+    <h1 class="title-main">مسابقه رنگین‌کمان جادویی 🌈</h1>
+    <div class="instruction-text">دخترم با هر پاسخ یک رنگ از رنگین‌کمان را کامل کن ✨</div>
+    <div class="input-group">
+        <label>نام زیبای من:</label><br>
+        <input type="text" id="studentName" placeholder="">
+    </div>
+    <button class="start-btn" onclick="startQuiz()">شروع مسابقه ✨</button>
+</div>
+
+<!-- Quiz Screen -->
+<div id="quiz-screen" class="card quiz-card">
+    <div id="question-num" class="question-num"></div>
+    <div id="currentScore" class="score-display">امتیاز: 0</div>
+    <div id="question-text" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;"></div>
+    <div id="options-container"></div>
+</div>
+
+<!-- Celebration Screen -->
+<div id="celebration-screen" class="card">
+    <div class="praise-text" id="praise-msg"></div>
+    <div id="image-container">
+        <img src="image.webp" class="celebration-img" alt="تقدیر">
+    </div>
+    <p style="color: #FF69B4; font-weight: bold;">برای دیدن پاسخنامه به صفحه بعد مراجعه کن 👇</p>
+    <button class="next-page-btn" onclick="showAnswerSheet()">مشاهده پاسخنامه 📄</button>
+</div>
+
+<!-- Answer Sheet Screen -->
+<div id="answer-sheet-screen" class="card" style="display: none; max-width: 600px;">
+    <h2 style="color: #D81B60;">جدول پاسخنامه 📝</h2>
+    <p style="color: #666; font-size: 0.85rem;">طراح سوال: کبری قربانی (دبستان سما، انزلی)</p>
+    <table class="answer-table">
+        <thead>
+            <tr>
+                <th>سوال</th>
+                <th>پاسخ شما</th>
+                <th>وضعیت</th>
+            </tr>
+        </thead>
+        <tbody id="answer-body"></tbody>
+    </table>
+    <button class="start-btn" onclick="location.reload()">شروع دوباره 🔄</button>
+</div>
+
+<script>
+    const questions = [
+        { q: "سر سفره نوروز حتماً ماهی‌های قرمز درون تنگ را دیده‌اید. آنچه که شما می‌بینید چه تصویری از ماهی‌هاست؟", options: ["کوچکتر", "بزرگتر", "هم اندازه", "وارونه"], correct: 1 },
+        { q: "نور از کدام گزینه عبور نمی‌کند؟", options: ["ذره‌بین", "آینه تخت", "منشور", "تلق شفاف جلد کتاب"], correct: 1 },
+        { q: "اولین و آخرین رنگ رنگین‌کمان از بالا به ترتیب (از راست به چپ) کدام رنگ‌ها هستند؟", options: ["بنفش قرمز", "قرمز بنفش", "سبز نارنجی", "زرد آبی"], correct: 1 },
+        { q: "اگر در جنگل کبریتی برای روشن کردن آتش نداشتیم، با کدام گزینه زیر می‌توانیم کاغذی را آتش بزنیم؟", options: ["آینه تخت", "کفگیر استیل", "شمع", "ذره‌بین"], correct: 3 },
+        { q: "برای دیدن رنگین‌کمان حتماً باید ________.", options: ["هوا طوفانی باشد", "پشت به آفتاب بایستیم", "هوا برفی باشد", "رو به آفتاب بایستیم"], correct: 1 },
+        { q: "با کدام گزینه نمی‌توانیم نقطه کانونی داغ ایجاد کنیم؟", options: ["منشور", "ذره‌بین", "میکروسکوپ", "تلسکوپ"], correct: 0 }, // Option 'ساعت‌سازان' removed
+        { q: "یک قطره آب از دست هانیه روی کتاب علومش چکید. او وقتی خواست آن را پاک کند متوجه شد که نوشته‌ها ________ شده‌اند.", options: ["کوچکتر", "بزرگتر", "محو", "وارونه"], correct: 1 }
+    ];
+
+    const stickers = ["⭐", "🎈", "🍭", "🦄", "🎀", "🧚‍♀️", "🎨"];
+    let currentIdx = 0;
+    let score = 0;
+    let studentName = "";
+    let userAnswers = [];
+
+    function startQuiz() {
+        studentName = document.getElementById('studentName').value.trim();
+        if (!studentName) { alert("لطفاً نام خود را بنویسید ❤️"); return; }
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-num').innerText = `سوال ${currentIdx + 1} از ${questions.length}`;
+        document.getElementById('question-text').innerText = q.q;
+        const container = document.getElementById('options-container');
+        container.innerHTML = "";
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(i);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(selectedIdx) {
+        const q = questions[currentIdx];
+        const isCorrect = selectedIdx === q.correct;
+        userAnswers.push({ question: q.q, selected: q.options[selectedIdx], correct: q.options[q.correct], isCorrect: isCorrect });
+
+        if (isCorrect) {
+            score++;
+            document.getElementById('currentScore').innerText = `امتیاز: ${score}`;
+            fillRainbow();
+            createPetals();
+            showSticker();
+        }
+
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            setTimeout(showQuestion, 1000);
+        } else {
+            setTimeout(endQuiz, 1000);
+        }
+    }
+
+    function fillRainbow() {
+        const layers = document.querySelectorAll('.rainbow-layer');
+        if (score > 0 && score <= layers.length) {
+            layers[score - 1].style.opacity = "1";
+        }
+    }
+
+    function createPetals() {
+        for (let i = 0; i < 20; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            petal.style.top = '-20px';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 3000);
+        }
+    }
+
+    function showSticker() {
+        const s = document.createElement('div');
+        s.className = 'sticker-popup';
+        s.innerText = stickers[Math.floor(Math.random() * stickers.length)];
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1000);
+    }
+
+    function endQuiz() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        if (score > 5) {
+            showCelebration();
+        } else {
+            showAnswerSheet();
+        }
+    }
+
+    function showCelebration() {
+        document.getElementById('celebration-screen').style.display = 'block';
+        const praise = document.getElementById('praise-msg');
+        praise.innerText = `بسیار عالی ${studentName} عزیز! 😍\nتو یک ستاره درخشان هستی! ✨\nبا این امتیاز فوق‌العاده، واقعاً افتخار معلم هستی! 💖`;
+    }
+
+    function showAnswerSheet() {
+        document.getElementById('celebration-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'none';
+        
+        const sheet = document.getElementById('answer-sheet-screen');
+        sheet.style.display = 'block';
+        sheet.style.marginTop = "50px";
+
+        const tbody = document.getElementById('answer-body');
+        tbody.innerHTML = "";
+        userAnswers.forEach((ans, i) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${i + 1}</td>
+                <td>${ans.selected}</td>
+                <td class="${ans.isCorrect ? 'status-correct' : 'status-wrong'}">${ans.isCorrect ? '✅ درست' : '❌ نادرست'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+</script>
+
+</body>
+</html>
