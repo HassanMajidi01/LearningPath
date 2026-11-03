@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://edu-kiashahr.ir/sitemap.xml
