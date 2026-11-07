@@ -1,0 +1,452 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی آموزشی - درس ۴ فارسی پنجم</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #212121;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decorative Background Elements (Warm Fantasy Corners) */
+        .corner-sticker {
+            position: fixed;
+            font-size: 36px;
+            z-index: 0;
+            opacity: 0.8;
+            animation: floatSticker 3s ease-in-out infinite alternate;
+        }
+        .top-right { top: 15px; right: 20px; }
+        .top-left { top: 15px; left: 20px; }
+        .bottom-right { bottom: 15px; right: 20px; }
+        .bottom-left { bottom: 15px; left: 20px; }
+
+        @keyframes floatSticker {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-8px) rotate(5deg); }
+        }
+
+        header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.15);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            border: 2px dashed #ab47bc;
+            z-index: 1;
+        }
+        header p {
+            margin: 0;
+            font-size: 15px;
+            color: #212121;
+            font-weight: 800;
+        }
+        header span {
+            color: #d81b60;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(106, 27, 154, 0.2);
+            text-align: center;
+            position: relative;
+            border: 3px solid #ce93d8;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #8e24aa;
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        .subtitle {
+            font-size: 17px;
+            color: #212121;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        .subtitle span {
+            color: #c2185b;
+        }
+
+        .instruction-box {
+            font-size: 17px;
+            color: #212121;
+            background: #fdf5fc;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e1bee7;
+            font-weight: bold;
+        }
+        .instruction-box span {
+            color: #ad1457;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 14px 20px;
+            font-size: 19px;
+            border: 2px solid #ab47bc;
+            border-radius: 15px;
+            outline: none;
+            text-align: center;
+            margin-bottom: 20px;
+            background: #fdf5fc;
+            color: #212121;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #8e24aa;
+            box-shadow: 0 0 12px rgba(142, 36, 170, 0.3);
+            background: #ffffff;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+            color: white;
+            border: none;
+            padding: 13px 32px;
+            font-size: 19px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(142, 36, 170, 0.3);
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ba68c8, #6a1b9a);
+        }
+
+        .scrambled-word {
+            font-size: 34px;
+            letter-spacing: 9px;
+            color: #ad1457;
+            background: #fdf5fc;
+            padding: 18px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-weight: 900;
+            border: 2px dashed #ab47bc;
+            direction: ltr;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #212121;
+            background: #fdf5fc;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e1bee7;
+        }
+        .stats span {
+            color: #7b1fa2;
+        }
+
+        .feedback {
+            font-size: 19px;
+            margin: 15px 0;
+            font-weight: 900;
+            min-height: 35px;
+        }
+
+        .sticker {
+            font-size: 50px;
+            margin: 10px 0;
+            animation: bounce 0.5s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Falling Celebration Elements (Butterflies & Flowers) */
+        .falling-item {
+            position: fixed;
+            top: -50px;
+            font-size: 30px;
+            z-index: 999;
+            animation: fallDown linear forwards;
+            pointer-events: none;
+        }
+        @keyframes fallDown {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Warm Corner Stickers -->
+    <div class="corner-sticker top-right">🌸</div>
+    <div class="corner-sticker top-left">🦋</div>
+    <div class="corner-sticker bottom-right">💖</div>
+    <div class="corner-sticker bottom-left">⭐</div>
+
+    <header>
+        <p>طراح بازی: <span>کبری قربانی</span> ، دبستان دخترانه ی سما ، واحد <span>بندرانزلی</span></p>
+    </header>
+
+    <div class="container" id="welcome-screen">
+        <h1>✨ ساخت کلمات از درس ۴ فارسی ✨</h1>
+        <p class="subtitle">سلام فرشته‌ی مهربانم! لطفاً نام قشنگت را وارد کن:</p>
+        <input type="text" id="student-name" placeholder="نام دانش‌آموز عزیز...">
+        <br>
+        <button onclick="startGame()">شروع بازی جذاب 🌸</button>
+    </div>
+
+    <div class="container hidden" id="game-screen">
+        <div class="stats">
+            <div>دانش‌آموز: <span id="display-name"></span></div>
+            <div>امتیاز: <span id="score">0</span></div>
+            <div>سوال: <span id="question-num">1</span> / <span id="total-q"></span></div>
+        </div>
+        
+        <div class="instruction-box">
+            ✏️ <b>دانش‌آموز سخت‌کوشم،</b> <span style="color:#6a1b9a;">با حروف داده شده کلمه بساز:</span>
+        </div>
+
+        <div id="sticker-container" class="sticker">🌟</div>
+        <div class="scrambled-word" id="scrambled-box">کلمه</div>
+        <div class="feedback" id="feedback-msg"></div>
+
+        <input type="text" id="user-answer" placeholder="پاسخ خود را اینجا بنویسید..." autocomplete="off">
+        <br>
+        <button onclick="checkAnswer()">ثبت پاسخ 🎯</button>
+    </div>
+
+    <div class="container hidden" id="end-screen">
+        <h1>🎉 پایان بازی جذاب 🎉</h1>
+        <div id="end-sticker" class="sticker">🏆</div>
+        <p id="final-message" style="font-size: 19px; line-height: 1.7; color: #212121; font-weight: bold;"></p>
+        <button onclick="restartGame()">بازی دوباره 🔄</button>
+    </div>
+
+    <script>
+        const wordsList = [
+            "تهیدست", "حوادث", "سرمایه", "فضای گرم", "محافظت", 
+            "غفلت", "چارپایان", "گرسنه", "موش موذی", "هلاک", 
+            "فضیلت", "ثروتمند", "کاهلی", "مقصد", "آخرت", 
+            "پاداش", "باتجربه", "صاحب", "معمولاً", "پسندیده", 
+            "خصلت", "گمنام"
+        ];
+
+        const positiveFeedbacks = [
+            "آفرین دختر گل و باهوشم! عالی بود! 🌸",
+            "آفرین! ستاره‌ی درخشان کلاس پنجم! ⭐",
+            "هزار آفرین به این دقت و هوش! 💖",
+            "باریکلا! پاسخ کاملاً درست و زیبا بود! حبه‌ی قند! 🍬",
+            "احسنت! تو فوق‌العاده‌ای! 🦋"
+        ];
+
+        const negativeFeedbacks = [
+            "ای وای، اشتباه شد عزیزم! اما ناامید نشو، بعدی رو جبران می‌کنی! 💪",
+            "دقت کن فرشته‌ی من، این بار نشد ولی تلاشش عالی بود! 🌸",
+            "اشتباه بود گلم! کمی بیشتر فکر کن، تو می‌تونی! ✨"
+        ];
+
+        const positiveStickers = ["🌟", "💖", "🌸", "🦋", "🍬", "🦄", "⭐", "🏆"];
+        const negativeStickers = ["💫", "💡", "🌱", "🍀"];
+        const celebrationSymbols = ["🦋", "🌸", "🌺", "⭐", "💖", "🌷", "✨"];
+
+        let currentWords = [];
+        let currentIndex = 0;
+        let score = 0;
+        let studentName = "";
+
+        // حذف اعراب و تنوین و یکسان‌سازی حروف عربی/فارسی برای مقایسه‌ی منصفانه
+        function normalize(str) {
+            return str
+                .replace(/[\u064B-\u0652\u0670\u0653-\u0655\u0640]/g, '') // حذف فتحه، کسره، ضمه، تنوین، سکون، تشدید، کشیده
+                .replace(/ي/g, 'ی')
+                .replace(/ك/g, 'ک')
+                .replace(/ة/g, 'ه')
+                .replace(/أ|إ|آ/g, 'ا')
+                .replace(/ؤ/g, 'و')
+                .replace(/\u200c/g, ' ')   // نیم‌فاصله
+                .replace(/\s+/g, '')       // حذف همه‌ی فاصله‌ها
+                .trim();
+        }
+
+        // ساخت حروف به‌هم‌ریخته بدون اعراب و بدون فاصله
+        function shuffleString(str) {
+            let cleanStr = normalize(str);
+            let arr = cleanStr.split('');
+            if (arr.length < 2) return cleanStr;
+            let shuffled;
+            do {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                shuffled = arr.join(' ');
+            } while (shuffled.replace(/\s/g, '') === cleanStr);
+            return shuffled;
+        }
+
+        function triggerCelebrationRain() {
+            for (let i = 0; i < 15; i++) {
+                let item = document.createElement("div");
+                item.className = "falling-item";
+                item.innerText = celebrationSymbols[Math.floor(Math.random() * celebrationSymbols.length)];
+                item.style.left = Math.random() * window.innerWidth + "px";
+                item.style.animationDuration = (Math.random() * 2 + 1.5) + "s";
+                item.style.fontSize = (Math.random() * 20 + 20) + "px";
+                document.body.appendChild(item);
+
+                setTimeout(() => {
+                    item.remove();
+                }, 3500);
+            }
+        }
+
+        function startGame() {
+            const nameInput = document.getElementById("student-name").value.trim();
+            if (nameInput === "") {
+                alert("لطفاً نام قشنگت را وارد کن گلم!");
+                return;
+            }
+            studentName = nameInput;
+            document.getElementById("display-name").innerText = studentName;
+            
+            currentWords = [...wordsList].sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            score = 0;
+            document.getElementById("score").innerText = score;
+            document.getElementById("total-q").innerText = currentWords.length;
+
+            document.getElementById("welcome-screen").classList.add("hidden");
+            document.getElementById("game-screen").classList.remove("hidden");
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentIndex >= currentWords.length) {
+                endGame();
+                return;
+            }
+            document.getElementById("question-num").innerText = currentIndex + 1;
+            document.getElementById("user-answer").value = "";
+            document.getElementById("feedback-msg").innerText = "";
+            
+            let originalWord = currentWords[currentIndex];
+            let scrambled = shuffleString(originalWord);
+            document.getElementById("scrambled-box").innerText = scrambled;
+            document.getElementById("sticker-container").innerText = "🧩";
+        }
+
+        function checkAnswer() {
+            let userAns = document.getElementById("user-answer").value;
+            let correctAns = currentWords[currentIndex];
+            let feedbackEl = document.getElementById("feedback-msg");
+            let stickerEl = document.getElementById("sticker-container");
+
+            if (normalize(userAns) === "") {
+                alert("لطفاً کلمه را بنویس بعد دکمه ثبت را بزن!");
+                return;
+            }
+
+            if (normalize(userAns) === normalize(correctAns)) {
+                score += 1;
+                let randomFeedback = positiveFeedbacks[Math.floor(Math.random() * positiveFeedbacks.length)];
+                let randomSticker = positiveStickers[Math.floor(Math.random() * positiveStickers.length)];
+                
+                feedbackEl.style.color = "#2e7d32";
+                feedbackEl.innerText = randomFeedback;
+                stickerEl.innerText = randomSticker;
+                
+                triggerCelebrationRain();
+            } else {
+                score -= 1;
+                let randomFeedback = negativeFeedbacks[Math.floor(Math.random() * negativeFeedbacks.length)];
+                let randomSticker = negativeStickers[Math.floor(Math.random() * negativeStickers.length)];
+                
+                feedbackEl.style.color = "#c62828";
+                feedbackEl.innerText = `${randomFeedback} (کلمه درست: ${correctAns})`;
+                stickerEl.innerText = randomSticker;
+            }
+
+            document.getElementById("score").innerText = score;
+            currentIndex++;
+
+            setTimeout(() => {
+                loadQuestion();
+            }, 2500);
+        }
+
+        function endGame() {
+            document.getElementById("game-screen").classList.add("hidden");
+            document.getElementById("end-screen").classList.remove("hidden");
+            
+            let finalMsgEl = document.getElementById("final-message");
+            let endStickerEl = document.getElementById("end-sticker");
+
+            if (score > 20) {
+                // High score feedback (Above 20)
+                endStickerEl.innerText = "👑🏆✨";
+                finalMsgEl.innerHTML = `فرشته‌ی نازنین و پرتلاشم، <b style="color:#ad1457;">${studentName}</b> عزیز!<br>
+                تو با کسب امتیاز درخشان <b style="color:#2e7d32;">${score}</b>، شاهکار کردی و نشان افتخار کلاس پنجم را با افتخار به دست آوردی!<br>
+                ذهن زیبا، پشتکار و دقت بی‌نظیر تو تحسین‌برانگیز است. همیشه همین‌طور در اوج و درخشان بمانی! 🌸💖`;
+                triggerCelebrationRain();
+            } else {
+                // Score 20 or lower feedback
+                endStickerEl.innerText = "🌱⭐💪";
+                finalMsgEl.innerHTML = `دانش‌آموز عزیزم، <b style="color:#ad1457;">${studentName}</b> جان!<br>
+                بازی زیبای تو با امتیاز <b style="color:#7b1fa2;">${score}</b> به پایان رسید.<br>
+                تلاش و همت تو در یادگیری درس بسیار ارزشمند است. با کمی تمرین بیشتر و دقت در کلمات، مطمئنم در دفعات بعدی ستاره‌ی بسیار پرنورتری خواهی بود. به مسیر قشنگت ادامه بده گلم! ✨`;
+            }
+        }
+
+        function restartGame() {
+            document.getElementById("end-screen").classList.add("hidden");
+            document.getElementById("welcome-screen").classList.remove("hidden");
+            document.getElementById("student-name").value = "";
+        }
+
+        document.getElementById("user-answer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+        document.getElementById("student-name").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                startGame();
+            }
+        });
+    </script>
+</body>
+</html>
